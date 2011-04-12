@@ -1,7 +1,9 @@
 
 # just
 
-  Progressive high-level request API for node
+  Progressive high-level request API for node.
+
+// TODO: rename SuperAgent
 
 ## License 
 
