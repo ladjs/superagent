@@ -15,8 +15,13 @@ app.listen(3000, function(){
   var req = just.request('GET', 'http://localhost:3000');
 
   req.on('response', function(res){
+    var buf = '';
     res.statusCode.should.equal(200);
-    app.close();
+    res.on('data', function(chunk){ buf += chunk; });
+    res.on('end', function(){
+      buf.should.equal('Hello');
+      app.close();
+    });
   });
 
   req.end();
