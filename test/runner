@@ -2,6 +2,12 @@
 
 tests=$(find test/cases/*.js)
 for test in $tests; do
-  echo -n $test
+  echo -n "$test"
   node $test
+  if test $? -eq 0; then
+    echo ' √'
+  else
+    echo ' x'
+  fi
 done
+

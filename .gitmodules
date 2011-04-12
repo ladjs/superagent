@@ -1,0 +1,3 @@
+[submodule "support/should"]
+	path = support/should
+	url = git://github.com/visionmedia/should.js.git

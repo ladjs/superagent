@@ -1,2 +1,2 @@
 
-require('should');
+require('../support/should');
