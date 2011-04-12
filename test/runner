@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
 tests=$(find test/cases/*.js)
+
+echo
 for test in $tests; do
-  echo -n "$test"
+  echo -n "  $test"
   node $test
   if test $? -eq 0; then
     echo ' √'
@@ -10,4 +12,4 @@ for test in $tests; do
     echo ' x'
   fi
 done
-
+echo
