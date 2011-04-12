@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+tests=$(find test/cases/*.js)
+for test in $tests; do
+  echo -n $test
+  node $test
+done

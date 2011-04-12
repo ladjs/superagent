@@ -1,5 +1,5 @@
 
 test:
-	@echo "populate me"
+	@./test/runner
 
 .PHONY: test
