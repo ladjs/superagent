@@ -1,0 +1,10 @@
+{
+    "name": "just"
+  , "version": "0.0.1"
+  , "description": "Progressive high-level request API for node"
+  , "keywords": []
+  , "author": "TJ Holowaychuk <tj@vision-media.ca>"
+  , "dependencies": {}
+  , "main": "index"
+  , "engines": { "node": "0.4.x" }
+}
