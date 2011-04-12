@@ -1,3 +1,9 @@
 [submodule "support/should"]
 	path = support/should
 	url = git://github.com/visionmedia/should.js.git
+[submodule "support/express"]
+	path = support/express
+	url = git://github.com/visionmedia/express.git
+[submodule "support/connect"]
+	path = support/connect
+	url = git://github.com/senchalabs/connect.git
