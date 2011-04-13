@@ -6,7 +6,8 @@ var agent = require('superagent')
   , app = express.createServer();
 
 app.get('/', function(req, res){
-  res.end(req.headers['x-requested-by']);
+  res.end(req.headers['x-requested-by']
+    + ':' + req.headers['x-tobi']);
 });
 
 app.listen(3000, function(){
@@ -14,9 +15,10 @@ app.listen(3000, function(){
     .get('http://localhost:3000')
     .buffer()
     .header('X-Requested-By', 'SuperAgent')
+    .header('X-Tobi', 'rules')
     .on('response', function(res){
     res.on('end', function(){
-      res.body.should.equal('SuperAgent');
+      res.body.should.equal('SuperAgent:rules');
       app.close();
     });
   }).end();
