@@ -1,7 +1,7 @@
 
 # SuperAgent
 
-  Progressive high-level request API for node.
+  Progressive high-level request HTTP client for node.
 
 ## License 
 
