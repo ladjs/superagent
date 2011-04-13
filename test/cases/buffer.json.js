@@ -6,7 +6,7 @@ var agent = require('superagent')
   , app = express.createServer();
 
 app.get('/', function(req, res){
-  res.send('Hello');
+  res.send({ foo: 'bar' });
 });
 
 app.listen(3000, function(){
@@ -16,7 +16,7 @@ app.listen(3000, function(){
     .on('response', function(res){
     res.on('end', function(){
       res.statusCode.should.equal(200);
-      res.body.should.equal('Hello');
+      res.body.should.eql({ foo: 'bar' });
       app.close();
     });
   }).end();

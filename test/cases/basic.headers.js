@@ -6,8 +6,7 @@ var agent = require('superagent')
   , app = express.createServer();
 
 app.get('/', function(req, res){
-  res.end(req.headers['x-requested-by']
-    + ':' + req.headers['x-tobi']);
+  res.send(req.headers['x-requested-by'] + ':' + req.headers['x-tobi']);
 });
 
 app.listen(3000, function(){
