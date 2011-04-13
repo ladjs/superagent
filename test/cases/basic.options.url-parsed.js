@@ -10,11 +10,7 @@ app.get('/search', function(req, res){
 });
 
 app.listen(3000, function(){
-  var req = agent.request('GET', {
-      host: 'localhost'
-    , port: 3000
-    , path: '/search?q=something'
-  });
+  var req = agent.request('GET', require('url').parse('http://localhost:3000/search?q=something'));
 
   req.on('response', function(res){
     var buf = '';
