@@ -1,18 +1,16 @@
 
 require('./../common');
 
-var just = require('just')
+var agent = require('superagent')
   , express = require('express')
   , app = express.createServer();
-
-just.should.have.property('version');
 
 app.get('/foo', function(req, res){
   res.end('Hello from foo');
 });
 
 app.listen(3000, function(){
-  var req = just.request('GET', 'http://localhost:3000/foo');
+  var req = agent.request('GET', 'http://localhost:3000/foo');
 
   req.on('response', function(res){
     var buf = '';
