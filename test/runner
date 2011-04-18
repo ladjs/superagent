@@ -4,8 +4,8 @@ tests=$(find test/cases/*.js)
 
 echo
 for test in $tests; do
-  echo -n "  $test"
+  echo "  $test"
   node $test
-  test $? -eq 0 && echo ' ok'
+  test $? -eq 0
 done
 echo
