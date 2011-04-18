@@ -6,6 +6,6 @@ echo
 for test in $tests; do
   echo -n "  $test"
   node $test
-  test $? -eq 0 && echo ' √'
+  test $? -eq 0 && echo ' ok'
 done
 echo
