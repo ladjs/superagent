@@ -6,6 +6,7 @@ var agent = require('superagent')
   , app = express.createServer();
 
 app.get('/', function(req, res){
+  res.header('Content-Type', 'application/x-www-form-urlencoded');
   res.send('user[name]=tj&user[email]=tj@vision-media.ca');
 });
 
