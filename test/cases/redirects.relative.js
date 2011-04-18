@@ -10,15 +10,15 @@ var redirects = [];
 agent.should.have.property('version');
 
 app.get('/', function(req, res){
-  res.send(302, { 'Location': '/one' })
+  res.send(302, { 'Location': '/one?foo=bar' })
 });
 
 app.get('/one', function(req, res){
-  res.send(302, { 'Location': '/two' })
+  res.send(302, { 'Location': '/two?foo=bar' })
 });
 
 app.get('/two', function(req, res){
-  res.send('done');
+  res.send('done: ' + req.query.foo);
 });
 
 app.listen(3000, function(){
@@ -28,8 +28,8 @@ app.listen(3000, function(){
       res.statusCode.should.equal(200);
 
       res.on('end', function(){
-        res.body.should.equal('done');
-        redirects.should.eql(['/one', '/two']);
+        res.body.should.equal('done: bar');
+        redirects.should.eql(['/one?foo=bar', '/two?foo=bar']);
         app.close();
       });
     });
