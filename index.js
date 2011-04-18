@@ -1,2 +1,2 @@
 
-module.exports = require('./lib/just');
+module.exports = require('./lib/superagent');
