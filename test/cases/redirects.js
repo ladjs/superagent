@@ -16,13 +16,17 @@ app.get('/one', function(req, res){
 });
 
 app.get('/two', function(req, res){
-  res.end('done');
+  res.send('done');
 });
 
 app.listen(3000, function(){
   agent.request('GET', 'http://localhost:3000')
     .buffer()
-    .on('end', function(res){
-      console.log(res.statusCode);
+    .on('response', function(res){
+      res.statusCode.should.equal(200);
+      res.on('end', function(){
+        res.body.should.equal('done');
+        app.close();
+      });
     }).end();
 });
