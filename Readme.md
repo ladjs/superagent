@@ -3,6 +3,16 @@
 
   Progressive high-level request HTTP client for node.
 
+  Mikeal's library is great, but when you want something in between node's low level API, and a high level API, things start to fall apart. The aim of this library is to provide a similar high-level interface, as well as a progressive one. 
+
+## Installation
+
+    $ npm install superagent
+
+## Examples
+
+
+
 ## License 
 
 (The MIT License)
