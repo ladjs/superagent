@@ -51,6 +51,21 @@
        console.log('redirecting to %s', location);
      });
 
+### Buffered Responses
+
+ By default data is not buffered, and you must listen on response "data" events like you normally would. SuperAgent provides the `.buffer()` and `.parse()` methods, which are equivalent, and check `Content-Type` header and associate a parser with the response.
+
+ For example the following will automatically parse/buffer `text/*`, `application/json`, and `application/x-www-form-urlencoded` responses:
+ 
+      agent
+      .get('http://localhost:3000')
+      .parse()
+      .on('response', function(res){
+        res.on('end', function(){
+          console.log(res.body);
+        });
+      }).end();
+
 ## License 
 
 (The MIT License)
