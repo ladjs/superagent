@@ -19,7 +19,7 @@ app.get('/one', function(req, res){
 
 app.listen(3000, function(){
   var req = agent.request('GET', 'http://localhost:3000')
-    .buffer()
+    .parse()
     .on('response', function(res){
       res.statusCode.should.equal(200);
 

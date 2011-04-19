@@ -12,7 +12,7 @@ app.get('/', function(req, res){
 app.listen(3000, function(){
   agent
     .get('http://localhost:3000')
-    .buffer()
+    .parse()
     .header('X-Requested-By', 'SuperAgent')
     .header('X-Tobi', 'rules')
     .on('response', function(res){

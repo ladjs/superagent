@@ -23,7 +23,7 @@ app.get('/two', function(req, res){
 
 app.listen(3000, function(){
   var req = agent.request('GET', 'http://localhost:3000?foo=bar')
-    .buffer()
+    .parse()
     .on('response', function(res){
       res.statusCode.should.equal(200);
 

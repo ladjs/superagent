@@ -13,7 +13,7 @@
 // app.listen(3000, function(){
 //   agent
 //     .get('http://localhost:3000')
-//     .buffer()
+//     .parse()
 //     .on('response', function(res){
 //     res.on('end', function(){
 //       assert.fail('end called');
