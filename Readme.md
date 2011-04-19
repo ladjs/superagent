@@ -66,6 +66,8 @@
         });
       }).end();
 
+ Sometimes it is not ideal to simply halt processing until the data is buffered / parsed, which is why SuperAgent gives you the choice of this API, or the callback API.
+
 ## License 
 
 (The MIT License)
