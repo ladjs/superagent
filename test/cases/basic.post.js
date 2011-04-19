@@ -11,10 +11,12 @@ app.post('/', function(req, res){
   req.on('data', function(chunk){ buf += chunk; });
   req.on('end', function(){
     buf.should.equal('{"foo":"bar"}');
-    app.close();
+    --pending || app.close();
   });
   res.end();
 });
+
+var pending = 2;
 
 app.listen(3000, function(){
   var req = agent
@@ -23,5 +25,14 @@ app.listen(3000, function(){
 
   req.write('{"foo":');
   req.write('"bar"}');
+  req.end();
+
+
+  var req = agent
+    .post('http://localhost:3000')
+    .header('Content-Type', 'application/json');
+
+  req.write(new Buffer('{"foo":'));
+  req.write(new Buffer('"bar"}'));
   req.end();
 });
