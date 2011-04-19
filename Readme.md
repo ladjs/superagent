@@ -3,24 +3,44 @@
 
   Progressive high-level request HTTP client for node.
 
-  Mikeal's library is great, but when you want something in between node's low level API, and a high level API, things start to fall apart. The aim of this library is to provide a similar high-level interface, as well as a progressive one. 
+  Mikeal's library is great, but when you want something in between node's low level API, and a high level API, things start to fall apart. The aim of this library is to provide a similar high-level interface, as well as a progressive one.
+
+  __WARNING__: work in progress
 
 ## Installation
 
     $ npm install superagent
 
+## TODO
+
+  - progressive multipart support (req / res)
+  - schema relative redirects
+  - SSL
+
 ## Examples
 
 ### GET
 
- Below is a simple __GET__ request, with buffered body available at `res.body` and `body`.
+ Below is a simple __GET__ request, with buffered body available at `res.body` and `body`. By default when passing a callback there is no need to listen on "end", as the callback is invoked when the response is complete.
  
      var agent = require('superagent');
     
      agent.get('http://google.com', function(err, res, body){
-       
+       console.log(res.statusCode);
+       console.log(body);
      });
 
+### GET Query String
+
+ The second object passed becomes the querystring:
+ 
+     agent.get('http://google.com', { search: 'foobar' }, function(err, res, body){
+       // whatever
+     });
+
+### Redirects
+
+ The default maximum redirects defaults to `5`, however we can alter this with `.redirects(n)` or `.maxRedirects(n)`. 
 
      var req = agent.get('http://google.com', function(err, res, body){
        console.log(res.statusCode);
@@ -30,7 +50,6 @@
      req.on('redirect', function(location){
        console.log('redirecting to %s', location);
      });
-
 
 ## License 
 
