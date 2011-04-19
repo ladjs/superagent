@@ -20,6 +20,7 @@ app.get('/one', function(req, res){
 app.listen(3000, function(){
   var req = agent.request('GET', 'http://localhost:3000')
     .parse()
+    .redirects(10)
     .on('response', function(res){
       res.statusCode.should.equal(200);
 
@@ -29,8 +30,8 @@ app.listen(3000, function(){
     });
 
   req.on('error', function(err){
-    redirects.should.have.length(6);
-    err.message.should.equal('exceeded maximum of 5 redirects');
+    redirects.should.have.length(11);
+    err.message.should.equal('exceeded maximum of 10 redirects');
     app.close();
   });
 
