@@ -7,6 +7,7 @@ var agent = require('superagent')
 
 app.post('/', function(req, res){
   var buf = '';
+  req.headers.should.have.property('content-length', '13');
   req.headers.should.have.property('content-type', 'application/json');
   req.on('data', function(chunk){ buf += chunk; });
   req.on('end', function(){
