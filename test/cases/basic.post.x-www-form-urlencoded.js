@@ -20,6 +20,5 @@ app.post('/', function(req, res){
 app.listen(3000, function(){
   agent
     .post('http://localhost:3000')
-    .form({ foo: 'bar' })
-    .end();
+    .form({ foo: 'bar' });
 });
