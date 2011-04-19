@@ -76,6 +76,14 @@
       .post('http://localhost:3000')
       .json({ foo: 'bar' });
 
+### POSTing Form Data
+
+  The same can be done for `application/x-www-form-urlencoded` data, using the `.form()` method.
+  
+      agent
+        .post('http://localhost:3000')
+        .form({ foo: 'bar' });
+
 ## License 
 
 (The MIT License)
