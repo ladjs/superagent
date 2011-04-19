@@ -84,6 +84,10 @@
         .post('http://localhost:3000')
         .form({ foo: 'bar' });
 
+## Running Tests
+
+    $ make test
+
 ## License 
 
 (The MIT License)
