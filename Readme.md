@@ -68,6 +68,14 @@
 
  Sometimes it is not ideal to simply halt processing until the data is buffered / parsed, which is why SuperAgent gives you the choice of this API, or the callback API.
 
+### POSTing JSON
+
+ Posting some JSON is easy, the `.json()` method writes a jsonified version of the object passed, providing a content-length and content-type.
+
+    agent
+      .post('http://localhost:3000')
+      .json({ foo: 'bar' });
+
 ## License 
 
 (The MIT License)
