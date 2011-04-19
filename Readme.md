@@ -11,6 +11,25 @@
 
 ## Examples
 
+### GET
+
+ Below is a simple __GET__ request, with buffered body available at `res.body` and `body`.
+ 
+     var agent = require('superagent');
+    
+     agent.get('http://google.com', function(err, res, body){
+       
+     });
+
+
+     var req = agent.get('http://google.com', function(err, res, body){
+       console.log(res.statusCode);
+       console.log(body);
+     });
+
+     req.on('redirect', function(location){
+       console.log('redirecting to %s', location);
+     });
 
 
 ## License 
