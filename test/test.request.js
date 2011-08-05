@@ -258,6 +258,13 @@ test('POST shorthand', function(next){
   });
 });
 
+test('POST shorthand without callback', function(next){
+  request.post('/user/0/pet', { pet: 'tobi' }).end(function(res){
+    assert('added pet "tobi"' == res.text);
+    next();
+  });
+});
+
 test('request X-Requested-With', function(next){
   request
   .get('/echo-header/x-requested-with')
