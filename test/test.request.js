@@ -7,12 +7,12 @@ test('Request inheritance', function(){
 });
 
 test('request() simple GET without callback', function(next){
-  request('GET', 'test.request.js').send();
+  request('GET', 'test.request.js').end();
   next();
 });
 
 test('request() simple GET', function(next){
-  request('GET', 'test.request.js').send(function(res){
+  request('GET', 'test.request.js').end(function(res){
     assert(res instanceof request.Response, 'respond with Response');
     assert(res.ok, 'response should be ok');
     next();
@@ -20,7 +20,7 @@ test('request() simple GET', function(next){
 });
 
 test('request() GET 5xx', function(next){
-  request('GET', '/error').send(function(res){
+  request('GET', '/error').end(function(res){
     assert(!res.ok, 'response should not be ok');
     assert(res.error, 'response should be an error');
     assert(!res.clientError, 'response should not be a client error');
@@ -30,7 +30,7 @@ test('request() GET 5xx', function(next){
 });
 
 test('request() GET 4xx', function(next){
-  request('GET', '/notfound').send(function(res){
+  request('GET', '/notfound').end(function(res){
     assert(!res.ok, 'response should not be ok');
     assert(res.error, 'response should be an error');
     assert(res.clientError, 'response should be a client error');
@@ -40,42 +40,42 @@ test('request() GET 4xx', function(next){
 });
 
 test('request() GET 404 Not Found', function(next){
-  request('GET', '/notfound').send(function(res){
+  request('GET', '/notfound').end(function(res){
     assert(res.notFound, 'response should be .notFound');
     next();
   });
 });
 
 test('request() GET 400 Bad Request', function(next){
-  request('GET', '/bad-request').send(function(res){
+  request('GET', '/bad-request').end(function(res){
     assert(res.badRequest, 'response should be .badRequest');
     next();
   });
 });
 
 test('request() GET 401 Bad Request', function(next){
-  request('GET', '/unauthorized').send(function(res){
+  request('GET', '/unauthorized').end(function(res){
     assert(res.unauthorized, 'response should be .unauthorized');
     next();
   });
 });
 
 test('request() GET 406 Not Acceptable', function(next){
-  request('GET', '/not-acceptable').send(function(res){
+  request('GET', '/not-acceptable').end(function(res){
     assert(res.notAcceptable, 'response should be .notAcceptable');
     next();
   });
 });
 
 test('request() GET 204 No Content', function(next){
-  request('GET', '/no-content').send(function(res){
+  request('GET', '/no-content').end(function(res){
     assert(res.noContent, 'response should be .noContent');
     next();
   });
 });
 
 test('request() header parsing', function(next){
-  request('GET', '/notfound').send(function(res){
+  request('GET', '/notfound').end(function(res){
     assert('text/plain' == res.header['content-type']);
     assert('Express' == res.header['x-powered-by']);
     next();
@@ -83,7 +83,7 @@ test('request() header parsing', function(next){
 });
 
 test('request() .status', function(next){
-  request('GET', '/notfound').send(function(res){
+  request('GET', '/notfound').end(function(res){
     assert(404 == res.status, 'response .status');
     assert(4 == res.statusType, 'response .statusType');
     next();
@@ -91,7 +91,7 @@ test('request() .status', function(next){
 });
 
 test('get()', function(next){
-  request.get('/notfound').send(function(res){
+  request.get('/notfound').end(function(res){
     assert(404 == res.status, 'response .status');
     assert(4 == res.statusType, 'response .statusType');
     next();
@@ -99,21 +99,21 @@ test('get()', function(next){
 });
 
 test('put()', function(next){
-  request.put('/user/12').send(function(res){
+  request.put('/user/12').end(function(res){
     assert('updated' == res.text, 'response text');
     next();
   });
 });
 
 test('post()', function(next){
-  request.post('/user').send(function(res){
+  request.post('/user').end(function(res){
     assert('created' == res.text, 'response text');
     next();
   });
 });
 
 test('del()', function(next){
-  request.del('/user/12').send(function(res){
+  request.del('/user/12').end(function(res){
     assert('deleted' == res.text, 'response text');
     next();
   });
