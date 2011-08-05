@@ -143,6 +143,21 @@ test('request .type() with alias', function(next){
   });
 });
 
+test('request .send() with no data or callback', function(next){
+  request.get('/echo-header/content-type');
+  next();
+});
+
+test('request .send() with callback only', function(next){
+  request
+  .get('/echo-header/accept')
+  .set('Accept', 'foo/bar')
+  .send(function(res){
+    assert('foo/bar' == res.text);
+    next();
+  });
+});
+
 test('request .end()', function(next){
   request
   .get('/echo-header/content-type')
