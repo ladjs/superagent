@@ -53,6 +53,7 @@ request
   .post('/api/pet')
   .data({ name: 'Manny', species: 'cat' })
   .set('X-API-Key', 'foobar')
+  .set('Accept', 'application/json')
   .end(function(res){
     
   });
