@@ -1,7 +1,7 @@
 
 # superagent
 
-  Super-agent is an elegant, small, progressive client-side HTTP request library.
+  Super-agent is an elegant, small (~1.7kb compressed), progressive client-side HTTP request library.
 
 ## Links
 
