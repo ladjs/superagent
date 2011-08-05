@@ -148,6 +148,11 @@ test('request .send() with no data or callback', function(next){
   next();
 });
 
+test('request .send() with no data only', function(next){
+  request.post('/user/5/pet').type('urlencoded').send('pet=tobi');
+  next();
+});
+
 test('request .send() with callback only', function(next){
   request
   .get('/echo-header/accept')
