@@ -105,6 +105,8 @@ request.post('/api/pet', cat, function(res){
 ## Future
 
   - finish node port
+  - more cross-browser support
+  - jsonp
 
 ## License 
 
