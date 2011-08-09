@@ -329,3 +329,11 @@ test('GET querystring object .get(uri, obj)', function(next){
   });
 });
 
+test('GET querystring object .get(uri, obj, fn)', function(next){
+  request
+  .get('/querystring', { search: 'Manny'}, function(res){
+    assert.eql(res.body, { search: 'Manny' });
+    next();
+  });
+});
+
