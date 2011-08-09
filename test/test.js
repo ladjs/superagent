@@ -25,6 +25,7 @@ function run() {
       passed(test, new Date - testStart);
     } catch (err) {
       failed(test, err);
+      throw(err);
     }
   }
 
@@ -62,15 +63,25 @@ function assert(ok, msg) {
   if (!ok) throw new Error(msg || 'assertion failed');
 }
 
+var isArray = Array.isArray ?
+  Array.isArray :
+  function (v) {
+    return Object.prototype.toString.call(v) == '[object Array]';
+  };
+
 function eql(a, b) {
   // same object
   if (a === b) return true;
 
   // different types
-  if (toString.call(a) != toString.call(b)) return false;
+  try {
+    // Note: this breaks in IE
+    if (toString.call(a) != toString.call(b)) return false;
+  } catch (e) {
+  }
 
   // array
-  if (Array.isArray(a)) {
+  if (isArray(a)) {
     // different length
     if (a.length != b.length) return false;
 
@@ -83,7 +94,7 @@ function eql(a, b) {
   }
 
   // object
-  if ('Object' == a.constructor.name) {
+  if (Object == a.constructor) {
     var alen = 0
       , blen = 0;
 
