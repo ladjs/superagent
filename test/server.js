@@ -53,7 +53,7 @@ app.del('/user/:id', function(req, res){
   res.send('deleted');
 });
 
-app.get('/echo-header/:field', function(req, res){
+app.all('/echo-header/:field', function(req, res){
   res.send(req.headers[req.params.field]);
 });
 

@@ -167,6 +167,8 @@ test('request .send() with callback only', function(next){
   });
 });
 
+// FIXME: ie6 will POST rather than GET here due to data(),
+//        but I'm not 100% sure why.  Newer IEs are OK.
 test('request .end()', function(next){
   request
   .get('/echo-header/content-type')
