@@ -320,3 +320,12 @@ test('GET querystring object', function(next){
   });
 });
 
+test('GET querystring object .get(uri, obj)', function(next){
+  request
+  .get('/querystring', { search: 'Manny'})
+  .end(function(res){
+    assert.eql(res.body, { search: 'Manny' });
+    next();
+  });
+});
+
