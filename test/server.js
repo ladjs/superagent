@@ -33,6 +33,10 @@ app.put('/user/:id', function(req, res){
   res.send('updated');
 });
 
+app.get('/querystring', function(req, res){
+  res.send(req.query);
+});
+
 app.post('/todo/item', function(req, res){
   var buf = '';
   req.on('data', function(chunk){ buf += chunk; });
