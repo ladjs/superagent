@@ -234,6 +234,17 @@ test('POST json default', function(next){
   });
 });
 
+test('POST multiple .data() calls', function(next){
+  request
+  .post('/pet')
+  .data({ name: 'Manny' })
+  .data({ species: 'cat' })
+  .send(function(res){
+    assert('added Manny the cat' == res.text);
+    next();
+  });
+});
+
 test('GET .contentType', function(next){
   request
   .get('/pets')
@@ -316,6 +327,18 @@ test('GET querystring object', function(next){
   .data({ search: 'Manny' })
   .end(function(res){
     assert.eql(res.body, { search: 'Manny' });
+    next();
+  });
+});
+
+test('GET querystring multiple objects', function(next){
+  request
+  .get('/querystring')
+  .data({ search: 'Manny' })
+  .data({ range: '1..5' })
+  .data({ order: 'desc' })
+  .end(function(res){
+    assert.eql(res.body, { search: 'Manny', range: '1..5', order: 'desc' });
     next();
   });
 });
