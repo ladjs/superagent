@@ -202,6 +202,17 @@ test('request .set()', function(next){
   });
 });
 
+test('request .set(object)', function(next){
+  request
+  .get('/echo-header/content-type')
+  .set({ 'Content-Type': 'text/plain' })
+  .data('wahoo')
+  .send(function(res){
+    assert('text/plain' == res.text);
+    next();
+  });
+});
+
 test('POST urlencoded', function(next){
   request
   .post('/pet')
