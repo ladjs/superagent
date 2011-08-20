@@ -1,5 +1,5 @@
 
-SRC = $(shell find lib/*.js)
+SRC = lib/events.js lib/superagent.js
 
 all: superagent.js superagent.min.js
 
