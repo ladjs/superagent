@@ -1,4 +1,13 @@
 
+0.1.1 / 2011-08-20 
+==================
+
+  * Added `res.redirect` flag (node)
+  * Added redirect support (node)
+  * Added `Request#redirects(n)` (node)
+  * Added `.set(object)` header field support
+  * Fixed `Content-Length` support
+
 0.1.0 / 2011-08-09 
 ==================
 
