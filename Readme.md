@@ -98,7 +98,7 @@ request.post('/api/pet', cat, function(res){
 
 ## Browser support
 
-  Tested in:
+  Actively tested in:
   
     - Firefox 5.x
     - Safari 5.x
