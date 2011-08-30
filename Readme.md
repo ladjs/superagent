@@ -104,12 +104,6 @@ request.post('/api/pet', cat, function(res){
     - Safari 5.x
     - Chrome 13.x
 
-## Future
-
-  - finish node port
-  - more cross-browser support
-  - jsonp
-
 ## License 
 
 (The MIT License)
