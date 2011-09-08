@@ -94,7 +94,7 @@ request.post('/api/pet', cat, function(res){
 
     $ make test
 
- Visit `localhost:3000/test/` in the browser.
+ Visit `localhost:3000/` in the browser.
 
 ## Browser support
 

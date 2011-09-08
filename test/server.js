@@ -9,6 +9,10 @@ var app = express.createServer();
 
 app.use(express.bodyParser());
 
+app.get('/', function(req, res){
+  res.redirect('/test/');
+});
+
 app.get('/error', function(req, res){
   res.status(500).send('fail');
 });
