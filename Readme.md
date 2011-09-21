@@ -1,13 +1,9 @@
 
 # SuperAgent
 
-  SuperAgent is an elegant, small (~1.7kb compressed), progressive client-side HTTP request library.
+  SuperAgent is an elegant, small (~1.7kb compressed), progressive client-side HTTP request library. View the [docs](http://visionmedia.github.com/superagent/).
 
 ![super agent](http://f.cl.ly/items/3d282n3A0h0Z0K2w0q2a/Screenshot.png)
-
-## Links
-
-  - API [docs](http://visionmedia.github.com/superagent/)
 
 ## About
 
