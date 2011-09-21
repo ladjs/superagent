@@ -1,0 +1,19 @@
+
+body {
+  padding: 40px 80px;
+  font: 14px/1.5 "Helvetica Neue", Helvetica, sans-serif;
+  background: url(images/bg.png);
+  text-align: center;
+}
+
+#content {
+  margin: 0 auto;
+  padding: 10px 40px;
+  text-align: left;
+  background: white;
+  width: 50%;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  -webkit-box-shadow: 0 2px 5px 0 black;
+}

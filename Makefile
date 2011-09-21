@@ -15,9 +15,14 @@ test:
 docs: index.html
 
 index.html: docs/index.md
-	markdown < $< > $@
+	markdown < $< \
+	  | cat head.html - tail.html \
+	  > $@
+
+docclean:
+	rm -f index.html
 
 clean:
 	rm -f superagent{,.min}.js
 
-.PHONY: test docs clean
+.PHONY: test docs clean docclean
