@@ -371,3 +371,23 @@ test('GET querystring object .get(uri, obj, fn)', function(next){
   });
 });
 
+test('request(method, url)', function(next){
+  request('GET', '/foo').end(function(res){
+    assert('bar' == res.body.foo);
+    next();
+  });
+});
+
+test('request(url)', function(next){
+  request('/foo').end(function(res){
+    assert('bar' == res.body.foo);
+    next();
+  });
+});
+
+test('request(url, fn)', function(next){
+  request('/foo', function(res){
+    assert('bar' == res.body.foo);
+    next();
+  });
+});
