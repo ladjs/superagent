@@ -17,3 +17,16 @@ body {
   border-radius: 2px;
   -webkit-box-shadow: 0 2px 5px 0 black;
 }
+
+pre {
+  padding: 10px;
+}
+
+p code {
+  border: 1px solid #ECEA75;
+  padding: 1px 3px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  background: #FDFCD1;
+}
