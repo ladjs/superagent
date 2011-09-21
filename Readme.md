@@ -1,7 +1,7 @@
 
-# superagent
+# SuperAgent
 
-  Super-agent is an elegant, small (~1.7kb compressed), progressive client-side HTTP request library.
+  SuperAgent is an elegant, small (~1.7kb compressed), progressive client-side HTTP request library.
 
 ![super agent](http://f.cl.ly/items/3d282n3A0h0Z0K2w0q2a/Screenshot.png)
 
@@ -98,7 +98,7 @@ request.post('/api/pet', cat, function(res){
 
 ## Browser support
 
-  Actively tested in:
+  Actively tested with:
   
     - Firefox 5.x
     - Safari 5.x
