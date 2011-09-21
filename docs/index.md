@@ -178,4 +178,28 @@
 ### Response Content-Type
 
   The Content-Type response header is special-cased, providing `res.contentType`, which is void of the charset (if any). For example the Content-Type of "text/html; charset=utf8" will provide "text/html" as `res.contentType`, and the `res.charset` property would then contain "utf8".
-     
+
+### Response status
+
+  The response status flags help determine if the request was a success, among other useful information. These flags are currently defined as:
+  
+     var type = status / 100 | 0;
+
+     // status / class
+     res.status = status;
+     res.statusType = type;
+
+     // basics
+     res.info = 1 == type;
+     res.ok = 2 == type;
+     res.clientError = 4 == type;
+     res.serverError = 5 == type;
+     res.error = 4 == type || 5 == type;
+
+     // sugar
+     res.accepted = 202 == status;
+     res.noContent = 204 == status || 1223 == status;
+     res.badRequest = 400 == status;
+     res.unauthorized = 401 == status;
+     res.notAcceptable = 406 == status;
+     res.notFound = 404 == status;
