@@ -181,7 +181,7 @@
 
 ### Response status
 
-  The response status flags help determine if the request was a success, among other useful information. These flags are currently defined as:
+  The response status flags help determine if the request was a success, among other useful information, making SuperAgent ideal for interacting with RESTful web services. These flags are currently defined as:
   
      var type = status / 100 | 0;
 
