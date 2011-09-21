@@ -1,0 +1,223 @@
+<h1>SuperAgent</h1>
+
+<p> Super Agent is light-weight progressive ajax API crafted for flexibility, readability, and a low learning curve after being frustrated with many of the existing request APIs.</p>
+
+<pre><code> request
+   .post('/api/pet')
+   .data({ name: 'Manny', species: 'cat' })
+   .set('X-API-Key', 'foobar')
+   .set('Accept', 'application/json')
+   .end(function(res){
+     if (res.ok) {
+       alert('yay got ' + JSON.stringify(res.body));
+     } else {
+       alert('Oh no! error ' + res.text);
+     }
+   });
+</code></pre>
+
+<h2>Request basics</h2>
+
+<p> A request can be initiated by invoking the appropriate method on the <code>request</code> object, then calling <code>.end()</code> to send the request. For example a simple GET request:</p>
+
+<pre><code> request
+   .get('/search')
+   .end(function(res){
+
+   });
+</code></pre>
+
+<p> The <strong>node</strong> client may also provide absolute urls:</p>
+
+<pre><code> request
+   .get('http://example.com/search')
+   .end(function(res){
+
+   });
+</code></pre>
+
+<p>  <strong>DELETE</strong>, <strong>HEAD</strong>, <strong>POST</strong>, <strong>PUT</strong> and other <strong>HTTP</strong> verbs may also be used, simply change the method name:</p>
+
+<pre><code>request
+  .head('/favicon.ico')
+  .end(function(res){
+
+  });
+</code></pre>
+
+<p>  <strong>DELETE</strong> is a special-case, as it&rsquo;s a reserved word, so the method is named <code>.del()</code>:</p>
+
+<pre><code>request
+  .del('/user/1')
+  .end(function(res){
+
+  });
+</code></pre>
+
+<h3>Crafting requests</h3>
+
+<p>  SuperAgent&rsquo;s flexible API gives you the granularity you need, <em>when</em> you need, yet more concise variations help reduce the amount of code necessary. For example the following GET request:</p>
+
+<pre><code>request
+  .get('/search')
+  .end(function(res){
+
+  });
+</code></pre>
+
+<p>  Could also be defined as the following, where a callback is given to the HTTP verb method:</p>
+
+<pre><code>request
+  .get('/search', function(res){
+
+  });
+</code></pre>
+
+<p>   Taking this further the default HTTP verb is <strong>GET</strong> so the following works as well:</p>
+
+<pre><code> request('/search', function(res){
+
+ });
+</code></pre>
+
+<p>   This applies to more complicated requests as well, for example the following <strong>GET</strong> request with a query-string can be written in the chaining manner:</p>
+
+<pre><code> request
+   .get('/search')
+   .data({ query: 'tobi the ferret' })
+   .end(function(res){
+
+   });
+</code></pre>
+
+<p>   Or one may pass the query-string object to <code>.get()</code>:</p>
+
+<pre><code> request
+   .get('/search', { query: 'tobi the ferret' })
+   .end(function(res){
+
+   });
+</code></pre>
+
+<p>  Taking this even further the callback may be passed as well:</p>
+
+<pre><code> request
+   .get('/search', { query: 'tobi the ferret', function(res){
+
+   });
+</code></pre>
+
+<h2>Setting header fields</h2>
+
+<p>  Setting header fields is simple, invoke <code>.set()</code> with a field name and value:</p>
+
+<pre><code> request
+   .get('/search')
+   .set('API-Key', 'foobar')
+   .set('Accept', 'application/json')
+   .end(callback);
+</code></pre>
+
+<h2>GET requests</h2>
+
+<p> The <code>.data()</code> method accepts objects, which when used with the <strong>GET</strong> method will form a query-string. The following will produce the path <code>/search?query=Manny&amp;range=1..5&amp;order=desc</code>.</p>
+
+<pre><code> request
+   .get('/search')
+   .data({ query: 'Manny' })
+   .data({ range: '1..5' })
+   .data({ order: 'desc' })
+   .end(function(res){
+
+   });
+</code></pre>
+
+<p>  The <code>.data()</code> method accepts strings as well:</p>
+
+<pre><code>  request
+    .get('/querystring')
+    .data('search=Manny&amp;range=1..5')
+    .end(function(res){
+
+    });
+</code></pre>
+
+<h3>POST / PUT requests</h3>
+
+<p>  A typical JSON <strong>POST</strong> request might look a little like the following, where we set the Content-Type header field appropriately, and &ldquo;write&rdquo; some data, in this case just a JSON string.</p>
+
+<pre><code>  request.post('/user')
+    .set('Content-Type', 'application/json')
+    .data('{"name":"tj","pet":"tobi"})
+    .end(callback)
+</code></pre>
+
+<p>  Since JSON is undoubtably the most common, it&rsquo;s the <em>default</em>! The following example is equivalent to the previous.</p>
+
+<pre><code>  request.post('/user')
+    .data({ name: 'tj', pet: 'tobi' })
+    .end(callback)
+</code></pre>
+
+<p>  Or using multiple <code>.data()</code> calls:</p>
+
+<pre><code>  request.post('/user')
+    .data({ name: 'tj' })
+    .data({ pet: 'tobi' })
+    .end(callback)
+</code></pre>
+
+<p>  SuperAgent formats are extensible, however by default &ldquo;json&rdquo; and &ldquo;form-data&rdquo; are supported. To send the data as <code>application/x-www-form-urlencoded</code> simply invoke <code>.type()</code> with &ldquo;form-data&rdquo;, where the default is &ldquo;json&rdquo;. This request will POST the body &ldquo;name=tj&amp;pet=tobi&rdquo;.</p>
+
+<pre><code>  request.post('/user')
+    .type('form-data')
+    .data({ name: 'tj' })
+    .data({ pet: 'tobi' })
+    .end(callback)
+</code></pre>
+
+<h2>Response properties</h2>
+
+<p>  Many helpful flags and properties are set on the <code>Response</code> object, ranging from the response text, parsed response body, header fields, status flags and more.</p>
+
+<h3>Response text</h3>
+
+<p>  The <code>res.text</code> property contains the unparsed response body string.</p>
+
+<h3>Response body</h3>
+
+<p>  Much like SuperAgent can auto-serialize request data, it can also automatically parse it. When a parser is defined for the Content-Type, it is parsed, which by default includes &ldquo;application/json&rdquo; and &ldquo;application/x-www-form-urlencoded&rdquo;. The parsed object is then available via <code>res.body</code>.</p>
+
+<h3>Response header fields</h3>
+
+<p>  The <code>res.header</code> contains an object of parsed header fields, lowercasing field names much like node does. For example <code>res.header['content-length']</code>.</p>
+
+<h3>Response Content-Type</h3>
+
+<p>  The Content-Type response header is special-cased, providing <code>res.contentType</code>, which is void of the charset (if any). For example the Content-Type of &ldquo;text/html; charset=utf8&rdquo; will provide &ldquo;text/html&rdquo; as <code>res.contentType</code>, and the <code>res.charset</code> property would then contain &ldquo;utf8&rdquo;.</p>
+
+<h3>Response status</h3>
+
+<p>  The response status flags help determine if the request was a success, among other useful information, making SuperAgent ideal for interacting with RESTful web services. These flags are currently defined as:</p>
+
+<pre><code> var type = status / 100 | 0;
+
+ // status / class
+ res.status = status;
+ res.statusType = type;
+
+ // basics
+ res.info = 1 == type;
+ res.ok = 2 == type;
+ res.clientError = 4 == type;
+ res.serverError = 5 == type;
+ res.error = 4 == type || 5 == type;
+
+ // sugar
+ res.accepted = 202 == status;
+ res.noContent = 204 == status || 1223 == status;
+ res.badRequest = 400 == status;
+ res.unauthorized = 401 == status;
+ res.notAcceptable = 406 == status;
+ res.notFound = 404 == status;
+</code></pre>

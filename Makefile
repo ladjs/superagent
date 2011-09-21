@@ -12,7 +12,10 @@ superagent.min.js: superagent.js
 test:
 	@node test/server
 
-docs: lib
+docs: index.html
+
+index.html: docs/index.md
+	markdown < $< > $@
 
 clean:
 	rm -f superagent{,.min}.js
