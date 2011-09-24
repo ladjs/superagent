@@ -1,4 +1,21 @@
 
+0.1.2 / 2011-09-24 
+==================
+
+  * Added markdown documentation
+  * Added `request(url[, fn])` support to the client
+  * Added `qs` dependency to package.json
+  * Added options for `Request#pipe()`
+  * Added support for `request(url, callback)`
+  * Added `request(url)` as shortcut for `request.get(url)`
+  * Added `Request#pipe(stream)`
+  * Added inherit from `Stream`
+  * Added multipart support
+  * Added ssl support (node)
+  * Removed Content-Length field from client
+  * Fixed buffering, `setEncoding()` to utf8 [reported by stagas]
+  * Fixed "end" event when piping
+
 0.1.1 / 2011-08-20 
 ==================
 
