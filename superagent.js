@@ -56,7 +56,7 @@ EventEmitter.prototype.emit = function(event){
 
 /*!
  * superagent
- * Copyright (c) 2010 TJ Holowaychuk <tj@vision-media.ca>
+ * Copyright (c) 2011 TJ Holowaychuk <tj@vision-media.ca>
  * MIT Licensed
  */
 
@@ -89,18 +89,10 @@ var superagent = function(exports){
       && ('file:' != window.location.protocol || !window.ActiveXObject)) {
       return new XMLHttpRequest;
     } else {
-      try {
-        return new ActiveXObject('Microsoft.XMLHTTP');
-      } catch(e) {}
-      try {
-        return new ActiveXObject('Msxml2.XMLHTTP.6.0');
-      } catch(e) {}
-      try {
-        return new ActiveXObject('Msxml2.XMLHTTP.3.0');
-      } catch(e) {}
-      try {
-        return new ActiveXObject('Msxml2.XMLHTTP');
-      } catch(e) {}
+      try { return new ActiveXObject('Microsoft.XMLHTTP'); } catch(e) {}
+      try { return new ActiveXObject('Msxml2.XMLHTTP.6.0'); } catch(e) {}
+      try { return new ActiveXObject('Msxml2.XMLHTTP.3.0'); } catch(e) {}
+      try { return new ActiveXObject('Msxml2.XMLHTTP'); } catch(e) {}
     }
     return false;
   }
@@ -126,7 +118,7 @@ var superagent = function(exports){
   */
   
   function isFunction(obj) {
-   return obj && obj.call && obj.apply;
+    return 'function' == typeof obj;
   }
 
   /**
@@ -207,6 +199,7 @@ var superagent = function(exports){
       html: 'text/html'
     , json: 'application/json'
     , urlencoded: 'application/x-www-form-urlencoded'
+    , 'form-data': 'application/x-www-form-urlencoded'
   };
 
   /**
@@ -414,6 +407,7 @@ var superagent = function(exports){
     this.error = 4 == type || 5 == type;
 
     // sugar
+    this.accepted = 202 == status;
     this.noContent = 204 == status || 1223 == status;
     this.badRequest = 400 == status;
     this.unauthorized = 401 == status;
@@ -543,13 +537,13 @@ var superagent = function(exports){
    *       
    *       // manual x-www-form-urlencoded
    *       request.post('/user')
-   *         .type('urlencoded')
+   *         .type('form-data')
    *         .data('name=tj')
    *         .end(callback)
    *       
    *       // auto x-www-form-urlencoded
    *       request.post('/user')
-   *         .type('urlencoded')
+   *         .type('form-data')
    *         .data({ name: 'tj' })
    *         .end(callback)
    *
@@ -647,11 +641,6 @@ var superagent = function(exports){
       // serialize stuff
       var serialize = exports.serialize[this.header['content-type']];
       if (serialize) data = serialize(data);
-
-      // content-length
-      if (null != data && !this.header['content-length']) {
-        this.set('Content-Length', data.length);
-      }
     }
 
     // set header fields
@@ -671,15 +660,31 @@ var superagent = function(exports){
   exports.Request = Request;
 
   /**
-   * Shortcut for `new Request(method, url)`.
+   * Issue a request:
+   *
+   * Examples:
+   *
+   *    request('GET', '/users').end(callback)
+   *    request('/users').end(callback)
+   *    request('/users', callback)
    *
    * @param {String} method
-   * @param {String} url
+   * @param {String|Function} url or callback
    * @return {Request}
    * @api public
    */
 
   function request(method, url) {
+    // callback
+    if ('function' == typeof url) {
+      return new Request('GET', method).end(url);
+    }
+
+    // url first
+    if (1 == arguments.length) {
+      return new Request('GET', method);
+    }
+
     return new Request(method, url);
   }
 
