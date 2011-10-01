@@ -2,7 +2,7 @@
 body {
   padding: 40px 80px;
   font: 14px/1.5 "Helvetica Neue", Helvetica, sans-serif;
-  background: url(images/bg.png);
+  background: #181818 url(images/bg.png);
   text-align: center;
 }
 
