@@ -22,6 +22,10 @@ pre {
   padding: 10px;
 }
 
+code {
+  font: 12px/1 monaco, monospace;
+}
+
 p code {
   border: 1px solid #ECEA75;
   padding: 1px 3px;
