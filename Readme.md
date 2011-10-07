@@ -1,4 +1,3 @@
-
 # SuperAgent
 
   SuperAgent is an elegant, small (~1.7kb compressed), progressive client-side HTTP request library. View the [docs](http://visionmedia.github.com/superagent/).
@@ -26,7 +25,7 @@ $.get('/user/1', function(data, textStatus, xhr){
 great, it's ok, but it's kinda lame having 3 arguments just to access something on the `xhr`. Our equivalent would be:
 
 ```js
-request.get('/user/1', function(res){
+request.get('/user/1', function(err, res){
   
 });
 ```
@@ -56,7 +55,7 @@ request
   .data({ name: 'Manny', species: 'cat' })
   .set('X-API-Key', 'foobar')
   .set('Accept', 'application/json')
-  .end(function(res){
+  .end(function(err, res){
     
   });
 ```
@@ -67,7 +66,7 @@ or we can pass data to `.send()` which combines `.data()` and `.end()`, which is
 request
   .post('/api/pet')
   .set('X-API-Key', 'foobar')
-  .send(cat, function(res){
+  .send(cat, function(err, res){
     
   });
 ```
@@ -75,7 +74,7 @@ request
 building on the existing API internally we also provide something similar to `$.post()` for those times in life where your interactions are very basic:
 
 ```js
-request.post('/api/pet', cat, function(res){
+request.post('/api/pet', cat, function(err, res){
   
 });
 ```
