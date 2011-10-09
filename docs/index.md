@@ -1,4 +1,3 @@
-
 # SuperAgent
 
  Super Agent is light-weight progressive ajax API crafted for flexibility, readability, and a low learning curve after being frustrated with many of the existing request APIs.
@@ -93,7 +92,7 @@
   Taking this even further the callback may be passed as well:
   
      request
-       .get('/search', { query: 'tobi the ferret', function(res){
+       .get('/search', { query: 'tobi the ferret' }, function(res){
      
        });
 
