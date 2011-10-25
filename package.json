@@ -11,5 +11,5 @@
     "express": "2.4.4"
   }
   , "main": "index"
-  , "engines": { "node": "0.4.x" }
+  , "engines": { "node": ">= 0.4.0 < 0.7.0" }
 }
