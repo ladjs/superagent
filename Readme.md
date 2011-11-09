@@ -80,7 +80,17 @@ request.post('/api/pet', cat, function(res){
 });
 ```
 
-## Running tests
+## Running node tests
+
+  Install dependencies:
+  
+     $ npm install -d
+  
+  Run em!
+  
+    $ make test
+
+## Running browser tests
 
  Install the test server deps (nodejs / express):
 
