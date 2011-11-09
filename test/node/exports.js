@@ -1,8 +1,4 @@
 
-/**
- * Module dependencies.
- */
-
 var request = require('../../');
 
 describe('exports', function(){
