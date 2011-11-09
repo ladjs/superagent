@@ -88,7 +88,7 @@ request.post('/api/pet', cat, function(res){
 
  Start the test server:
 
-    $ make test
+    $ make test-server
 
  Visit `localhost:3000/` in the browser.
 
