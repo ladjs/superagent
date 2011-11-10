@@ -167,5 +167,19 @@ describe('request.VERB(path)', function(){
         done();
       });
     })
+    
+    describe('when called several times', function(){
+      it('should merge the objects', function(done){
+        request
+        .post('http://localhost:3000/echo')
+        .data({ name: 'tobi' })
+        .data({ age: 1 })
+        .end(function(res){
+          res.header['content-type'].should.equal('application/json');
+          res.text.should.equal('{"name":"tobi","age":1}');
+          done();
+        });
+      })
+    })
   })
 })
