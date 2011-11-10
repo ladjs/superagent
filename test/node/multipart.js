@@ -126,11 +126,13 @@ describe('Part', function(){
 describe('Part', function(){
   describe('#pipe(stream)', function(){
     it('should write to the part', function(){
-      var req = request.post('http://localhost:3005/echo');
+      var req = request
+        .post('http://localhost:3005/echo')
+        .type('multipart/form-data');
 
       var stream = fs.createReadStream(__dirname + '/fixtures/user.html');
 
-      var part = req.type('multipart/form-data').part();
+      var part = req.part();
       part.set('Content-Type', 'text/html');
       stream.pipe(part);
 
