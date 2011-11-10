@@ -188,6 +188,18 @@ describe('request.VERB(path)', function(){
     })
   })
 
+  describe('req.write(String)', function(){
+    it('should write the given data', function(done){
+      var req = request.post('http://localhost:3000/echo');
+      req.write('{"name"').should.be.a('boolean');
+      req.write(':"tobi"}').should.be.a('boolean');
+      req.end(function(res){
+        res.text.should.equal('{"name":"tobi"}');
+        done();
+      });
+    })
+  })
+
   describe('req.data(String)', function(){
     it('should write the string', function(done){
       request
