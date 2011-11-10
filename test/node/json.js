@@ -45,7 +45,7 @@ describe('req.data(Object)', function(){
   })
 })
 
-describe('req', function(){
+describe('res.body', function(){
   describe('application/json', function(){
     it('should parse the JSON', function(done){
       request
