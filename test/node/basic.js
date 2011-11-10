@@ -34,6 +34,22 @@ app.post('/echo', function(req, res){
   req.pipe(res);
 });
 
+app.get('/', function(req, res){
+  res.redirect('/movies');
+});
+
+app.get('/movies', function(req, res){
+  res.redirect('/movies/all');
+});
+
+app.get('/movies/all', function(req, res){
+  res.redirect('/movies/all/0');
+});
+
+app.get('/movies/all/0', function(req, res){
+  res.send('first movie page');
+});
+
 app.listen(3000);
 
 // TODO: "response" event should be a Response
@@ -152,6 +168,24 @@ describe('request.VERB(path)', function(){
       .end(function(res){
         assert(200 == res.status);
         assert(2 == res.statusType);
+        done();
+      });
+    })
+  })
+
+  describe('on redirect', function(){
+    it('should follow Location', function(){
+      var redirects = [];
+
+      request
+      .get('http://localhost:3000/')
+      .on('redirect', function(res){
+        console.error(res.headers.location);
+        redirects.push(res.headers.location);
+      })
+      .end(function(res){
+        console.log(res.header);
+        console.log(res.text);
         done();
       });
     })
