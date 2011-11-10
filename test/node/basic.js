@@ -132,7 +132,7 @@ describe('request', function(){
     })
   })
 
-  describe('req.write(String)', function(){
+  describe('req.write(str)', function(){
     it('should write the given data', function(done){
       var req = request.post('http://localhost:3000/echo');
       req.write('{"name"').should.be.a('boolean');
@@ -167,7 +167,7 @@ describe('request', function(){
     })
   })
 
-  describe('req.data(String)', function(){
+  describe('req.data(str)', function(){
     it('should write the string', function(done){
       request
       .post('http://localhost:3000/echo')
@@ -179,7 +179,7 @@ describe('request', function(){
     })
   })
 
-  describe('req.data(Object)', function(){
+  describe('req.data(obj)', function(){
     it('should default to json', function(done){
       request
       .post('http://localhost:3000/echo')
