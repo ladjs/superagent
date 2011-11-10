@@ -194,6 +194,28 @@ describe('request.VERB(path)', function(){
     })
   })
 
+  describe('req.redirects(n)', function(){
+    it('should alter the default number of redirects to follow', function(done){
+      var redirects = [];
+
+      request
+      .get('http://localhost:3000/')
+      .redirects(2)
+      .on('redirect', function(res){
+        redirects.push(res.headers.location);
+      })
+      .end(function(res){
+        var arr = [];
+        assert(res.redirect, 'res.redirect');
+        arr.push('http://localhost:3000/movies');
+        arr.push('http://localhost:3000/movies/all');
+        redirects.should.eql(arr);
+        res.text.should.match(/Moved Temporarily/);
+        done();
+      });
+    })
+  })
+
   describe('req.type(str)', function(){
     it('should set the Content-Type', function(done){
       request
