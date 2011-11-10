@@ -127,4 +127,15 @@ describe('request.VERB(path)', function(){
       });
     })
   })
+  
+  describe('res.header', function(){
+    it('should be an object', function(){
+      request
+      .get('http://localhost:3000/login')
+      .end(function(res){
+        assert('Express' == res.header['x-powered-by']);
+        done();
+      });
+    })
+  })
 })
