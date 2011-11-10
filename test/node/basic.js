@@ -28,6 +28,10 @@ app.get('/error', function(req, res){
   throw new Error('oh noes');
 });
 
+app.post('/echo', function(req, res){
+  req.pipe(res);
+});
+
 app.listen(3000);
 
 // TODO: "response" event should be a Response
@@ -129,7 +133,7 @@ describe('request.VERB(path)', function(){
   })
   
   describe('res.header', function(){
-    it('should be an object', function(){
+    it('should be an object', function(done){
       request
       .get('http://localhost:3000/login')
       .end(function(res){
@@ -140,7 +144,7 @@ describe('request.VERB(path)', function(){
   })
   
   describe('res.statusType', function(){
-    it('should provide the first digit', function(){
+    it('should provide the first digit', function(done){
       request
       .get('http://localhost:3000/login')
       .end(function(res){
@@ -148,6 +152,20 @@ describe('request.VERB(path)', function(){
         assert(2 == res.statusType);
         done();
       });
+    })
+  })
+  
+  describe('req.send(data)', function(){
+    describe('with a string', function(){
+      it('should write data to the socket', function(done){
+        request
+        .post('http://localhost:3000/echo')
+        .send('foo')
+        .end(function(res){
+          res.text.should.equal('foo');
+          done();
+        });
+      })
     })
   })
 })
