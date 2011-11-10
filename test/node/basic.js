@@ -23,7 +23,6 @@ describe('request.VERB(path)', function(){
       .get('http://localhost:3000/notfound')
       .end(function(res){
         assert(!res.ok, 'response should not be ok');
-        assert(res.notFound, 'response should be notFound');
         assert(res.error, 'response should be an error');
         assert(res.clientError, 'response should be a client error');
         assert(!res.serverError, 'response should not be a server error');
@@ -42,6 +41,17 @@ describe('request.VERB(path)', function(){
         assert(res.error, 'response should be an error');
         assert(!res.clientError, 'response should not be a client error');
         assert(res.serverError, 'response should be a server error');
+        done();
+      });
+    })
+  })
+  
+  describe('with 404 response', function(){
+    it('should set flags properly', function(done){
+      request
+      .get('http://localhost:3000/notfound')
+      .end(function(res){
+        assert(res.notFound, 'response should be .notFound');
         done();
       });
     })
