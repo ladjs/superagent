@@ -155,7 +155,39 @@ describe('request.VERB(path)', function(){
       });
     })
   })
-  
+
+  describe('req.type(str)', function(){
+    it('should set the Content-Type', function(done){
+      request
+      .post('http://localhost:3000/echo')
+      .type('text/x-foo')
+      .end(function(res){
+        res.header['content-type'].should.equal('text/x-foo');
+        done();
+      });
+    })
+    
+    it('should map "json"', function(done){
+      request
+      .post('http://localhost:3000/echo')
+      .type('json')
+      .end(function(res){
+        res.header['content-type'].should.equal('application/json');
+        done();
+      });
+    })
+    
+    it('should map "html"', function(done){
+      request
+      .post('http://localhost:3000/echo')
+      .type('html')
+      .end(function(res){
+        res.header['content-type'].should.equal('text/html');
+        done();
+      });
+    })
+  })
+
   describe('req.data(Object)', function(){
     it('should default to json', function(done){
       request
