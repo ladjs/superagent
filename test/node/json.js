@@ -18,31 +18,43 @@ app.listen(3001);
 
 // TODO: "response" event should be a Response
 
-describe('request.VERB(path)', function(){
-  describe('req.data(Object)', function(){
-    it('should default to json', function(done){
+describe('req.data(Object)', function(){
+  it('should default to json', function(done){
+    request
+    .post('http://localhost:3001/echo')
+    .data({ name: 'tobi' })
+    .end(function(res){
+      res.header['content-type'].should.equal('application/json');
+      res.text.should.equal('{"name":"tobi"}');
+      done();
+    });
+  })
+  
+  describe('when called several times', function(){
+    it('should merge the objects', function(done){
       request
       .post('http://localhost:3001/echo')
       .data({ name: 'tobi' })
+      .data({ age: 1 })
       .end(function(res){
         res.header['content-type'].should.equal('application/json');
-        res.text.should.equal('{"name":"tobi"}');
+        res.text.should.equal('{"name":"tobi","age":1}');
         done();
       });
     })
-    
-    describe('when called several times', function(){
-      it('should merge the objects', function(done){
-        request
-        .post('http://localhost:3001/echo')
-        .data({ name: 'tobi' })
-        .data({ age: 1 })
-        .end(function(res){
-          res.header['content-type'].should.equal('application/json');
-          res.text.should.equal('{"name":"tobi","age":1}');
-          done();
-        });
-      })
+  })
+})
+
+describe('req', function(){
+  describe('application/json', function(){
+    it('should parse the JSON', function(done){
+      request
+      .get('http://localhost:3001/json')
+      .end(function(res){
+        res.text.should.equal('{"name":"manny"}');
+        res.body.should.eql({ name: 'manny' });
+        done();
+      });
     })
   })
 })
