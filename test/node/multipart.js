@@ -2,7 +2,8 @@
 var request = require('../../')
   , express = require('express')
   , assert = require('assert')
-  , app = express.createServer();
+  , app = express.createServer()
+  , fs = require('fs');
 
 app.post('/echo', function(req, res){
   res.writeHead(200, req.headers);
@@ -118,6 +119,41 @@ describe('Part', function(){
           assert(body == res.text, 'invalid multipart response');
         });
       })
+    })
+  })
+})
+
+describe('Part', function(){
+  describe('#pipe(stream)', function(){
+    it('should write to the part', function(){
+      var req = request.post('http://localhost:3005/echo');
+
+      var stream = fs.createReadStream(__dirname + '/fixtures/user.html');
+
+      var part = req.type('multipart/form-data').part();
+      part.set('Content-Type', 'text/html');
+      part.pipe(stream);
+
+      req.on('response', function(res){
+        console.log(res.statusCode);
+        console.log(res.text);
+      });
+
+      // req.end(function(res){
+      //   console.log(res.text);
+      //   return
+      //   var ct = res.header['content-type'];
+      //   ct.should.include.string('multipart/form-data; boundary="');
+      // 
+      //   var body = '\r\n';
+      //   body += '--' + boundary(ct) + '\r\n';
+      //   body += 'Content-Type: image/png\r\n';
+      //   body += '\r\n';
+      //   body += 'some image data';
+      //   body += '\r\n--' + boundary(ct) + '--';
+      // 
+      //   // assert(body == res.text, 'invalid multipart response');
+      // });
     })
   })
 })
