@@ -174,18 +174,21 @@ describe('request.VERB(path)', function(){
   })
 
   describe('on redirect', function(){
-    it('should follow Location', function(){
+    it('should follow Location', function(done){
       var redirects = [];
 
       request
       .get('http://localhost:3000/')
       .on('redirect', function(res){
-        console.error(res.headers.location);
         redirects.push(res.headers.location);
       })
       .end(function(res){
-        console.log(res.header);
-        console.log(res.text);
+        var arr = [];
+        arr.push('http://localhost:3000/movies');
+        arr.push('http://localhost:3000/movies/all');
+        arr.push('http://localhost:3000/movies/all/0');
+        redirects.should.eql(arr);
+        res.text.should.equal('first movie page');
         done();
       });
     })
