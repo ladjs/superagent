@@ -29,6 +29,7 @@ app.get('/error', function(req, res){
 });
 
 app.post('/echo', function(req, res){
+  res.writeHead(200, req.headers);
   req.pipe(res);
 });
 
@@ -155,17 +156,16 @@ describe('request.VERB(path)', function(){
     })
   })
   
-  describe('req.send(data)', function(){
-    describe('with a string', function(){
-      it('should write data to the socket', function(done){
-        request
-        .post('http://localhost:3000/echo')
-        .send('foo')
-        .end(function(res){
-          res.text.should.equal('foo');
-          done();
-        });
-      })
+  describe('req.data(Object)', function(){
+    it('should default to json', function(done){
+      request
+      .post('http://localhost:3000/echo')
+      .data({ name: 'tobi' })
+      .end(function(res){
+        res.header['content-type'].should.equal('application/json');
+        res.text.should.equal('{"name":"tobi"}');
+        done();
+      });
     })
   })
 })
