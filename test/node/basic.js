@@ -1,5 +1,6 @@
 
-var request = require('../../')
+var EventEmitter = require('events').EventEmitter
+  , request = require('../../')
   , express = require('express')
   , assert = require('assert')
   , app = express.createServer();
@@ -197,6 +198,29 @@ describe('request.VERB(path)', function(){
         res.text.should.equal('{"name":"tobi"}');
         done();
       });
+    })
+  })
+
+  describe('req.pipe(stream)', function(){
+    it('should pipe the response to the given stream', function(done){
+      var stream = new EventEmitter;
+
+      stream.buf = '';
+      stream.writable = true;
+
+      stream.write = function(chunk){
+        this.buf += chunk;
+      };
+
+      stream.end = function(){
+        this.buf.should.equal('{"name":"tobi"}');
+        done();
+      };
+
+      request
+      .post('http://localhost:3000/echo')
+      .data('{"name":"tobi"}')
+      .pipe(stream);
     })
   })
 
