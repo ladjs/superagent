@@ -34,7 +34,7 @@ app.listen(3000);
 
 describe('request.VERB(path)', function(){
   describe('with 4xx response', function(){
-    it('should set flags properly', function(done){
+    it('should set res.error and res.clientError', function(done){
       request
       .get('http://localhost:3000/notfound')
       .end(function(res){
@@ -48,7 +48,7 @@ describe('request.VERB(path)', function(){
   })
   
   describe('with 5xx response', function(){
-    it('should set flags properly', function(done){
+    it('should set res.error and res.serverError', function(done){
       request
       .get('http://localhost:3000/error')
       .end(function(res){
@@ -63,7 +63,7 @@ describe('request.VERB(path)', function(){
   })
   
   describe('with 404 Not Found', function(){
-    it('should set flags properly', function(done){
+    it('should res.notFound', function(done){
       request
       .get('http://localhost:3000/notfound')
       .end(function(res){
@@ -74,7 +74,7 @@ describe('request.VERB(path)', function(){
   })
   
   describe('with 400 Bad Request', function(){
-    it('should set flags properly', function(done){
+    it('should set req.badRequest', function(done){
       request
       .get('http://localhost:3000/bad-request')
       .end(function(res){
@@ -85,7 +85,7 @@ describe('request.VERB(path)', function(){
   })
   
   describe('with 401 Bad Request', function(){
-    it('should set flags properly', function(done){
+    it('should set res.unauthorized', function(done){
       request
       .get('http://localhost:3000/unauthorized')
       .end(function(res){
@@ -96,7 +96,7 @@ describe('request.VERB(path)', function(){
   })
   
   describe('with 406 Not Acceptable', function(){
-    it('should set flags properly', function(done){
+    it('should set res.notAcceptable', function(done){
       request
       .get('http://localhost:3000/not-acceptable')
       .end(function(res){
@@ -107,7 +107,7 @@ describe('request.VERB(path)', function(){
   })
   
   describe('with 204 No Content', function(){
-    it('should set flags properly', function(done){
+    it('should set res.noContent', function(done){
       request
       .get('http://localhost:3000/no-content')
       .end(function(res){
