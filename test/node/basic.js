@@ -72,7 +72,18 @@ describe('request', function(){
       });
     })
   })
-  
+
+  describe('res.charset', function(){
+    it('should be set when present', function(done){
+      request
+      .get('http://localhost:3000/login')
+      .end(function(res){
+        res.charset.should.equal('utf-8');
+        done();
+      });
+    })
+  })
+
   describe('res.statusType', function(){
     it('should provide the first digit', function(done){
       request
