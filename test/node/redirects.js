@@ -25,7 +25,7 @@ app.listen(3003);
 
 // TODO: "response" event should be a Response
 
-describe('request.VERB(path)', function(){
+describe('request', function(){
   describe('on redirect', function(){
     it('should follow Location', function(done){
       var redirects = [];

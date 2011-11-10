@@ -58,7 +58,7 @@ app.listen(3000);
 
 // TODO: "response" event should be a Response
 
-describe('request.VERB(path)', function(){
+describe('request', function(){
   describe('with 4xx response', function(){
     it('should set res.error and res.clientError', function(done){
       request
