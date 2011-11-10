@@ -138,4 +138,16 @@ describe('request.VERB(path)', function(){
       });
     })
   })
+  
+  describe('res.statusType', function(){
+    it('should provide the first digit', function(){
+      request
+      .get('http://localhost:3000/login')
+      .end(function(res){
+        assert(200 == res.status);
+        assert(2 == res.statusType);
+        done();
+      });
+    })
+  })
 })
