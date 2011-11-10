@@ -11,6 +11,10 @@ app.post('/echo', function(req, res){
 
 app.listen(3005);
 
+function boundary(ct) {
+  return ct.match(/boundary="(.*)"/)[1];
+}
+
 // TODO: "response" event should be a Response
 
 describe('Request', function(){
@@ -27,14 +31,13 @@ describe('Request', function(){
         req.end(function(res){
           var ct = res.header['content-type'];
           ct.should.include.string('multipart/mixed; boundary="');
-          var boundary = ct.match(/boundary="(.*)"/)[1];
 
           var body = '\r\n';
-          body += '--' + boundary + '\r\n';
+          body += '--' + boundary(ct) + '\r\n';
           body += 'Content-Type: image/png\r\n';
           body += '\r\n';
           body += 'some image data';
-          body += '\r\n--' + boundary + '--';
+          body += '\r\n--' + boundary(ct) + '--';
 
           assert(body == res.text, 'invalid multipart response');
         });
@@ -61,19 +64,18 @@ describe('Request', function(){
         req.end(function(res){
           var ct = res.header['content-type'];
           ct.should.include.string('multipart/mixed; boundary="');
-          var boundary = ct.match(/boundary="(.*)"/)[1];
 
           var body = '';
-          body += '\r\n--' + boundary + '\r\n';
+          body += '\r\n--' + boundary(ct) + '\r\n';
           body += 'Content-Type: image/png\r\n';
           body += 'Content-Disposition: attachment\r\n';
           body += '\r\n';
           body += 'some image data';
-          body += '\r\n--' + boundary + '\r\n';
+          body += '\r\n--' + boundary(ct) + '\r\n';
           body += 'Content-Type: text/plain\r\n';
           body += '\r\n';
           body += 'foo bar baz';
-          body += '\r\n--' + boundary + '--';
+          body += '\r\n--' + boundary(ct) + '--';
 
           assert(body == res.text, 'invalid multipart response');
           done();
@@ -94,14 +96,13 @@ describe('Request', function(){
         req.end(function(res){
           var ct = res.header['content-type'];
           ct.should.include.string('multipart/form-data; boundary="');
-          var boundary = ct.match(/boundary="(.*)"/)[1];
 
           var body = '\r\n';
-          body += '--' + boundary + '\r\n';
+          body += '--' + boundary(ct) + '\r\n';
           body += 'Content-Type: image/png\r\n';
           body += '\r\n';
           body += 'some image data';
-          body += '\r\n--' + boundary + '--';
+          body += '\r\n--' + boundary(ct) + '--';
 
           assert(body == res.text, 'invalid multipart response');
         });
