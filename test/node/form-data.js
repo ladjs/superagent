@@ -1,6 +1,5 @@
 
-var EventEmitter = require('events').EventEmitter
-  , request = require('../../')
+var request = require('../../')
   , express = require('express')
   , assert = require('assert')
   , app = express.createServer();
