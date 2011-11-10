@@ -47,7 +47,7 @@ describe('req.data(Object)', function(){
 
 describe('res.body', function(){
   describe('application/json', function(){
-    it('should parse the JSON', function(done){
+    it('should parse the body', function(done){
       request
       .get('http://localhost:3001/json')
       .end(function(res){
