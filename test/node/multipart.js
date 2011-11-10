@@ -132,7 +132,7 @@ describe('Part', function(){
 
       var part = req.type('multipart/form-data').part();
       part.set('Content-Type', 'text/html');
-      part.pipe(stream);
+      stream.pipe(part);
 
       req.on('response', function(res){
         console.log(res.statusCode);
