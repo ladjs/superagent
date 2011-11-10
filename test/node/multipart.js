@@ -19,6 +19,17 @@ function boundary(ct) {
 
 describe('Request', function(){
   describe('#part()', function(){
+    it('should return a new Part', function(){
+      var req = request.post('http://localhost:3005');
+      req.part().constructor.name.should.equal('Part');
+      req.part().constructor.name.should.equal('Part');
+      req.part().should.not.equal(req.part());
+    })
+  })
+})
+
+describe('Part', function(){
+  describe('#pipe()', function(){
     describe('with a single part', function(){
       it('should construct a multipart request', function(){
         var req = request.post('http://localhost:3005/echo');
@@ -43,7 +54,7 @@ describe('Request', function(){
         });
       })
     })
-    
+
     describe('with several parts', function(){
       it('should construct a multipart request', function(done){
 
@@ -53,7 +64,7 @@ describe('Request', function(){
           .set('Content-Type', 'image/png')
           .set('Content-Disposition', 'attachment')
           .write('some image data');
-            
+
         var part = req.part()
           .set('Content-Type', 'text/plain');
 
@@ -82,11 +93,11 @@ describe('Request', function(){
         });
       })
     })
-    
+
     describe('with a Content-Type specified', function(){
       it('should append the boundary', function(){
         var req = request.post('http://localhost:3005/echo');
- 
+
         req
           .type('multipart/form-data')
           .part()
