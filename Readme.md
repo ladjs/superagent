@@ -48,7 +48,7 @@ $.ajax({
 });
 ```
 
- Not only is it ugly, it's opinionated, jQuery likes to treat {4,5}xx responses specifically, for example you cannot (easily at least) receive a parsed JSON response for say "400 Bad Request". This same request would look like this:
+ Not only is it ugly it's pretty opinionated, jQuery likes to special-case {4,5}xx, for example you cannot (easily at least) receive a parsed JSON response for say "400 Bad Request". This same request would look like this:
 
 ```js
 request
@@ -57,17 +57,6 @@ request
   .set('X-API-Key', 'foobar')
   .set('Accept', 'application/json')
   .end(function(res){
-    
-  });
-```
-
-or we can pass data to `.send()` which combines `.data()` and `.end()`, which is really ugly unless you are passing a variable:
-
-```js
-request
-  .post('/api/pet')
-  .set('X-API-Key', 'foobar')
-  .send(cat, function(res){
     
   });
 ```
