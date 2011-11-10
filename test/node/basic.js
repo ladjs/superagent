@@ -225,5 +225,19 @@ describe('request.VERB(path)', function(){
         });
       })
     })
+
+    describe('when type is form-data', function(){
+      it('should send x-www-form-urlencoded', function(done){
+        request
+        .post('http://localhost:3000/echo')
+        .type('form-data')
+        .data({ name: 'tobi' })
+        .end(function(res){
+          res.header['content-type'].should.equal('application/x-www-form-urlencoded');
+          res.text.should.equal('name=tobi');
+          done();
+        });
+      })
+    })
   })
 })
