@@ -73,6 +73,33 @@ describe('request', function(){
     })
   })
 
+  describe('req.set(field, val)', function(){
+    it('should set the header field', function(done){
+      request
+      .post('http://localhost:3000/echo')
+      .set('X-Foo', 'bar')
+      .set('X-Bar', 'baz')
+      .end(function(res){
+        assert('bar' == res.header['x-foo']);
+        assert('baz' == res.header['x-bar']);
+        done();
+      })
+    })
+  })
+  
+  describe('req.set(obj)', function(){
+    it('should set the header fields', function(done){
+      request
+      .post('http://localhost:3000/echo')
+      .set({ 'X-Foo': 'bar', 'X-Bar': 'baz' })
+      .end(function(res){
+        assert('bar' == res.header['x-foo']);
+        assert('baz' == res.header['x-bar']);
+        done();
+      })
+    })
+  })
+
   describe('req.type(str)', function(){
     it('should set the Content-Type', function(done){
       request
