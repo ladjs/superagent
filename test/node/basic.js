@@ -188,6 +188,18 @@ describe('request.VERB(path)', function(){
     })
   })
 
+  describe('req.data(String)', function(){
+    it('should write the string', function(done){
+      request
+      .post('http://localhost:3000/echo')
+      .data('{"name":"tobi"}')
+      .end(function(res){
+        res.text.should.equal('{"name":"tobi"}');
+        done();
+      });
+    })
+  })
+
   describe('req.data(Object)', function(){
     it('should default to json', function(done){
       request
