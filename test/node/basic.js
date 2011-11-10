@@ -34,6 +34,10 @@ app.post('/echo', function(req, res){
   req.pipe(res);
 });
 
+app.get('/json', function(req, res){
+  res.send({ name: 'manny' });
+});
+
 app.get('/', function(req, res){
   res.redirect('/movies');
 });
