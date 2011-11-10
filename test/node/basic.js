@@ -3,7 +3,8 @@ var EventEmitter = require('events').EventEmitter
   , request = require('../../')
   , express = require('express')
   , assert = require('assert')
-  , app = express.createServer();
+  , app = express.createServer()
+  , url = require('url');
 
 app.get('/login', function(req, res){
   res.send('<form id="login"></form>');
@@ -39,6 +40,17 @@ app.listen(3000);
 // TODO: "response" event should be a Response
 
 describe('request', function(){
+  describe('with an object', function(){
+    it('should format the url', function(done){
+      request
+      .get(url.parse('http://localhost:3000/login'))
+      .end(function(res){
+        assert(res.ok);
+        done();
+      })
+    })
+  })
+
   describe('.end()', function(){
     it('should issue a request', function(done){
       request
