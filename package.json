@@ -8,7 +8,7 @@
   , "devDependencies": {
       "express": "2.5.0"
     , "should": "0.3.2"
-    , "mocha": "0.0.1-alpha1"
+    , "mocha": "*"
   }
   , "main": "index"
   , "engines": { "node": ">= 0.4.0 < 0.7.0" }
