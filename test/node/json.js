@@ -18,11 +18,11 @@ app.listen(3001);
 
 // TODO: "response" event should be a Response
 
-describe('req.data(Object)', function(){
+describe('req.send(Object)', function(){
   it('should default to json', function(done){
     request
     .post('http://localhost:3001/echo')
-    .data({ name: 'tobi' })
+    .send({ name: 'tobi' })
     .end(function(res){
       res.header['content-type'].should.equal('application/json');
       res.text.should.equal('{"name":"tobi"}');
@@ -34,8 +34,8 @@ describe('req.data(Object)', function(){
     it('should merge the objects', function(done){
       request
       .post('http://localhost:3001/echo')
-      .data({ name: 'tobi' })
-      .data({ age: 1 })
+      .send({ name: 'tobi' })
+      .send({ age: 1 })
       .end(function(res){
         res.header['content-type'].should.equal('application/json');
         res.text.should.equal('{"name":"tobi","age":1}');

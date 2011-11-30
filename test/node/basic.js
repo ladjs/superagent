@@ -185,16 +185,16 @@ describe('request', function(){
 
       request
       .post('http://localhost:3000/echo')
-      .data('{"name":"tobi"}')
+      .send('{"name":"tobi"}')
       .pipe(stream);
     })
   })
 
-  describe('req.data(str)', function(){
+  describe('req.send(str)', function(){
     it('should write the string', function(done){
       request
       .post('http://localhost:3000/echo')
-      .data('{"name":"tobi"}')
+      .send('{"name":"tobi"}')
       .end(function(res){
         res.text.should.equal('{"name":"tobi"}');
         done();
@@ -202,11 +202,11 @@ describe('request', function(){
     })
   })
 
-  describe('req.data(obj)', function(){
+  describe('req.send(obj)', function(){
     it('should default to json', function(done){
       request
       .post('http://localhost:3000/echo')
-      .data({ name: 'tobi' })
+      .send({ name: 'tobi' })
       .end(function(res){
         res.header['content-type'].should.equal('application/json');
         res.text.should.equal('{"name":"tobi"}');
@@ -218,8 +218,8 @@ describe('request', function(){
       it('should merge the objects', function(done){
         request
         .post('http://localhost:3000/echo')
-        .data({ name: 'tobi' })
-        .data({ age: 1 })
+        .send({ name: 'tobi' })
+        .send({ age: 1 })
         .end(function(res){
           res.header['content-type'].should.equal('application/json');
           res.text.should.equal('{"name":"tobi","age":1}');

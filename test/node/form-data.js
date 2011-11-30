@@ -18,13 +18,13 @@ app.listen(3002);
 
 // TODO: "response" event should be a Response
 
-describe('req.data(Object)', function(){
+describe('req.send(Object)', function(){
   describe('with req.type() set to form-data', function(){
     it('should send x-www-form-urlencoded data', function(done){
       request
       .post('http://localhost:3000/echo')
       .type('form-data')
-      .data({ name: 'tobi' })
+      .send({ name: 'tobi' })
       .end(function(res){
         res.header['content-type'].should.equal('application/x-www-form-urlencoded');
         res.text.should.equal('name=tobi');
@@ -38,8 +38,8 @@ describe('req.data(Object)', function(){
       request
       .post('http://localhost:3002/echo')
       .type('form-data')
-      .data({ name: { first: 'tobi', last: 'holowaychuk' } })
-      .data({ age: '1' })
+      .send({ name: { first: 'tobi', last: 'holowaychuk' } })
+      .send({ age: '1' })
       .end(function(res){
         res.header['content-type'].should.equal('application/x-www-form-urlencoded');
         res.text.should.equal('name[first]=tobi&name[last]=holowaychuk&age=1');
