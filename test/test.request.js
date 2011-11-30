@@ -124,14 +124,18 @@ test('del()', function(next){
 });
 
 test('post() data', function(next){
-  request.post('/todo/item').send('tobi', function(res){
+  request.post('/todo/item').send('tobi').end(function(res){
     assert('added "tobi"' == res.text, 'response text');
     next();
   });
 });
 
 test('request .type()', function(next){
-  request.post('/user/12/pet').type('urlencoded').send('pet=tobi', function(res){
+  request
+  .post('/user/12/pet')
+  .type('urlencoded')
+  .send('pet=tobi')
+  .end(function(res){
     assert('added pet "tobi"' == res.text, 'response text');
     next();
   });
@@ -141,13 +145,14 @@ test('request .type() with alias', function(next){
   request
   .post('/user/12/pet')
   .type('application/x-www-form-urlencoded')
-  .send('pet=tobi', function(res){
+  .send('pet=tobi')
+  .end(function(res){
     assert('added pet "tobi"' == res.text, 'response text');
     next();
   });
 });
 
-test('request .send() with no data or callback', function(next){
+test('request .get() with no data or callback', function(next){
   request.get('/echo-header/content-type');
   next();
 });
@@ -161,7 +166,7 @@ test('request .send() with callback only', function(next){
   request
   .get('/echo-header/accept')
   .set('Accept', 'foo/bar')
-  .send(function(res){
+  .end(function(res){
     assert('foo/bar' == res.text);
     next();
   });
@@ -173,19 +178,19 @@ test('request .end()', function(next){
   request
   .get('/echo-header/content-type')
   .set('Content-Type', 'text/plain')
-  .data('wahoo')
+  .send('wahoo')
   .end(function(res){
     assert('text/plain' == res.text);
     next();
   });
 });
 
-test('request .data()', function(next){
+test('request .send()', function(next){
   request
   .get('/echo-header/content-type')
   .set('Content-Type', 'text/plain')
-  .data('wahoo')
-  .send(function(res){
+  .send('wahoo')
+  .end(function(res){
     assert('text/plain' == res.text);
     next();
   });
@@ -195,8 +200,8 @@ test('request .set()', function(next){
   request
   .get('/echo-header/content-type')
   .set('Content-Type', 'text/plain')
-  .data('wahoo')
-  .send(function(res){
+  .send('wahoo')
+  .end(function(res){
     assert('text/plain' == res.text);
     next();
   });
@@ -206,8 +211,8 @@ test('request .set(object)', function(next){
   request
   .get('/echo-header/content-type')
   .set({ 'Content-Type': 'text/plain' })
-  .data('wahoo')
-  .send(function(res){
+  .send('wahoo')
+  .end(function(res){
     assert('text/plain' == res.text);
     next();
   });
@@ -217,8 +222,8 @@ test('POST urlencoded', function(next){
   request
   .post('/pet')
   .type('urlencoded')
-  .data({ name: 'Manny', species: 'cat' })
-  .send(function(res){
+  .send({ name: 'Manny', species: 'cat' })
+  .end(function(res){
     assert('added Manny the cat' == res.text);
     next();
   });
@@ -228,8 +233,8 @@ test('POST json', function(next){
   request
   .post('/pet')
   .type('json')
-  .data({ name: 'Manny', species: 'cat' })
-  .send(function(res){
+  .send({ name: 'Manny', species: 'cat' })
+  .end(function(res){
     assert('added Manny the cat' == res.text);
     next();
   });
@@ -238,19 +243,19 @@ test('POST json', function(next){
 test('POST json default', function(next){
   request
   .post('/pet')
-  .data({ name: 'Manny', species: 'cat' })
-  .send(function(res){
+  .send({ name: 'Manny', species: 'cat' })
+  .end(function(res){
     assert('added Manny the cat' == res.text);
     next();
   });
 });
 
-test('POST multiple .data() calls', function(next){
+test('POST multiple .send() calls', function(next){
   request
   .post('/pet')
-  .data({ name: 'Manny' })
-  .data({ species: 'cat' })
-  .send(function(res){
+  .send({ name: 'Manny' })
+  .send({ species: 'cat' })
+  .end(function(res){
     assert('added Manny the cat' == res.text);
     next();
   });
@@ -259,7 +264,7 @@ test('POST multiple .data() calls', function(next){
 test('GET .contentType', function(next){
   request
   .get('/pets')
-  .send(function(res){
+  .end(function(res){
     assert('application/json' == res.contentType);
     next();
   });
@@ -268,7 +273,7 @@ test('GET .contentType', function(next){
 test('GET Content-Type params', function(next){
   request
   .get('/pets')
-  .send(function(res){
+  .end(function(res){
     assert('utf-8' == res.charset);
     next();
   });
@@ -277,7 +282,7 @@ test('GET Content-Type params', function(next){
 test('GET json', function(next){
   request
   .get('/pets')
-  .send(function(res){
+  .end(function(res){
     assert.eql(res.body, ['tobi', 'loki', 'jane']);
     next();
   });
@@ -286,7 +291,7 @@ test('GET json', function(next){
 test('GET x-www-form-urlencoded', function(next){
   request
   .get('/foo')
-  .send(function(res){
+  .end(function(res){
     assert.eql(res.body, { foo: 'bar' });
     next();
   });
@@ -316,7 +321,7 @@ test('POST shorthand without callback', function(next){
 test('request X-Requested-With', function(next){
   request
   .get('/echo-header/x-requested-with')
-  .send(function(res){
+  .end(function(res){
     assert('XMLHttpRequest' == res.text);
     next();
   });
@@ -325,7 +330,7 @@ test('request X-Requested-With', function(next){
 test('GET querystring', function(next){
   request
   .get('/querystring')
-  .data('search=Manny&range=1..5')
+  .send('search=Manny&range=1..5')
   .end(function(res){
     assert.eql(res.body, { search: 'Manny', range: '1..5' });
     next();
@@ -335,7 +340,7 @@ test('GET querystring', function(next){
 test('GET querystring object', function(next){
   request
   .get('/querystring')
-  .data({ search: 'Manny' })
+  .send({ search: 'Manny' })
   .end(function(res){
     assert.eql(res.body, { search: 'Manny' });
     next();
@@ -345,9 +350,9 @@ test('GET querystring object', function(next){
 test('GET querystring multiple objects', function(next){
   request
   .get('/querystring')
-  .data({ search: 'Manny' })
-  .data({ range: '1..5' })
-  .data({ order: 'desc' })
+  .send({ search: 'Manny' })
+  .send({ range: '1..5' })
+  .send({ order: 'desc' })
   .end(function(res){
     assert.eql(res.body, { search: 'Manny', range: '1..5', order: 'desc' });
     next();
