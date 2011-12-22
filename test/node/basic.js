@@ -202,7 +202,7 @@ describe('request', function(){
     })
   })
 
-  describe('req.send(obj)', function(){
+  describe('req.send(Object)', function(){
     it('should default to json', function(done){
       request
       .post('http://localhost:3000/echo')

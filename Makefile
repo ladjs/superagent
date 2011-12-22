@@ -22,9 +22,12 @@ superagent.min.js: superagent.js
 test-server:
 	@node test/server
 
-docs: lib
+docs: lib test-docs
+
+test-docs:
+	make test REPORTER=doc | cat docs/head.html - cat docs/tail.html > docs/test.html
 
 clean:
 	rm -f superagent{,.min}.js
 
-.PHONY: test docs clean
+.PHONY: test docs test-docs clean
