@@ -25,7 +25,9 @@ test-server:
 docs: lib test-docs
 
 test-docs:
-	make test REPORTER=doc | cat docs/head.html - cat docs/tail.html > docs/test.html
+	make test REPORTER=doc \
+		| cat docs/head.html - docs/tail.html \
+		> docs/test.html
 
 clean:
 	rm -f superagent{,.min}.js
