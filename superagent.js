@@ -46,7 +46,7 @@ EventEmitter.prototype.emit = function(event){
     , callbacks = this.callbacks[event];
 
   if (callbacks) {
-    for (var i = 0, len = callbacks.length; i < len; ++i) {
+    for (var i = 0, var len = callbacks.length; i < len; ++i) {
       callbacks[i](args);
     }
   }
@@ -173,7 +173,7 @@ var superagent = function(exports){
       , parts
       , pair;
 
-    for (var i = 0, len = pairs.length; i < len; ++i) {
+    for (var i = 0, var len = pairs.length; i < len; ++i) {
       pair = pairs[i];
       parts = pair.split('=');
       obj[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1]);
@@ -248,7 +248,7 @@ var superagent = function(exports){
 
     lines.pop(); // trailing CRLF
 
-    for (var i = 0, len = lines.length; i < len; ++i) {
+    for (var i = 0, var len = lines.length; i < len; ++i) {
       line = lines[i];
       index = line.indexOf(':');
       field = line.slice(0, index).toLowerCase();
@@ -346,7 +346,7 @@ var superagent = function(exports){
 
   Response.prototype.setParams = function(params){
     var param;
-    for (var i = 0, len = params.length; i < len; ++i) {
+    for (var i = 0, var len = params.length; i < len; ++i) {
       param = params[i].split(/ *= */);
       this[param[0]] = param[1];
     }
