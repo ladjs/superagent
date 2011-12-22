@@ -198,8 +198,7 @@ var superagent = function(exports){
   exports.types = {
       html: 'text/html'
     , json: 'application/json'
-    , urlencoded: 'application/x-www-form-urlencoded'
-    , 'form-data': 'application/x-www-form-urlencoded'
+    , form: 'application/x-www-form-urlencoded'
   };
 
   /**
@@ -537,13 +536,13 @@ var superagent = function(exports){
    *       
    *       // manual x-www-form-urlencoded
    *       request.post('/user')
-   *         .type('form-data')
+   *         .type('form')
    *         .data('name=tj')
    *         .end(callback)
    *       
    *       // auto x-www-form-urlencoded
    *       request.post('/user')
-   *         .type('form-data')
+   *         .type('form')
    *         .data({ name: 'tj' })
    *         .end(callback)
    *

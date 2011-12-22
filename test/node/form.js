@@ -19,11 +19,11 @@ app.listen(3002);
 // TODO: "response" event should be a Response
 
 describe('req.send(Object)', function(){
-  describe('with req.type() set to form-data', function(){
+  describe('with req.type() set to form', function(){
     it('should send x-www-form-urlencoded data', function(done){
       request
       .post('http://localhost:3000/echo')
-      .type('form-data')
+      .type('form')
       .send({ name: 'tobi' })
       .end(function(res){
         res.header['content-type'].should.equal('application/x-www-form-urlencoded');
@@ -37,7 +37,7 @@ describe('req.send(Object)', function(){
     it('should merge the objects', function(done){
       request
       .post('http://localhost:3002/echo')
-      .type('form-data')
+      .type('form')
       .send({ name: { first: 'tobi', last: 'holowaychuk' } })
       .send({ age: '1' })
       .end(function(res){

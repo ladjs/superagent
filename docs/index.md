@@ -150,10 +150,10 @@
         .data({ pet: 'tobi' })
         .end(callback)
 
-  SuperAgent formats are extensible, however by default "json" and "form-data" are supported. To send the data as `application/x-www-form-urlencoded` simply invoke `.type()` with "form-data", where the default is "json". This request will POST the body "name=tj&pet=tobi".
+  SuperAgent formats are extensible, however by default "json" and "form" are supported. To send the data as `application/x-www-form-urlencoded` simply invoke `.type()` with "form-data", where the default is "json". This request will POST the body "name=tj&pet=tobi".
 
       request.post('/user')
-        .type('form-data')
+        .type('form')
         .data({ name: 'tj' })
         .data({ pet: 'tobi' })
         .end(callback)
