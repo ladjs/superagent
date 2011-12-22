@@ -24,7 +24,7 @@ describe('req.send(Object)', function(){
     .post('http://localhost:3001/echo')
     .send({ name: 'tobi' })
     .end(function(res){
-      res.header['content-type'].should.equal('application/json');
+      res.should.be.json
       res.text.should.equal('{"name":"tobi"}');
       done();
     });
@@ -35,7 +35,7 @@ describe('req.send(Object)', function(){
     .post('http://localhost:3001/echo')
     .send([1,2,3])
     .end(function(res){
-      res.header['content-type'].should.equal('application/json');
+      res.should.be.json
       res.text.should.equal('[1,2,3]');
       done();
     });
@@ -48,7 +48,7 @@ describe('req.send(Object)', function(){
       .send({ name: 'tobi' })
       .send({ age: 1 })
       .end(function(res){
-        res.header['content-type'].should.equal('application/json');
+        res.should.be.json
         res.text.should.equal('{"name":"tobi","age":1}');
         done();
       });
