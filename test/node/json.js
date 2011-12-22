@@ -29,6 +29,17 @@ describe('req.send(Object)', function(){
       done();
     });
   })
+
+  it('should work with arrays', function(done){
+    request
+    .post('http://localhost:3001/echo')
+    .send([1,2,3])
+    .end(function(res){
+      res.header['content-type'].should.equal('application/json');
+      res.text.should.equal('[1,2,3]');
+      done();
+    });
+  })
   
   describe('when called several times', function(){
     it('should merge the objects', function(done){
