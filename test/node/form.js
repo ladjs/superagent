@@ -18,7 +18,7 @@ app.listen(3002);
 
 // TODO: "response" event should be a Response
 
-describe('req.send(Object)', function(){
+describe('req.send(Object) as "form"', function(){
   describe('with req.type() set to form', function(){
     it('should send x-www-form-urlencoded data', function(done){
       request

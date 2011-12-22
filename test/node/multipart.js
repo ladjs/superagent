@@ -121,9 +121,7 @@ describe('Part', function(){
       })
     })
   })
-})
 
-describe('Part', function(){
   describe('#pipe(stream)', function(){
     it('should write to the part', function(){
       var req = request
