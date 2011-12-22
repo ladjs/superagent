@@ -65,6 +65,10 @@ app.all('/echo-header/:field', function(req, res){
   res.send(req.headers[req.params.field]);
 });
 
+app.post('/echo', function(req, res){
+  res.send(req.body);
+});
+
 app.post('/pet', function(req, res){
   res.send('added ' + req.body.name + ' the ' + req.body.species);
 });
