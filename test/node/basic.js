@@ -139,7 +139,7 @@ describe('request', function(){
       .post('http://localhost:3000/echo')
       .type('json')
       .end(function(res){
-        res.header['content-type'].should.equal('application/json');
+        res.should.be.json
         done();
       });
     })
@@ -208,7 +208,7 @@ describe('request', function(){
       .post('http://localhost:3000/echo')
       .send({ name: 'tobi' })
       .end(function(res){
-        res.header['content-type'].should.equal('application/json');
+        res.should.be.json
         res.text.should.equal('{"name":"tobi"}');
         done();
       });
@@ -221,7 +221,7 @@ describe('request', function(){
         .send({ name: 'tobi' })
         .send({ age: 1 })
         .end(function(res){
-          res.header['content-type'].should.equal('application/json');
+          res.should.be.json
           res.text.should.equal('{"name":"tobi","age":1}');
           done();
         });
