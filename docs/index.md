@@ -16,6 +16,10 @@
          }
        });
 
+## Test documentation
+
+  The following [test documentation](docs/test.html) was generated with [Mocha's](http://visionmedia.github.com/mocha) "doc" reporter, and directly reflects the test suite. This provides an additional source of documentation.
+
 ## Request basics
 
  A request can be initiated by invoking the appropriate method on the `request` object, then calling `.end()` to send the request. For example a simple GET request:
