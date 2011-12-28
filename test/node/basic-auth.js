@@ -14,6 +14,17 @@ app.get('/', function(req, res){
 app.listen(3010);
 
 describe('Basic auth', function(){
+  describe('when credentials are present in url', function(){
+    it('should set Authorization', function(done){
+      request
+      .get('http://tobi:learnboost@localhost:3010')
+      .end(function(res){
+        res.status.should.equal(200);
+        done();
+      });
+    })
+  })
+
   describe('req.auth(user, pass)', function(){
     it('should set Authorization', function(done){
       request
