@@ -13,14 +13,16 @@ app.get('/', function(req, res){
 
 app.listen(3010);
 
-describe('req.auth(user, pass)', function(){
-  it('should set Authorization', function(done){
-    request
-    .get('http://localhost:3010')
-    .auth('tobi', 'learnboost')
-    .end(function(res){
-      res.status.should.equal(200);
-      done();
-    });
+describe('Basic auth', function(){
+  describe('req.auth(user, pass)', function(){
+    it('should set Authorization', function(done){
+      request
+      .get('http://localhost:3010')
+      .auth('tobi', 'learnboost')
+      .end(function(res){
+        res.status.should.equal(200);
+        done();
+      });
+    })
   })
 })
