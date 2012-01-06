@@ -1,59 +1,179 @@
 
-/*!
- * EventEmitter
- * Copyright (c) 2011 TJ Holowaychuk <tj@vision-media.ca>
- * MIT Licensed
+/**
+ * Module exports.
  */
-
-// TODO: own library, since tons of my libs use this :D
 
 /**
- * Slice reference.
+ * Check if `obj` is an array.
  */
 
-var slice = [].slice;
+function isArray(obj) {
+  return '[object Array]' == {}.toString.call(obj);
+}
 
 /**
- * EventEmitter.
+ * Event emitter constructor.
+ *
+ * @api public.
  */
 
-function EventEmitter() {
-  this.callbacks = {};
+function EventEmitter(){};
+
+/**
+ * Adds a listener.
+ *
+ * @api public
+ */
+
+EventEmitter.prototype.on = function (name, fn) {
+  if (!this.$events) {
+    this.$events = {};
+  }
+
+  if (!this.$events[name]) {
+    this.$events[name] = fn;
+  } else if (isArray(this.$events[name])) {
+    this.$events[name].push(fn);
+  } else {
+    this.$events[name] = [this.$events[name], fn];
+  }
+
+  return this;
 };
 
+EventEmitter.prototype.addListener = EventEmitter.prototype.on;
+
 /**
- * Listen on the given `event` with `fn`.
+ * Adds a volatile listener.
  *
- * @param {String} event
- * @param {Function} fn
+ * @api public
  */
 
-EventEmitter.prototype.on = function(event, fn){
-  (this.callbacks[event] = this.callbacks[event] || [])
-    .push(fn);
+EventEmitter.prototype.once = function (name, fn) {
+  var self = this;
+
+  function on () {
+    self.removeListener(name, on);
+    fn.apply(this, arguments);
+  };
+
+  on.listener = fn;
+  this.on(name, on);
+
   return this;
 };
 
 /**
- * Emit `event` with the given args.
+ * Removes a listener.
  *
- * @param {String} event
- * @param {Mixed} ...
+ * @api public
  */
 
-EventEmitter.prototype.emit = function(event){
-  var args = slice.call(arguments, 1)
-    , callbacks = this.callbacks[event];
+EventEmitter.prototype.removeListener = function (name, fn) {
+  if (this.$events && this.$events[name]) {
+    var list = this.$events[name];
 
-  if (callbacks) {
-    for (var i = 0, len = callbacks.length; i < len; ++i) {
-      callbacks[i](args);
+    if (isArray(list)) {
+      var pos = -1;
+
+      for (var i = 0, l = list.length; i < l; i++) {
+        if (list[i] === fn || (list[i].listener && list[i].listener === fn)) {
+          pos = i;
+          break;
+        }
+      }
+
+      if (pos < 0) {
+        return this;
+      }
+
+      list.splice(pos, 1);
+
+      if (!list.length) {
+        delete this.$events[name];
+      }
+    } else if (list === fn || (list.listener && list.listener === fn)) {
+      delete this.$events[name];
     }
   }
 
   return this;
 };
 
+/**
+ * Removes all listeners for an event.
+ *
+ * @api public
+ */
+
+EventEmitter.prototype.removeAllListeners = function (name) {
+  if (name === undefined) {
+    this.$events = {};
+    return this;
+  }
+
+  if (this.$events && this.$events[name]) {
+    this.$events[name] = null;
+  }
+
+  return this;
+};
+
+/**
+ * Gets all listeners for a certain event.
+ *
+ * @api publci
+ */
+
+EventEmitter.prototype.listeners = function (name) {
+  if (!this.$events) {
+    this.$events = {};
+  }
+
+  if (!this.$events[name]) {
+    this.$events[name] = [];
+  }
+
+  if (!isArray(this.$events[name])) {
+    this.$events[name] = [this.$events[name]];
+  }
+
+  return this.$events[name];
+};
+
+/**
+ * Emits an event.
+ *
+ * @api public
+ */
+
+EventEmitter.prototype.emit = function (name) {
+  if (!this.$events) {
+    return false;
+  }
+
+  var handler = this.$events[name];
+
+  if (!handler) {
+    return false;
+  }
+
+  var args = [].slice.call(arguments, 1);
+
+  if ('function' == typeof handler) {
+    handler.apply(this, args);
+  } else if (isArray(handler)) {
+    var listeners = handler.slice();
+
+    for (var i = 0, l = listeners.length; i < l; i++) {
+      listeners[i].apply(this, args);
+    }
+  } else {
+    return false;
+  }
+
+  return true;
+};
 /*!
  * superagent
  * Copyright (c) 2011 TJ Holowaychuk <tj@vision-media.ca>
@@ -72,7 +192,7 @@ var superagent = function(exports){
    * Library version.
    */
 
-  exports.version = '0.1.1';
+  exports.version = '0.2.0';
 
   /**
    * Noop.
@@ -130,9 +250,7 @@ var superagent = function(exports){
    */
 
   function isObject(obj) {
-    if (null == obj) return false;
-    var cons = obj.constructor;
-    return cons && Object == cons;
+    return null != obj && 'object' == typeof obj;
   }
 
   /**
@@ -198,7 +316,8 @@ var superagent = function(exports){
   exports.types = {
       html: 'text/html'
     , json: 'application/json'
-    , form: 'application/x-www-form-urlencoded'
+    , urlencoded: 'application/x-www-form-urlencoded'
+    , 'form-data': 'application/x-www-form-urlencoded'
   };
 
   /**
@@ -280,7 +399,7 @@ var superagent = function(exports){
    *
    *      request
    *        .post('/user')
-   *        .data({ name: 'tj' })
+   *        .send({ name: 'tj' })
    *        .end(function(res){});
    *
    *  Or passed to `.send()`:
@@ -487,12 +606,12 @@ var superagent = function(exports){
    *
    *      request.post('/')
    *        .type('xml')
-   *        .data(xmlstring)
+   *        .send(xmlstring)
    *        .end(callback);
    *      
    *      request.post('/')
    *        .type('application/xml')
-   *        .data(xmlstring)
+   *        .send(xmlstring)
    *        .end(callback);
    *
    * @param {String} type
@@ -513,37 +632,37 @@ var superagent = function(exports){
    *
    *       // querystring
    *       request.get('/search')
-   *         .data({ search: 'query' })
+   *         .send({ search: 'query' })
    *         .end(callback)
    *
    *       // multiple data "writes"
    *       request.get('/search')
-   *         .data({ search: 'query' })
-   *         .data({ range: '1..5' })
-   *         .data({ order: 'desc' })
+   *         .send({ search: 'query' })
+   *         .send({ range: '1..5' })
+   *         .send({ order: 'desc' })
    *         .end(callback)
    *
    *       // manual json
    *       request.post('/user')
    *         .type('json')
-   *         .data('{"name":"tj"})
+   *         .send('{"name":"tj"})
    *         .end(callback)
    *       
    *       // auto json
    *       request.post('/user')
-   *         .data({ name: 'tj' })
+   *         .send({ name: 'tj' })
    *         .end(callback)
    *       
    *       // manual x-www-form-urlencoded
    *       request.post('/user')
    *         .type('form')
-   *         .data('name=tj')
+   *         .send('name=tj')
    *         .end(callback)
    *       
    *       // auto x-www-form-urlencoded
    *       request.post('/user')
    *         .type('form')
-   *         .data({ name: 'tj' })
+   *         .send({ name: 'tj' })
    *         .end(callback)
    *
    * @param {String|Object} data
@@ -551,7 +670,7 @@ var superagent = function(exports){
    * @api public
    */
 
-  Request.prototype.data = function(data){
+  Request.prototype.send = function(data){
     var obj = isObject(data);
 
     // merge
@@ -567,40 +686,6 @@ var superagent = function(exports){
     if (!obj) return this;
     if (this.header['content-type']) return this;
     this.type('json');
-    return this;
-  };
-
-  /**
-   * Send `.data()` and `.end()` with optional callback `fn`.
-   *
-   * Examples:
-   *
-   *       // equivalent to .end()
-   *       request.post('/user').send();
-   *       
-   *       // equivalent to .data(user).end()
-   *       request.post('/user').send(user);
-   *       
-   *       // equivalent to .data(user).end(callback)
-   *       request.post('/user').send(user, callback);
-   *       
-   *       // equivalent to ..end(callback)
-   *       request.post('/user').send(callback);
-   *
-   * @param {Object|String} data
-   * @param {Function} fn
-   * @return {Request} for chaining
-   * @api public
-   */
-
-  Request.prototype.send = function(data, fn){
-    if (isFunction(data)) {
-      this.end(data);
-    } else if (data) {
-      this.data(data).end(fn);
-    } else {
-      this.end();
-    }
     return this;
   };
 
@@ -700,7 +785,7 @@ var superagent = function(exports){
   request.get = function(url, data, fn){
     var req = request('GET', url);
     if (isFunction(data)) fn = data, data = null;
-    if (data) req.data(data);
+    if (data) req.send(data);
     if (fn) req.end(fn);
     return req;
   };
@@ -732,7 +817,7 @@ var superagent = function(exports){
 
   request.post = function(url, data, fn){
     var req = request('POST', url);
-    if (data) req.data(data);
+    if (data) req.send(data);
     if (fn) req.end(fn);
     return req;
   };
@@ -749,7 +834,7 @@ var superagent = function(exports){
 
   request.put = function(url, data, fn){
     var req = request('PUT', url);
-    if (data) req.data(data);
+    if (data) req.send(data);
     if (fn) req.end(fn);
     return req;
   };

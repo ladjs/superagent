@@ -1,4 +1,18 @@
 
+0.2.0 / 2012-01-05 
+==================
+
+  * Added url auth support
+  * Added `.auth(username, password)`
+  * Added basic auth support [node]. Closes #41
+  * Added `make test-docs`
+  * Added guillermo's EventEmitter. Closes #16
+  * Removed `Request#data()` for SS, renamed to `send()`
+  * Removed `Request#data()` from client, renamed to `send()`
+  * Fixed array support. [browser]
+  * Fixed array support. Closes #35 [node]
+  * Fixed `EventEmitter#emit()`
+
 0.1.3 / 2011-10-25 
 ==================
 
