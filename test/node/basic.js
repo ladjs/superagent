@@ -51,6 +51,17 @@ describe('request', function(){
     })
   })
 
+  describe('without a schema', function(){
+    it('should default to http', function(done){
+      request
+      .get('localhost:3000/login')
+      .end(function(res){
+        assert(res.status == 200);
+        done();
+      })
+    })
+  })
+
   describe('.end()', function(){
     it('should issue a request', function(done){
       request
