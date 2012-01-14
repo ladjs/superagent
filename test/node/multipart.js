@@ -42,7 +42,7 @@ describe('Part', function(){
 
         req.end(function(res){
           var ct = res.header['content-type'];
-          ct.should.include.string('multipart/form-data; boundary="');
+          ct.should.include('multipart/form-data; boundary="');
 
           var body = '\r\n';
           body += '--' + boundary(ct) + '\r\n';
@@ -75,7 +75,7 @@ describe('Part', function(){
 
         req.end(function(res){
           var ct = res.header['content-type'];
-          ct.should.include.string('multipart/form-data; boundary="');
+          ct.should.include('multipart/form-data; boundary="');
 
           var body = '';
           body += '\r\n--' + boundary(ct) + '\r\n';
@@ -107,7 +107,7 @@ describe('Part', function(){
 
         req.end(function(res){
           var ct = res.header['content-type'];
-          ct.should.include.string('multipart/form-data; boundary="');
+          ct.should.include('multipart/form-data; boundary="');
 
           var body = '\r\n';
           body += '--' + boundary(ct) + '\r\n';
