@@ -15,3 +15,12 @@ describe('utils.type(obj)', function(){
     utils.type(res).should.equal('application/json');
   })
 })
+
+describe('utils.params', function(){
+  it('should return the field parameters', function(){
+    var str = 'application/json; charset=utf-8; foo  = bar';
+    var obj = utils.params(str);
+    obj.charset.should.equal('utf-8');
+    obj.foo.should.equal('bar');
+  })
+})
