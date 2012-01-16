@@ -16,7 +16,7 @@ describe('utils.type(obj)', function(){
   })
 })
 
-describe('utils.params', function(){
+describe('utils.params(str)', function(){
   it('should return the field parameters', function(){
     var str = 'application/json; charset=utf-8; foo  = bar';
     var obj = utils.params(str);
