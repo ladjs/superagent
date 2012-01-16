@@ -107,6 +107,18 @@ describe('request', function(){
     })
   })
 
+  describe('res.type', function(){
+    it('should provide the mime-type void of params', function(done){
+      request
+      .get('http://localhost:3000/login')
+      .end(function(res){
+        res.type.should.equal('text/html');
+        res.charset.should.equal('utf-8');
+        done();
+      });
+    })
+  })
+
   describe('req.set(field, val)', function(){
     it('should set the header field', function(done){
       request
