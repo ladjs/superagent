@@ -9,10 +9,10 @@ describe('utils.uid(len)', function(){
   })
 })
 
-describe('utils.type(obj)', function(){
+describe('utils.type(str)', function(){
   it('should return the mime type', function(){
-    var res = { headers: { 'content-type': 'application/json; charset=utf-8' }};
-    utils.type(res).should.equal('application/json');
+    utils.type('application/json; charset=utf-8')
+      .should.equal('application/json');
   })
 })
 
