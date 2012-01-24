@@ -1,4 +1,14 @@
 
+0.3.0 / 2012-01-24 
+==================
+
+  * Added deflate/gzip support [guillermo]
+  * Added `res.type` (Content-Type void of params)
+  * Added `res.statusCode` to mirror node
+  * Added `res.headers` to mirror node
+  * Changed: parsers take callbacks
+  * Fixed optional schema support. Closes #49
+
 0.2.0 / 2012-01-05 
 ==================
 

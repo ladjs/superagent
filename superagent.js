@@ -192,7 +192,7 @@ var superagent = function(exports){
    * Library version.
    */
 
-  exports.version = '0.2.0';
+  exports.version = '0.3.0';
 
   /**
    * Noop.
