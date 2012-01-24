@@ -25,5 +25,14 @@ describe('req.send(Object)', function(){
         done();
       });
     })
+
+    it('should keep the qs from the url', function(done){
+      request
+      .get('http://localhost:3006/?tj=holoway')
+      .end(function(res) {
+        res.body.should.eql({ tj: 'holoway' });
+        done();
+      });
+    });
   })
 })
