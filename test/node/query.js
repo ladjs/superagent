@@ -29,10 +29,20 @@ describe('req.send(Object)', function(){
     it('should keep the qs from the url', function(done){
       request
       .get('http://localhost:3006/?tj=holoway')
-      .end(function(res) {
+      .end(function(res){
         res.body.should.eql({ tj: 'holoway' });
         done();
       });
+    });
+
+    it('should allow incremental qs additions as strings', function(done){
+      request.get('http://localhost:3006/?')
+        .send({ name: 'tobi' })
+        .send('type=ferret')
+        .end(function(res){
+          res.body.should.eql({ name: 'tobi', type: 'ferret' });
+          done();
+        });
     });
   })
 })
