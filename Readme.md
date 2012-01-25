@@ -1,7 +1,7 @@
 
 # SuperAgent
 
-  SuperAgent is an elegant, small (~1.7kb compressed), progressive client-side HTTP request library. View the [docs](http://visionmedia.github.com/superagent/).
+  SuperAgent is a small progressive client-side HTTP request library, and Node.js module with the same API, sporting many high-level HTTP client features. View the [docs](http://visionmedia.github.com/superagent/).
 
 ![super agent](http://f.cl.ly/items/3d282n3A0h0Z0K2w0q2a/Screenshot.png)
 
@@ -53,7 +53,7 @@ $.ajax({
 ```js
 request
   .post('/api/pet')
-  .data({ name: 'Manny', species: 'cat' })
+  .send({ name: 'Manny', species: 'cat' })
   .set('X-API-Key', 'foobar')
   .set('Accept', 'application/json')
   .end(function(res){
