@@ -272,11 +272,11 @@ test('POST multiple .send() calls', function(next){
   });
 });
 
-test('GET .contentType', function(next){
+test('GET .type', function(next){
   request
   .get('/pets')
   .end(function(res){
-    assert('application/json' == res.contentType);
+    assert('application/json' == res.type);
     next();
   });
 });
