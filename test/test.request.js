@@ -358,6 +358,16 @@ test('GET querystring object', function(next){
   });
 });
 
+test('GET querystring append original', function(next){
+  request
+  .get('/querystring?search=Manny')
+  .send({ range: '1..5' })
+  .end(function(res){
+    assert.eql(res.body, { search: 'Manny', range: '1..5' });
+    next();
+  });
+});
+
 test('GET querystring multiple objects', function(next){
   request
   .get('/querystring')
@@ -372,7 +382,7 @@ test('GET querystring multiple objects', function(next){
 
 test('GET querystring object .get(uri, obj)', function(next){
   request
-  .get('/querystring', { search: 'Manny'})
+  .get('/querystring', { search: 'Manny' })
   .end(function(res){
     assert.eql(res.body, { search: 'Manny' });
     next();
