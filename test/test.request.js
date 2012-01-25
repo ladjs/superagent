@@ -338,16 +338,6 @@ test('request X-Requested-With', function(next){
   });
 });
 
-test('GET querystring', function(next){
-  request
-  .get('/querystring')
-  .send('search=Manny&range=1..5')
-  .end(function(res){
-    assert.eql(res.body, { search: 'Manny', range: '1..5' });
-    next();
-  });
-});
-
 test('GET querystring object', function(next){
   request
   .get('/querystring')
