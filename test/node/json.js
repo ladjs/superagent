@@ -16,8 +16,6 @@ app.get('/json', function(req, res){
 
 app.listen(3001);
 
-// TODO: "response" event should be a Response
-
 describe('req.send(Object) as "json"', function(){
   it('should default to json', function(done){
     request

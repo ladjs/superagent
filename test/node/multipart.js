@@ -16,8 +16,6 @@ function boundary(ct) {
   return ct.match(/boundary="(.*)"/)[1];
 }
 
-// TODO: "response" event should be a Response
-
 describe('Request', function(){
   describe('#part()', function(){
     it('should return a new Part', function(){

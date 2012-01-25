@@ -23,8 +23,6 @@ app.get('/movies/all/0', function(req, res){
 
 app.listen(3003);
 
-// TODO: "response" event should be a Response
-
 describe('request', function(){
   describe('on redirect', function(){
     it('should follow Location', function(done){

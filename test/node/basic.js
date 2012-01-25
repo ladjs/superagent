@@ -37,8 +37,6 @@ app.get('/movies/all/0', function(req, res){
 
 app.listen(3000);
 
-// TODO: "response" event should be a Response
-
 describe('request', function(){
   describe('with an object', function(){
     it('should format the url', function(done){
