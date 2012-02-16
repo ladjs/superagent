@@ -1,0 +1,28 @@
+info it worked if it ends with ok
+verbose cli [ 'node', '/usr/local/bin/npm', 'info', 'kiwi' ]
+info using npm@1.0.106
+info using node@v0.6.6
+verbose config file /Users/tj/.npmrc
+verbose config file /usr/local/etc/npmrc
+verbose config file /usr/local/lib/node_modules/npm/npmrc
+verbose GET kiwi
+verbose raw, before any munging kiwi
+verbose url resolving [ 'https://registry.npmjs.org/', './kiwi' ]
+verbose url resolved https://registry.npmjs.org/kiwi
+silly get cb [ 404,
+silly get cb   { server: 'CouchDB/1.1.0 (Erlang OTP/R14B04)',
+silly get cb     date: 'Thu, 26 Jan 2012 00:27:57 GMT',
+silly get cb     'content-type': 'application/json',
+silly get cb     'content-length': '52',
+silly get cb     'cache-control': 'must-revalidate' } ]
+ERR! 404 'kiwi' is not in the npm registry.
+ERR! 404 You could maybe bug the author to publish it
+ERR! 404 Note that you can also install from a tarball or folder.
+ERR! 
+ERR! System Darwin 10.7.0
+ERR! command "node" "/usr/local/bin/npm" "info" "kiwi"
+ERR! cwd /Users/tj/Projects/superagent
+ERR! node -v v0.6.6
+ERR! npm -v 1.0.106
+ERR! code E404
+verbose exit [ 1, true ]
