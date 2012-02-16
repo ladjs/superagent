@@ -49,6 +49,16 @@ describe('request', function(){
     })
   })
 
+  describe('with a callback', function(){
+    it('should invoke .end()', function(done){
+      request
+      .get('localhost:3000/login', function(res){
+        assert(res.status == 200);
+        done();
+      })
+    })
+  })
+
   describe('without a schema', function(){
     it('should default to http', function(done){
       request
