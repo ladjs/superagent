@@ -15,11 +15,6 @@ describe('exports', function(){
       .should.eql(['http:', 'https:']);
   })
 
-  it('should expose .types', function(){
-    Object.keys(request.types)
-      .should.eql(['html', 'json', 'form']);
-  })
-  
   it('should expose .serialize', function(){
     Object.keys(request.serialize)
       .should.eql(['application/x-www-form-urlencoded', 'application/json']);

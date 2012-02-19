@@ -5,6 +5,10 @@ var request = require('../../')
   , app = express.createServer()
   , fs = require('fs');
 
+function read(file) {
+  return fs.readFileSync(file, 'utf8');
+}
+
 app.post('/echo', function(req, res){
   res.writeHead(200, req.headers);
   req.pipe(res);
@@ -25,133 +29,197 @@ describe('Request', function(){
       req.part().should.not.equal(req.part());
     })
   })
-})
 
-describe('Part', function(){
-  describe('#pipe()', function(){
-    describe('with a single part', function(){
-      it('should construct a multipart request', function(){
-        var req = request.post('http://localhost:3005/echo');
+  describe('#field(name, value)', function(){
+    it('should set a multipart field value', function(done){
+      var req = request.post('http://localhost:3005/echo');
 
-        req
-          .part()
-          .set('Content-Type', 'image/png')
-          .write('some image data');
+      req.field('user[name]', 'tobi');
+      req.field('user[age]', '2');
+      req.field('user[species]', 'ferret');
 
-        req.end(function(res){
-          var ct = res.header['content-type'];
-          ct.should.include('multipart/form-data; boundary="');
-
-          var body = '\r\n';
-          body += '--' + boundary(ct) + '\r\n';
-          body += 'Content-Type: image/png\r\n';
-          body += '\r\n';
-          body += 'some image data';
-          body += '\r\n--' + boundary(ct) + '--';
-
-          assert(body == res.text, 'invalid multipart response');
-        });
-      })
+      req.end(function(res){
+        res.body['user[name]'].should.equal('tobi');
+        res.body['user[age]'].should.equal('2');
+        res.body['user[species]'].should.equal('ferret');
+        done();
+      });
     })
 
-    describe('with several parts', function(){
-      it('should construct a multipart request', function(done){
+    it('should work with file attachments', function(done){
+      var req = request.post('http://localhost:3005/echo');
 
-        var req = request.post('http://localhost:3005/echo');
+      req.field('name', 'Tobi');
+      req.attach('test/node/fixtures/user.html', 'document');
+      req.field('species', 'ferret');
 
-        req.part()
-          .set('Content-Type', 'image/png')
-          .set('Content-Disposition', 'attachment')
-          .write('some image data');
+      req.end(function(res){
+        res.body.name.should.equal('Tobi');
+        res.body.species.should.equal('ferret');
 
-        var part = req.part()
-          .set('Content-Type', 'text/plain');
-
-        part.write('foo ');
-        part.write('bar ');
-        part.write('baz');
-
-        req.end(function(res){
-          var ct = res.header['content-type'];
-          ct.should.include('multipart/form-data; boundary="');
-
-          var body = '';
-          body += '\r\n--' + boundary(ct) + '\r\n';
-          body += 'Content-Type: image/png\r\n';
-          body += 'Content-Disposition: attachment\r\n';
-          body += '\r\n';
-          body += 'some image data';
-          body += '\r\n--' + boundary(ct) + '\r\n';
-          body += 'Content-Type: text/plain\r\n';
-          body += '\r\n';
-          body += 'foo bar baz';
-          body += '\r\n--' + boundary(ct) + '--';
-
-          assert(body == res.text, 'invalid multipart response');
-          done();
-        });
-      })
-    })
-
-    describe('with a Content-Type specified', function(){
-      it('should append the boundary', function(){
-        var req = request.post('http://localhost:3005/echo');
-
-        req
-          .type('multipart/form-data')
-          .part()
-          .set('Content-Type', 'image/png')
-          .write('some image data');
-
-        req.end(function(res){
-          var ct = res.header['content-type'];
-          ct.should.include('multipart/form-data; boundary="');
-
-          var body = '\r\n';
-          body += '--' + boundary(ct) + '\r\n';
-          body += 'Content-Type: image/png\r\n';
-          body += '\r\n';
-          body += 'some image data';
-          body += '\r\n--' + boundary(ct) + '--';
-
-          assert(body == res.text, 'invalid multipart response');
-        });
+        var html = res.files.document;
+        html.name.should.equal('document');
+        html.type.should.equal('text/html');
+        read(html.path).should.equal('<h1>name</h1>');
+        done();
       })
     })
   })
 
-  describe('#pipe(stream)', function(){
-    it('should write to the part', function(){
+  describe('#attach(file)', function(){
+    it('should attach a file', function(done){
+      var req = request.post('http://localhost:3005/echo');
+
+      req.attach('test/node/fixtures/user.html');
+      req.attach('test/node/fixtures/user.json');
+      req.attach('test/node/fixtures/user.txt');
+
+      req.end(function(res){
+        var html = res.files['user.html'];
+        var json = res.files['user.json'];
+        var text = res.files['user.txt'];
+
+        html.name.should.equal('user.html');
+        html.type.should.equal('text/html');
+        read(html.path).should.equal('<h1>name</h1>');
+
+        json.name.should.equal('user.json');
+        json.type.should.equal('application/json');
+        read(json.path).should.equal('{"name":"tobi"}');
+
+        text.name.should.equal('user.txt');
+        text.type.should.equal('text/plain');
+        read(text.path).should.equal('Tobi');
+
+        done();
+      })
+    })
+  })
+
+  describe('#attach(file, filename)', function(){
+    it('should use the custom filename', function(done){
+      var req = request.post('http://localhost:3005/echo');
+
+      req.attach('test/node/fixtures/user.html', 'document');
+
+      req.end(function(res){
+        var html = res.files.document;
+        html.name.should.equal('document');
+        html.type.should.equal('text/html');
+        read(html.path).should.equal('<h1>name</h1>');
+        done();
+      })
+    })
+  })
+})
+
+describe('Part', function(){
+  describe('with a single part', function(){
+    it('should construct a multipart request', function(done){
+      var req = request.post('http://localhost:3005/echo');
+  
+      req
+        .part()
+        .set('Content-Disposition', 'attachment; name="image"; filename="image.png"')
+        .set('Content-Type', 'image/png')
+        .write('some image data');
+  
+      req.end(function(res){
+        var ct = res.header['content-type'];
+        ct.should.include('multipart/form-data; boundary=');
+        res.body.should.eql({});
+        res.files.image.name.should.equal('image.png');
+        res.files.image.type.should.equal('image/png');
+        done();
+      });
+    })
+  })
+
+  describe('with several parts', function(){
+    it('should construct a multipart request', function(done){
+  
+      var req = request.post('http://localhost:3005/echo');
+  
+      req.part()
+        .set('Content-Type', 'image/png')
+        .set('Content-Disposition', 'attachment; filename="myimage.png"')
+        .write('some image data');
+  
+      var part = req.part()
+        .set('Content-Type', 'image/png')
+        .set('Content-Disposition', 'attachment; filename="another.png"')
+  
+      part.write('random');
+      part.write('thing');
+      part.write('here');
+  
+      req.part()
+        .set('Content-Disposition', 'form-data; name="name"')
+        .set('Content-Type', 'text/plain')
+        .write('tobi');
+  
+      req.end(function(res){
+        res.body.name.should.equal('tobi');
+        Object.keys(res.files).should.eql(['myimage.png', 'another.png']);
+        done();
+      });
+    })
+  })
+
+  describe('with a Content-Type specified', function(){
+    it('should append the boundary', function(done){
       var req = request
         .post('http://localhost:3005/echo')
         .type('multipart/form-data');
-
-      var stream = fs.createReadStream(__dirname + '/fixtures/user.html');
-
-      var part = req.part();
-      part.set('Content-Type', 'text/html');
-      stream.pipe(part);
-
-      req.on('response', function(res){
-        console.log(res.statusCode);
-        console.log(res.text);
+  
+      req
+        .part()
+        .set('Content-Type', 'text/plain')
+        .set('Content-Disposition', 'form-data; name="name"')
+        .write('Tobi');
+  
+      req.end(function(res){
+        res.header['content-type'].should.include('boundary=');
+        res.body.name.should.equal('Tobi');
+        done();
       });
+    })
+  })
 
-      // req.end(function(res){
-      //   console.log(res.text);
-      //   return
-      //   var ct = res.header['content-type'];
-      //   ct.should.include.string('multipart/form-data; boundary="');
-      // 
-      //   var body = '\r\n';
-      //   body += '--' + boundary(ct) + '\r\n';
-      //   body += 'Content-Type: image/png\r\n';
-      //   body += '\r\n';
-      //   body += 'some image data';
-      //   body += '\r\n--' + boundary(ct) + '--';
-      // 
-      //   // assert(body == res.text, 'invalid multipart response');
-      // });
+  describe('#name(str)', function(){
+    it('should set Content-Disposition to form-data and name param', function(done){
+      var req = request
+        .post('http://localhost:3005/echo');
+  
+      req
+        .part()
+        .name('user[name]')
+        .write('Tobi');
+  
+      req.end(function(res){
+        res.body['user[name]'].should.equal('Tobi');
+        done();
+      });
+    })
+  })
+
+  describe('#filename(str)', function(){
+    it('should set Content-Disposition and Content-Type', function(done){
+      var req = request
+        .post('http://localhost:3005/echo')
+        .type('multipart/form-data');
+  
+      req
+        .part()
+        .filename('path/to/my.txt')
+        .write('Tobi');
+  
+      req.end(function(res){
+        var file = res.files['my.txt'];
+        file.name.should.equal('my.txt');
+        file.type.should.equal('text/plain');
+        done();
+      });
     })
   })
 })

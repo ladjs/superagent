@@ -170,7 +170,7 @@ describe('request', function(){
       .post('http://localhost:3000/echo')
       .type('json')
       .end(function(res){
-        res.should.be.json
+        res.should.be.json;
         done();
       });
     })
