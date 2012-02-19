@@ -94,6 +94,26 @@ describe('Request', function(){
         done();
       })
     })
+
+    describe('when a file does not exist', function(){
+      it('should emit an error', function(done){
+        var req = request.post('http://localhost:3005/echo');
+
+        req.attach('foo');
+        req.attach('bar');
+        req.attach('baz');
+
+        req.on('error', function(err){
+          err.message.should.include('ENOENT, no such file');
+          err.path.should.equal('foo');
+          done();
+        });
+
+        req.end(function(res){
+          assert(0, 'end() was called');
+        });
+      })
+    })
   })
 
   describe('#attach(file, filename)', function(){
