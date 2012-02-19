@@ -30,6 +30,16 @@ describe('Request', function(){
     })
   })
 
+  it('should default res.files to {}', function(done){
+    var req = request.post('http://localhost:3005/echo');
+
+    req.end(function(res){
+      res.files.should.eql({});
+      res.body.should.eql({});
+      done();
+    });
+  })
+
   describe('#field(name, value)', function(){
     it('should set a multipart field value', function(done){
       var req = request.post('http://localhost:3005/echo');
