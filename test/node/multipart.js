@@ -119,7 +119,7 @@ describe('Request', function(){
   describe('#attach(file, filename)', function(){
     it('should use the custom filename', function(done){
       request
-      .post('http://localhost:3005/echo')
+      .post(':3005/echo')
       .attach('test/node/fixtures/user.html', 'document')
       .end(function(res){
         var html = res.files.document;
