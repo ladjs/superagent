@@ -118,11 +118,10 @@ describe('Request', function(){
 
   describe('#attach(file, filename)', function(){
     it('should use the custom filename', function(done){
-      var req = request.post('http://localhost:3005/echo');
-
-      req.attach('test/node/fixtures/user.html', 'document');
-
-      req.end(function(res){
+      request
+      .post('http://localhost:3005/echo')
+      .attach('test/node/fixtures/user.html', 'document')
+      .end(function(res){
         var html = res.files.document;
         html.name.should.equal('document');
         html.type.should.equal('text/html');
