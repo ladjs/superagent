@@ -23,7 +23,7 @@ superagent.min.js: superagent.js
 test-server:
 	@node test/server
 
-docs: lib test-docs
+docs: test-docs
 
 test-docs:
 	make test REPORTER=doc \
