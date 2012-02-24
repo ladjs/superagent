@@ -14,6 +14,12 @@ test:
 		--growl \
 		$(TESTS)
 
+test-cov: lib-cov
+	SUPERAGENT_COV=1 $(MAKE) test REPORTER=html-cov > coverage.html
+
+lib-cov:
+	jscoverage lib lib-cov
+
 superagent.js: $(SRC)
 	cat $^ > $@
 
@@ -33,4 +39,4 @@ test-docs:
 clean:
 	rm -f superagent{,.min}.js
 
-.PHONY: test docs test-docs clean
+.PHONY: test-cov test docs test-docs clean
