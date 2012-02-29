@@ -106,7 +106,7 @@ function eql(a, b) {
 
     // different values
     for (var key in a) {
-      if (!eql(a[key], b[key])) return false;
+      if (!eql(a[key], b[key])) { console.log(key); return false; }
     }
 
     return true;

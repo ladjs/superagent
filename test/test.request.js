@@ -308,6 +308,28 @@ test('GET x-www-form-urlencoded', function(next){
   });
 });
 
+test('GET complex x-www-form-urlencoded', function(next){
+  request
+  .get('/update')
+  .end(function(res){
+    assert.eql(res.body, {
+      post: {
+        message: 'hi',
+        attachments: ['pic.jpg', 'lol.cat', { link: 'http://www.reddit.com/' }],
+        timestamp: {
+          day: 21,
+          month: 3,
+          year: 2101,
+          era: 'AD'
+        }
+      },
+      user: 'bob',
+      credentials: [ 'verified', 'featured' ]
+    });
+    next();
+  });
+});
+
 test('GET shorthand', function(next){
   request.get('/foo', function(res){
     assert('foo=bar' == res.text);
@@ -344,6 +366,30 @@ test('GET querystring object', function(next){
   .send({ search: 'Manny' })
   .end(function(res){
     assert.eql(res.body, { search: 'Manny' });
+    next();
+  });
+});
+
+test('GET querystring complex object', function(next){
+  var data = {
+    post: {
+      message: 'hi',
+      attachments: ['pic.jpg', 'lol.cat', { link: 'http://www.reddit.com/' }],
+      timestamp: {
+        day: 21,
+        month: 3,
+        year: 2101,
+        era: 'AD'
+      }
+    },
+    user: 'bob',
+    credentials: [ 'verified', 'featured' ]
+  };
+  request
+  .get('/update')
+  .send(data)
+  .end(function(res){
+    assert.eql(res.body, data);
     next();
   });
 });

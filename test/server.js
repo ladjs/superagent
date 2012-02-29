@@ -83,6 +83,12 @@ app.get('/foo', function(req, res){
     .send('foo=bar');
 });
 
+app.get('/update', function(req, res){
+  res
+    .header('Content-Type', 'application/x-www-form-urlencoded')
+    .send('post%5Bmessage%5D=hi&post%5Battachments%5D%5B0%5D=pic.jpg&post%5Battachments%5D%5B1%5D=lol.cat&post%5Battachments%5D%5B2%5D%5Blink%5D=http%3A%2F%2Fwww.reddit.com%2F&post%5Btimestamp%5D%5Bday%5D=21&post%5Btimestamp%5D%5Bmonth%5D=3&post%5Btimestamp%5D%5Byear%5D=2101&post%5Btimestamp%5D%5Bera%5D=AD&user=bob&credentials%5B0%5D=verified&credentials%5B1%5D=featured');
+});
+
 app.use(express.static(__dirname + '/../'));
 
 app.listen(3000);

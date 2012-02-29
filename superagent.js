@@ -254,6 +254,24 @@ var superagent = function(exports){
   }
 
   /**
+   * Turn a String into a number or boolean, if applicable.
+   *
+   * @param {String} str
+   * @return {String|Number|Boolean}
+   * @api private
+   */
+
+  function devolve(str) {
+    if (str == 'true') return true;
+    if (str == 'false') return false;
+    var ret = parseInt(str);
+    if(!isNaN(ret)) return ret;
+    ret = parseFloat(str);
+    if(!isNaN(ret)) return ret;
+    return str;
+  }
+
+  /**
    * Serialize the given `obj`.
    *
    * @param {Object} obj
@@ -261,12 +279,22 @@ var superagent = function(exports){
    * @api private
    */
 
-  function serialize(obj) {
+  function serialize(obj, prepend) {
     if (!isObject(obj)) return obj;
-    var pairs = [];
+    var pairs = []
+      , sta = ''
+      , bef = ''
+      , end = '';
+    if (typeof prepend == 'string') {
+      bef = prepend + '[';
+      end = ']';
+    }
     for (var key in obj) {
-      pairs.push(encodeURIComponent(key)
-        + '=' + encodeURIComponent(obj[key]));
+      if (isObject(obj[key]))
+        pairs.push(serialize(obj[key], bef + key + end));
+      else
+        pairs.push(encodeURIComponent(bef + key + end)
+          + '=' + encodeURIComponent(obj[key]));
     }
     return pairs.join('&');
   }
@@ -289,12 +317,37 @@ var superagent = function(exports){
     var obj = {}
       , pairs = str.split('&')
       , parts
-      , pair;
+      , pair
+      , bits
+      , store
+      , key
+      , ref;
 
     for (var i = 0, len = pairs.length; i < len; ++i) {
       pair = pairs[i];
       parts = pair.split('=');
-      obj[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1]);
+      bits = decodeURIComponent(parts[0]).split('[');
+      store = obj;
+      key = bits[0];
+      for (var x = 1, l = bits.length; x < l; ++x) {
+        ref = bits[x];
+        if (ref.substr(-1) == ']')
+          ref = ref.substr(0, ref.length - 1);
+        if (typeof store[key] !== 'object') {
+          if (isNaN(parseInt(ref)))
+            store[key] = {};
+          else
+            store[key] = [];
+        } else {
+          if (Array.isArray(store[key]) && isNaN(parseInt(ref)))
+            store[key] = store[key].reduce(function (object, val, index) {
+              object[index] = val;
+            }, {});
+        }
+        store = store[key];
+        key = ref;
+      }
+      store[key] = devolve(decodeURIComponent(parts[1]));
     }
 
     return obj;
@@ -379,6 +432,37 @@ var superagent = function(exports){
   }
 
   /**
+   * Return the mime type for the given `str`.
+   *
+   * @param {String} str
+   * @return {String}
+   * @api private
+   */
+
+  function type(str){
+    return str.split(/ *; */).shift();
+  };
+
+  /**
+   * Return header field parameters.
+   *
+   * @param {String} str
+   * @return {Object}
+   * @api private
+   */
+
+  function params(str){
+    return str.split(/ *; */).reduce(function(obj, str){
+      var parts = str.split(/ *= */)
+        , key = parts.shift()
+        , val = parts.shift();
+
+      if (key && val) obj[key] = val;
+      return obj;
+    }, {});
+  };
+
+  /**
    * Initialize a new `Response` with the given `xhr`.
    *
    *  - set flags (.ok, .error, etc)
@@ -437,38 +521,23 @@ var superagent = function(exports){
   /**
    * Set header related properties:
    *
-   *   - `.contentType` the content type without params
+   *   - `.type` the content type without params
    *
    * A response of "Content-Type: text/plain; charset=utf-8"
-   * will provide you with a `.contentType` of "text/plain".
+   * will provide you with a `.type` of "text/plain".
    *
    * @param {Object} header
    * @api private
    */
 
   Response.prototype.setHeaderProperties = function(header){
-    // TODO: moar!
-    var params = (this.header['content-type'] || '').split(/ *; */);
-    this.contentType = params.shift();
-    this.setParams(params);
-  };
+    // content-type
+    var ct = this.header['content-type'] || '';
+    this.type = type(ct);
 
-  /**
-   * Create properties from `params`.
-   *
-   * For example "Content-Type: text/plain; charset=utf-8"
-   * would provide `.charset` "utf-8".
-   *
-   * @param {Array} params
-   * @api private
-   */
-
-  Response.prototype.setParams = function(params){
-    var param;
-    for (var i = 0, len = params.length; i < len; ++i) {
-      param = params[i].split(/ *= */);
-      this[param[0]] = param[1];
-    }
+    // params
+    var obj = params(ct);
+    for (var key in obj) this[key] = obj[key];
   };
 
   /**
@@ -483,7 +552,7 @@ var superagent = function(exports){
    */
 
   Response.prototype.parseBody = function(str){
-    var parse = exports.parse[this.contentType];
+    var parse = exports.parse[this.type];
     return parse
       ? parse(str)
       : null;
@@ -625,6 +694,23 @@ var superagent = function(exports){
   };
 
   /**
+   * Add `obj` to the query-string, later formatted
+   * in `.end()`.
+   *
+   * @param {Object} obj
+   * @return {Request} for chaining
+   * @api public
+   */
+
+  Request.prototype.query = function(obj){
+    this._query = this._query || {};
+    for (var key in obj) {
+      this._query[key] = obj[key];
+    }
+    return this;
+  };
+
+  /**
    * Send `data`, defaulting the `.type()` to "json" when
    * an object is given.
    *
@@ -671,6 +757,7 @@ var superagent = function(exports){
    */
 
   Request.prototype.send = function(data){
+    if ('GET' == this.method) return this.query(data);
     var obj = isObject(data);
 
     // merge
@@ -682,7 +769,6 @@ var superagent = function(exports){
       this._data = data;
     }
 
-    if ('GET' == this.method) return this;
     if (!obj) return this;
     if (this.header['content-type']) return this;
     this.type('json');
@@ -701,7 +787,8 @@ var superagent = function(exports){
   Request.prototype.end = function(fn){
     var self = this
       , xhr = this.xhr = getXHR()
-      , data = this._data || null;
+      , query = this._query
+      , data = this._data;
 
     // store callback
     this.callback = fn || noop;
@@ -712,9 +799,11 @@ var superagent = function(exports){
     };
 
     // querystring
-    if ('GET' == this.method && null != data) {
-      this.url += '?' + exports.serializeObject(data);
-      data = null;
+    if (query) {
+      query = exports.serializeObject(query);
+      this.url += ~this.url.indexOf('?')
+        ? '&' + query
+        : '?' + query;
     }
 
     // initiate request
