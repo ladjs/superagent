@@ -207,6 +207,41 @@
 
 <p>  Super Agent will parse known response-body data for you, currently supporting <em>application/x-www-form-urlencoded</em>, <em>application/json</em>, and <em>multipart/form-data</em>.</p>
 
+<h3>JSON / Urlencoded</h3>
+
+<p>  The property <code>res.body</code> is the parsed object, for example if a request responded with the JSON string &lsquo;{&ldquo;user&rdquo;:{&ldquo;name&rdquo;:&ldquo;tobi&rdquo;}}&rsquo;, <code>res.body.user.name</code> would be &ldquo;tobi&rdquo;. Likewise the x-www-form-urlencoded value of &ldquo;user[name]=tobi&rdquo; would yield the same result.</p>
+
+<h3>Multipart</h3>
+
+<p>  When parsing multipart responses, the object <code>res.files</code> is also available to you. Suppose for example a request responds with the following multipart body:</p>
+
+<pre><code>--whoop
+Content-Disposition: attachment; name="image"; filename="tobi.png"
+Content-Type: image/png
+
+... data here ...
+--whoop
+Content-Disposition: form-data; name="name"
+Content-Type: text/plain
+
+Tobi
+--whoop--
+</code></pre>
+
+<p>  You would have the values <code>res.body.name</code> provided as &ldquo;Tobi&rdquo;, and <code>res.files.image</code> as a <code>File</code> object containing the path on disk, filename, and other properties.</p>
+
+<h3>Response text</h3>
+
+<p>  The <code>res.text</code> property is also available for a string representation of the body as illustrated by this test:</p>
+
+<pre><code>var req = request.post('local/echo');
+req.write('{"name"').should.be.a('boolean');
+req.write(':"tobi"}').should.be.a('boolean');
+req.end(function(res){
+  res.text.should.equal('{"name":"tobi"}');
+});
+</code></pre>
+
 <h2>Response properties</h2>
 
 <p>  Many helpful flags and properties are set on the <code>Response</code> object, ranging from the response text, parsed response body, header fields, status flags and more.</p>

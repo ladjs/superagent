@@ -179,6 +179,39 @@
 
   Super Agent will parse known response-body data for you, currently supporting _application/x-www-form-urlencoded_, _application/json_, and _multipart/form-data_.
 
+### JSON / Urlencoded
+
+  The property `res.body` is the parsed object, for example if a request responded with the JSON string '{"user":{"name":"tobi"}}', `res.body.user.name` would be "tobi". Likewise the x-www-form-urlencoded value of "user[name]=tobi" would yield the same result.
+
+### Multipart
+
+  When parsing multipart responses, the object `res.files` is also available to you. Suppose for example a request responds with the following multipart body:
+  
+    --whoop
+    Content-Disposition: attachment; name="image"; filename="tobi.png"
+    Content-Type: image/png
+    
+    ... data here ...
+    --whoop
+    Content-Disposition: form-data; name="name"
+    Content-Type: text/plain
+
+    Tobi
+    --whoop--
+
+  You would have the values `res.body.name` provided as "Tobi", and `res.files.image` as a `File` object containing the path on disk, filename, and other properties.
+
+### Response text
+
+  The `res.text` property is also available for a string representation of the body as illustrated by this test:
+  
+    var req = request.post('local/echo');
+    req.write('{"name"').should.be.a('boolean');
+    req.write(':"tobi"}').should.be.a('boolean');
+    req.end(function(res){
+      res.text.should.equal('{"name":"tobi"}');
+    });
+
 ## Response properties
 
   Many helpful flags and properties are set on the `Response` object, ranging from the response text, parsed response body, header fields, status flags and more.
