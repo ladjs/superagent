@@ -213,7 +213,7 @@
 
 <h3>Multipart</h3>
 
-<p>  When parsing multipart responses, the object <code>res.files</code> is also available to you. Suppose for example a request responds with the following multipart body:</p>
+<p>  The Node client supports <em>multipart/form-data</em> via the <a href="https://github.com/felixge/node-formidable">Formidable</a> module. When parsing multipart responses, the object <code>res.files</code> is also available to you. Suppose for example a request responds with the following multipart body:</p>
 
 <pre><code>--whoop
 Content-Disposition: attachment; name="image"; filename="tobi.png"
@@ -288,13 +288,9 @@ req.end(function(res){
  res.notFound = 404 == status;
 </code></pre>
 
-<h3>Streaming data</h3>
+<h2>Compression</h2>
 
-<p>   &hellip; docs coming soon</p>
-
-<h3>Multi-part requests</h3>
-
-<p>   &hellip; docs coming soon</p>
+<p>  The Node client supports compressed responses, best of all, you don&rsquo;t have to do anything! It just works.</p>
     </div>
     <a href="http://github.com/visionmedia/superagent"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://a248.e.akamai.net/assets.github.com/img/4c7dc970b89fd04b81c8e221ba88ff99a06c6b61/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67" alt="Fork me on GitHub"></a>
   </body>

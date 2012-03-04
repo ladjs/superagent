@@ -230,7 +230,7 @@
 
 ### Response Content-Type
 
-  The Content-Type response header is special-cased, providing `res.contentType`, which is void of the charset (if any). For example the Content-Type of "text/html; charset=utf8" will provide "text/html" as `res.contentType`, and the `res.charset` property would then contain "utf8".
+  The Content-Type response header is special-cased, providing `res.type`, which is void of the charset (if any). For example the Content-Type of "text/html; charset=utf8" will provide "text/html" as `res.type`, and the `res.charset` property would then contain "utf8".
 
 ### Response status
 
@@ -257,10 +257,6 @@
      res.notAcceptable = 406 == status;
      res.notFound = 404 == status;
 
-### Streaming data
+## Compression
 
-   ... docs coming soon
-
-### Multi-part requests
-
-   ... docs coming soon
+  The Node client supports compressed responses, best of all, you don't have to do anything! It just works.
