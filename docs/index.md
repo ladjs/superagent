@@ -185,7 +185,7 @@
 
 ### Multipart
 
-  When parsing multipart responses, the object `res.files` is also available to you. Suppose for example a request responds with the following multipart body:
+  The Node client supports _multipart/form-data_ via the [Formidable](https://github.com/felixge/node-formidable) module. When parsing multipart responses, the object `res.files` is also available to you. Suppose for example a request responds with the following multipart body:
   
     --whoop
     Content-Disposition: attachment; name="image"; filename="tobi.png"
