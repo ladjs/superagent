@@ -25,7 +25,7 @@ test('request() simple GET', function(next){
 });
 
 test('request() simple HEAD', function(next){
-  request('HEAD', 'test.request.js').end(function(res){
+  request.head('test.request.js').end(function(res){
     assert(res instanceof request.Response, 'respond with Response');
     assert(res.ok, 'response should be ok');
     assert(!res.text, 'res.text');
