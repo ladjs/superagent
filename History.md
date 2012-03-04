@@ -1,4 +1,17 @@
 
+0.4.0 / 2012-03-04 
+==================
+
+  * Added `.head()` method [browser]. Closes #78
+  * Added `make test-cov` support
+  * Added multipart request support. Closes #11
+  * Added all methods that node supports. Closes #71
+  * Added "response" event providing a Response object. Closes #28
+  * Added `.query(obj)`. Closes #59
+  * Added `res.type` (browser). Closes #54
+  * Changed: default `res.body` and `res.files` to {}
+  * Fixed: port existing query-string fix (browser). Closes #57
+
 0.3.0 / 2012-01-24 
 ==================
 
