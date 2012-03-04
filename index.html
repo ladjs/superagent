@@ -323,6 +323,38 @@ req.type('json');
 stream.pipe(req);
 </code></pre>
 
+<p>  Or piping the response to a file:</p>
+
+<pre><code>var request = require('superagent')
+  , fs = require('fs');
+
+var stream = fs.createWeadStream('path/to/my.json');
+var req = request.get('/some.json');
+req.pipe(stream);
+</code></pre>
+
+<h2>Multipart requests</h2>
+
+<p>  Super Agent is also great for <em>building</em> multipart requests, providing a both low-level and high-level APIs.</p>
+
+<p>  The low-level API uses <code>Part</code>s to represent a file or field. The <code>.part()</code> method returns a new <code>Part</code>, which provides an API similar to the request itself.</p>
+
+<pre><code> var req = request.post('/upload');
+
+ req.part()
+   .set('Content-Type', 'image/png')
+   .set('Content-Disposition', 'attachment; filename="myimage.png"')
+   .write('some image data')
+   .write('some more image data');
+
+ req.part()
+   .set('Content-Disposition', 'form-data; name="name"')
+   .set('Content-Type', 'text/plain')
+   .write('tobi');
+
+ req.end(callback);
+</code></pre>
+
 <h2>Compression</h2>
 
 <p>  The Node client supports compressed responses, best of all, you don&rsquo;t have to do anything! It just works.</p>
