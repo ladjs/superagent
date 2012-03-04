@@ -87,6 +87,15 @@
 
        });
 
+  Or as a single object:
+  
+    request
+      .get('/search')
+      .send({ query: 'Manny', range: '1..5', order: 'desc' })
+      .end(function(res){
+
+      });
+
   The `.send()` method accepts strings as well:
   
       request
@@ -125,6 +134,26 @@
         .send({ name: 'tj' })
         .send({ pet: 'tobi' })
         .end(callback)
+
+## Setting the Content-Type
+
+  The obvious solution is to use the `.set()` method:
+  
+     request.post('/user')
+       .set('Content-Type', 'application/json')
+
+  As a short-hand the `.type()` method is also available, accepting
+  the canonicalized MIME type name complete with type/subtype, or
+  simply the extension name such as "xml", "json", "png", etc:
+  
+     request.post('/user')
+       .type('application/json')
+
+     request.post('/user')
+       .type('json')
+
+     request.post('/user')
+       .type('png')
 
 ## Response properties
 
