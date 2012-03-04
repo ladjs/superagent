@@ -379,6 +379,37 @@ var superagent = function(exports){
   }
 
   /**
+   * Return the mime type for the given `str`.
+   *
+   * @param {String} str
+   * @return {String}
+   * @api private
+   */
+
+  function type(str){
+    return str.split(/ *; */).shift();
+  };
+
+  /**
+   * Return header field parameters.
+   *
+   * @param {String} str
+   * @return {Object}
+   * @api private
+   */
+
+  function params(str){
+    return str.split(/ *; */).reduce(function(obj, str){
+      var parts = str.split(/ *= */)
+        , key = parts.shift()
+        , val = parts.shift();
+
+      if (key && val) obj[key] = val;
+      return obj;
+    }, {});
+  };
+
+  /**
    * Initialize a new `Response` with the given `xhr`.
    *
    *  - set flags (.ok, .error, etc)
@@ -437,38 +468,23 @@ var superagent = function(exports){
   /**
    * Set header related properties:
    *
-   *   - `.contentType` the content type without params
+   *   - `.type` the content type without params
    *
    * A response of "Content-Type: text/plain; charset=utf-8"
-   * will provide you with a `.contentType` of "text/plain".
+   * will provide you with a `.type` of "text/plain".
    *
    * @param {Object} header
    * @api private
    */
 
   Response.prototype.setHeaderProperties = function(header){
-    // TODO: moar!
-    var params = (this.header['content-type'] || '').split(/ *; */);
-    this.contentType = params.shift();
-    this.setParams(params);
-  };
+    // content-type
+    var ct = this.header['content-type'] || '';
+    this.type = type(ct);
 
-  /**
-   * Create properties from `params`.
-   *
-   * For example "Content-Type: text/plain; charset=utf-8"
-   * would provide `.charset` "utf-8".
-   *
-   * @param {Array} params
-   * @api private
-   */
-
-  Response.prototype.setParams = function(params){
-    var param;
-    for (var i = 0, len = params.length; i < len; ++i) {
-      param = params[i].split(/ *= */);
-      this[param[0]] = param[1];
-    }
+    // params
+    var obj = params(ct);
+    for (var key in obj) this[key] = obj[key];
   };
 
   /**
@@ -483,7 +499,7 @@ var superagent = function(exports){
    */
 
   Response.prototype.parseBody = function(str){
-    var parse = exports.parse[this.contentType];
+    var parse = exports.parse[this.type];
     return parse
       ? parse(str)
       : null;
@@ -625,6 +641,23 @@ var superagent = function(exports){
   };
 
   /**
+   * Add `obj` to the query-string, later formatted
+   * in `.end()`.
+   *
+   * @param {Object} obj
+   * @return {Request} for chaining
+   * @api public
+   */
+
+  Request.prototype.query = function(obj){
+    this._query = this._query || {};
+    for (var key in obj) {
+      this._query[key] = obj[key];
+    }
+    return this;
+  };
+
+  /**
    * Send `data`, defaulting the `.type()` to "json" when
    * an object is given.
    *
@@ -671,6 +704,7 @@ var superagent = function(exports){
    */
 
   Request.prototype.send = function(data){
+    if ('GET' == this.method) return this.query(data);
     var obj = isObject(data);
 
     // merge
@@ -682,7 +716,6 @@ var superagent = function(exports){
       this._data = data;
     }
 
-    if ('GET' == this.method) return this;
     if (!obj) return this;
     if (this.header['content-type']) return this;
     this.type('json');
@@ -701,7 +734,8 @@ var superagent = function(exports){
   Request.prototype.end = function(fn){
     var self = this
       , xhr = this.xhr = getXHR()
-      , data = this._data || null;
+      , query = this._query
+      , data = this._data;
 
     // store callback
     this.callback = fn || noop;
@@ -712,9 +746,11 @@ var superagent = function(exports){
     };
 
     // querystring
-    if ('GET' == this.method && null != data) {
-      this.url += '?' + exports.serializeObject(data);
-      data = null;
+    if (query) {
+      query = exports.serializeObject(query);
+      this.url += ~this.url.indexOf('?')
+        ? '&' + query
+        : '?' + query;
     }
 
     // initiate request
@@ -784,6 +820,24 @@ var superagent = function(exports){
 
   request.get = function(url, data, fn){
     var req = request('GET', url);
+    if (isFunction(data)) fn = data, data = null;
+    if (data) req.send(data);
+    if (fn) req.end(fn);
+    return req;
+  };
+
+  /**
+   * GET `url` with optional callback `fn(res)`.
+   *
+   * @param {String} url
+   * @param {Mixed} data
+   * @param {Function} fn
+   * @return {Request}
+   * @api public
+   */
+
+  request.head = function(url, data, fn){
+    var req = request('HEAD', url);
     if (isFunction(data)) fn = data, data = null;
     if (data) req.send(data);
     if (fn) req.end(fn);
