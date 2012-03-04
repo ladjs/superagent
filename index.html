@@ -180,6 +180,21 @@
    .type('png')
 </code></pre>
 
+<h2>Basic authentication</h2>
+
+<p>  Basic auth is currently provided by the <em>node</em> client in two forms, first via the URL as &ldquo;<user>:<pass>&rdquo;:</p>
+
+<pre><code>request.get('http://tobi:learnboost@local').end(callback);
+</code></pre>
+
+<p>  As well as via the <code>.auth()</code> method:</p>
+
+<pre><code>request
+  .get('http://local')
+  .auth('tobo', 'learnboost')
+  .end(callback);
+</code></pre>
+
 <h2>Response properties</h2>
 
 <p>  Many helpful flags and properties are set on the <code>Response</code> object, ranging from the response text, parsed response body, header fields, status flags and more.</p>

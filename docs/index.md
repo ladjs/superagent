@@ -155,6 +155,19 @@
      request.post('/user')
        .type('png')
 
+## Basic authentication
+
+  Basic auth is currently provided by the _node_ client in two forms, first via the URL as "<user>:<pass>":
+    
+    request.get('http://tobi:learnboost@local').end(callback);
+
+  As well as via the `.auth()` method:
+
+    request
+      .get('http://local')
+      .auth('tobo', 'learnboost')
+      .end(callback);
+
 ## Response properties
 
   Many helpful flags and properties are set on the `Response` object, ranging from the response text, parsed response body, header fields, status flags and more.
