@@ -37,518 +37,730 @@
   <body>
     <h1>SuperAgent</h1>
     <p>The superagent test suite documentation generated with the <a href="http://visionmedia.github.com/mocha">Mocha</a> test framework.</p>
-    <section class="suite">
-      <h1>request</h1>
-      <dl>
         <section class="suite">
-          <h1>with an object</h1>
+          <h1>Basic auth</h1>
           <dl>
-            <dt>should format the url</dt>
-            <dd><pre><code>
-request
-.get(url.parse('http://localhost:3000/login'))
-.end(function(res){
-  assert(res.ok);
-  done();
-})</code></pre></dd>
+            <section class="suite">
+              <h1>when credentials are present in url</h1>
+              <dl>
+                <dt>should set Authorization</dt>
+                <dd><pre><code>
+    request
+    .get('http://tobi:learnboost@localhost:3010')
+    .end(function(res){
+      res.status.should.equal(200);
+      done();
+    });</code></pre></dd>
+              </dl>
+            </section>
+            <section class="suite">
+              <h1>req.auth(user, pass)</h1>
+              <dl>
+                <dt>should set Authorization</dt>
+                <dd><pre><code>
+    request
+    .get('http://localhost:3010')
+    .auth('tobi', 'learnboost')
+    .end(function(res){
+      res.status.should.equal(200);
+      done();
+    });</code></pre></dd>
+              </dl>
+            </section>
           </dl>
         </section>
         <section class="suite">
-          <h1>.end()</h1>
+          <h1>request</h1>
           <dl>
-            <dt>should issue a request</dt>
-            <dd><pre><code>
-request
-.get('http://localhost:3000/login')
-.end(function(res){
-  assert(res.status == 200);
-  done();
-});</code></pre></dd>
-          </dl>
-        </section>
-        <section class="suite">
-          <h1>res.header</h1>
-          <dl>
-            <dt>should be an object</dt>
-            <dd><pre><code>
-request
-.get('http://localhost:3000/login')
-.end(function(res){
-  assert('Express' == res.header['x-powered-by']);
-  done();
-});</code></pre></dd>
-          </dl>
-        </section>
-        <section class="suite">
-          <h1>res.charset</h1>
-          <dl>
-            <dt>should be set when present</dt>
-            <dd><pre><code>
-request
-.get('http://localhost:3000/login')
-.end(function(res){
-  res.charset.should.equal('utf-8');
-  done();
-});</code></pre></dd>
-          </dl>
-        </section>
-        <section class="suite">
-          <h1>res.statusType</h1>
-          <dl>
-            <dt>should provide the first digit</dt>
-            <dd><pre><code>
-request
-.get('http://localhost:3000/login')
-.end(function(res){
-  assert(200 == res.status);
-  assert(2 == res.statusType);
-  done();
-});</code></pre></dd>
-          </dl>
-        </section>
-        <section class="suite">
-          <h1>req.set(field, val)</h1>
-          <dl>
-            <dt>should set the header field</dt>
-            <dd><pre><code>
-request
-.post('http://localhost:3000/echo')
-.set('X-Foo', 'bar')
-.set('X-Bar', 'baz')
-.end(function(res){
-  assert('bar' == res.header['x-foo']);
-  assert('baz' == res.header['x-bar']);
-  done();
-})</code></pre></dd>
-          </dl>
-        </section>
-        <section class="suite">
-          <h1>req.set(obj)</h1>
-          <dl>
-            <dt>should set the header fields</dt>
-            <dd><pre><code>
-request
-.post('http://localhost:3000/echo')
-.set({ 'X-Foo': 'bar', 'X-Bar': 'baz' })
-.end(function(res){
-  assert('bar' == res.header['x-foo']);
-  assert('baz' == res.header['x-bar']);
-  done();
-})</code></pre></dd>
-          </dl>
-        </section>
-        <section class="suite">
-          <h1>req.type(str)</h1>
-          <dl>
-            <dt>should set the Content-Type</dt>
-            <dd><pre><code>
-request
-.post('http://localhost:3000/echo')
-.type('text/x-foo')
-.end(function(res){
-  res.header['content-type'].should.equal('text/x-foo');
-  done();
-});</code></pre></dd>
-            <dt>should map "json"</dt>
-            <dd><pre><code>
-request
-.post('http://localhost:3000/echo')
-.type('json')
-.end(function(res){
-  res.should.be.json
-  done();
-});</code></pre></dd>
-            <dt>should map "html"</dt>
-            <dd><pre><code>
-request
-.post('http://localhost:3000/echo')
-.type('html')
-.end(function(res){
-  res.header['content-type'].should.equal('text/html');
-  done();
-});</code></pre></dd>
-          </dl>
-        </section>
-        <section class="suite">
-          <h1>req.write(str)</h1>
-          <dl>
-            <dt>should write the given data</dt>
-            <dd><pre><code>
-var req = request.post('http://localhost:3000/echo');
-req.write('{&quot;name&quot;').should.be.a('boolean');
-req.write(':&quot;tobi&quot;}').should.be.a('boolean');
-req.end(function(res){
-  res.text.should.equal('{&quot;name&quot;:&quot;tobi&quot;}');
-  done();
-});</code></pre></dd>
-          </dl>
-        </section>
-        <section class="suite">
-          <h1>req.pipe(stream)</h1>
-          <dl>
-            <dt>should pipe the response to the given stream</dt>
-            <dd><pre><code>
-var stream = new EventEmitter;
+            <section class="suite">
+              <h1>with an object</h1>
+              <dl>
+                <dt>should format the url</dt>
+                <dd><pre><code>
+    request
+    .get(url.parse('http://localhost:3000/login'))
+    .end(function(res){
+      assert(res.ok);
+      done();
+    })</code></pre></dd>
+              </dl>
+            </section>
+            <section class="suite">
+              <h1>with a callback</h1>
+              <dl>
+                <dt>should invoke .end()</dt>
+                <dd><pre><code>
+    request
+    .get('localhost:3000/login', function(res){
+      assert(res.status == 200);
+      done();
+    })</code></pre></dd>
+              </dl>
+            </section>
+            <section class="suite">
+              <h1>without a schema</h1>
+              <dl>
+                <dt>should default to http</dt>
+                <dd><pre><code>
+    request
+    .get('localhost:3000/login')
+    .end(function(res){
+      assert(res.status == 200);
+      done();
+    })</code></pre></dd>
+              </dl>
+            </section>
+            <section class="suite">
+              <h1>.end()</h1>
+              <dl>
+                <dt>should issue a request</dt>
+                <dd><pre><code>
+    request
+    .get('http://localhost:3000/login')
+    .end(function(res){
+      assert(res.status == 200);
+      done();
+    });</code></pre></dd>
+              </dl>
+            </section>
+            <section class="suite">
+              <h1>res.header</h1>
+              <dl>
+                <dt>should be an object</dt>
+                <dd><pre><code>
+    request
+    .get('http://localhost:3000/login')
+    .end(function(res){
+      assert('Express' == res.header['x-powered-by']);
+      done();
+    });</code></pre></dd>
+              </dl>
+            </section>
+            <section class="suite">
+              <h1>res.charset</h1>
+              <dl>
+                <dt>should be set when present</dt>
+                <dd><pre><code>
+    request
+    .get('http://localhost:3000/login')
+    .end(function(res){
+      res.charset.should.equal('utf-8');
+      done();
+    });</code></pre></dd>
+              </dl>
+            </section>
+            <section class="suite">
+              <h1>res.statusType</h1>
+              <dl>
+                <dt>should provide the first digit</dt>
+                <dd><pre><code>
+    request
+    .get('http://localhost:3000/login')
+    .end(function(res){
+      assert(200 == res.status);
+      assert(2 == res.statusType);
+      done();
+    });</code></pre></dd>
+              </dl>
+            </section>
+            <section class="suite">
+              <h1>res.type</h1>
+              <dl>
+                <dt>should provide the mime-type void of params</dt>
+                <dd><pre><code>
+    request
+    .get('http://localhost:3000/login')
+    .end(function(res){
+      res.type.should.equal('text/html');
+      res.charset.should.equal('utf-8');
+      done();
+    });</code></pre></dd>
+              </dl>
+            </section>
+            <section class="suite">
+              <h1>req.set(field, val)</h1>
+              <dl>
+                <dt>should set the header field</dt>
+                <dd><pre><code>
+    request
+    .post('http://localhost:3000/echo')
+    .set('X-Foo', 'bar')
+    .set('X-Bar', 'baz')
+    .end(function(res){
+      assert('bar' == res.header['x-foo']);
+      assert('baz' == res.header['x-bar']);
+      done();
+    })</code></pre></dd>
+              </dl>
+            </section>
+            <section class="suite">
+              <h1>req.set(obj)</h1>
+              <dl>
+                <dt>should set the header fields</dt>
+                <dd><pre><code>
+    request
+    .post('http://localhost:3000/echo')
+    .set({ 'X-Foo': 'bar', 'X-Bar': 'baz' })
+    .end(function(res){
+      assert('bar' == res.header['x-foo']);
+      assert('baz' == res.header['x-bar']);
+      done();
+    })</code></pre></dd>
+              </dl>
+            </section>
+            <section class="suite">
+              <h1>req.type(str)</h1>
+              <dl>
+                <dt>should set the Content-Type</dt>
+                <dd><pre><code>
+    request
+    .post('http://localhost:3000/echo')
+    .type('text/x-foo')
+    .end(function(res){
+      res.header['content-type'].should.equal('text/x-foo');
+      done();
+    });</code></pre></dd>
+                <dt>should map "json"</dt>
+                <dd><pre><code>
+    request
+    .post('http://localhost:3000/echo')
+    .type('json')
+    .end(function(res){
+      res.should.be.json;
+      done();
+    });</code></pre></dd>
+                <dt>should map "html"</dt>
+                <dd><pre><code>
+    request
+    .post('http://localhost:3000/echo')
+    .type('html')
+    .end(function(res){
+      res.header['content-type'].should.equal('text/html');
+      done();
+    });</code></pre></dd>
+              </dl>
+            </section>
+            <section class="suite">
+              <h1>req.write(str)</h1>
+              <dl>
+                <dt>should write the given data</dt>
+                <dd><pre><code>
+    var req = request.post('http://localhost:3000/echo');
+    req.write('{&quot;name&quot;').should.be.a('boolean');
+    req.write(':&quot;tobi&quot;}').should.be.a('boolean');
+    req.end(function(res){
+      res.text.should.equal('{&quot;name&quot;:&quot;tobi&quot;}');
+      done();
+    });</code></pre></dd>
+              </dl>
+            </section>
+            <section class="suite">
+              <h1>req.pipe(stream)</h1>
+              <dl>
+                <dt>should pipe the response to the given stream</dt>
+                <dd><pre><code>
+    var stream = new EventEmitter;
 
-stream.buf = '';
-stream.writable = true;
+    stream.buf = '';
+    stream.writable = true;
 
-stream.write = function(chunk){
-  this.buf += chunk;
-};
+    stream.write = function(chunk){
+      this.buf += chunk;
+    };
 
-stream.end = function(){
-  this.buf.should.equal('{&quot;name&quot;:&quot;tobi&quot;}');
-  done();
-};
+    stream.end = function(){
+      this.buf.should.equal('{&quot;name&quot;:&quot;tobi&quot;}');
+      done();
+    };
 
-request
-.post('http://localhost:3000/echo')
-.send('{&quot;name&quot;:&quot;tobi&quot;}')
-.pipe(stream);</code></pre></dd>
+    request
+    .post('http://localhost:3000/echo')
+    .send('{&quot;name&quot;:&quot;tobi&quot;}')
+    .pipe(stream);</code></pre></dd>
+              </dl>
+            </section>
+            <section class="suite">
+              <h1>req.send(str)</h1>
+              <dl>
+                <dt>should write the string</dt>
+                <dd><pre><code>
+    request
+    .post('http://localhost:3000/echo')
+    .send('{&quot;name&quot;:&quot;tobi&quot;}')
+    .end(function(res){
+      res.text.should.equal('{&quot;name&quot;:&quot;tobi&quot;}');
+      done();
+    });</code></pre></dd>
+              </dl>
+            </section>
+            <section class="suite">
+              <h1>req.send(Object)</h1>
+              <dl>
+                <dt>should default to json</dt>
+                <dd><pre><code>
+    request
+    .post('http://localhost:3000/echo')
+    .send({ name: 'tobi' })
+    .end(function(res){
+      res.should.be.json
+      res.text.should.equal('{&quot;name&quot;:&quot;tobi&quot;}');
+      done();
+    });</code></pre></dd>
+                <section class="suite">
+                  <h1>when called several times</h1>
+                  <dl>
+                    <dt>should merge the objects</dt>
+                    <dd><pre><code>
+    request
+    .post('http://localhost:3000/echo')
+    .send({ name: 'tobi' })
+    .send({ age: 1 })
+    .end(function(res){
+      res.should.be.json
+      res.text.should.equal('{&quot;name&quot;:&quot;tobi&quot;,&quot;age&quot;:1}');
+      done();
+    });</code></pre></dd>
+                  </dl>
+                </section>
+              </dl>
+            </section>
           </dl>
         </section>
         <section class="suite">
-          <h1>req.send(str)</h1>
+          <h1>exports</h1>
           <dl>
-            <dt>should write the string</dt>
+            <dt>should expose .version</dt>
             <dd><pre><code>
-request
-.post('http://localhost:3000/echo')
-.send('{&quot;name&quot;:&quot;tobi&quot;}')
-.end(function(res){
-  res.text.should.equal('{&quot;name&quot;:&quot;tobi&quot;}');
-  done();
-});</code></pre></dd>
+    request.version.should.be.a('string');</code></pre></dd>
+            <dt>should expose Part</dt>
+            <dd><pre><code>
+    request.Part.should.be.a('function');</code></pre></dd>
+            <dt>should expose .protocols</dt>
+            <dd><pre><code>
+    Object.keys(request.protocols)
+      .should.eql(['http:', 'https:']);</code></pre></dd>
+            <dt>should expose .serialize</dt>
+            <dd><pre><code>
+    Object.keys(request.serialize)
+      .should.eql(['application/x-www-form-urlencoded', 'application/json']);</code></pre></dd>
+            <dt>should expose .parse</dt>
+            <dd><pre><code>
+    Object.keys(request.parse)
+      .should.eql(['application/x-www-form-urlencoded', 'application/json']);</code></pre></dd>
           </dl>
         </section>
         <section class="suite">
-          <h1>req.send(Object)</h1>
+          <h1>flags</h1>
           <dl>
-            <dt>should default to json</dt>
-            <dd><pre><code>
-request
-.post('http://localhost:3000/echo')
-.send({ name: 'tobi' })
-.end(function(res){
-  res.should.be.json
-  res.text.should.equal('{&quot;name&quot;:&quot;tobi&quot;}');
-  done();
-});</code></pre></dd>
+            <section class="suite">
+              <h1>with 4xx response</h1>
+              <dl>
+                <dt>should set res.error and res.clientError</dt>
+                <dd><pre><code>
+    request
+    .get('http://localhost:3004/notfound')
+    .end(function(res){
+      assert(!res.ok, 'response should not be ok');
+      assert(res.error, 'response should be an error');
+      assert(res.clientError, 'response should be a client error');
+      assert(!res.serverError, 'response should not be a server error');
+      done();
+    });</code></pre></dd>
+              </dl>
+            </section>
+            <section class="suite">
+              <h1>with 5xx response</h1>
+              <dl>
+                <dt>should set res.error and res.serverError</dt>
+                <dd><pre><code>
+    request
+    .get('http://localhost:3004/error')
+    .end(function(res){
+      assert(!res.ok, 'response should not be ok');
+      assert(!res.notFound, 'response should not be notFound');
+      assert(res.error, 'response should be an error');
+      assert(!res.clientError, 'response should not be a client error');
+      assert(res.serverError, 'response should be a server error');
+      done();
+    });</code></pre></dd>
+              </dl>
+            </section>
+            <section class="suite">
+              <h1>with 404 Not Found</h1>
+              <dl>
+                <dt>should res.notFound</dt>
+                <dd><pre><code>
+    request
+    .get('http://localhost:3004/notfound')
+    .end(function(res){
+      assert(res.notFound, 'response should be .notFound');
+      done();
+    });</code></pre></dd>
+              </dl>
+            </section>
+            <section class="suite">
+              <h1>with 400 Bad Request</h1>
+              <dl>
+                <dt>should set req.badRequest</dt>
+                <dd><pre><code>
+    request
+    .get('http://localhost:3004/bad-request')
+    .end(function(res){
+      assert(res.badRequest, 'response should be .badRequest');
+      done();
+    });</code></pre></dd>
+              </dl>
+            </section>
+            <section class="suite">
+              <h1>with 401 Bad Request</h1>
+              <dl>
+                <dt>should set res.unauthorized</dt>
+                <dd><pre><code>
+    request
+    .get('http://localhost:3004/unauthorized')
+    .end(function(res){
+      assert(res.unauthorized, 'response should be .unauthorized');
+      done();
+    });</code></pre></dd>
+              </dl>
+            </section>
+            <section class="suite">
+              <h1>with 406 Not Acceptable</h1>
+              <dl>
+                <dt>should set res.notAcceptable</dt>
+                <dd><pre><code>
+    request
+    .get('http://localhost:3004/not-acceptable')
+    .end(function(res){
+      assert(res.notAcceptable, 'response should be .notAcceptable');
+      done();
+    });</code></pre></dd>
+              </dl>
+            </section>
+            <section class="suite">
+              <h1>with 204 No Content</h1>
+              <dl>
+                <dt>should set res.noContent</dt>
+                <dd><pre><code>
+    request
+    .get('http://localhost:3004/no-content')
+    .end(function(res){
+      assert(res.noContent, 'response should be .noContent');
+      done();
+    });</code></pre></dd>
+              </dl>
+            </section>
+          </dl>
+        </section>
+        <section class="suite">
+          <h1>req.send(Object) as "form"</h1>
+          <dl>
+            <section class="suite">
+              <h1>with req.type() set to form</h1>
+              <dl>
+                <dt>should send x-www-form-urlencoded data</dt>
+                <dd><pre><code>
+    request
+    .post('http://localhost:3000/echo')
+    .type('form')
+    .send({ name: 'tobi' })
+    .end(function(res){
+      res.header['content-type'].should.equal('application/x-www-form-urlencoded');
+      res.text.should.equal('name=tobi');
+      done();
+    });</code></pre></dd>
+              </dl>
+            </section>
             <section class="suite">
               <h1>when called several times</h1>
               <dl>
                 <dt>should merge the objects</dt>
                 <dd><pre><code>
-request
-.post('http://localhost:3000/echo')
-.send({ name: 'tobi' })
-.send({ age: 1 })
-.end(function(res){
-  res.should.be.json
-  res.text.should.equal('{&quot;name&quot;:&quot;tobi&quot;,&quot;age&quot;:1}');
-  done();
-});</code></pre></dd>
+    request
+    .post('http://localhost:3002/echo')
+    .type('form')
+    .send({ name: { first: 'tobi', last: 'holowaychuk' } })
+    .send({ age: '1' })
+    .end(function(res){
+      res.header['content-type'].should.equal('application/x-www-form-urlencoded');
+      res.text.should.equal('name[first]=tobi&amp;name[last]=holowaychuk&amp;age=1');
+      done();
+    });</code></pre></dd>
               </dl>
             </section>
           </dl>
         </section>
-      </dl>
-    </section>
-    <section class="suite">
-      <h1>exports</h1>
-      <dl>
-        <dt>should expose .version</dt>
-        <dd><pre><code>
-request.version.should.be.a('string');</code></pre></dd>
-        <dt>should expose Part</dt>
-        <dd><pre><code>
-request.Part.should.be.a('function');</code></pre></dd>
-        <dt>should expose .protocols</dt>
-        <dd><pre><code>
-Object.keys(request.protocols)
-  .should.eql(['http:', 'https:']);</code></pre></dd>
-        <dt>should expose .types</dt>
-        <dd><pre><code>
-Object.keys(request.types)
-  .should.eql(['html', 'json', 'form']);</code></pre></dd>
-        <dt>should expose .serialize</dt>
-        <dd><pre><code>
-Object.keys(request.serialize)
-  .should.eql(['application/x-www-form-urlencoded', 'application/json']);</code></pre></dd>
-        <dt>should expose .parse</dt>
-        <dd><pre><code>
-Object.keys(request.parse)
-  .should.eql(['application/x-www-form-urlencoded', 'application/json']);</code></pre></dd>
-      </dl>
-    </section>
-    <section class="suite">
-      <h1>flags</h1>
-      <dl>
         <section class="suite">
-          <h1>with 4xx response</h1>
+          <h1>res.body</h1>
           <dl>
-            <dt>should set res.error and res.clientError</dt>
-            <dd><pre><code>
-request
-.get('http://localhost:3004/notfound')
-.end(function(res){
-  assert(!res.ok, 'response should not be ok');
-  assert(res.error, 'response should be an error');
-  assert(res.clientError, 'response should be a client error');
-  assert(!res.serverError, 'response should not be a server error');
-  done();
-});</code></pre></dd>
+            <section class="suite">
+              <h1>application/x-www-form-urlencoded</h1>
+              <dl>
+                <dt>should parse the body</dt>
+                <dd><pre><code>
+    request
+    .get('http://localhost:3002/form-data')
+    .end(function(res){
+      res.text.should.equal('pet[name]=manny');
+      res.body.should.eql({ pet: { name: 'manny' }});
+      done();
+    });</code></pre></dd>
+              </dl>
+            </section>
           </dl>
         </section>
         <section class="suite">
-          <h1>with 5xx response</h1>
+          <h1>request multipart/form-data</h1>
           <dl>
-            <dt>should set res.error and res.serverError</dt>
-            <dd><pre><code>
-request
-.get('http://localhost:3004/error')
-.end(function(res){
-  assert(!res.ok, 'response should not be ok');
-  assert(!res.notFound, 'response should not be notFound');
-  assert(res.error, 'response should be an error');
-  assert(!res.clientError, 'response should not be a client error');
-  assert(res.serverError, 'response should be a server error');
-  done();
-});</code></pre></dd>
+            <section class="suite">
+              <h1>req.body</h1>
+              <dl>
+                <dt>should be populated with fields</dt>
+                <dd><pre><code>
+    request.get('http://localhost:3007/', function(res){
+      res.status.should.equal(200);
+      res.body.should.eql({ name: 'tobi' });
+      res.files.image.name.should.equal('something.png');
+      res.files.image.type.should.equal('image/png');
+      assert(null == res.text, 'res.text should be empty for multipart');
+      done();
+    });</code></pre></dd>
+              </dl>
+            </section>
           </dl>
         </section>
         <section class="suite">
-          <h1>with 404 Not Found</h1>
+          <h1>zlib</h1>
           <dl>
-            <dt>should res.notFound</dt>
+            <dt>should deflate the content</dt>
             <dd><pre><code>
-request
-.get('http://localhost:3004/notfound')
-.end(function(res){
-  assert(res.notFound, 'response should be .notFound');
-  done();
-});</code></pre></dd>
+    request
+      .get('http://localhost:3080')
+      .end(function(res){
+        res.should.have.status(200);
+        res.text.should.equal(subject);
+        res.headers['content-length'].should.be.below(subject.length);
+        done();
+      });</code></pre></dd>
           </dl>
         </section>
         <section class="suite">
-          <h1>with 400 Bad Request</h1>
+          <h1>req.send(Object) as "json"</h1>
           <dl>
-            <dt>should set req.badRequest</dt>
+            <dt>should default to json</dt>
             <dd><pre><code>
-request
-.get('http://localhost:3004/bad-request')
-.end(function(res){
-  assert(res.badRequest, 'response should be .badRequest');
-  done();
-});</code></pre></dd>
+    request
+    .post('http://localhost:3001/echo')
+    .send({ name: 'tobi' })
+    .end(function(res){
+      res.should.be.json
+      res.text.should.equal('{&quot;name&quot;:&quot;tobi&quot;}');
+      done();
+    });</code></pre></dd>
+            <dt>should work with arrays</dt>
+            <dd><pre><code>
+    request
+    .post('http://localhost:3001/echo')
+    .send([1,2,3])
+    .end(function(res){
+      res.should.be.json
+      res.text.should.equal('[1,2,3]');
+      done();
+    });</code></pre></dd>
+            <section class="suite">
+              <h1>when called several times</h1>
+              <dl>
+                <dt>should merge the objects</dt>
+                <dd><pre><code>
+    request
+    .post('http://localhost:3001/echo')
+    .send({ name: 'tobi' })
+    .send({ age: 1 })
+    .end(function(res){
+      res.should.be.json
+      res.text.should.equal('{&quot;name&quot;:&quot;tobi&quot;,&quot;age&quot;:1}');
+      done();
+    });</code></pre></dd>
+              </dl>
+            </section>
           </dl>
         </section>
         <section class="suite">
-          <h1>with 401 Bad Request</h1>
+          <h1>res.body</h1>
           <dl>
-            <dt>should set res.unauthorized</dt>
-            <dd><pre><code>
-request
-.get('http://localhost:3004/unauthorized')
-.end(function(res){
-  assert(res.unauthorized, 'response should be .unauthorized');
-  done();
-});</code></pre></dd>
+            <section class="suite">
+              <h1>application/json</h1>
+              <dl>
+                <dt>should parse the body</dt>
+                <dd><pre><code>
+    request
+    .get('http://localhost:3001/json')
+    .end(function(res){
+      res.text.should.equal('{&quot;name&quot;:&quot;manny&quot;}');
+      res.body.should.eql({ name: 'manny' });
+      done();
+    });</code></pre></dd>
+              </dl>
+            </section>
           </dl>
         </section>
         <section class="suite">
-          <h1>with 406 Not Acceptable</h1>
+          <h1>Request</h1>
           <dl>
-            <dt>should set res.notAcceptable</dt>
+            <dt>should default res.files to {}</dt>
             <dd><pre><code>
-request
-.get('http://localhost:3004/not-acceptable')
-.end(function(res){
-  assert(res.notAcceptable, 'response should be .notAcceptable');
-  done();
-});</code></pre></dd>
+    var req = request.post('http://localhost:3005/echo');
+
+    req.end(function(res){
+      res.files.should.eql({});
+      res.body.should.eql({});
+      done();
+    });</code></pre></dd>
+            <section class="suite">
+              <h1>#part()</h1>
+              <dl>
+                <dt>should return a new Part</dt>
+                <dd><pre><code>
+    var req = request.post('http://localhost:3005');
+    req.part().constructor.name.should.equal('Part');
+    req.part().constructor.name.should.equal('Part');
+    req.part().should.not.equal(req.part());</code></pre></dd>
+              </dl>
+            </section>
+            <section class="suite">
+              <h1>#field(name, value)</h1>
+              <dl>
+                <dt>should set a multipart field value</dt>
+                <dd><pre><code>
+    var req = request.post('http://localhost:3005/echo');
+
+    req.field('user[name]', 'tobi');
+    req.field('user[age]', '2');
+    req.field('user[species]', 'ferret');
+
+    req.end(function(res){
+      res.body['user[name]'].should.equal('tobi');
+      res.body['user[age]'].should.equal('2');
+      res.body['user[species]'].should.equal('ferret');
+      done();
+    });</code></pre></dd>
+                <dt>should work with file attachments</dt>
+                <dd><pre><code>
+    var req = request.post('http://localhost:3005/echo');
+
+    req.field('name', 'Tobi');
+    req.attach('test/node/fixtures/user.html', 'document');
+    req.field('species', 'ferret');
+
+    req.end(function(res){
+      res.body.name.should.equal('Tobi');
+      res.body.species.should.equal('ferret');
+
+      var html = res.files.document;
+      html.name.should.equal('document');
+      html.type.should.equal('text/html');
+      read(html.path).should.equal('&lt;h1&gt;name&lt;/h1&gt;');
+      done();
+    })</code></pre></dd>
+              </dl>
+            </section>
+            <section class="suite">
+              <h1>#attach(file)</h1>
+              <dl>
+                <dt>should attach a file</dt>
+                <dd><pre><code>
+    var req = request.post('http://localhost:3005/echo');
+
+    req.attach('test/node/fixtures/user.html');
+    req.attach('test/node/fixtures/user.json');
+    req.attach('test/node/fixtures/user.txt');
+
+    req.end(function(res){
+      var html = res.files['user.html'];
+      var json = res.files['user.json'];
+      var text = res.files['user.txt'];
+
+      html.name.should.equal('user.html');
+      html.type.should.equal('text/html');
+      read(html.path).should.equal('&lt;h1&gt;name&lt;/h1&gt;');
+
+      json.name.should.equal('user.json');
+      json.type.should.equal('application/json');
+      read(json.path).should.equal('{&quot;name&quot;:&quot;tobi&quot;}');
+
+      text.name.should.equal('user.txt');
+      text.type.should.equal('text/plain');
+      read(text.path).should.equal('Tobi');
+
+      done();
+    })</code></pre></dd>
+                <section class="suite">
+                  <h1>when a file does not exist</h1>
+                  <dl>
+                    <dt>should emit an error</dt>
+                    <dd><pre><code>
+    var req = request.post('http://localhost:3005/echo');
+
+    req.attach('foo');
+    req.attach('bar');
+    req.attach('baz');
+
+    req.on('error', function(err){
+      err.message.should.include('ENOENT, no such file');
+      err.path.should.equal('foo');
+      done();
+    });
+
+    req.end(function(res){
+      assert(0, 'end() was called');
+    });</code></pre></dd>
+                  </dl>
+                </section>
+              </dl>
+            </section>
+            <section class="suite">
+              <h1>#attach(file, filename)</h1>
+              <dl>
+                <dt>should use the custom filename</dt>
+                <dd><pre><code>
+    request
+    .post(':3005/echo')
+    .attach('test/node/fixtures/user.html', 'document')
+    .end(function(res){
+      var html = res.files.document;
+      html.name.should.equal('document');
+      html.type.should.equal('text/html');
+      read(html.path).should.equal('&lt;h1&gt;name&lt;/h1&gt;');
+      done();
+    })</code></pre></dd>
+              </dl>
+            </section>
           </dl>
         </section>
         <section class="suite">
-          <h1>with 204 No Content</h1>
-          <dl>
-            <dt>should set res.noContent</dt>
-            <dd><pre><code>
-request
-.get('http://localhost:3004/no-content')
-.end(function(res){
-  assert(res.noContent, 'response should be .noContent');
-  done();
-});</code></pre></dd>
-          </dl>
-        </section>
-      </dl>
-    </section>
-    <section class="suite">
-      <h1>req.send(Object) as "form"</h1>
-      <dl>
-        <section class="suite">
-          <h1>with req.type() set to form</h1>
-          <dl>
-            <dt>should send x-www-form-urlencoded data</dt>
-            <dd><pre><code>
-request
-.post('http://localhost:3000/echo')
-.type('form')
-.send({ name: 'tobi' })
-.end(function(res){
-  res.header['content-type'].should.equal('application/x-www-form-urlencoded');
-  res.text.should.equal('name=tobi');
-  done();
-});</code></pre></dd>
-          </dl>
-        </section>
-        <section class="suite">
-          <h1>when called several times</h1>
-          <dl>
-            <dt>should merge the objects</dt>
-            <dd><pre><code>
-request
-.post('http://localhost:3002/echo')
-.type('form')
-.send({ name: { first: 'tobi', last: 'holowaychuk' } })
-.send({ age: '1' })
-.end(function(res){
-  res.header['content-type'].should.equal('application/x-www-form-urlencoded');
-  res.text.should.equal('name[first]=tobi&amp;name[last]=holowaychuk&amp;age=1');
-  done();
-});</code></pre></dd>
-          </dl>
-        </section>
-      </dl>
-    </section>
-    <section class="suite">
-      <h1>res.body</h1>
-      <dl>
-        <section class="suite">
-          <h1>application/x-www-form-urlencoded</h1>
-          <dl>
-            <dt>should parse the body</dt>
-            <dd><pre><code>
-request
-.get('http://localhost:3002/form-data')
-.end(function(res){
-  res.text.should.equal('pet[name]=manny');
-  res.body.should.eql({ pet: { name: 'manny' }});
-  done();
-});</code></pre></dd>
-          </dl>
-        </section>
-      </dl>
-    </section>
-    <section class="suite">
-      <h1>req.send(Object) as "json"</h1>
-      <dl>
-        <dt>should default to json</dt>
-        <dd><pre><code>
-request
-.post('http://localhost:3001/echo')
-.send({ name: 'tobi' })
-.end(function(res){
-  res.should.be.json
-  res.text.should.equal('{&quot;name&quot;:&quot;tobi&quot;}');
-  done();
-});</code></pre></dd>
-        <dt>should work with arrays</dt>
-        <dd><pre><code>
-request
-.post('http://localhost:3001/echo')
-.send([1,2,3])
-.end(function(res){
-  res.should.be.json
-  res.text.should.equal('[1,2,3]');
-  done();
-});</code></pre></dd>
-        <section class="suite">
-          <h1>when called several times</h1>
-          <dl>
-            <dt>should merge the objects</dt>
-            <dd><pre><code>
-request
-.post('http://localhost:3001/echo')
-.send({ name: 'tobi' })
-.send({ age: 1 })
-.end(function(res){
-  res.should.be.json
-  res.text.should.equal('{&quot;name&quot;:&quot;tobi&quot;,&quot;age&quot;:1}');
-  done();
-});</code></pre></dd>
-          </dl>
-        </section>
-      </dl>
-    </section>
-    <section class="suite">
-      <h1>res.body</h1>
-      <dl>
-        <section class="suite">
-          <h1>application/json</h1>
-          <dl>
-            <dt>should parse the body</dt>
-            <dd><pre><code>
-request
-.get('http://localhost:3001/json')
-.end(function(res){
-  res.text.should.equal('{&quot;name&quot;:&quot;manny&quot;}');
-  res.body.should.eql({ name: 'manny' });
-  done();
-});</code></pre></dd>
-          </dl>
-        </section>
-      </dl>
-    </section>
-    <section class="suite">
-      <h1>Request</h1>
-      <dl>
-        <section class="suite">
-          <h1>#part()</h1>
-          <dl>
-            <dt>should return a new Part</dt>
-            <dd><pre><code>
-var req = request.post('http://localhost:3005');
-req.part().constructor.name.should.equal('Part');
-req.part().constructor.name.should.equal('Part');
-req.part().should.not.equal(req.part());</code></pre></dd>
-          </dl>
-        </section>
-      </dl>
-    </section>
-    <section class="suite">
-      <h1>Part</h1>
-      <dl>
-        <section class="suite">
-          <h1>#pipe()</h1>
+          <h1>Part</h1>
           <dl>
             <section class="suite">
               <h1>with a single part</h1>
               <dl>
                 <dt>should construct a multipart request</dt>
                 <dd><pre><code>
-var req = request.post('http://localhost:3005/echo');
+    var req = request.post('http://localhost:3005/echo');
 
-req
-  .part()
-  .set('Content-Type', 'image/png')
-  .write('some image data');
+    req
+      .part()
+      .set('Content-Disposition', 'attachment; name=&quot;image&quot;; filename=&quot;image.png&quot;')
+      .set('Content-Type', 'image/png')
+      .write('some image data');
 
-req.end(function(res){
-  var ct = res.header['content-type'];
-  ct.should.include.string('multipart/mixed; boundary=&quot;');
-
-  var body = '\r\n';
-  body += '--' + boundary(ct) + '\r\n';
-  body += 'Content-Type: image/png\r\n';
-  body += '\r\n';
-  body += 'some image data';
-  body += '\r\n--' + boundary(ct) + '--';
-
-  assert(body == res.text, 'invalid multipart response');
-});</code></pre></dd>
+    req.end(function(res){
+      var ct = res.header['content-type'];
+      ct.should.include('multipart/form-data; boundary=');
+      res.body.should.eql({});
+      res.files.image.name.should.equal('image.png');
+      res.files.image.type.should.equal('image/png');
+      done();
+    });</code></pre></dd>
               </dl>
             </section>
             <section class="suite">
@@ -561,34 +773,26 @@ req.end(function(res){
 
         req.part()
           .set('Content-Type', 'image/png')
-          .set('Content-Disposition', 'attachment')
+          .set('Content-Disposition', 'attachment; filename=&quot;myimage.png&quot;')
           .write('some image data');
 
         var part = req.part()
-          .set('Content-Type', 'text/plain');
+          .set('Content-Type', 'image/png')
+          .set('Content-Disposition', 'attachment; filename=&quot;another.png&quot;')
 
-        part.write('foo ');
-        part.write('bar ');
-        part.write('baz');
+        part.write('random');
+        part.write('thing');
+        part.write('here');
+
+        req.part()
+          .set('Content-Disposition', 'form-data; name=&quot;name&quot;')
+          .set('Content-Type', 'text/plain')
+          .write('tobi');
 
         req.end(function(res){
-          var ct = res.header['content-type'];
-          ct.should.include.string('multipart/mixed; boundary=&quot;');
-
-          var body = '';
-          body += '\r\n--' + boundary(ct) + '\r\n';
-          body += 'Content-Type: image/png\r\n';
-          body += 'Content-Disposition: attachment\r\n';
-          body += '\r\n';
-          body += 'some image data';
-          body += '\r\n--' + boundary(ct) + '\r\n';
-          body += 'Content-Type: text/plain\r\n';
-          body += '\r\n';
-          body += 'foo bar baz';
-          body += '\r\n--' + boundary(ct) + '--';
-
-          assert(body == res.text, 'invalid multipart response');
-          done();
+          res.body.name.should.equal('tobi');
+          Object.keys(res.files).should.eql(['myimage.png', 'another.png']);
+        done();
         });</code></pre></dd>
               </dl>
             </section>
@@ -597,142 +801,248 @@ req.end(function(res){
               <dl>
                 <dt>should append the boundary</dt>
                 <dd><pre><code>
-var req = request.post('http://localhost:3005/echo');
+    var req = request
+      .post('http://localhost:3005/echo')
+      .type('multipart/form-data');
 
-req
-  .type('multipart/form-data')
-  .part()
-  .set('Content-Type', 'image/png')
-  .write('some image data');
+    req
+      .part()
+      .set('Content-Type', 'text/plain')
+      .set('Content-Disposition', 'form-data; name=&quot;name&quot;')
+      .write('Tobi');
 
-req.end(function(res){
-  var ct = res.header['content-type'];
-  ct.should.include.string('multipart/form-data; boundary=&quot;');
+    req.end(function(res){
+      res.header['content-type'].should.include('boundary=');
+      res.body.name.should.equal('Tobi');
+      done();
+    });</code></pre></dd>
+              </dl>
+            </section>
+            <section class="suite">
+              <h1>#name(str)</h1>
+              <dl>
+                <dt>should set Content-Disposition to form-data and name param</dt>
+                <dd><pre><code>
+    var req = request
+      .post('http://localhost:3005/echo');
 
-  var body = '\r\n';
-  body += '--' + boundary(ct) + '\r\n';
-  body += 'Content-Type: image/png\r\n';
-  body += '\r\n';
-  body += 'some image data';
-  body += '\r\n--' + boundary(ct) + '--';
+    req
+      .part()
+      .name('user[name]')
+      .write('Tobi');
 
-  assert(body == res.text, 'invalid multipart response');
-});</code></pre></dd>
+    req.end(function(res){
+      res.body['user[name]'].should.equal('Tobi');
+      done();
+    });</code></pre></dd>
+              </dl>
+            </section>
+            <section class="suite">
+              <h1>#filename(str)</h1>
+              <dl>
+                <dt>should set Content-Disposition and Content-Type</dt>
+                <dd><pre><code>
+    var req = request
+      .post('http://localhost:3005/echo')
+      .type('multipart/form-data');
+
+    req
+      .part()
+      .filename('path/to/my.txt')
+      .write('Tobi');
+
+    req.end(function(res){
+      var file = res.files['my.txt'];
+      file.name.should.equal('my.txt');
+      file.type.should.equal('text/plain');
+      done();
+    });</code></pre></dd>
               </dl>
             </section>
           </dl>
         </section>
         <section class="suite">
-          <h1>#pipe(stream)</h1>
+          <h1>request</h1>
           <dl>
-            <dt>should write to the part</dt>
-            <dd><pre><code>
-var req = request
-  .post('http://localhost:3005/echo')
-  .type('multipart/form-data');
+            <section class="suite">
+              <h1>act as a writable stream</h1>
+              <dl>
+                <dt>should format the url</dt>
+                <dd><pre><code>
+    var req = request.post('http://localhost:3020')
+      , stream = fs.createReadStream('test/node/fixtures/user.json');
 
-var stream = fs.createReadStream(__dirname + '/fixtures/user.html');
+    req.type('json');
 
-var part = req.part();
-part.set('Content-Type', 'text/html');
-stream.pipe(part);
+    req.on('response', function(res){
+      res.body.should.eql({ name: 'tobi' });
+      done();
+    });
 
-req.on('response', function(res){
-  console.log(res.statusCode);
-  console.log(res.text);
-});
-
-// req.end(function(res){
-//   console.log(res.text);
-//   return
-//   var ct = res.header['content-type'];
-//   ct.should.include.string('multipart/form-data; boundary=&quot;');
-// 
-//   var body = '\r\n';
-//   body += '--' + boundary(ct) + '\r\n';
-//   body += 'Content-Type: image/png\r\n';
-//   body += '\r\n';
-//   body += 'some image data';
-//   body += '\r\n--' + boundary(ct) + '--';
-// 
-//   // assert(body == res.text, 'invalid multipart response');
-// });</code></pre></dd>
-          </dl>
-        </section>
-      </dl>
-    </section>
-    <section class="suite">
-      <h1>req.send(Object)</h1>
-      <dl>
-        <section class="suite">
-          <h1>on a GET request</h1>
-          <dl>
-            <dt>should send x-www-form-urlencoded data</dt>
-            <dd><pre><code>
-request
-.get('http://localhost:3006/')
-.send({ name: 'tobi' })
-.send({ order: 'asc' })
-.send({ limit: ['1', '2'] })
-.end(function(res){
-  res.body.should.eql({ name: 'tobi', order: 'asc', limit: ['1', '2'] });
-  done();
-});</code></pre></dd>
-          </dl>
-        </section>
-      </dl>
-    </section>
-    <section class="suite">
-      <h1>request</h1>
-      <dl>
-        <section class="suite">
-          <h1>on redirect</h1>
-          <dl>
-            <dt>should follow Location</dt>
-            <dd><pre><code>
-var redirects = [];
-
-request
-.get('http://localhost:3003/')
-.on('redirect', function(res){
-  redirects.push(res.headers.location);
-})
-.end(function(res){
-  var arr = [];
-  arr.push('http://localhost:3003/movies');
-  arr.push('http://localhost:3003/movies/all');
-  arr.push('http://localhost:3003/movies/all/0');
-  redirects.should.eql(arr);
-  res.text.should.equal('first movie page');
-  done();
-});</code></pre></dd>
+    stream.pipe(req);</code></pre></dd>
+              </dl>
+            </section>
           </dl>
         </section>
         <section class="suite">
-          <h1>req.redirects(n)</h1>
+          <h1>req.send(Object)</h1>
           <dl>
-            <dt>should alter the default number of redirects to follow</dt>
-            <dd><pre><code>
-var redirects = [];
-
-request
-.get('http://localhost:3003/')
-.redirects(2)
-.on('redirect', function(res){
-  redirects.push(res.headers.location);
-})
-.end(function(res){
-  var arr = [];
-  assert(res.redirect, 'res.redirect');
-  arr.push('http://localhost:3003/movies');
-  arr.push('http://localhost:3003/movies/all');
-  redirects.should.eql(arr);
-  res.text.should.match(/Moved Temporarily/);
-  done();
-});</code></pre></dd>
+            <section class="suite">
+              <h1>on a GET request</h1>
+              <dl>
+                <dt>should construct the query-string</dt>
+                <dd><pre><code>
+    request
+    .get('http://localhost:3006/')
+    .send({ name: 'tobi' })
+    .send({ order: 'asc' })
+    .send({ limit: ['1', '2'] })
+    .end(function(res){
+      res.body.should.eql({ name: 'tobi', order: 'asc', limit: ['1', '2'] });
+      done();
+    });</code></pre></dd>
+                <dt>should append to the original query-string</dt>
+                <dd><pre><code>
+    request
+    .get('http://localhost:3006/?name=tobi')
+    .send({ order: 'asc' })
+    .end(function(res) {
+      res.body.should.eql({ name: 'tobi', order: 'asc' });
+      done();
+    });</code></pre></dd>
+                <dt>should retain the original query-string</dt>
+                <dd><pre><code>
+    request
+    .get('http://localhost:3006/?name=tobi')
+    .end(function(res) {
+      res.body.should.eql({ name: 'tobi' });
+      done();
+    });</code></pre></dd>
+              </dl>
+            </section>
           </dl>
         </section>
-      </dl>
-    </section>
+        <section class="suite">
+          <h1>req.query(Object)</h1>
+          <dl>
+            <dt>should construct the query-string</dt>
+            <dd><pre><code>
+    request
+    .del('http://localhost:3006/')
+    .query({ name: 'tobi' })
+    .query({ order: 'asc' })
+    .query({ limit: ['1', '2'] })
+    .end(function(res){
+      res.body.should.eql({ name: 'tobi', order: 'asc', limit: ['1', '2'] });
+      done();
+    });</code></pre></dd>
+            <dt>should append to the original query-string</dt>
+            <dd><pre><code>
+    request
+    .del('http://localhost:3006/?name=tobi')
+    .query({ order: 'asc' })
+    .end(function(res) {
+      res.body.should.eql({ name: 'tobi', order: 'asc' });
+      done();
+    });</code></pre></dd>
+            <dt>should retain the original query-string</dt>
+            <dd><pre><code>
+    request
+    .del('http://localhost:3006/?name=tobi')
+    .end(function(res) {
+      res.body.should.eql({ name: 'tobi' });
+      done();
+    });</code></pre></dd>
+          </dl>
+        </section>
+        <section class="suite">
+          <h1>request</h1>
+          <dl>
+            <section class="suite">
+              <h1>on redirect</h1>
+              <dl>
+                <dt>should follow Location</dt>
+                <dd><pre><code>
+    var redirects = [];
+
+    request
+    .get('http://localhost:3003/')
+    .on('redirect', function(res){
+      redirects.push(res.headers.location);
+    })
+    .end(function(res){
+      var arr = [];
+      arr.push('http://localhost:3003/movies');
+      arr.push('http://localhost:3003/movies/all');
+      arr.push('http://localhost:3003/movies/all/0');
+      redirects.should.eql(arr);
+      res.text.should.equal('first movie page');
+      done();
+    });</code></pre></dd>
+              </dl>
+            </section>
+            <section class="suite">
+              <h1>req.redirects(n)</h1>
+              <dl>
+                <dt>should alter the default number of redirects to follow</dt>
+                <dd><pre><code>
+    var redirects = [];
+
+    request
+    .get('http://localhost:3003/')
+    .redirects(2)
+    .on('redirect', function(res){
+      redirects.push(res.headers.location);
+    })
+    .end(function(res){
+      var arr = [];
+      assert(res.redirect, 'res.redirect');
+      arr.push('http://localhost:3003/movies');
+      arr.push('http://localhost:3003/movies/all');
+      redirects.should.eql(arr);
+      res.text.should.match(/Moved Temporarily/);
+      done();
+    });</code></pre></dd>
+              </dl>
+            </section>
+          </dl>
+        </section>
+        <section class="suite">
+          <h1>utils.uid(len)</h1>
+          <dl>
+            <dt>should generate a unique id</dt>
+            <dd><pre><code>
+    utils.uid(10).should.have.length(10);
+    utils.uid(30).should.have.length(30);
+    utils.uid(30).should.not.equal(utils.uid(30));</code></pre></dd>
+          </dl>
+        </section>
+        <section class="suite">
+          <h1>utils.type(str)</h1>
+          <dl>
+            <dt>should return the mime type</dt>
+            <dd><pre><code>
+    utils.type('application/json; charset=utf-8')
+      .should.equal('application/json');
+
+    utils.type('application/json')
+      .should.equal('application/json');</code></pre></dd>
+          </dl>
+        </section>
+        <section class="suite">
+          <h1>utils.params(str)</h1>
+          <dl>
+            <dt>should return the field parameters</dt>
+            <dd><pre><code>
+    var str = 'application/json; charset=utf-8; foo  = bar';
+    var obj = utils.params(str);
+    obj.charset.should.equal('utf-8');
+    obj.foo.should.equal('bar');
+
+    var str = 'application/json';
+    utils.params(str).should.eql({});</code></pre></dd>
+          </dl>
+        </section>
+    
   </body>
 </html>
