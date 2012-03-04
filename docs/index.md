@@ -173,19 +173,6 @@
       .send({ post: 'data', here: 'wahoo' })
       .end(callback);
 
-## Basic authentication
-
-  Basic auth is currently provided by the _node_ client in two forms, first via the URL as "user:pass":
-    
-    request.get('http://tobi:learnboost@local').end(callback);
-
-  As well as via the `.auth()` method:
-
-    request
-      .get('http://local')
-      .auth('tobo', 'learnboost')
-      .end(callback);
-
 ## Parsing response bodies
 
   Super Agent will parse known response-body data for you, currently supporting _application/x-www-form-urlencoded_, _application/json_, and _multipart/form-data_.
@@ -267,6 +254,28 @@
      res.unauthorized = 401 == status;
      res.notAcceptable = 406 == status;
      res.notFound = 404 == status;
+
+## Basic authentication
+
+  Basic auth is currently provided by the _node_ client in two forms, first via the URL as "user:pass":
+    
+    request.get('http://tobi:learnboost@local').end(callback);
+
+  As well as via the `.auth()` method:
+
+    request
+      .get('http://local')
+      .auth('tobo', 'learnboost')
+      .end(callback);
+
+## Following redirects
+
+  By default up to 5 redirects will be followed, however you may specify this with the `res.redirects(n)` method:
+  
+    request
+      .get('/some.png')
+      .redirects(2)
+      .end(callback);
 
 ## Compression
 
