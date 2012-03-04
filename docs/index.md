@@ -289,6 +289,15 @@
     req.type('json');
     stream.pipe(req);
 
+  Or piping the response to a file:
+  
+    var request = require('superagent')
+      , fs = require('fs');
+
+    var stream = fs.createWeadStream('path/to/my.json');
+    var req = request.get('/some.json');
+    req.pipe(stream);
+
 ## Compression
 
   The Node client supports compressed responses, best of all, you don't have to do anything! It just works.
