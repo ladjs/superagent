@@ -321,7 +321,7 @@
 
 ## Attaching files
 
-  As mentioned a higher-level API is also provided, in the form of `.attach(file[, filename])` and `.field(name, value)`. Attaching several files is simple, you can also provide a custom filename for the attachment:
+  As mentioned a higher-level API is also provided, in the form of `.attach(file[, filename])` and `.field(name, value)`. Attaching several files is simple, you can also provide a custom filename for the attachment, otherwise the basename of the attached file is used.
   
     request
       .post('/upload')

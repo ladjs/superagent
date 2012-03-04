@@ -357,7 +357,7 @@ req.pipe(stream);
 
 <h2>Attaching files</h2>
 
-<p>  As mentioned a higher-level API is also provided, in the form of <code>.attach(file[, filename])</code> and <code>.field(name, value)</code>. Attaching several files is simple, you can also provide a custom filename for the attachment:</p>
+<p>  As mentioned a higher-level API is also provided, in the form of <code>.attach(file[, filename])</code> and <code>.field(name, value)</code>. Attaching several files is simple, you can also provide a custom filename for the attachment, otherwise the basename of the attached file is used.</p>
 
 <pre><code>request
   .post('/upload')
