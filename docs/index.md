@@ -58,52 +58,11 @@
         
       });
 
-### Crafting requests
-
-  SuperAgent's flexible API gives you the granularity you need, _when_ you need, yet more concise variations help reduce the amount of code necessary. For example the following GET request:
+  The HTTP method defaults to __GET__, so if you wish, the following is valid:
   
-    request
-      .get('/search')
-      .end(function(res){
-    
-      });
-
-  Could also be defined as the following, where a callback is given to the HTTP verb method:
-  
-    request
-      .get('/search', function(res){
-    
-      });
-
-   Taking this further the default HTTP verb is __GET__ so the following works as well:
-   
      request('/search', function(res){
- 
-     });
-
-   This applies to more complicated requests as well, for example the following __GET__ request with a query-string can be written in the chaining manner:
-   
-     request
-       .get('/search')
-       .send({ query: 'tobi the ferret' })
-       .end(function(res){
-         
-       });
-
-   Or one may pass the query-string object to `.get()`:
-   
-     request
-       .get('/search', { query: 'tobi the ferret' })
-       .end(function(res){
        
-       });
-  
-  Taking this even further the callback may be passed as well:
-  
-     request
-       .get('/search', { query: 'tobi the ferret', function(res){
-     
-       });
+     });
 
 ## Setting header fields
 

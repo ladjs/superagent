@@ -70,57 +70,11 @@
   });
 </code></pre>
 
-<h3>Crafting requests</h3>
-
-<p>  SuperAgent&rsquo;s flexible API gives you the granularity you need, <em>when</em> you need, yet more concise variations help reduce the amount of code necessary. For example the following GET request:</p>
-
-<pre><code>request
-  .get('/search')
-  .end(function(res){
-
-  });
-</code></pre>
-
-<p>  Could also be defined as the following, where a callback is given to the HTTP verb method:</p>
-
-<pre><code>request
-  .get('/search', function(res){
-
-  });
-</code></pre>
-
-<p>   Taking this further the default HTTP verb is <strong>GET</strong> so the following works as well:</p>
+<p>  The HTTP method defaults to <strong>GET</strong>, so if you wish, the following is valid:</p>
 
 <pre><code> request('/search', function(res){
 
  });
-</code></pre>
-
-<p>   This applies to more complicated requests as well, for example the following <strong>GET</strong> request with a query-string can be written in the chaining manner:</p>
-
-<pre><code> request
-   .get('/search')
-   .send({ query: 'tobi the ferret' })
-   .end(function(res){
-
-   });
-</code></pre>
-
-<p>   Or one may pass the query-string object to <code>.get()</code>:</p>
-
-<pre><code> request
-   .get('/search', { query: 'tobi the ferret' })
-   .end(function(res){
-
-   });
-</code></pre>
-
-<p>  Taking this even further the callback may be passed as well:</p>
-
-<pre><code> request
-   .get('/search', { query: 'tobi the ferret', function(res){
-
-   });
 </code></pre>
 
 <h2>Setting header fields</h2>
