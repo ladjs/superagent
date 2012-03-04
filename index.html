@@ -5,8 +5,19 @@
     <link rel="stylesheet" href="style.css">
     <script src="jquery.js"></script>
     <script src="highlight.js"></script>
+    <script>
+      $(function(){
+        $('h2').each(function(){
+          var val = $(this).text();
+          var slug = val.toLowerCase().replace(/ +/, '-');
+          $(this).attr('id', slug);
+          $('#menu').append('<li><a href="#' + slug + '">' + val + '</a></li>');
+        });
+      });
+    </script>
   </head>
   <body>
+    <ul id="menu"></ul>
     <div id="content"><h1>SuperAgent</h1>
 
 <p> Super Agent is light-weight progressive ajax API crafted for flexibility, readability, and a low learning curve after being frustrated with many of the existing request APIs. It also works with Node.js!</p>
