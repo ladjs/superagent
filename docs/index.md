@@ -1,7 +1,7 @@
 
 # SuperAgent
 
- Super Agent is light-weight progressive ajax API crafted for flexibility, readability, and a low learning curve after being frustrated with many of the existing request APIs.
+ Super Agent is light-weight progressive ajax API crafted for flexibility, readability, and a low learning curve after being frustrated with many of the existing request APIs. It also works with Node.js!
 
      request
        .post('/api/pet')
