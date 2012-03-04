@@ -157,7 +157,7 @@
 
 ## Basic authentication
 
-  Basic auth is currently provided by the _node_ client in two forms, first via the URL as "<user>:<pass>":
+  Basic auth is currently provided by the _node_ client in two forms, first via the URL as "user:pass":
     
     request.get('http://tobi:learnboost@local').end(callback);
 
