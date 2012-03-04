@@ -277,6 +277,18 @@
       .redirects(2)
       .end(callback);
 
+## Piping data
+
+  The Node client allows you to pipe data to and from the request. For example piping a file's contents as the request:
+  
+    var request = require('superagent')
+      , fs = require('fs');
+
+    var stream = fs.createReadStream('path/to/my.json');
+    var req = request.post('/somewhere');
+    req.type('json');
+    stream.pipe(req);
+
 ## Compression
 
   The Node client supports compressed responses, best of all, you don't have to do anything! It just works.
