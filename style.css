@@ -18,6 +18,24 @@ body {
   -webkit-box-shadow: 0 2px 5px 0 black;
 }
 
+#menu {
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+}
+
+#menu a {
+  color: rgba(255,255,255,.4);
+  text-decoration: none;
+}
+
+#menu a:hover {
+  color: white;
+}
+
 pre {
   padding: 10px;
 }
