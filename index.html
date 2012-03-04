@@ -188,6 +188,18 @@
    .type('png')
 </code></pre>
 
+<h2>Query strings</h2>
+
+<p>  When issuing a <strong>GET</strong> request the <code>res.send(obj)</code> method will invoke <code>res.query(obj)</code>, this is a method which may be used with other HTTP methods in order to build up a query-string. For example populating <code>?format=json&amp;dest=/login</code> on a <strong>POST</strong>:</p>
+
+<pre><code>request
+  .post('/')
+  .query({ format: 'json' })
+  .query({ dest: '/login' })
+  .send({ post: 'data', here: 'wahoo' })
+  .end(callback);
+</code></pre>
+
 <h2>Basic authentication</h2>
 
 <p>  Basic auth is currently provided by the <em>node</em> client in two forms, first via the URL as &ldquo;user:pass&rdquo;:</p>
@@ -260,7 +272,7 @@ req.end(function(res){
 
 <h3>Response Content-Type</h3>
 
-<p>  The Content-Type response header is special-cased, providing <code>res.contentType</code>, which is void of the charset (if any). For example the Content-Type of &ldquo;text/html; charset=utf8&rdquo; will provide &ldquo;text/html&rdquo; as <code>res.contentType</code>, and the <code>res.charset</code> property would then contain &ldquo;utf8&rdquo;.</p>
+<p>  The Content-Type response header is special-cased, providing <code>res.type</code>, which is void of the charset (if any). For example the Content-Type of &ldquo;text/html; charset=utf8&rdquo; will provide &ldquo;text/html&rdquo; as <code>res.type</code>, and the <code>res.charset</code> property would then contain &ldquo;utf8&rdquo;.</p>
 
 <h3>Response status</h3>
 

@@ -162,6 +162,17 @@
      request.post('/user')
        .type('png')
 
+## Query strings
+
+  When issuing a __GET__ request the `res.send(obj)` method will invoke `res.query(obj)`, this is a method which may be used with other HTTP methods in order to build up a query-string. For example populating `?format=json&dest=/login` on a __POST__:
+  
+    request
+      .post('/')
+      .query({ format: 'json' })
+      .query({ dest: '/login' })
+      .send({ post: 'data', here: 'wahoo' })
+      .end(callback);
+
 ## Basic authentication
 
   Basic auth is currently provided by the _node_ client in two forms, first via the URL as "user:pass":
