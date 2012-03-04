@@ -90,6 +90,14 @@
    .end(callback);
 </code></pre>
 
+<p>  You may also pass an object to set several fields in a single call:</p>
+
+<pre><code> request
+   .get('/search')
+   .set({ 'API-Key': 'foobar', Accept: 'application/json' })
+   .end(callback);
+</code></pre>
+
 <h2>GET requests</h2>
 
 <p> The <code>.send()</code> method accepts objects, which when used with the <strong>GET</strong> method will form a query-string. The following will produce the path <code>/search?query=Manny&amp;range=1..5&amp;order=desc</code>.</p>
@@ -194,6 +202,10 @@
   .auth('tobo', 'learnboost')
   .end(callback);
 </code></pre>
+
+<h2>Parsing response bodies</h2>
+
+<p>  Super Agent will parse known response-body data for you, currently supporting <em>application/x-www-form-urlencoded</em>, <em>application/json</em>, and <em>multipart/form-data</em>.</p>
 
 <h2>Response properties</h2>
 

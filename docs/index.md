@@ -74,6 +74,13 @@
        .set('Accept', 'application/json')
        .end(callback);
 
+  You may also pass an object to set several fields in a single call:
+  
+     request
+       .get('/search')
+       .set({ 'API-Key': 'foobar', Accept: 'application/json' })
+       .end(callback);
+
 ## GET requests
 
  The `.send()` method accepts objects, which when used with the __GET__ method will form a query-string. The following will produce the path `/search?query=Manny&range=1..5&order=desc`.
@@ -167,6 +174,10 @@
       .get('http://local')
       .auth('tobo', 'learnboost')
       .end(callback);
+
+## Parsing response bodies
+
+  Super Agent will parse known response-body data for you, currently supporting _application/x-www-form-urlencoded_, _application/json_, and _multipart/form-data_.
 
 ## Response properties
 
