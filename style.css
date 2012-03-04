@@ -19,6 +19,7 @@ body {
 }
 
 #menu {
+  font-size: 13px;
   margin: 0;
   padding: 0;
   text-align: left;
@@ -28,7 +29,7 @@ body {
 }
 
 #menu a {
-  color: rgba(255,255,255,.4);
+  color: rgba(255,255,255,.5);
   text-decoration: none;
 }
 
