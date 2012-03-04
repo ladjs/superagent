@@ -319,6 +319,30 @@
 
      req.end(callback);
 
+## Attaching files
+
+  As mentioned a higher-level API is also provided, in the form of `.attach(file[, filename])` and `.field(name, value)`. Attaching several files is simple, you can also provide a custom filename for the attachment:
+  
+    request
+      .post('/upload')
+      .attach('path/to/tobi.png', 'Tobi.png')
+      .attach('path/to/loki.png')
+      .attach('path/to/jane.png')
+      .end(callback);
+
+## Field values
+
+  Much like form fields in HTML, you can set field values with the `.field(name, value)` method. Suppose you want to upload a few images with your name and email, your request might look something like this:
+
+     request
+       .post('/upload')
+       .field('user[name]', 'Tobi')
+       .field('user[email]', 'tobi@learnboost.com')
+       .attach('path/to/tobi.png')
+       .attach('path/to/loki.png')
+       .attach('path/to/jane.png')
+       .end(callback);
+
 ## Compression
 
   The Node client supports compressed responses, best of all, you don't have to do anything! It just works.
