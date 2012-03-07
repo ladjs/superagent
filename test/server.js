@@ -37,6 +37,10 @@ app.put('/user/:id', function(req, res){
   res.send('updated');
 });
 
+app.patch('/user/:id', function(req, res){
+  res.send('updated');
+});
+
 app.get('/querystring', function(req, res){
   res.send(req.query);
 });

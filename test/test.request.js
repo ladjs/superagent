@@ -112,6 +112,13 @@ test('get()', function(next){
   });
 });
 
+test('patch()', function(next){
+  request.patch('/user/12').end(function(res){
+    assert('updated' == res.text, 'response text');
+    next();
+  });
+});
+
 test('put()', function(next){
   request.put('/user/12').end(function(res){
     assert('updated' == res.text, 'response text');
