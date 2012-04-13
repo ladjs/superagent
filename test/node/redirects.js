@@ -21,6 +21,10 @@ app.get('/movies/all/0', function(req, res){
   res.send('first movie page');
 });
 
+app.post('/movie', function(req, res){
+  res.redirect('/movies/all/0');
+});
+
 app.listen(3003);
 
 describe('request', function(){
@@ -62,6 +66,26 @@ describe('request', function(){
         arr.push('http://localhost:3003/movies/all');
         redirects.should.eql(arr);
         res.text.should.match(/Moved Temporarily/);
+        done();
+      });
+    })
+  })
+
+  describe('on POST', function(){
+    it('should redirect as GET', function(done){
+      var redirects = [];
+
+      request
+      .post('http://localhost:3003/movie')
+      .redirects(2)
+      .on('redirect', function(res){
+        redirects.push(res.headers.location);
+      })
+      .end(function(res){
+        var arr = [];
+        arr.push('http://localhost:3003/movies/all/0');
+        redirects.should.eql(arr);
+        res.text.should.equal('first movie page');
         done();
       });
     })
