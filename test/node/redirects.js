@@ -77,6 +77,7 @@ describe('request', function(){
 
       request
       .post('http://localhost:3003/movie')
+      .send({ name: 'Tobi' })
       .redirects(2)
       .on('redirect', function(res){
         redirects.push(res.headers.location);
