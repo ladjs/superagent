@@ -1,4 +1,11 @@
 
+0.4.1 / 2012-04-13 
+==================
+
+  * Added HTTP PATCH support
+  * Fixed: GET / HEAD when following redirects. Closes #86
+  * Fixed Content-Length detection for multibyte chars
+
 0.4.0 / 2012-03-04 
 ==================
 
