@@ -114,7 +114,7 @@ describe('Request', function(){
         req.attach('baz');
 
         req.on('error', function(err){
-          err.message.should.include('ENOENT, no such file');
+          err.message.should.include('ENOENT');
           err.path.should.equal('foo');
           done();
         });
