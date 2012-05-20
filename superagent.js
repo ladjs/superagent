@@ -860,6 +860,23 @@ var superagent = function(exports){
   };
 
   /**
+   * PATCH `url` with optional `data` and callback `fn(res)`.
+   *
+   * @param {String} url
+   * @param {Mixed} data
+   * @param {Function} fn
+   * @return {Request}
+   * @api public
+   */
+
+  request.patch = function(url, data, fn){
+    var req = request('PATCH', url);
+    if (data) req.send(data);
+    if (fn) req.end(fn);
+    return req;
+  };
+
+  /**
    * POST `url` with optional `data` and callback `fn(res)`.
    *
    * @param {String} url
