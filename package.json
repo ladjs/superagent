@@ -8,6 +8,7 @@
       "qs": "0.4.2"
     , "formidable": "1.0.9"
     , "mime": "1.2.5"
+    , "emitter-component": "0.0.1"
   }
   , "devDependencies": {
       "express": "2.5.x"
