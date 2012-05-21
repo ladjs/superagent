@@ -14,6 +14,11 @@
     , "should": "*"
     , "mocha": "*"
   }
+  , "component": {
+    "scripts": {
+      "superagent": "lib/superagent.js"
+    }
+  }
   , "main": "index"
   , "engines": { "node": "*" }
 }

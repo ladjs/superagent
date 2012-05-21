@@ -1,10 +1,6 @@
 
 request = superagent;
 
-test('.version', function(){
-  assert(request.version);
-});
-
 test('Request inheritance', function(){
   assert(request.get('/') instanceof request.Request);
   assert(request.get('/') instanceof EventEmitter);
