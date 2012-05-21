@@ -8,12 +8,6 @@
 
   This library spawned from my frustration with jQuery's weak & inconsistent Ajax support. jQuery's API while having recently added some promise-like support, is largely static, forcing you to build up big objects containing all the header fields and options, not to mention most of the options are awkwardly named "type" instead of "method", etc. Onto examples!
 
-  Before we get started, superagent is namespaced to `superagent`, however I personally like to just call this `request`:
-
-```js
-request = superagent;
-```
-
   The following is what you might typically do for a simple __GET__ with jQuery:
 
 ```js
