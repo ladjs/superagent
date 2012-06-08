@@ -142,6 +142,8 @@
         .send({ pet: 'tobi' })
         .end(callback)
 
+ Note: "form-data" is aliased as "form" and "urlencoded".
+
 ## Setting the Content-Type
 
   The obvious solution is to use the `.set()` method:
