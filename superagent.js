@@ -176,29 +176,21 @@ EventEmitter.prototype.emit = function (name) {
 };
 /*!
  * superagent
- * Copyright (c) 2011 TJ Holowaychuk <tj@vision-media.ca>
+ * Copyright (c) 2012 TJ Holowaychuk <tj@vision-media.ca>
  * MIT Licensed
  */
 
-var superagent = function(exports){
+;(function(){
+
+  var Emitter = 'undefined' == typeof exports
+    ? EventEmitter
+    : require('emitter');
   
-  /**
-   * Expose the request function.
-   */
-  
-  exports = request;
-
-  /**
-   * Library version.
-   */
-
-  exports.version = '0.3.0';
-
   /**
    * Noop.
    */
 
-  var noop = function(){};
+  function noop(){};
 
   /**
    * Determine XHR.
@@ -275,7 +267,7 @@ var superagent = function(exports){
    * Expose serialization method.
    */
 
-   exports.serializeObject = serialize;
+   request.serializeObject = serialize;
 
    /**
     * Parse the given x-www-form-urlencoded `str`.
@@ -304,7 +296,7 @@ var superagent = function(exports){
    * Expose parser.
    */
 
-  exports.parseString = parseString;
+  request.parseString = parseString;
 
   /**
    * Default MIME type map.
@@ -313,10 +305,11 @@ var superagent = function(exports){
    * 
    */
 
-  exports.types = {
+  request.types = {
       html: 'text/html'
     , json: 'application/json'
     , urlencoded: 'application/x-www-form-urlencoded'
+    , 'form': 'application/x-www-form-urlencoded'
     , 'form-data': 'application/x-www-form-urlencoded'
   };
 
@@ -329,7 +322,7 @@ var superagent = function(exports){
    * 
    */
 
-   exports.serialize = {
+   request.serialize = {
        'application/x-www-form-urlencoded': serialize
      , 'application/json': JSON.stringify
    };
@@ -343,7 +336,7 @@ var superagent = function(exports){
     * 
     */
 
-  exports.parse = {
+  request.parse = {
       'application/x-www-form-urlencoded': parseString
     , 'application/json': JSON.parse
   };
@@ -499,7 +492,7 @@ var superagent = function(exports){
    */
 
   Response.prototype.parseBody = function(str){
-    var parse = exports.parse[this.type];
+    var parse = request.parse[this.type];
     return parse
       ? parse(str)
       : null;
@@ -553,7 +546,7 @@ var superagent = function(exports){
    * Expose `Response`.
    */
 
-  exports.Response = Response;
+  request.Response = Response;
 
   /**
    * Initialize a new `Request` with the given `method` and `url`.
@@ -565,7 +558,7 @@ var superagent = function(exports){
   
   function Request(method, url) {
     var self = this;
-    EventEmitter.call(this);
+    Emitter.call(this);
     this.method = method;
     this.url = url;
     this.header = {};
@@ -576,10 +569,10 @@ var superagent = function(exports){
   }
 
   /**
-   * Inherit from `EventEmitter.prototype`.
+   * Inherit from `Emitter.prototype`.
    */
 
-  Request.prototype = new EventEmitter;
+  Request.prototype = new Emitter;
   Request.prototype.constructor = Request;
 
   /**
@@ -614,7 +607,7 @@ var superagent = function(exports){
   };
 
   /**
-   * Set Content-Type to `type`, mapping values from `exports.types`.
+   * Set Content-Type to `type`, mapping values from `request.types`.
    *
    * Examples:
    *
@@ -636,7 +629,7 @@ var superagent = function(exports){
    */
 
   Request.prototype.type = function(type){
-    this.set('Content-Type', exports.types[type] || type);
+    this.set('Content-Type', request.types[type] || type);
     return this;
   };
 
@@ -747,7 +740,7 @@ var superagent = function(exports){
 
     // querystring
     if (query) {
-      query = exports.serializeObject(query);
+      query = request.serializeObject(query);
       this.url += ~this.url.indexOf('?')
         ? '&' + query
         : '?' + query;
@@ -759,7 +752,7 @@ var superagent = function(exports){
     // body
     if ('GET' != this.method && 'HEAD' != this.method) {
       // serialize stuff
-      var serialize = exports.serialize[this.header['content-type']];
+      var serialize = request.serialize[this.header['content-type']];
       if (serialize) data = serialize(data);
     }
 
@@ -777,7 +770,7 @@ var superagent = function(exports){
    * Expose `Request`.
    */
   
-  exports.Request = Request;
+  request.Request = Request;
 
   /**
    * Issue a request:
@@ -910,6 +903,12 @@ var superagent = function(exports){
     return req;
   };
 
-  return exports;
-  
-}({});
+  // expose
+
+  if ('undefined' == typeof exports) {
+    window.request = window.superagent = request;
+  } else {
+    module.exports = request;
+  }
+
+})();
