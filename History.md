@@ -1,4 +1,10 @@
 
+0.4.3 / 2012-06-15 
+==================
+
+  * Added 303, 305 and 307 as redirect status codes [slaskis]
+  * Fixed passing an object as the url
+
 0.4.2 / 2012-06-02 
 ==================
 
