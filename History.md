@@ -1,4 +1,9 @@
 
+0.5.0 / 2012-06-16 
+==================
+
+  * Added "Link" response header field parsing, exposing `res.links`
+
 0.4.3 / 2012-06-15 
 ==================
 

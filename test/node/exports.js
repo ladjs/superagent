@@ -2,10 +2,6 @@
 var request = require('../../');
 
 describe('exports', function(){
-  it('should expose .version', function(){
-    request.version.should.be.a('string');
-  })
-  
   it('should expose Part', function(){
     request.Part.should.be.a('function');
   })
