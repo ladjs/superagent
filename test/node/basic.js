@@ -35,6 +35,11 @@ app.get('/movies/all/0', function(req, res){
   res.send('first movie page');
 });
 
+app.get('/links', function(req, res){
+  res.header('Link', '<https://api.github.com/repos/visionmedia/mocha/issues?page=2>; rel="next"');
+  res.end();
+});
+
 app.listen(3000);
 
 describe('request', function(){
@@ -124,6 +129,26 @@ describe('request', function(){
         res.charset.should.equal('utf-8');
         done();
       });
+    })
+  })
+
+  describe('res.links', function(){
+    it('should default to an empty object', function(done){
+      request
+      .get('http://localhost:3000/login')
+      .end(function(res){
+        res.links.should.eql({});
+        done();
+      })
+    })
+
+    it('should parse the Link header field', function(done){
+      request
+      .get('http://localhost:3000/links')
+      .end(function(res){
+        res.links.next.should.equal('https://api.github.com/repos/visionmedia/mocha/issues?page=2');
+        done();
+      })
     })
   })
 

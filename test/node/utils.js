@@ -31,3 +31,12 @@ describe('utils.params(str)', function(){
     utils.params(str).should.eql({});
   })
 })
+
+describe('utils.parseLinks(str)', function(){
+  it('should parse links', function(){
+    var str = '<https://api.github.com/repos/visionmedia/mocha/issues?page=2>; rel="next", <https://api.github.com/repos/visionmedia/mocha/issues?page=5>; rel="last"';
+    var ret = utils.parseLinks(str);
+    ret.next.should.equal('https://api.github.com/repos/visionmedia/mocha/issues?page=2');
+    ret.last.should.equal('https://api.github.com/repos/visionmedia/mocha/issues?page=5');
+  })
+})
