@@ -284,4 +284,17 @@ describe('request', function(){
       })
     })
   })
+
+  describe('.end(fn)', function(){
+    it('should check arity', function(done){
+      request
+      .post('http://localhost:3000/echo')
+      .send({ name: 'tobi' })
+      .end(function(err, res){
+        assert(null == err);
+        res.text.should.equal('{"name":"tobi"}');
+        done();
+      });
+    })
+  })
 })
