@@ -84,6 +84,10 @@ request.post('/api/pet', cat, function(res){
 
  Visit `localhost:3000/` in the browser.
 
+## Wiki
+
+  For superagent extensions such as couchdb and oauth visit the [wiki](https://github.com/visionmedia/superagent/wiki).
+
 ## License 
 
 (The MIT License)
