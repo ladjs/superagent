@@ -1,4 +1,11 @@
 
+0.5.1 / 2012-07-16 
+==================
+
+  * add "methods" dep
+  * add `.end()` arity check to node callbacks
+  * fix unzip support due to weird node internals
+
 0.5.0 / 2012-06-16 
 ==================
 
