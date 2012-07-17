@@ -285,6 +285,18 @@ test('POST multiple .send() calls', function(next){
   });
 });
 
+test('POST multiple .send() strings', function(next){
+  request
+  .post('/echo')
+  .send('user[name]=tj')
+  .send('user[email]=tj@vision-media.ca')
+  .end(function(res){
+    assert(res.header['content-type'] == 'application/x-www-form-urlencoded');
+    assert(res.text == 'user[name]=tj&user[email]=tj@vision-media.ca')
+    done();
+  })
+});
+
 test('GET .type', function(next){
   request
   .get('/pets')
