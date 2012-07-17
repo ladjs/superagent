@@ -47,6 +47,20 @@ describe('req.send(Object) as "form"', function(){
   })
 })
 
+describe('req.send(String)', function(){
+  it('should default to "form"', function(done){
+    request
+    .post('http://localhost:3002/echo')
+    .send('user[name]=tj')
+    .send('user[email]=tj@vision-media.ca')
+    .end(function(res){
+      res.header['content-type'].should.equal('application/x-www-form-urlencoded');
+      res.body.should.eql({ user: { name: 'tj', email: 'tj@vision-media.ca' } });
+      done();
+    })
+  })
+})
+
 describe('res.body', function(){
   describe('application/x-www-form-urlencoded', function(){
     it('should parse the body', function(done){
