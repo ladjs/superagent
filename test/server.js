@@ -7,6 +7,8 @@ var express = require('express');
 
 var app = express.createServer();
 
+app.set('json spaces', 0);
+
 app.use(express.bodyParser());
 
 app.get('/', function(req, res){
