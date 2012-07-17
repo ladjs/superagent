@@ -1,4 +1,9 @@
 
+0.6.0 / 2012-07-17 
+==================
+
+  * add `res.send('foo=bar')` default of "application/x-www-form-urlencoded"
+
 0.5.1 / 2012-07-16 
 ==================
 

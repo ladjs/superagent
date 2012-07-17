@@ -691,6 +691,12 @@ EventEmitter.prototype.emit = function (name) {
    *         .send({ name: 'tj' })
    *         .end(callback)
    *
+   *       // defaults to x-www-form-urlencoded
+    *      request.post('/user')
+    *        .send('name=tobi')
+    *        .send('species=ferret')
+    *        .end(callback)
+   *
    * @param {String|Object} data
    * @return {Request} for chaining
    * @api public
@@ -699,19 +705,29 @@ EventEmitter.prototype.emit = function (name) {
   Request.prototype.send = function(data){
     if ('GET' == this.method) return this.query(data);
     var obj = isObject(data);
+    var type = this.header['content-type'];
 
     // merge
     if (obj && isObject(this._data)) {
       for (var key in data) {
         this._data[key] = data[key];
       }
+    } else if ('string' == typeof data) {
+      if (!type) this.type('form');
+      type = this.header['content-type'];
+      if ('application/x-www-form-urlencoded' == type) {
+        this._data = this._data
+          ? this._data + '&' + data
+          : data;
+      } else {
+        this._data = (this._data || '') + data;
+      }
     } else {
       this._data = data;
     }
 
     if (!obj) return this;
-    if (this.header['content-type']) return this;
-    this.type('json');
+    if (!type) this.type('json');
     return this;
   };
 
@@ -750,7 +766,7 @@ EventEmitter.prototype.emit = function (name) {
     xhr.open(this.method, this.url, true);
 
     // body
-    if ('GET' != this.method && 'HEAD' != this.method) {
+    if ('GET' != this.method && 'HEAD' != this.method && 'string' != typeof data) {
       // serialize stuff
       var serialize = request.serialize[this.header['content-type']];
       if (serialize) data = serialize(data);
