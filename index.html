@@ -168,6 +168,15 @@
     .end(callback)
 </code></pre>
 
+<p>  By default sending strings will set the Content-Type to <code>application/x-www-form-urlencoded</code>,
+  multiple calls will be concatenated with <code>&amp;</code>, here resulting in <code>name=tj&amp;pet=tobi</code>:</p>
+
+<pre><code>  request.post('/user')
+    .send('name=tj')
+    .send('pet=tobi')
+    .end(callback);
+</code></pre>
+
 <p>  SuperAgent formats are extensible, however by default &ldquo;json&rdquo; and &ldquo;form&rdquo; are supported. To send the data as <code>application/x-www-form-urlencoded</code> simply invoke <code>.type()</code> with &ldquo;form&rdquo;, where the default is &ldquo;json&rdquo;. This request will POST the body &ldquo;name=tj&amp;pet=tobi&rdquo;.</p>
 
 <pre><code>  request.post('/user')
@@ -177,7 +186,7 @@
     .end(callback)
 </code></pre>
 
-<p> Note: &ldquo;form&rdquo; is aliased as &ldquo;form&rdquo; and &ldquo;urlencoded&rdquo;.</p>
+<p> Note: &ldquo;form&rdquo; is aliased as &ldquo;form-data&rdquo; and &ldquo;urlencoded&rdquo; for backwards compat.</p>
 
 <h2>Setting the Content-Type</h2>
 
@@ -215,7 +224,7 @@
 
 <h2>Parsing response bodies</h2>
 
-<p>  Super Agent will parse known response-body data for you, currently supporting <em>application/x-www-form-urlencoded</em>, <em>application/json</em>, and <em>multipart/f</em>.</p>
+<p>  Super Agent will parse known response-body data for you, currently supporting <em>application/x-www-form-urlencoded</em>, <em>application/json</em>, and <em>multipart/form-data</em>.</p>
 
 <h3>JSON / Urlencoded</h3>
 
@@ -398,6 +407,6 @@ req.pipe(stream);
 
 <p>  The Node client supports compressed responses, best of all, you don&rsquo;t have to do anything! It just works.</p>
     </div>
-    <a href="http://github.com/visionmedia/superagent"><img style="position: absolute; top: 0; right: 0; border: 0;" src="images/forkme.png" alt="Fork me on GitHub"></a>
+    <a href="http://github.com/visionmedia/superagent"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://a248.e.akamai.net/assets.github.com/img/4c7dc970b89fd04b81c8e221ba88ff99a06c6b61/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67" alt="Fork me on GitHub"></a>
   </body>
 </html>
