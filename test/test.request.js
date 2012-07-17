@@ -245,27 +245,27 @@ test('POST urlencoded', function(next){
   });
 });
 
-// test('POST json', function(next){
-//   request
-//   .post('/pet')
-//   .type('json')
-//   .send({ name: 'Manny', species: 'cat' })
-//   .end(function(res){
-//     assert('added Manny the cat' == res.text);
-//     next();
-//   });
-// });
+test('POST json', function(next){
+  request
+  .post('/pet')
+  .type('json')
+  .send({ name: 'Manny', species: 'cat' })
+  .end(function(res){
+    assert('added Manny the cat' == res.text);
+    next();
+  });
+});
 
-// test('POST json array', function(next){
-//   request
-//   .post('/echo')
-//   .send([1,2,3])
-//   .end(function(res){
-//     assert('application/json; charset=utf-8' == res.header['content-type']);
-//     assert('[1,2,3]' == res.text);
-//     next();
-//   });
-// });
+test('POST json array', function(next){
+  request
+  .post('/echo')
+  .send([1,2,3])
+  .end(function(res){
+    assert('application/json; charset=utf-8' == res.header['content-type']);
+    assert('[1,2,3]' == res.text);
+    next();
+  });
+});
 
 test('POST json default', function(next){
   request
@@ -288,17 +288,17 @@ test('POST multiple .send() calls', function(next){
   });
 });
 
-// test('POST multiple .send() strings', function(next){
-//   request
-//   .post('/echo')
-//   .send('user[name]=tj')
-//   .send('user[email]=tj@vision-media.ca')
-//   .end(function(res){
-//     assert(res.header['content-type'] == 'application/x-www-form-urlencoded');
-//     assert(res.text == 'user[name]=tj&user[email]=tj@vision-media.ca')
-//     done();
-//   })
-// });
+test('POST multiple .send() strings', function(next){
+  request
+  .post('/echo')
+  .send('user[name]=tj')
+  .send('user[email]=tj@vision-media.ca')
+  .end(function(res){
+    assert(res.header['content-type'] == 'application/x-www-form-urlencoded');
+    assert(res.text == 'user[name]=tj&user[email]=tj@vision-media.ca')
+    done();
+  })
+});
 
 test('GET .type', function(next){
   request
