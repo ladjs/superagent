@@ -134,15 +134,23 @@
         .send({ pet: 'tobi' })
         .end(callback)
 
-  SuperAgent formats are extensible, however by default "json" and "form-data" are supported. To send the data as `application/x-www-form-urlencoded` simply invoke `.type()` with "form-data", where the default is "json". This request will POST the body "name=tj&pet=tobi".
+  By default sending strings will set the Content-Type to `application/x-www-form-urlencoded`,
+  multiple calls will be concatenated with `&`, here resulting in `name=tj&pet=tobi`:
 
       request.post('/user')
-        .type('form-data')
+        .send('name=tj')
+        .send('pet=tobi')
+        .end(callback);
+
+  SuperAgent formats are extensible, however by default "json" and "form" are supported. To send the data as `application/x-www-form-urlencoded` simply invoke `.type()` with "form", where the default is "json". This request will POST the body "name=tj&pet=tobi".
+
+      request.post('/user')
+        .type('form')
         .send({ name: 'tj' })
         .send({ pet: 'tobi' })
         .end(callback)
 
- Note: "form-data" is aliased as "form" and "urlencoded".
+ Note: "form" is aliased as "form-data" and "urlencoded" for backwards compat.
 
 ## Setting the Content-Type
 
