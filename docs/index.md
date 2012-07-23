@@ -32,7 +32,7 @@
 
   A method string may also be passed:
   
-    request('GET, '/search').end(callback);
+    request('GET', '/search').end(callback);
 
  The __node__ client may also provide absolute urls:
 
