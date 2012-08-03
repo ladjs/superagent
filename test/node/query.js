@@ -62,6 +62,20 @@ describe('req.query(Object)', function(){
     });
   })
 
+  it('should work after setting header fields', function(done){
+    request
+    .del('http://localhost:3006/')
+    .set('Foo', 'bar')
+    .set('Bar', 'baz')
+    .query({ name: 'tobi' })
+    .query({ order: 'asc' })
+    .query({ limit: ['1', '2'] })
+    .end(function(res){
+      res.body.should.eql({ name: 'tobi', order: 'asc', limit: ['1', '2'] });
+      done();
+    });
+  })
+
   it('should append to the original query-string', function(done){
     request
     .del('http://localhost:3006/?name=tobi')
