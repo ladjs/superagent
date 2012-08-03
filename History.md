@@ -1,4 +1,9 @@
 
+0.7.0 / 2012-08-03 
+==================
+
+  * allow `query()` to be called after the internal `req` has been created [tootallnate]
+
 0.6.0 / 2012-07-17 
 ==================
 
