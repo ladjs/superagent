@@ -11,7 +11,7 @@
     , "mime": "1.2.5"
     , "emitter-component": "0.0.1"
     , "methods": "0.0.1"
-    , "tough-cookie": "0.9.13"
+    , "cookiejar": "1.3.0"
   }
   , "devDependencies": {
       "express": "3.0.0beta4"
