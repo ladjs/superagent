@@ -21,14 +21,53 @@ app.get('/dashboard', function(req, res) {
   return res.send(401);
 });
 
+app.all('/signout', function(req, res) {
+  req.session.regenerate(function() {
+    return res.send(200);
+  });
+});
+
 app.listen(4000);
 
 describe('request', function() {
   describe('persistent agent', function() {
-    var agent = request.agent();
+    var agent1 = request.agent();
+    var agent2 = request.agent();
 
-    it('should start with empty cookies', function(done) {
-      agent
+    it('should start with empty session (set cookies)', function(done) {
+      agent1
+        .get('http://localhost:4000/dashboard')
+        .end(function(err, res) {
+          should.not.exist(err);
+          res.should.have.status(401);
+          should.exist(res.headers['set-cookie']);
+          return done();
+        });
+    });
+
+    it('should gain a session (cookies already set)', function(done) {
+      agent1
+        .post('http://localhost:4000/signin')
+        .end(function(err, res) {
+          should.not.exist(err);
+          res.should.have.status(200);
+          should.not.exist(res.headers['set-cookie']);
+          return done();
+        });
+    });
+
+    it('should persist cookies across requests', function(done) {
+      agent1
+        .get('http://localhost:4000/dashboard')
+        .end(function(err, res) {
+          should.not.exist(err);
+          res.should.have.status(200);
+          return done();
+        });
+    });
+
+    it('should not share cookies', function(done) {
+      agent2
         .get('http://localhost:4000/dashboard')
         .end(function(err, res) {
           should.not.exist(err);
@@ -37,9 +76,19 @@ describe('request', function() {
         });
     });
 
-    it('should create cookies', function(done) {
-      agent
-        .post('http://localhost:4000/signin')
+    it('should not lose cookies between agents', function(done) {
+      agent1
+        .get('http://localhost:4000/dashboard')
+        .end(function(err, res) {
+          should.not.exist(err);
+          res.should.have.status(200);
+          return done();
+        });
+    });
+
+    it('should be able to create a new session (clear cookie)', function(done) {
+      agent1
+        .post('http://localhost:4000/signout')
         .end(function(err, res) {
           should.not.exist(err);
           res.should.have.status(200);
@@ -48,25 +97,13 @@ describe('request', function() {
         });
     });
 
-    it('should persist cookies across requests', function(done) {
-      agent
-        .get('http://localhost:4000/dashboard')
-        .end(function(err, res) {
-          should.not.exist(err);
-          res.should.have.status(200);
-          return done();
-        });
-    });
-  });
-  describe('other persistent agents', function() {
-    var agent = request.agent();
-
-    it('should not share cookies', function(done) {
-      agent
+    it('should regenerate with an empty session', function(done) {
+      agent1
         .get('http://localhost:4000/dashboard')
         .end(function(err, res) {
           should.not.exist(err);
           res.should.have.status(401);
+          should.not.exist(res.headers['set-cookie']);
           return done();
         });
     });
