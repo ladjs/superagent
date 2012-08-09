@@ -98,7 +98,9 @@ user1
   });
 ```
 
-For examples, view the [agency tests](superagent/blob/master/test/node/agency.js)
+Examples:
+- [agency tests](superagent/blob/master/test/node/agency.js)
+- [express demo app](https://github.com/hunterloftis/component-test/blob/master/lib/users/test/controller.test.js)
 
 ## Wiki
 
