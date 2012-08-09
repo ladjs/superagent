@@ -2,7 +2,7 @@
 var request = require('../../')
   , express = require('express')
   , assert = require('assert')
-  , app = express.createServer();
+  , app = express();
 
 app.post('/echo', function(req, res){
   res.writeHead(200, req.headers);
@@ -30,7 +30,7 @@ describe('req.send(Object) as "form"', function(){
       });
     })
   })
-  
+
   describe('when called several times', function(){
     it('should merge the objects', function(done){
       request

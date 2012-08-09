@@ -2,7 +2,7 @@
 var request = require('../../')
   , express = require('express')
   , assert = require('assert')
-  , app = express.createServer();
+  , app = express();
 
 app.get('/', function(req, res){
   if (req.header('if-modified-since')) {

@@ -3,7 +3,7 @@ var EventEmitter = require('events').EventEmitter
   , request = require('../../')
   , express = require('express')
   , assert = require('assert')
-  , app = express.createServer();
+  , app = express();
 
 app.use(express.basicAuth('tobi', 'learnboost'));
 

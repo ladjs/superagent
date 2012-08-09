@@ -5,7 +5,7 @@
 
 var express = require('express');
 
-var app = express.createServer();
+var app = express();
 
 app.set('json spaces', 0);
 

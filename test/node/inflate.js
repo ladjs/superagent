@@ -12,7 +12,7 @@ try {
 } catch (e) { }
 
 if (zlib) {
-  var app = express.createServer()
+  var app = express()
     , subject = 'some long long long long string';
 
   app.listen(3080);

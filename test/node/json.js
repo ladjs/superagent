@@ -3,7 +3,7 @@ var EventEmitter = require('events').EventEmitter
   , request = require('../../')
   , express = require('express')
   , assert = require('assert')
-  , app = express.createServer();
+  , app = express();
 
 app.post('/echo', function(req, res){
   res.writeHead(200, req.headers);
@@ -38,7 +38,7 @@ describe('req.send(Object) as "json"', function(){
       done();
     });
   })
-  
+
   describe('when called several times', function(){
     it('should merge the objects', function(done){
       request

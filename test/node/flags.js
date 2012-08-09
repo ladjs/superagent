@@ -3,7 +3,7 @@ var EventEmitter = require('events').EventEmitter
   , request = require('../../')
   , express = require('express')
   , assert = require('assert')
-  , app = express.createServer();
+  , app = express();
 
 app.get('/error', function(req, res){
   throw new Error('oh noes');
@@ -32,7 +32,7 @@ app.get('/no-content', function(req, res){
 app.listen(3004);
 
 describe('flags', function(){
-  
+
   describe('with 4xx response', function(){
     it('should set res.error and res.clientError', function(done){
       request
