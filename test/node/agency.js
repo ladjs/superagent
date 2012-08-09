@@ -9,19 +9,12 @@ app.use(express.session({
   secret: 'secret'
 }));
 
-app.use(function(req, res, next) {
-  console.log(req.url);
-  return next();
-});
-
 app.post('/signin', function(req, res) {
-  console.log("req.headers:", req.headers);
   req.session.user = 'hunter@hunterloftis.com';
   return res.redirect('/dashboard');
 });
 
 app.get('/dashboard', function(req, res) {
-  console.log("req.headers:", req.headers);
   if (req.session.user) {
     return res.send(200, 'dashboard');
   }
