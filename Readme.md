@@ -88,13 +88,13 @@ request.post('/api/pet', cat, function(res){
 
 ```js
 var request = require('superagent');
-var agent = request.agent();
-agent
+var user1 = request.agent();
+user1
   .post('http://localhost:4000/signin')
   .send({ user: 'hunter@hunterloftis.com', password: 'password' })
   .end(function(err, res) {
-    // this Agent will manage a cookie jar, emulating a browser
-    // res.redirects contains an Array of this request's redirects
+    // user1 will manage its own cookies
+    // res.redirects contains an Array of redirects
   });
 ```
 
