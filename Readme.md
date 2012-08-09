@@ -98,7 +98,7 @@ agent
   });
 ```
 
-For examples, view the [agency tests](blob/master/test/node/agency.js)
+For examples, view the [agency tests](superagent/blob/master/test/node/agency.js)
 
 ## Wiki
 
