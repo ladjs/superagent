@@ -84,7 +84,7 @@ request.post('/api/pet', cat, function(res){
 
  Visit `localhost:3000/` in the browser.
 
-## Using superagent as a persistent agent (with cookies, ie sessions)
+## Persisting an agent (with cookies, ie sessions)
 
 ```js
 var request = require('superagent');
