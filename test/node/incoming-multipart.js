@@ -2,7 +2,7 @@
 var request = require('../../')
   , express = require('express')
   , assert = require('assert')
-  , app = express.createServer()
+  , app = express()
   , fs = require('fs');
 
 app.get('/', function(req, res){

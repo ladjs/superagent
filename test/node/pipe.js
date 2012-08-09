@@ -1,7 +1,7 @@
 
 var request = require('../../')
   , express = require('express')
-  , app = express.createServer()
+  , app = express()
   , fs = require('fs');
 
 app.use(express.bodyParser());

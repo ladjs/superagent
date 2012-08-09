@@ -3,7 +3,7 @@ var EventEmitter = require('events').EventEmitter
   , request = require('../../')
   , express = require('express')
   , assert = require('assert')
-  , app = express.createServer()
+  , app = express()
   , url = require('url');
 
 app.get('/login', function(req, res){
@@ -85,7 +85,7 @@ describe('request', function(){
       });
     })
   })
-  
+
   describe('res.header', function(){
     it('should be an object', function(done){
       request
@@ -165,7 +165,7 @@ describe('request', function(){
       })
     })
   })
-  
+
   describe('req.set(obj)', function(){
     it('should set the header fields', function(done){
       request
@@ -189,7 +189,7 @@ describe('request', function(){
         done();
       });
     })
-    
+
     it('should map "json"', function(done){
       request
       .post('http://localhost:3000/echo')
@@ -199,7 +199,7 @@ describe('request', function(){
         done();
       });
     })
-    
+
     it('should map "html"', function(done){
       request
       .post('http://localhost:3000/echo')
@@ -269,7 +269,7 @@ describe('request', function(){
         done();
       });
     })
-    
+
     describe('when called several times', function(){
       it('should merge the objects', function(done){
         request

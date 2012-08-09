@@ -1,5 +1,5 @@
 var express = require('express')
-  , app = express.createServer()
+  , app = express()
   , request = require('../../')
   , assert = require('assert')
   , should = require('should');
@@ -11,20 +11,35 @@ app.use(express.session({
 
 app.post('/signin', function(req, res) {
   req.session.user = 'hunter@hunterloftis.com';
-  return res.send(200);
+  return res.redirect('/dashboard');
 });
 
 app.get('/dashboard', function(req, res) {
   if (req.session.user) {
-    return res.send(200);
+    return res.send(200, 'dashboard');
   }
-  return res.send(401);
+  return res.send(401, 'dashboard');
 });
 
 app.all('/signout', function(req, res) {
   req.session.regenerate(function() {
-    return res.send(200);
+    return res.send(200, 'signout');
   });
+});
+
+app.get('/', function(req, res) {
+  if (req.session.user) {
+    return res.redirect('/dashboard');
+  }
+  return res.send(200, 'home');
+});
+
+app.post('/redirect', function(req, res) {
+  return res.redirect('/simple');
+});
+
+app.get('/simple', function(req, res) {
+  return res.send(200, 'simple');
 });
 
 app.listen(4000);
@@ -52,6 +67,7 @@ describe('request', function() {
           should.not.exist(err);
           res.should.have.status(200);
           should.not.exist(res.headers['set-cookie']);
+          res.text.should.include('dashboard');
           return done();
         });
     });
@@ -82,6 +98,41 @@ describe('request', function() {
         .end(function(err, res) {
           should.not.exist(err);
           res.should.have.status(200);
+          return done();
+        });
+    });
+
+    it('should be able to follow redirects', function(done) {
+      agent1
+        .get('http://localhost:4000/')
+        .end(function(err, res) {
+          should.not.exist(err);
+          res.should.have.status(200);
+          res.text.should.include('dashboard');
+          return done();
+        });
+    });
+
+    it('should be able to post redirects', function(done) {
+      agent1
+        .post('http://localhost:4000/redirect')
+        .send({ foo: 'bar', baz: 'blaaah' })
+        .end(function(err, res) {
+          should.not.exist(err);
+          res.should.have.status(200);
+          res.text.should.include('simple');
+          return done();
+        });
+    });
+
+    it('should be able to detect redirects', function(done) {
+      agent1
+        .get('http://localhost:4000/')
+        .redirects(0)
+        .end(function(err, res) {
+          should.not.exist(err);
+          res.should.have.status(302);
+          res.header.location.should.equal('http://localhost:4000/dashboard');
           return done();
         });
     });
