@@ -3,7 +3,8 @@ var EventEmitter = require('events').EventEmitter
   , request = require('../../')
   , express = require('express')
   , assert = require('assert')
-  , app = express();
+  , app = express()
+  , should = require('should');
 
 app.get('/', function(req, res){
   res.redirect('/movies');
@@ -39,9 +40,9 @@ describe('request', function(){
       })
       .end(function(res){
         var arr = [];
-        arr.push('http://localhost:3003/movies');
-        arr.push('http://localhost:3003/movies/all');
-        arr.push('http://localhost:3003/movies/all/0');
+        arr.push('//localhost:3003/movies');
+        arr.push('//localhost:3003/movies/all');
+        arr.push('//localhost:3003/movies/all/0');
         redirects.should.eql(arr);
         res.text.should.equal('first movie page');
         done();
@@ -62,8 +63,8 @@ describe('request', function(){
       .end(function(res){
         var arr = [];
         assert(res.redirect, 'res.redirect');
-        arr.push('http://localhost:3003/movies');
-        arr.push('http://localhost:3003/movies/all');
+        arr.push('//localhost:3003/movies');
+        arr.push('//localhost:3003/movies/all');
         redirects.should.eql(arr);
         res.text.should.match(/Moved Temporarily/);
         done();
@@ -84,7 +85,7 @@ describe('request', function(){
       })
       .end(function(res){
         var arr = [];
-        arr.push('http://localhost:3003/movies/all/0');
+        arr.push('//localhost:3003/movies/all/0');
         redirects.should.eql(arr);
         res.text.should.equal('first movie page');
         done();

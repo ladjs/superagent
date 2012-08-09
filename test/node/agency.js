@@ -121,18 +121,20 @@ describe('request', function() {
           should.not.exist(err);
           res.should.have.status(200);
           res.text.should.include('simple');
+          res.redirects.should.eql(['http://localhost:4000/simple']);
           return done();
         });
     });
 
-    it('should be able to detect redirects', function(done) {
+    it('should be able to limit redirects', function(done) {
       agent1
         .get('http://localhost:4000/')
         .redirects(0)
         .end(function(err, res) {
           should.not.exist(err);
           res.should.have.status(302);
-          res.header.location.should.equal('http://localhost:4000/dashboard');
+          res.redirects.should.eql([]);
+          res.header.location.should.equal('//localhost:4000/dashboard');
           return done();
         });
     });
