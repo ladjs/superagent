@@ -9,12 +9,19 @@ app.use(express.session({
   secret: 'secret'
 }));
 
+app.use(function(req, res, next) {
+  console.log(req.url);
+  return next();
+});
+
 app.post('/signin', function(req, res) {
+  console.log("req.headers:", req.headers);
   req.session.user = 'hunter@hunterloftis.com';
   return res.redirect('/dashboard');
 });
 
 app.get('/dashboard', function(req, res) {
+  console.log("req.headers:", req.headers);
   if (req.session.user) {
     return res.send(200, 'dashboard');
   }
@@ -48,6 +55,19 @@ describe('request', function() {
   describe('persistent agent', function() {
     var agent1 = request.agent();
     var agent2 = request.agent();
+    var agent3 = request.agent();
+
+    it('should gain a session on POST', function(done) {
+      agent3
+        .post('http://localhost:4000/signin')
+        .end(function(err, res) {
+          should.not.exist(err);
+          res.should.have.status(200);
+          should.not.exist(res.headers['set-cookie']);
+          res.text.should.include('dashboard');
+          return done();
+        });
+    });
 
     it('should start with empty session (set cookies)', function(done) {
       agent1
