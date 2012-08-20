@@ -19,7 +19,8 @@ if (zlib) {
 
   app.get('/', function (req, res, next){
     zlib.deflate(subject, function (err, buf){
-      res.header('content-encoding', 'gzip');
+      res.set('Content-Type', 'text/plain');
+      res.set('Content-Encoding', 'gzip');
       res.send(buf);
     });
   });

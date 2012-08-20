@@ -214,6 +214,7 @@ describe('request', function(){
   describe('req.write(str)', function(){
     it('should write the given data', function(done){
       var req = request.post('http://localhost:3000/echo');
+      req.set('Content-Type', 'application/json');
       req.write('{"name"').should.be.a('boolean');
       req.write(':"tobi"}').should.be.a('boolean');
       req.end(function(res){
@@ -250,6 +251,7 @@ describe('request', function(){
     it('should write the string', function(done){
       request
       .post('http://localhost:3000/echo')
+      .type('json')
       .send('{"name":"tobi"}')
       .end(function(res){
         res.text.should.equal('{"name":"tobi"}');
@@ -278,6 +280,7 @@ describe('request', function(){
         .send({ age: 1 })
         .end(function(res){
           res.should.be.json
+          res.buffered.should.be.true;
           res.text.should.equal('{"name":"tobi","age":1}');
           done();
         });
@@ -311,6 +314,28 @@ describe('request', function(){
         res.body.should.eql({});
         var buf = '';
         res.setEncoding('utf8');
+        res.on('data', function(chunk){ buf += chunk });
+        res.on('end', function(){
+          buf.should.equal('hello this is dog');
+          done();
+        });
+      });
+    })
+  })
+
+  describe('with a content type other than application/json or text/*', function(){
+    it('should disable buffering', function(done){
+      request
+      .post('http://localhost:3000/echo')
+      .type('application/x-dog')
+      .send('hello this is dog')
+      .end(function(err, res){
+        assert(null == err);
+        assert(null == res.text);
+        res.body.should.eql({});
+        var buf = '';
+        res.setEncoding('utf8');
+        res.buffered.should.be.false;
         res.on('data', function(chunk){ buf += chunk });
         res.on('end', function(){
           buf.should.equal('hello this is dog');
