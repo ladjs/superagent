@@ -2,7 +2,7 @@
 var request = require('../../')
   , express = require('express')
   , assert = require('assert')
-  , app = express.createServer()
+  , app = express()
   , fs = require('fs');
 
 function read(file) {
@@ -146,13 +146,13 @@ describe('Part', function(){
   describe('with a single part', function(){
     it('should construct a multipart request', function(done){
       var req = request.post('http://localhost:3005/echo');
-  
+
       req
         .part()
         .set('Content-Disposition', 'attachment; name="image"; filename="image.png"')
         .set('Content-Type', 'image/png')
         .write('some image data');
-  
+
       req.end(function(res){
         var ct = res.header['content-type'];
         ct.should.include('multipart/form-data; boundary=');
@@ -166,27 +166,27 @@ describe('Part', function(){
 
   describe('with several parts', function(){
     it('should construct a multipart request', function(done){
-  
+
       var req = request.post('http://localhost:3005/echo');
-  
+
       req.part()
         .set('Content-Type', 'image/png')
         .set('Content-Disposition', 'attachment; filename="myimage.png"')
         .write('some image data');
-  
+
       var part = req.part()
         .set('Content-Type', 'image/png')
         .set('Content-Disposition', 'attachment; filename="another.png"')
-  
+
       part.write('random');
       part.write('thing');
       part.write('here');
-  
+
       req.part()
         .set('Content-Disposition', 'form-data; name="name"')
         .set('Content-Type', 'text/plain')
         .write('tobi');
-  
+
       req.end(function(res){
         res.body.name.should.equal('tobi');
         Object.keys(res.files).should.eql(['myimage.png', 'another.png']);
@@ -200,13 +200,13 @@ describe('Part', function(){
       var req = request
         .post('http://localhost:3005/echo')
         .type('multipart/form-data');
-  
+
       req
         .part()
         .set('Content-Type', 'text/plain')
         .set('Content-Disposition', 'form-data; name="name"')
         .write('Tobi');
-  
+
       req.end(function(res){
         res.header['content-type'].should.include('boundary=');
         res.body.name.should.equal('Tobi');
@@ -219,12 +219,12 @@ describe('Part', function(){
     it('should set Content-Disposition to form-data and name param', function(done){
       var req = request
         .post('http://localhost:3005/echo');
-  
+
       req
         .part()
         .name('user[name]')
         .write('Tobi');
-  
+
       req.end(function(res){
         res.body['user[name]'].should.equal('Tobi');
         done();
@@ -237,12 +237,12 @@ describe('Part', function(){
       var req = request
         .post('http://localhost:3005/echo')
         .type('multipart/form-data');
-  
+
       req
         .part()
         .filename('path/to/my.txt')
         .write('Tobi');
-  
+
       req.end(function(res){
         var file = res.files['my.txt'];
         file.name.should.equal('my.txt');

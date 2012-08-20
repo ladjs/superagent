@@ -12,7 +12,7 @@
 
 ```js
 $.get('/user/1', function(data, textStatus, xhr){
-  
+
 });
 ```
 
@@ -20,7 +20,7 @@ great, it's ok, but it's kinda lame having 3 arguments just to access something 
 
 ```js
 request.get('/user/1', function(res){
-  
+
 });
 ```
 
@@ -35,9 +35,9 @@ $.ajax({
   data: { name: 'Manny', species: 'cat' },
   headers: { 'X-API-Key': 'foobar' }
 }).success(function(res){
-  
+
 }).error(function(){
-  
+
 });
 ```
 
@@ -50,7 +50,7 @@ request
   .set('X-API-Key', 'foobar')
   .set('Accept', 'application/json')
   .end(function(res){
-    
+
   });
 ```
 
@@ -58,18 +58,18 @@ building on the existing API internally we also provide something similar to `$.
 
 ```js
 request.post('/api/pet', cat, function(res){
-  
+
 });
 ```
 
 ## Running node tests
 
   Install dependencies:
-  
+
      $ npm install -d
-  
+
   Run em!
-  
+
     $ make test
 
 ## Running browser tests
@@ -84,11 +84,29 @@ request.post('/api/pet', cat, function(res){
 
  Visit `localhost:3000/` in the browser.
 
+## Persisting an agent (with cookies, ie sessions)
+
+```js
+var request = require('superagent');
+var user1 = request.agent();
+user1
+  .post('http://localhost:4000/signin')
+  .send({ user: 'hunter@hunterloftis.com', password: 'password' })
+  .end(function(err, res) {
+    // user1 will manage its own cookies
+    // res.redirects contains an Array of redirects
+  });
+```
+
+Examples:
+- [agency tests](superagent/blob/master/test/node/agency.js)
+- [express demo app](https://github.com/hunterloftis/component-test/blob/master/lib/users/test/controller.test.js)
+
 ## Wiki
 
   For superagent extensions such as couchdb and oauth visit the [wiki](https://github.com/visionmedia/superagent/wiki).
 
-## License 
+## License
 
 (The MIT License)
 
