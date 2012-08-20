@@ -5,41 +5,35 @@ var express = require('express')
   , should = require('should');
 
 app.use(express.cookieParser());
-app.use(express.session({
-  secret: 'secret'
-}));
+app.use(express.session({ secret: 'secret' }));
 
 app.post('/signin', function(req, res) {
   req.session.user = 'hunter@hunterloftis.com';
-  return res.redirect('/dashboard');
+  res.redirect('/dashboard');
 });
 
 app.get('/dashboard', function(req, res) {
-  if (req.session.user) {
-    return res.send(200, 'dashboard');
-  }
-  return res.send(401, 'dashboard');
+  if (req.session.user) return res.send(200, 'dashboard');
+  res.send(401, 'dashboard');
 });
 
 app.all('/signout', function(req, res) {
   req.session.regenerate(function() {
-    return res.send(200, 'signout');
+    res.send(200, 'signout');
   });
 });
 
 app.get('/', function(req, res) {
-  if (req.session.user) {
-    return res.redirect('/dashboard');
-  }
-  return res.send(200, 'home');
+  if (req.session.user) return res.redirect('/dashboard');
+  res.send(200, 'home');
 });
 
 app.post('/redirect', function(req, res) {
-  return res.redirect('/simple');
+  res.redirect('/simple');
 });
 
 app.get('/simple', function(req, res) {
-  return res.send(200, 'simple');
+  res.send(200, 'simple');
 });
 
 app.listen(4000);
@@ -58,7 +52,7 @@ describe('request', function() {
           res.should.have.status(200);
           should.not.exist(res.headers['set-cookie']);
           res.text.should.include('dashboard');
-          return done();
+          done();
         });
     });
 
@@ -69,7 +63,7 @@ describe('request', function() {
           should.not.exist(err);
           res.should.have.status(401);
           should.exist(res.headers['set-cookie']);
-          return done();
+          done();
         });
     });
 
@@ -81,7 +75,7 @@ describe('request', function() {
           res.should.have.status(200);
           should.not.exist(res.headers['set-cookie']);
           res.text.should.include('dashboard');
-          return done();
+          done();
         });
     });
 
@@ -91,7 +85,7 @@ describe('request', function() {
         .end(function(err, res) {
           should.not.exist(err);
           res.should.have.status(200);
-          return done();
+          done();
         });
     });
 
@@ -101,7 +95,7 @@ describe('request', function() {
         .end(function(err, res) {
           should.not.exist(err);
           res.should.have.status(401);
-          return done();
+          done();
         });
     });
 
@@ -111,7 +105,7 @@ describe('request', function() {
         .end(function(err, res) {
           should.not.exist(err);
           res.should.have.status(200);
-          return done();
+          done();
         });
     });
 
@@ -122,7 +116,7 @@ describe('request', function() {
           should.not.exist(err);
           res.should.have.status(200);
           res.text.should.include('dashboard');
-          return done();
+          done();
         });
     });
 
@@ -135,7 +129,7 @@ describe('request', function() {
           res.should.have.status(200);
           res.text.should.include('simple');
           res.redirects.should.eql(['http://localhost:4000/simple']);
-          return done();
+          done();
         });
     });
 
@@ -148,7 +142,7 @@ describe('request', function() {
           res.should.have.status(302);
           res.redirects.should.eql([]);
           res.header.location.should.equal('//localhost:4000/dashboard');
-          return done();
+          done();
         });
     });
 
@@ -159,7 +153,7 @@ describe('request', function() {
           should.not.exist(err);
           res.should.have.status(200);
           should.exist(res.headers['set-cookie']);
-          return done();
+          done();
         });
     });
 
@@ -170,7 +164,7 @@ describe('request', function() {
           should.not.exist(err);
           res.should.have.status(401);
           should.not.exist(res.headers['set-cookie']);
-          return done();
+          done();
         });
     });
   });
