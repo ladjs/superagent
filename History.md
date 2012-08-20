@@ -1,4 +1,13 @@
 
+0.8.0 / 2012-08-19 
+==================
+
+  * add `res.buffered` flag
+  * add buffering of text/*, json and forms only by default. Closes #61
+  * add `.buffer(false)` cancellation
+  * add cookie jar support [hunterloftis]
+  * add agent functionality [hunterloftis]
+
 0.7.0 / 2012-08-03 
 ==================
 
