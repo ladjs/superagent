@@ -297,4 +297,26 @@ describe('request', function(){
       });
     })
   })
+
+  describe('.buffer(false)', function(){
+    it('should disable buffering', function(done){
+      request
+      .post('http://localhost:3000/echo')
+      .type('application/x-dog')
+      .send('hello this is dog')
+      .buffer(false)
+      .end(function(err, res){
+        assert(null == err);
+        assert(null == res.text);
+        res.body.should.eql({});
+        var buf = '';
+        res.setEncoding('utf8');
+        res.on('data', function(chunk){ buf += chunk });
+        res.on('end', function(){
+          buf.should.equal('hello this is dog');
+          done();
+        });
+      });
+    })
+  })
 })
