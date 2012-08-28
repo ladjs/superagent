@@ -28,6 +28,10 @@ body {
   left: 15px;
 }
 
+#menu li {
+  list-style: none;
+}
+
 #menu a {
   color: rgba(255,255,255,.5);
   text-decoration: none;
