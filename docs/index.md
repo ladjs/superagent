@@ -265,6 +265,13 @@
      res.notAcceptable = 406 == status;
      res.notFound = 404 == status;
 
+## Request timeouts
+
+  A timeout can be applied by invoking `req.timeout(ms)`, after which an error
+  will be triggered. To differentiate between other errors the `err.timeout` property
+  is set to the `ms` value. __NOTE__ that this is a timeout applied to the request
+  and all subsequent redirects, not per request.
+
 ## Basic authentication
 
   Basic auth is currently provided by the _node_ client in two forms, first via the URL as "user:pass":

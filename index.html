@@ -307,6 +307,13 @@ req.end(function(res){
  res.notFound = 404 == status;
 </code></pre>
 
+<h2>Request timeouts</h2>
+
+<p>  A timeout can be applied by invoking <code>req.timeout(ms)</code>, after which an error
+  will be triggered. To differentiate between other errors the <code>err.timeout</code> property
+  is set to the <code>ms</code> value. <strong>NOTE</strong> that this is a timeout applied to the request
+  and all subsequent redirects, not per request.</p>
+
 <h2>Basic authentication</h2>
 
 <p>  Basic auth is currently provided by the <em>node</em> client in two forms, first via the URL as &ldquo;user:pass&rdquo;:</p>
