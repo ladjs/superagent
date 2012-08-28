@@ -26,6 +26,15 @@ app.post('/movie', function(req, res){
   res.redirect('/movies/all/0');
 });
 
+app.get('/tobi', function(req, res){
+  res.send('tobi');
+});
+
+app.get('/relative', function(req, res){
+  res.set('Location', '/tobi');
+  res.send(302);
+});
+
 app.listen(3003);
 
 describe('request', function(){
@@ -47,6 +56,24 @@ describe('request', function(){
         res.text.should.equal('first movie page');
         done();
       });
+    })
+
+    describe('when relative', function(){
+      it('should construct the FQDN', function(done){
+        var redirects = [];
+
+        request
+        .get('http://localhost:3003/relative')
+        .on('redirect', function(res){
+          redirects.push(res.headers.location);
+        })
+        .end(function(res){
+          var arr = [];
+          redirects.should.eql(['/tobi']);
+          res.text.should.equal('tobi');
+          done();
+        });
+      })
     })
   })
 
