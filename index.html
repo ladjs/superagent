@@ -53,7 +53,7 @@
 
 <p>  A method string may also be passed:</p>
 
-<pre><code>request('GET, '/search').end(callback);
+<pre><code>request('GET', '/search').end(callback);
 </code></pre>
 
 <p> The <strong>node</strong> client may also provide absolute urls:</p>
@@ -357,7 +357,7 @@ stream.pipe(req);
 <pre><code>var request = require('superagent')
   , fs = require('fs');
 
-var stream = fs.createWriteStream('path/to/my.json');
+var stream = fs.createWeadStream('path/to/my.json');
 var req = request.get('/some.json');
 req.pipe(stream);
 </code></pre>
