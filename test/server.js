@@ -72,7 +72,8 @@ app.all('/echo-header/:field', function(req, res){
 });
 
 app.post('/echo', function(req, res){
-  res.send(req.body);
+  res.writeHead(200, req.headers);
+  req.pipe(res);
 });
 
 app.post('/pet', function(req, res){

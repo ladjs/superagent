@@ -261,7 +261,8 @@ test('POST json array', function(next){
   .post('/echo')
   .send([1,2,3])
   .end(function(res){
-    assert('application/json; charset=utf-8' == res.header['content-type']);
+    console.log(res.header['content-type']);
+    assert('application/json; charset=' == res.header['content-type']);
     assert('[1,2,3]' == res.text);
     next();
   });
