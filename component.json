@@ -1,0 +1,8 @@
+{
+  "name": "superagent",
+  "repo": "visionmedia/superagent",
+  "description": "awesome http requests",
+  "version": "0.9.0",
+  "keywords": ["http", "ajax", "request", "agent"],
+  "main": "lib/superagent.js"
+}
