@@ -264,6 +264,7 @@
      res.unauthorized = 401 == status;
      res.notAcceptable = 406 == status;
      res.notFound = 404 == status;
+     res.forbidden = 403 == status;
 
 ## Request timeouts
 
