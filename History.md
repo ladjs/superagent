@@ -1,4 +1,12 @@
 
+0.9.1 / 2012-09-07 
+==================
+
+  * add `.forbidden` response property
+  * add component.json
+  * change emitter-component to 0.0.5
+  * fix client-side tests
+
 0.9.0 / 2012-08-28 
 ==================
 
