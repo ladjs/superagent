@@ -10,7 +10,7 @@
       "qs": "0.4.2"
     , "formidable": "1.0.9"
     , "mime": "1.2.5"
-    , "emitter-component": "*"
+    , "emitter-component": "0.0.5"
     , "methods": "0.0.1"
     , "cookiejar": "1.3.0"
   }
