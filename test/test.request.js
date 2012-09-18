@@ -261,7 +261,6 @@ test('POST json array', function(next){
   .post('/echo')
   .send([1,2,3])
   .end(function(res){
-    console.log(res.header['content-type']);
     assert('application/json; charset=' == res.header['content-type']);
     assert('[1,2,3]' == res.text);
     next();
@@ -370,7 +369,7 @@ test('request X-Requested-With', function(next){
 test('GET querystring object', function(next){
   request
   .get('/querystring')
-  .send({ search: 'Manny' })
+  .query({ search: 'Manny' })
   .end(function(res){
     assert.eql(res.body, { search: 'Manny' });
     next();
@@ -380,7 +379,7 @@ test('GET querystring object', function(next){
 test('GET querystring append original', function(next){
   request
   .get('/querystring?search=Manny')
-  .send({ range: '1..5' })
+  .query({ range: '1..5' })
   .end(function(res){
     assert.eql(res.body, { search: 'Manny', range: '1..5' });
     next();
@@ -390,9 +389,9 @@ test('GET querystring append original', function(next){
 test('GET querystring multiple objects', function(next){
   request
   .get('/querystring')
-  .send({ search: 'Manny' })
-  .send({ range: '1..5' })
-  .send({ order: 'desc' })
+  .query({ search: 'Manny' })
+  .query({ range: '1..5' })
+  .query({ order: 'desc' })
   .end(function(res){
     assert.eql(res.body, { search: 'Manny', range: '1..5', order: 'desc' });
     next();
@@ -401,7 +400,7 @@ test('GET querystring multiple objects', function(next){
 
 test('GET querystring object .get(uri, obj)', function(next){
   request
-  .get('/querystring', { search: 'Manny' })
+  .query('/querystring', { search: 'Manny' })
   .end(function(res){
     assert.eql(res.body, { search: 'Manny' });
     next();
