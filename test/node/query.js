@@ -14,41 +14,6 @@ app.del('/', function(req, res){
 
 app.listen(3006);
 
-describe('req.send(Object)', function(){
-  describe('on a GET request', function(){
-    it('should construct the query-string', function(done){
-      request
-      .get('http://localhost:3006/')
-      .send({ name: 'tobi' })
-      .send({ order: 'asc' })
-      .send({ limit: ['1', '2'] })
-      .end(function(res){
-        res.body.should.eql({ name: 'tobi', order: 'asc', limit: ['1', '2'] });
-        done();
-      });
-    })
-
-    it('should append to the original query-string', function(done){
-      request
-      .get('http://localhost:3006/?name=tobi')
-      .send({ order: 'asc' })
-      .end(function(res) {
-        res.body.should.eql({ name: 'tobi', order: 'asc' });
-        done();
-      });
-    });
-
-    it('should retain the original query-string', function(done){
-      request
-      .get('http://localhost:3006/?name=tobi')
-      .end(function(res) {
-        res.body.should.eql({ name: 'tobi' });
-        done();
-      });
-    });
-  })
-})
-
 describe('req.query(Object)', function(){
   it('should construct the query-string', function(done){
     request
