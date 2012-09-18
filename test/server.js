@@ -9,6 +9,12 @@ var app = express();
 
 app.set('json spaces', 0);
 
+app.use(function(req, res, next){
+  if ('/echo' != req.url) return next();
+  res.set(req.headers);
+  req.pipe(res);
+});
+
 app.use(express.bodyParser());
 
 app.get('/', function(req, res){
@@ -69,11 +75,6 @@ app.del('/user/:id', function(req, res){
 
 app.all('/echo-header/:field', function(req, res){
   res.send(req.headers[req.params.field]);
-});
-
-app.post('/echo', function(req, res){
-  res.writeHead(200, req.headers);
-  req.pipe(res);
 });
 
 app.post('/pet', function(req, res){
