@@ -400,7 +400,7 @@ test('GET querystring multiple objects', function(next){
 
 test('GET querystring object .get(uri, obj)', function(next){
   request
-  .query('/querystring', { search: 'Manny' })
+  .get('/querystring', { search: 'Manny' })
   .end(function(res){
     assert.eql(res.body, { search: 'Manny' });
     next();
