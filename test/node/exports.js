@@ -18,6 +18,6 @@ describe('exports', function(){
   
   it('should expose .parse', function(){
     Object.keys(request.parse)
-      .should.eql(['application/x-www-form-urlencoded', 'application/json']);
+      .should.eql(['application/x-www-form-urlencoded', 'application/json', 'text']);
   })
 })
