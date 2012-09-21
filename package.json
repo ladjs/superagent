@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "express": "3.0.0rc5",
+    "http-auth": "1.2.2",
     "should": "*",
     "mocha": "*"
   },
