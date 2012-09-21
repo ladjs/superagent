@@ -1,4 +1,10 @@
 
+0.9.4 / 2012-09-20 
+==================
+
+  * fix `Buffer` responses [TooTallNate]
+  * fix `res.type` when a "type" param is present [TooTallNate]
+
 0.9.3 / 2012-09-18 
 ==================
 
