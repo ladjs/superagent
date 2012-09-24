@@ -5,7 +5,7 @@ var EventEmitter = require('events').EventEmitter
   , assert = require('assert')
   , app = express()
   , should = require('should');
-
+app.use(express.bodyParser());
 app.get('/', function(req, res){
   res.redirect('/movies');
 });
@@ -21,11 +21,25 @@ app.get('/movies/all', function(req, res){
 app.get('/movies/all/0', function(req, res){
   res.send('first movie page');
 });
-
 app.post('/movie', function(req, res){
   res.redirect('/movies/all/0');
 });
-
+app.post('/addmovie', function(req, res){
+  res.redirect('/movies/add');
+});
+app.post('/movies/add', function(req, res){
+  res.send('movie '+req.body.name+' added');
+});
+app.get('/private', function(req, res){
+  res.redirect('/authed');
+});
+app.get('/authed', function(req, res){
+  if (req.get('authorization')) {
+    res.send('authed');
+  } else {
+    res.send('not authed');
+  }
+});
 app.get('/tobi', function(req, res){
   res.send('tobi');
 });
@@ -115,6 +129,46 @@ describe('request', function(){
         arr.push('//localhost:3003/movies/all/0');
         redirects.should.eql(arr);
         res.text.should.equal('first movie page');
+        done();
+      });
+    })
+    it('should redirect as POST if user specified', function(done){
+      var redirects = [];
+      request
+      .post('http://localhost:3003/addmovie')
+      .send({ name: 'Methos' })
+      .redirectData(true)
+      .redirects(2)
+      .on('redirect', function(res){
+        redirects.push(res.headers.location);
+      })
+      .end(function(res){
+        var arr = [];
+        arr.push('//localhost:3003/movies/add');
+        redirects.should.eql(arr);
+        res.text.should.equal('movie Methos added');
+        done();
+      });
+    })
+  })
+
+  describe('with Authorization', function(){
+    it('should not redirect Authorization header',function(done){
+      request
+      .get('http://localhost:3003/private')
+      .set('Authorization', 'Basic dXNlcm5hbWU6cGFzcw==')
+      .end(function(res){
+        res.text.should.equal('not authed');
+        done();
+      });
+    })
+    it('should redirect Authorization header if specified',function(done){
+      request
+      .get('http://localhost:3003/private')
+      .set('Authorization', 'Basic dXNlcm5hbWU6cGFzcw==')
+      .redirectAuth(true)
+      .end(function(res){
+        res.text.should.equal('authed');
         done();
       });
     })
