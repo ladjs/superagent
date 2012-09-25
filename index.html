@@ -111,13 +111,13 @@
 
 <h2>GET requests</h2>
 
-<p> The <code>.send()</code> method accepts objects, which when used with the <strong>GET</strong> method will form a query-string. The following will produce the path <code>/search?query=Manny&amp;range=1..5&amp;order=desc</code>.</p>
+<p> The <code>.query()</code> method accepts objects, which when used with the <strong>GET</strong> method will form a query-string. The following will produce the path <code>/search?query=Manny&amp;range=1..5&amp;order=desc</code>.</p>
 
 <pre><code> request
    .get('/search')
-   .send({ query: 'Manny' })
-   .send({ range: '1..5' })
-   .send({ order: 'desc' })
+   .query({ query: 'Manny' })
+   .query({ range: '1..5' })
+   .query({ order: 'desc' })
    .end(function(res){
 
    });
@@ -127,17 +127,17 @@
 
 <pre><code>request
   .get('/search')
-  .send({ query: 'Manny', range: '1..5', order: 'desc' })
+  .query({ query: 'Manny', range: '1..5', order: 'desc' })
   .end(function(res){
 
   });
 </code></pre>
 
-<p>  The <code>.send()</code> method accepts strings as well:</p>
+<p>  The <code>.query()</code> method accepts strings as well:</p>
 
 <pre><code>  request
     .get('/querystring')
-    .send('search=Manny&amp;range=1..5')
+    .query('search=Manny&amp;range=1..5')
     .end(function(res){
 
     });
