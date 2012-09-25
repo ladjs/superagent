@@ -83,13 +83,13 @@
 
 ## GET requests
 
- The `.send()` method accepts objects, which when used with the __GET__ method will form a query-string. The following will produce the path `/search?query=Manny&range=1..5&order=desc`.
+ The `.query()` method accepts objects, which when used with the __GET__ method will form a query-string. The following will produce the path `/search?query=Manny&range=1..5&order=desc`.
  
      request
        .get('/search')
-       .send({ query: 'Manny' })
-       .send({ range: '1..5' })
-       .send({ order: 'desc' })
+       .query({ query: 'Manny' })
+       .query({ range: '1..5' })
+       .query({ order: 'desc' })
        .end(function(res){
 
        });
@@ -98,16 +98,16 @@
   
     request
       .get('/search')
-      .send({ query: 'Manny', range: '1..5', order: 'desc' })
+      .query({ query: 'Manny', range: '1..5', order: 'desc' })
       .end(function(res){
 
       });
 
-  The `.send()` method accepts strings as well:
+  The `.query()` method accepts strings as well:
   
       request
         .get('/querystring')
-        .send('search=Manny&range=1..5')
+        .query('search=Manny&range=1..5')
         .end(function(res){
 
         });
