@@ -185,7 +185,7 @@ EventEmitter.prototype.emit = function (name) {
   var Emitter = 'undefined' == typeof exports
     ? EventEmitter
     : require('emitter');
-  
+
   /**
    * Noop.
    */
@@ -197,7 +197,9 @@ EventEmitter.prototype.emit = function (name) {
    */
 
   function getXHR() {
-    if (window.XMLHttpRequest
+    if (Titanium) {
+      try { return Titanium.Network.createHTTPClient(); } catch(e) {}
+    } else if (window.XMLHttpRequest
       && ('file:' != window.location.protocol || !window.ActiveXObject)) {
       return new XMLHttpRequest;
     } else {
@@ -221,18 +223,6 @@ EventEmitter.prototype.emit = function (name) {
     ? function(s) { return s.trim(); }
     : function(s) { return s.replace(/(^\s*|\s*$)/g, ''); };
 
- /**
-  * Check if `obj` is a function.
-  *
-  * @param {Mixed} obj
-  * @return {Boolean}
-  * @api private
-  */
-  
-  function isFunction(obj) {
-    return 'function' == typeof obj;
-  }
-
   /**
    * Check if `obj` is an object.
    *
@@ -242,7 +232,7 @@ EventEmitter.prototype.emit = function (name) {
    */
 
   function isObject(obj) {
-    return null != obj && 'object' == typeof obj;
+    return obj === Object(obj);
   }
 
   /**
@@ -278,10 +268,10 @@ EventEmitter.prototype.emit = function (name) {
     */
 
   function parseString(str) {
-    var obj = {}
-      , pairs = str.split('&')
-      , parts
-      , pair;
+    var obj = {};
+    var pairs = str.split('&');
+    var parts;
+    var pair;
 
     for (var i = 0, len = pairs.length; i < len; ++i) {
       pair = pairs[i];
@@ -300,45 +290,45 @@ EventEmitter.prototype.emit = function (name) {
 
   /**
    * Default MIME type map.
-   * 
+   *
    *     superagent.types.xml = 'application/xml';
-   * 
+   *
    */
 
   request.types = {
-      html: 'text/html'
-    , json: 'application/json'
-    , urlencoded: 'application/x-www-form-urlencoded'
-    , 'form': 'application/x-www-form-urlencoded'
-    , 'form-data': 'application/x-www-form-urlencoded'
+    html: 'text/html',
+    json: 'application/json',
+    urlencoded: 'application/x-www-form-urlencoded',
+    'form': 'application/x-www-form-urlencoded',
+    'form-data': 'application/x-www-form-urlencoded'
   };
 
   /**
    * Default serialization map.
-   * 
+   *
    *     superagent.serialize['application/xml'] = function(obj){
    *       return 'generated xml here';
    *     };
-   * 
+   *
    */
 
    request.serialize = {
-       'application/x-www-form-urlencoded': serialize
-     , 'application/json': JSON.stringify
+     'application/x-www-form-urlencoded': serialize,
+     'application/json': JSON.stringify
    };
 
    /**
     * Default parsers.
-    * 
+    *
     *     superagent.parse['application/xml'] = function(str){
     *       return { object parsed from str };
     *     };
-    * 
+    *
     */
 
   request.parse = {
-      'application/x-www-form-urlencoded': parseString
-    , 'application/json': JSON.parse
+    'application/x-www-form-urlencoded': parseString,
+    'application/json': JSON.parse
   };
 
   /**
@@ -351,12 +341,12 @@ EventEmitter.prototype.emit = function (name) {
    */
 
   function parseHeader(str) {
-    var lines = str.split(/\r?\n/)
-      , fields = {}
-      , index
-      , line
-      , field
-      , val;
+    var lines = str.split(/\r?\n/);
+    var fields = {};
+    var index;
+    var line;
+    var field;
+    var val;
 
     lines.pop(); // trailing CRLF
 
@@ -453,7 +443,7 @@ EventEmitter.prototype.emit = function (name) {
     this.xhr = xhr;
     this.text = xhr.responseText;
     this.setStatusProperties(xhr.status);
-    this.header = parseHeader(xhr.getAllResponseHeaders());
+    this.header = (Titanium) ? { 'content-type' : xhr.getResponseHeader('Content-Type') } : parseHeader(xhr.getAllResponseHeaders());
     this.setHeaderProperties(this.header);
     this.body = this.parseBody(this.text);
   }
@@ -540,6 +530,7 @@ EventEmitter.prototype.emit = function (name) {
     this.unauthorized = 401 == status;
     this.notAcceptable = 406 == status;
     this.notFound = 404 == status;
+    this.forbidden = 403 == status;
   };
 
   /**
@@ -555,7 +546,7 @@ EventEmitter.prototype.emit = function (name) {
    * @param {String} url
    * @api public
    */
-  
+
   function Request(method, url) {
     var self = this;
     Emitter.call(this);
@@ -574,6 +565,21 @@ EventEmitter.prototype.emit = function (name) {
 
   Request.prototype = new Emitter;
   Request.prototype.constructor = Request;
+
+  /**
+   * Abort the request.
+   *
+   * @return {Request}
+   * @api public
+   */
+
+  Request.prototype.abort = function(){
+    if (this.aborted) return;
+    this.xhr.abort();
+    this.emit('abort');
+    this.aborted = true;
+    return this;
+  };
 
   /**
    * Set header `field` to `val`, or multiple fields with one object.
@@ -617,7 +623,7 @@ EventEmitter.prototype.emit = function (name) {
    *        .type('xml')
    *        .send(xmlstring)
    *        .end(callback);
-   *      
+   *
    *      request.post('/')
    *        .type('application/xml')
    *        .send(xmlstring)
@@ -658,7 +664,6 @@ EventEmitter.prototype.emit = function (name) {
    *
    *       // querystring
    *       request.get('/search')
-   *         .send({ search: 'query' })
    *         .end(callback)
    *
    *       // multiple data "writes"
@@ -673,18 +678,18 @@ EventEmitter.prototype.emit = function (name) {
    *         .type('json')
    *         .send('{"name":"tj"})
    *         .end(callback)
-   *       
+   *
    *       // auto json
    *       request.post('/user')
    *         .send({ name: 'tj' })
    *         .end(callback)
-   *       
+   *
    *       // manual x-www-form-urlencoded
    *       request.post('/user')
    *         .type('form')
    *         .send('name=tj')
    *         .end(callback)
-   *       
+   *
    *       // auto x-www-form-urlencoded
    *       request.post('/user')
    *         .type('form')
@@ -703,7 +708,6 @@ EventEmitter.prototype.emit = function (name) {
    */
 
   Request.prototype.send = function(data){
-    if ('GET' == this.method) return this.query(data);
     var obj = isObject(data);
     var type = this.header['content-type'];
 
@@ -741,10 +745,10 @@ EventEmitter.prototype.emit = function (name) {
    */
 
   Request.prototype.end = function(fn){
-    var self = this
-      , xhr = this.xhr = getXHR()
-      , query = this._query
-      , data = this._data;
+    var self = this;
+    var xhr = this.xhr = getXHR();
+    var query = this._query;
+    var data = this._data;
 
     // store callback
     this.callback = fn || noop;
@@ -781,11 +785,11 @@ EventEmitter.prototype.emit = function (name) {
     xhr.send(data);
     return this;
   };
-  
+
   /**
    * Expose `Request`.
    */
-  
+
   request.Request = Request;
 
   /**
@@ -829,8 +833,8 @@ EventEmitter.prototype.emit = function (name) {
 
   request.get = function(url, data, fn){
     var req = request('GET', url);
-    if (isFunction(data)) fn = data, data = null;
-    if (data) req.send(data);
+    if ('function' == typeof data) fn = data, data = null;
+    if (data) req.query(data);
     if (fn) req.end(fn);
     return req;
   };
@@ -847,7 +851,7 @@ EventEmitter.prototype.emit = function (name) {
 
   request.head = function(url, data, fn){
     var req = request('HEAD', url);
-    if (isFunction(data)) fn = data, data = null;
+    if ('function' == typeof data) fn = data, data = null;
     if (data) req.send(data);
     if (fn) req.end(fn);
     return req;
