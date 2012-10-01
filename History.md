@@ -1,4 +1,12 @@
 
+0.9.5 / 2012-10-01 
+==================
+
+  * add field name to .attach()
+  * add text "parser"
+  * refactor isObject()
+  * remove wtf isFunction() helper
+
 0.9.4 / 2012-09-20 
 ==================
 
