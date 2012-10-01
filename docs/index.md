@@ -339,13 +339,13 @@
 
 ### Attaching files
 
-  As mentioned a higher-level API is also provided, in the form of `.attach(file[, filename])` and `.field(name, value)`. Attaching several files is simple, you can also provide a custom filename for the attachment, otherwise the basename of the attached file is used.
+  As mentioned a higher-level API is also provided, in the form of `.attach(name, [path], [filename])` and `.field(name, value)`. Attaching several files is simple, you can also provide a custom filename for the attachment, otherwise the basename of the attached file is used.
   
     request
       .post('/upload')
-      .attach('path/to/tobi.png', 'Tobi.png')
-      .attach('path/to/loki.png')
-      .attach('path/to/jane.png')
+      .attach('avatar', 'path/to/tobi.png', 'user.png')
+      .attach('image', 'path/to/loki.png')
+      .attach('file', 'path/to/jane.png')
       .end(callback);
 
 ### Field values
@@ -356,9 +356,7 @@
        .post('/upload')
        .field('user[name]', 'Tobi')
        .field('user[email]', 'tobi@learnboost.com')
-       .attach('path/to/tobi.png')
-       .attach('path/to/loki.png')
-       .attach('path/to/jane.png')
+       .attach('image', 'path/to/tobi.png')
        .end(callback);
 
 ## Compression
