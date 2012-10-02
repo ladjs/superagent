@@ -60,7 +60,7 @@ describe('Request', function(){
       var req = request.post('http://localhost:3005/echo');
 
       req.field('name', 'Tobi');
-      req.attach('test/node/fixtures/user.html', 'document');
+      req.attach('document', 'test/node/fixtures/user.html');
       req.field('species', 'ferret');
 
       req.end(function(res){
@@ -68,7 +68,7 @@ describe('Request', function(){
         res.body.species.should.equal('ferret');
 
         var html = res.files.document;
-        html.name.should.equal('document');
+        html.name.should.equal('user.html');
         html.type.should.equal('text/html');
         read(html.path).should.equal('<h1>name</h1>');
         done();
@@ -76,18 +76,18 @@ describe('Request', function(){
     })
   })
 
-  describe('#attach(file)', function(){
+  describe('#attach(name, path)', function(){
     it('should attach a file', function(done){
       var req = request.post('http://localhost:3005/echo');
 
-      req.attach('test/node/fixtures/user.html');
-      req.attach('test/node/fixtures/user.json');
-      req.attach('test/node/fixtures/user.txt');
+      req.attach('one', 'test/node/fixtures/user.html');
+      req.attach('two', 'test/node/fixtures/user.json');
+      req.attach('three', 'test/node/fixtures/user.txt');
 
       req.end(function(res){
-        var html = res.files['user.html'];
-        var json = res.files['user.json'];
-        var text = res.files['user.txt'];
+        var html = res.files.one;
+        var json = res.files.two
+        var text = res.files.three;
 
         html.name.should.equal('user.html');
         html.type.should.equal('text/html');
@@ -109,9 +109,9 @@ describe('Request', function(){
       it('should emit an error', function(done){
         var req = request.post('http://localhost:3005/echo');
 
-        req.attach('foo');
-        req.attach('bar');
-        req.attach('baz');
+        req.attach('name', 'foo');
+        req.attach('name2', 'bar');
+        req.attach('name3', 'baz');
 
         req.on('error', function(err){
           err.message.should.include('ENOENT');
@@ -126,14 +126,14 @@ describe('Request', function(){
     })
   })
 
-  describe('#attach(file, filename)', function(){
+  describe('#attach(name, path, filename)', function(){
     it('should use the custom filename', function(done){
       request
       .post(':3005/echo')
-      .attach('test/node/fixtures/user.html', 'document')
+      .attach('document', 'test/node/fixtures/user.html', 'doc.html')
       .end(function(res){
         var html = res.files.document;
-        html.name.should.equal('document');
+        html.name.should.equal('doc.html');
         html.type.should.equal('text/html');
         read(html.path).should.equal('<h1>name</h1>');
         done();
@@ -232,7 +232,7 @@ describe('Part', function(){
     })
   })
 
-  describe('#filename(str)', function(){
+  describe('#attachment(name, path)', function(){
     it('should set Content-Disposition and Content-Type', function(done){
       var req = request
         .post('http://localhost:3005/echo')
@@ -240,11 +240,11 @@ describe('Part', function(){
 
       req
         .part()
-        .filename('path/to/my.txt')
+        .attachment('file', 'path/to/my.txt')
         .write('Tobi');
 
       req.end(function(res){
-        var file = res.files['my.txt'];
+        var file = res.files.file;
         file.name.should.equal('my.txt');
         file.type.should.equal('text/plain');
         done();
