@@ -435,3 +435,18 @@ test('request(url, fn)', function(next){
     next();
   });
 });
+
+// Test cross domain
+test('cross domain', function(next){
+  request('https://api.github.com', function(res){
+    assert(res.xhr.withCredentials === true);
+    next();
+  });
+});
+
+test('not cross domain', function(next){
+  request('/user', function(res){
+    assert(res.xhr.withCredentials === false);
+    next();
+  });
+});
