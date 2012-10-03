@@ -182,7 +182,9 @@ EventEmitter.prototype.emit = function (name) {
 
 ;(function(){
 
-  var Emitter = EventEmitter;
+  var Emitter = 'undefined' == typeof exports
+    ? EventEmitter
+    : require('emitter');
 
   /**
    * Noop.
