@@ -14,6 +14,16 @@ app.get('/json', function(req, res){
   res.send({ name: 'manny' });
 });
 
+app.get('/json-hal', function(req, res){
+  res.set('content-type', 'application/json+hal')
+  res.send({ name: 'hal 5000' });
+});
+
+app.get('/collection-json', function(req, res){
+  res.set('content-type', 'application/vnd.collection+json')
+  res.send({ name: 'chewbacca' });
+});
+
 app.listen(3001);
 
 describe('req.send(Object) as "json"', function(){
@@ -62,6 +72,30 @@ describe('res.body', function(){
       .end(function(res){
         res.text.should.equal('{"name":"manny"}');
         res.body.should.eql({ name: 'manny' });
+        done();
+      });
+    })
+  })
+
+  describe('application/json+hal', function(){
+    it('should parse the body', function(done){
+      request
+      .get('http://localhost:3001/json-hal')
+      .end(function(res){
+        res.text.should.equal('{"name":"hal 5000"}');
+        res.body.should.eql({ name: 'hal 5000' });
+        done();
+      });
+    })
+  })
+
+  describe('vnd.collection+json', function(){
+    it('should parse the body', function(done){
+      request
+      .get('http://localhost:3001/collection-json')
+      .end(function(res){
+        res.text.should.equal('{"name":"chewbacca"}');
+        res.body.should.eql({ name: 'chewbacca' });
         done();
       });
     })
