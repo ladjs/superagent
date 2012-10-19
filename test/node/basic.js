@@ -40,6 +40,11 @@ app.get('/links', function(req, res){
   res.end();
 });
 
+app.get('/xml', function(req, res){
+  res.type('xml');
+  res.send('<some><xml></xml></some>');
+});
+
 app.listen(3000);
 
 describe('request', function(){
@@ -296,6 +301,20 @@ describe('request', function(){
       .end(function(err, res){
         assert(null == err);
         res.text.should.equal('{"name":"tobi"}');
+        done();
+      });
+    })
+  })
+
+  describe('.buffer()', function(){
+    it('should enable buffering', function(done){
+      request
+      .get('http://localhost:3000/xml')
+      .buffer()
+      .end(function(err, res){
+        assert(null == err);
+        assert('<some><xml></xml></some>' == res.text);
+        assert(res.buffered);
         done();
       });
     })
