@@ -45,6 +45,11 @@ app.get('/xml', function(req, res){
   res.send('<some><xml></xml></some>');
 });
 
+app.get('/custom', function(req, res){
+  res.type('application/x-custom');
+  res.send('custom stuff');
+});
+
 app.listen(3000);
 
 describe('request', function(){
@@ -309,11 +314,11 @@ describe('request', function(){
   describe('.buffer()', function(){
     it('should enable buffering', function(done){
       request
-      .get('http://localhost:3000/xml')
+      .get('http://localhost:3000/custom')
       .buffer()
       .end(function(err, res){
         assert(null == err);
-        assert('<some><xml></xml></some>' == res.text);
+        assert('custom stuff' == res.text);
         assert(res.buffered);
         done();
       });
