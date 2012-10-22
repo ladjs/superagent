@@ -1,4 +1,16 @@
 
+0.9.7 / 2012-10-19 
+==================
+
+  * fix `.buffer()` `res.text` when no parser matches
+
+0.9.6 / 2012-10-17 
+==================
+
+  * change: use `this` when `window` is undefined
+  * update to new component spec [juliangruber]
+  * fix emission of "data" events for compressed responses without encoding. Closes #125
+
 0.9.5 / 2012-10-01 
 ==================
 
