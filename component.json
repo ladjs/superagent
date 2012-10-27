@@ -5,6 +5,8 @@
   "version": "0.9.6",
   "keywords": ["http", "ajax", "request", "agent"],
   "scripts": ["index.js", "lib/superagent.js"],
+  "main": "lib/client.js",
+  "scripts": ["lib/client.js"],
   "dependencies": {
     "component/emitter": "0.0.6"
   }
