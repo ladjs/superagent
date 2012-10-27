@@ -34,7 +34,7 @@
       "superagent": "lib/superagent.js"
     }
   },
-  "main": "index",
+  "main": "lib/node",
   "engines": {
     "node": "*"
   }
