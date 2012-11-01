@@ -4,5 +4,4 @@ coverage.html
 node_modules
 *.sock
 test.js
-build
 components

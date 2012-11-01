@@ -1,10 +1,8 @@
 
-SRC = lib/events.js lib/superagent.js
-
 TESTS = test/node/*.js
 REPORTER = dot
 
-all: superagent.js superagent.min.js
+all: superagent.js
 
 test:
 	@NODE_ENV=test ./node_modules/.bin/mocha \
@@ -20,8 +18,11 @@ test-cov: lib-cov
 lib-cov:
 	jscoverage lib lib-cov
 
-superagent.js: $(SRC)
-	cat $^ > $@
+superagent.js: components
+	component build --standalone superagent
+
+components:
+	component install
 
 superagent.min.js: superagent.js
 	uglifyjs --no-mangle $< > $@
@@ -37,6 +38,6 @@ test-docs:
 		> docs/test.html
 
 clean:
-	rm -f superagent{,.min}.js
+	rm -f superagent.js
 
 .PHONY: test-cov test docs test-docs clean

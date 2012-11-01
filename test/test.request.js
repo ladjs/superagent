@@ -3,7 +3,6 @@ request = superagent;
 
 test('Request inheritance', function(){
   assert(request.get('/') instanceof request.Request);
-  assert(request.get('/') instanceof EventEmitter);
 });
 
 test('request() simple GET without callback', function(next){
