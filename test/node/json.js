@@ -5,7 +5,7 @@ var EventEmitter = require('events').EventEmitter
   , assert = require('assert')
   , app = express();
 
-app.post('/echo', function(req, res){
+app.all('/echo', function(req, res){
   res.writeHead(200, req.headers);
   req.pipe(res);
 });
@@ -38,6 +38,17 @@ describe('req.send(Object) as "json"', function(){
       done();
     });
   })
+
+  it('should work with GET', function(done){
+    request
+    .get('http://localhost:3001/echo')
+    .send({ tobi: 'ferret' })
+    .end(function(res){
+      res.should.be.json
+      res.text.should.equal('{"tobi":"ferret"}');
+      done();
+    });
+  });
 
   describe('when called several times', function(){
     it('should merge the objects', function(done){
