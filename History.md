@@ -1,4 +1,14 @@
 
+0.9.8 / 2012-11-03 
+==================
+
+  * add emission of error from `Request#callback()`
+  * add a better fix for nodes weird socket hang up error
+  * add PUT/POST/PATCH data support to client short-hand functions
+  * add .license property to component.json
+  * change client portion to build using component(1)
+  * fix GET body support [guille]
+
 0.9.7 / 2012-10-19 
 ==================
 
