@@ -23,6 +23,5 @@ describe('.parse(fn)', function(){
         done();
       });
     })
-  });
-
+  })
 })
