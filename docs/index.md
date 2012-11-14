@@ -112,6 +112,17 @@
 
         });
 
+  Or joined:
+
+      request
+        .get('/querystring')
+        .query('search=Manny')
+        .query('range=1..5')
+        .end(function(res){
+        
+        });
+
+
 ### POST / PUT requests
 
   A typical JSON __POST__ request might look a little like the following, where we set the Content-Type header field appropriately, and "write" some data, in this case just a JSON string.
@@ -386,12 +397,12 @@
   an "error" event is emitted:
 
     request
-    .post('/upload')
-    .attach('image', 'path/to/tobi.png')
-    .on('error', handle)
-    .end(function(res){
-      
-    });
+      .post('/upload')
+      .attach('image', 'path/to/tobi.png')
+      .on('error', handle)
+      .end(function(res){
+        
+      });
 
   Note that a 4xx or 5xx response with super agent is _not_ considered an error
   by default. For example if you get a 500 or 403 response, this status information
