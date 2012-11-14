@@ -1,7 +1,7 @@
 
-var request = require('../../')
+var request = require('../..')
   , express = require('express')
-  , assert = require('assert')
+  , assert = require('better-assert')
   , app = express();
 
 app.get('/', function(req, res){
@@ -23,6 +23,18 @@ describe('req.query(Object)', function(){
     .query({ limit: ['1', '2'] })
     .end(function(res){
       res.body.should.eql({ name: 'tobi', order: 'asc', limit: ['1', '2'] });
+      done();
+    });
+  })
+
+  it('should not error on dates', function(done){
+    var date = new Date(0);
+
+    request
+    .del('http://localhost:3006/')
+    .query({ at: date })
+    .end(function(res){
+      assert(String(date) == res.body.at);
       done();
     });
   })
