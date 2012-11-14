@@ -453,9 +453,9 @@ request.parseString = parseString;
 
 /**
  * Default MIME type map.
- * 
+ *
  *     superagent.types.xml = 'application/xml';
- * 
+ *
  */
 
 request.types = {
@@ -468,11 +468,11 @@ request.types = {
 
 /**
  * Default serialization map.
- * 
+ *
  *     superagent.serialize['application/xml'] = function(obj){
  *       return 'generated xml here';
  *     };
- * 
+ *
  */
 
  request.serialize = {
@@ -482,11 +482,11 @@ request.types = {
 
  /**
   * Default parsers.
-  * 
+  *
   *     superagent.parse['application/xml'] = function(str){
   *       return { object parsed from str };
   *     };
-  * 
+  *
   */
 
 request.parse = {
@@ -697,6 +697,20 @@ Response.prototype.setStatusProperties = function(status){
 };
 
 /**
+ * Return an `Error` representative of this response.
+ *
+ * @return {Error}
+ * @api public
+ */
+
+Response.prototype.toError = function(){
+  var msg = 'got ' + this.status + ' response';
+  var err = new Error(msg);
+  err.status = this.status;
+  return err;
+};
+
+/**
  * Expose `Response`.
  */
 
@@ -713,6 +727,7 @@ request.Response = Response;
 function Request(method, url) {
   var self = this;
   Emitter.call(this);
+  this._query = this._query || [];
   this.method = method;
   this.url = url;
   this.header = {};
@@ -786,7 +801,7 @@ Request.prototype.set = function(field, val){
  *        .type('xml')
  *        .send(xmlstring)
  *        .end(callback);
- *      
+ *
  *      request.post('/')
  *        .type('application/xml')
  *        .send(xmlstring)
@@ -803,19 +818,22 @@ Request.prototype.type = function(type){
 };
 
 /**
- * Add `obj` to the query-string, later formatted
- * in `.end()`.
- *
- * @param {Object} obj
- * @return {Request} for chaining
- * @api public
- */
+* Add query-string `val`.
+*
+* Examples:
+*
+*   request.get('/shoes')
+*     .query('size=10')
+*     .query({ color: 'blue' })
+*
+* @param {Object|String} val
+* @return {Request} for chaining
+* @api public
+*/
 
-Request.prototype.query = function(obj){
-  this._query = this._query || {};
-  for (var key in obj) {
-    this._query[key] = obj[key];
-  }
+Request.prototype.query = function(val){
+  if ('string' != typeof val) val = serialize(val);
+  this._query.push(val);
   return this;
 };
 
@@ -841,18 +859,18 @@ Request.prototype.query = function(obj){
  *         .type('json')
  *         .send('{"name":"tj"})
  *         .end(callback)
- *       
+ *
  *       // auto json
  *       request.post('/user')
  *         .send({ name: 'tj' })
  *         .end(callback)
- *       
+ *
  *       // manual x-www-form-urlencoded
  *       request.post('/user')
  *         .type('form')
  *         .send('name=tj')
  *         .end(callback)
- *       
+ *
  *       // auto x-www-form-urlencoded
  *       request.post('/user')
  *         .type('form')
@@ -910,7 +928,7 @@ Request.prototype.send = function(data){
 Request.prototype.end = function(fn){
   var self = this;
   var xhr = this.xhr = getXHR();
-  var query = this._query;
+  var query = this._query.join('&');
   var data = this._data;
 
   // store callback
@@ -988,7 +1006,7 @@ function request(method, url) {
  * GET `url` with optional callback `fn(res)`.
  *
  * @param {String} url
- * @param {Mixed} data
+ * @param {Mixed|Function} data or fn
  * @param {Function} fn
  * @return {Request}
  * @api public
@@ -1006,7 +1024,7 @@ request.get = function(url, data, fn){
  * GET `url` with optional callback `fn(res)`.
  *
  * @param {String} url
- * @param {Mixed} data
+ * @param {Mixed|Function} data or fn
  * @param {Function} fn
  * @return {Request}
  * @api public
@@ -1047,6 +1065,7 @@ request.del = function(url, fn){
 
 request.patch = function(url, data, fn){
   var req = request('PATCH', url);
+  if ('function' == typeof data) fn = data, data = null;
   if (data) req.send(data);
   if (fn) req.end(fn);
   return req;
@@ -1064,6 +1083,7 @@ request.patch = function(url, data, fn){
 
 request.post = function(url, data, fn){
   var req = request('POST', url);
+  if ('function' == typeof data) fn = data, data = null;
   if (data) req.send(data);
   if (fn) req.end(fn);
   return req;
@@ -1073,7 +1093,7 @@ request.post = function(url, data, fn){
  * PUT `url` with optional `data` and callback `fn(res)`.
  *
  * @param {String} url
- * @param {Mixed} data
+ * @param {Mixed|Function} data or fn
  * @param {Function} fn
  * @return {Request}
  * @api public
@@ -1081,6 +1101,7 @@ request.post = function(url, data, fn){
 
 request.put = function(url, data, fn){
   var req = request('PUT', url);
+  if ('function' == typeof data) fn = data, data = null;
   if (data) req.send(data);
   if (fn) req.end(fn);
   return req;
@@ -1095,5 +1116,9 @@ module.exports = request;
 require.alias("component-emitter/index.js", "superagent/deps/emitter/index.js");
 
 require.alias("superagent/lib/client.js", "superagent/index.js");
-window.superagent = require("superagent");
+  if ("undefined" == typeof module) {
+    window.superagent = require("superagent");
+  } else {
+    module.exports = require("superagent");
+  }
 })();

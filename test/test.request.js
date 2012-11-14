@@ -397,6 +397,29 @@ test('GET querystring multiple objects', function(next){
   });
 });
 
+test('GET querystring with strings', function(next){
+  request
+  .get('/querystring')
+  .query('search=Manny')
+  .query('range=1..5')
+  .query('order=desc')
+  .end(function(res){
+    assert.eql(res.body, { search: 'Manny', range: '1..5', order: 'desc' });
+    next();
+  });
+});
+
+test('GET querystring with strings and objects', function(next){
+  request
+  .get('/querystring')
+  .query('search=Manny')
+  .query({ order: 'desc', range: '1..5' })
+  .end(function(res){
+    assert.eql(res.body, { search: 'Manny', range: '1..5', order: 'desc' });
+    next();
+  });
+});
+
 test('GET querystring object .get(uri, obj)', function(next){
   request
   .get('/querystring', { search: 'Manny' })
