@@ -417,6 +417,36 @@ req.pipe(stream);
 
 <p>When buffered the <code>res.buffered</code> flag is provided, you may use this to
   handle both buffered and unbuffered responses in the same callback.</p>
+
+<h2>Error handling</h2>
+
+<p>When an error occurs super agent will first check the arity of the callback
+  function given, if two parameters are present the error is passed, as shown
+  below:</p>
+
+<pre><code>request
+ .post('/upload')
+ .attach('image', 'path/to/tobi.png')
+ .end(function(err, res){
+
+ });
+</code></pre>
+
+<p>When a callback is omitted, or only a <code>res</code> parameter is present,
+  an "error" event is emitted:</p>
+
+<pre><code>request
+.post('/upload')
+.attach('image', 'path/to/tobi.png')
+.on('error', handle)
+.end(function(res){
+
+});
+</code></pre>
+
+<p>Note that a 4xx or 5xx response with super agent is <em>not</em> considered an error
+  by default. For example if you get a 500 or 403 response, this status information
+  will be available via <code>res.error</code>, <code>res.status</code> and the others mentioned in "Response properties", however no <code>Error</code> object is passed for these responses. An error includes network failures, parsing errors, etcetera.</p>
     </div>
     <a href="http://github.com/visionmedia/superagent"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub"></a>
   </body>
