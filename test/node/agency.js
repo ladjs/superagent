@@ -141,7 +141,7 @@ describe('request', function() {
           should.not.exist(err);
           res.should.have.status(302);
           res.redirects.should.eql([]);
-          res.header.location.should.equal('//localhost:4000/dashboard');
+          res.header.location.should.equal('/dashboard');
           done();
         });
     });

@@ -1,8 +1,8 @@
 
 var EventEmitter = require('events').EventEmitter
-  , request = require('../../')
+  , request = require('../..')
   , express = require('express')
-  , assert = require('assert')
+  , assert = require('better-assert')
   , app = express()
   , url = require('url');
 
@@ -50,13 +50,13 @@ app.get('/custom', function(req, res){
   res.send('custom stuff');
 });
 
-app.listen(3000);
+app.listen(5000);
 
 describe('request', function(){
   describe('with an object', function(){
     it('should format the url', function(done){
       request
-      .get(url.parse('http://localhost:3000/login'))
+      .get(url.parse('http://localhost:5000/login'))
       .end(function(res){
         assert(res.ok);
         done();
@@ -67,7 +67,7 @@ describe('request', function(){
   describe('with a callback', function(){
     it('should invoke .end()', function(done){
       request
-      .get('localhost:3000/login', function(res){
+      .get('localhost:5000/login', function(res){
         assert(res.status == 200);
         done();
       })
@@ -77,7 +77,7 @@ describe('request', function(){
   describe('without a schema', function(){
     it('should default to http', function(done){
       request
-      .get('localhost:3000/login')
+      .get('localhost:5000/login')
       .end(function(res){
         assert(res.status == 200);
         done();
@@ -88,7 +88,7 @@ describe('request', function(){
   describe('.end()', function(){
     it('should issue a request', function(done){
       request
-      .get('http://localhost:3000/login')
+      .get('http://localhost:5000/login')
       .end(function(res){
         assert(res.status == 200);
         done();
@@ -99,7 +99,7 @@ describe('request', function(){
   describe('res.header', function(){
     it('should be an object', function(done){
       request
-      .get('http://localhost:3000/login')
+      .get('http://localhost:5000/login')
       .end(function(res){
         assert('Express' == res.header['x-powered-by']);
         done();
@@ -110,7 +110,7 @@ describe('request', function(){
   describe('res.charset', function(){
     it('should be set when present', function(done){
       request
-      .get('http://localhost:3000/login')
+      .get('http://localhost:5000/login')
       .end(function(res){
         res.charset.should.equal('utf-8');
         done();
@@ -121,7 +121,7 @@ describe('request', function(){
   describe('res.statusType', function(){
     it('should provide the first digit', function(done){
       request
-      .get('http://localhost:3000/login')
+      .get('http://localhost:5000/login')
       .end(function(res){
         assert(200 == res.status);
         assert(2 == res.statusType);
@@ -133,7 +133,7 @@ describe('request', function(){
   describe('res.type', function(){
     it('should provide the mime-type void of params', function(done){
       request
-      .get('http://localhost:3000/login')
+      .get('http://localhost:5000/login')
       .end(function(res){
         res.type.should.equal('text/html');
         res.charset.should.equal('utf-8');
@@ -145,7 +145,7 @@ describe('request', function(){
   describe('res.links', function(){
     it('should default to an empty object', function(done){
       request
-      .get('http://localhost:3000/login')
+      .get('http://localhost:5000/login')
       .end(function(res){
         res.links.should.eql({});
         done();
@@ -154,7 +154,7 @@ describe('request', function(){
 
     it('should parse the Link header field', function(done){
       request
-      .get('http://localhost:3000/links')
+      .get('http://localhost:5000/links')
       .end(function(res){
         res.links.next.should.equal('https://api.github.com/repos/visionmedia/mocha/issues?page=2');
         done();
@@ -165,7 +165,7 @@ describe('request', function(){
   describe('req.set(field, val)', function(){
     it('should set the header field', function(done){
       request
-      .post('http://localhost:3000/echo')
+      .post('http://localhost:5000/echo')
       .set('X-Foo', 'bar')
       .set('X-Bar', 'baz')
       .end(function(res){
@@ -179,7 +179,7 @@ describe('request', function(){
   describe('req.set(obj)', function(){
     it('should set the header fields', function(done){
       request
-      .post('http://localhost:3000/echo')
+      .post('http://localhost:5000/echo')
       .set({ 'X-Foo': 'bar', 'X-Bar': 'baz' })
       .end(function(res){
         assert('bar' == res.header['x-foo']);
@@ -192,7 +192,7 @@ describe('request', function(){
   describe('req.type(str)', function(){
     it('should set the Content-Type', function(done){
       request
-      .post('http://localhost:3000/echo')
+      .post('http://localhost:5000/echo')
       .type('text/x-foo')
       .end(function(res){
         res.header['content-type'].should.equal('text/x-foo');
@@ -202,7 +202,7 @@ describe('request', function(){
 
     it('should map "json"', function(done){
       request
-      .post('http://localhost:3000/echo')
+      .post('http://localhost:5000/echo')
       .type('json')
       .end(function(res){
         res.should.be.json;
@@ -212,7 +212,7 @@ describe('request', function(){
 
     it('should map "html"', function(done){
       request
-      .post('http://localhost:3000/echo')
+      .post('http://localhost:5000/echo')
       .type('html')
       .end(function(res){
         res.header['content-type'].should.equal('text/html');
@@ -223,7 +223,7 @@ describe('request', function(){
 
   describe('req.write(str)', function(){
     it('should write the given data', function(done){
-      var req = request.post('http://localhost:3000/echo');
+      var req = request.post('http://localhost:5000/echo');
       req.set('Content-Type', 'application/json');
       req.write('{"name"').should.be.a('boolean');
       req.write(':"tobi"}').should.be.a('boolean');
@@ -251,7 +251,7 @@ describe('request', function(){
       };
 
       request
-      .post('http://localhost:3000/echo')
+      .post('http://localhost:5000/echo')
       .send('{"name":"tobi"}')
       .pipe(stream);
     })
@@ -260,7 +260,7 @@ describe('request', function(){
   describe('req.send(str)', function(){
     it('should write the string', function(done){
       request
-      .post('http://localhost:3000/echo')
+      .post('http://localhost:5000/echo')
       .type('json')
       .send('{"name":"tobi"}')
       .end(function(res){
@@ -273,7 +273,7 @@ describe('request', function(){
   describe('req.send(Object)', function(){
     it('should default to json', function(done){
       request
-      .post('http://localhost:3000/echo')
+      .post('http://localhost:5000/echo')
       .send({ name: 'tobi' })
       .end(function(res){
         res.should.be.json
@@ -285,7 +285,7 @@ describe('request', function(){
     describe('when called several times', function(){
       it('should merge the objects', function(done){
         request
-        .post('http://localhost:3000/echo')
+        .post('http://localhost:5000/echo')
         .send({ name: 'tobi' })
         .send({ age: 1 })
         .end(function(res){
@@ -301,7 +301,7 @@ describe('request', function(){
   describe('.end(fn)', function(){
     it('should check arity', function(done){
       request
-      .post('http://localhost:3000/echo')
+      .post('http://localhost:5000/echo')
       .send({ name: 'tobi' })
       .end(function(err, res){
         assert(null == err);
@@ -314,7 +314,7 @@ describe('request', function(){
   describe('.buffer()', function(){
     it('should enable buffering', function(done){
       request
-      .get('http://localhost:3000/custom')
+      .get('http://localhost:5000/custom')
       .buffer()
       .end(function(err, res){
         assert(null == err);
@@ -328,7 +328,7 @@ describe('request', function(){
   describe('.buffer(false)', function(){
     it('should disable buffering', function(done){
       request
-      .post('http://localhost:3000/echo')
+      .post('http://localhost:5000/echo')
       .type('application/x-dog')
       .send('hello this is dog')
       .buffer(false)
@@ -350,7 +350,7 @@ describe('request', function(){
   describe('with a content type other than application/json or text/*', function(){
     it('should disable buffering', function(done){
       request
-      .post('http://localhost:3000/echo')
+      .post('http://localhost:5000/echo')
       .type('application/x-dog')
       .send('hello this is dog')
       .end(function(err, res){

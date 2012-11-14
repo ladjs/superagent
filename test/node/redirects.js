@@ -49,9 +49,9 @@ describe('request', function(){
       })
       .end(function(res){
         var arr = [];
-        arr.push('//localhost:3003/movies');
-        arr.push('//localhost:3003/movies/all');
-        arr.push('//localhost:3003/movies/all/0');
+        arr.push('/movies');
+        arr.push('/movies/all');
+        arr.push('/movies/all/0');
         redirects.should.eql(arr);
         res.text.should.equal('first movie page');
         done();
@@ -90,8 +90,8 @@ describe('request', function(){
       .end(function(res){
         var arr = [];
         assert(res.redirect, 'res.redirect');
-        arr.push('//localhost:3003/movies');
-        arr.push('//localhost:3003/movies/all');
+        arr.push('/movies');
+        arr.push('/movies/all');
         redirects.should.eql(arr);
         res.text.should.match(/Moved Temporarily/);
         done();
@@ -112,7 +112,7 @@ describe('request', function(){
       })
       .end(function(res){
         var arr = [];
-        arr.push('//localhost:3003/movies/all/0');
+        arr.push('/movies/all/0');
         redirects.should.eql(arr);
         res.text.should.equal('first movie page');
         done();
