@@ -143,6 +143,17 @@
     });
 </code></pre>
 
+<p>Or joined:</p>
+
+<pre><code>  request
+    .get('/querystring')
+    .query('search=Manny')
+    .query('range=1..5')
+    .end(function(res){
+
+    });
+</code></pre>
+
 <h3>POST / PUT requests</h3>
 
 <p>A typical JSON <strong>POST</strong> request might look a little like the following, where we set the Content-Type header field appropriately, and "write" some data, in this case just a JSON string.</p>
@@ -436,12 +447,12 @@ req.pipe(stream);
   an "error" event is emitted:</p>
 
 <pre><code>request
-.post('/upload')
-.attach('image', 'path/to/tobi.png')
-.on('error', handle)
-.end(function(res){
+  .post('/upload')
+  .attach('image', 'path/to/tobi.png')
+  .on('error', handle)
+  .end(function(res){
 
-});
+  });
 </code></pre>
 
 <p>Note that a 4xx or 5xx response with super agent is <em>not</em> considered an error
