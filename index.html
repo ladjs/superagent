@@ -20,7 +20,7 @@
     <ul id="menu"></ul>
     <div id="content"><h1>SuperAgent</h1>
 
-<p> Super Agent is light-weight progressive ajax API crafted for flexibility, readability, and a low learning curve after being frustrated with many of the existing request APIs. It also works with Node.js!</p>
+<p>Super Agent is light-weight progressive ajax API crafted for flexibility, readability, and a low learning curve after being frustrated with many of the existing request APIs. It also works with Node.js!</p>
 
 <pre><code> request
    .post('/api/pet')
@@ -38,11 +38,11 @@
 
 <h2>Test documentation</h2>
 
-<p>  The following <a href="docs/test.html">test documentation</a> was generated with <a href="http://visionmedia.github.com/mocha">Mocha&rsquo;s</a> &ldquo;doc&rdquo; reporter, and directly reflects the test suite. This provides an additional source of documentation.</p>
+<p>The following <a href="docs/test.html">test documentation</a> was generated with <a href="http://visionmedia.github.com/mocha">Mocha's</a> "doc" reporter, and directly reflects the test suite. This provides an additional source of documentation.</p>
 
 <h2>Request basics</h2>
 
-<p> A request can be initiated by invoking the appropriate method on the <code>request</code> object, then calling <code>.end()</code> to send the request. For example a simple GET request:</p>
+<p>A request can be initiated by invoking the appropriate method on the <code>request</code> object, then calling <code>.end()</code> to send the request. For example a simple GET request:</p>
 
 <pre><code> request
    .get('/search')
@@ -51,12 +51,12 @@
    });
 </code></pre>
 
-<p>  A method string may also be passed:</p>
+<p>A method string may also be passed:</p>
 
 <pre><code>request('GET', '/search').end(callback);
 </code></pre>
 
-<p> The <strong>node</strong> client may also provide absolute urls:</p>
+<p>The <strong>node</strong> client may also provide absolute urls:</p>
 
 <pre><code> request
    .get('http://example.com/search')
@@ -65,7 +65,7 @@
    });
 </code></pre>
 
-<p>  <strong>DELETE</strong>, <strong>HEAD</strong>, <strong>POST</strong>, <strong>PUT</strong> and other <strong>HTTP</strong> verbs may also be used, simply change the method name:</p>
+<p><strong>DELETE</strong>, <strong>HEAD</strong>, <strong>POST</strong>, <strong>PUT</strong> and other <strong>HTTP</strong> verbs may also be used, simply change the method name:</p>
 
 <pre><code>request
   .head('/favicon.ico')
@@ -74,7 +74,7 @@
   });
 </code></pre>
 
-<p>  <strong>DELETE</strong> is a special-case, as it&rsquo;s a reserved word, so the method is named <code>.del()</code>:</p>
+<p><strong>DELETE</strong> is a special-case, as it's a reserved word, so the method is named <code>.del()</code>:</p>
 
 <pre><code>request
   .del('/user/1')
@@ -83,7 +83,7 @@
   });
 </code></pre>
 
-<p>  The HTTP method defaults to <strong>GET</strong>, so if you wish, the following is valid:</p>
+<p>The HTTP method defaults to <strong>GET</strong>, so if you wish, the following is valid:</p>
 
 <pre><code> request('/search', function(res){
 
@@ -92,7 +92,7 @@
 
 <h2>Setting header fields</h2>
 
-<p>  Setting header fields is simple, invoke <code>.set()</code> with a field name and value:</p>
+<p>Setting header fields is simple, invoke <code>.set()</code> with a field name and value:</p>
 
 <pre><code> request
    .get('/search')
@@ -101,7 +101,7 @@
    .end(callback);
 </code></pre>
 
-<p>  You may also pass an object to set several fields in a single call:</p>
+<p>You may also pass an object to set several fields in a single call:</p>
 
 <pre><code> request
    .get('/search')
@@ -111,7 +111,7 @@
 
 <h2>GET requests</h2>
 
-<p> The <code>.query()</code> method accepts objects, which when used with the <strong>GET</strong> method will form a query-string. The following will produce the path <code>/search?query=Manny&amp;range=1..5&amp;order=desc</code>.</p>
+<p>The <code>.query()</code> method accepts objects, which when used with the <strong>GET</strong> method will form a query-string. The following will produce the path <code>/search?query=Manny&amp;range=1..5&amp;order=desc</code>.</p>
 
 <pre><code> request
    .get('/search')
@@ -123,7 +123,7 @@
    });
 </code></pre>
 
-<p>  Or as a single object:</p>
+<p>Or as a single object:</p>
 
 <pre><code>request
   .get('/search')
@@ -133,7 +133,7 @@
   });
 </code></pre>
 
-<p>  The <code>.query()</code> method accepts strings as well:</p>
+<p>The <code>.query()</code> method accepts strings as well:</p>
 
 <pre><code>  request
     .get('/querystring')
@@ -145,22 +145,22 @@
 
 <h3>POST / PUT requests</h3>
 
-<p>  A typical JSON <strong>POST</strong> request might look a little like the following, where we set the Content-Type header field appropriately, and &ldquo;write&rdquo; some data, in this case just a JSON string.</p>
+<p>A typical JSON <strong>POST</strong> request might look a little like the following, where we set the Content-Type header field appropriately, and "write" some data, in this case just a JSON string.</p>
 
 <pre><code>  request.post('/user')
     .set('Content-Type', 'application/json')
-    .send('{"name":"tj","pet":"tobi"})
+    .send('{"name":"tj","pet":"tobi"}')
     .end(callback)
 </code></pre>
 
-<p>  Since JSON is undoubtably the most common, it&rsquo;s the <em>default</em>! The following example is equivalent to the previous.</p>
+<p>Since JSON is undoubtably the most common, it's the <em>default</em>! The following example is equivalent to the previous.</p>
 
 <pre><code>  request.post('/user')
     .send({ name: 'tj', pet: 'tobi' })
     .end(callback)
 </code></pre>
 
-<p>  Or using multiple <code>.send()</code> calls:</p>
+<p>Or using multiple <code>.send()</code> calls:</p>
 
 <pre><code>  request.post('/user')
     .send({ name: 'tj' })
@@ -168,7 +168,7 @@
     .end(callback)
 </code></pre>
 
-<p>  By default sending strings will set the Content-Type to <code>application/x-www-form-urlencoded</code>,
+<p>By default sending strings will set the Content-Type to <code>application/x-www-form-urlencoded</code>,
   multiple calls will be concatenated with <code>&amp;</code>, here resulting in <code>name=tj&amp;pet=tobi</code>:</p>
 
 <pre><code>  request.post('/user')
@@ -177,7 +177,7 @@
     .end(callback);
 </code></pre>
 
-<p>  SuperAgent formats are extensible, however by default &ldquo;json&rdquo; and &ldquo;form&rdquo; are supported. To send the data as <code>application/x-www-form-urlencoded</code> simply invoke <code>.type()</code> with &ldquo;form&rdquo;, where the default is &ldquo;json&rdquo;. This request will POST the body &ldquo;name=tj&amp;pet=tobi&rdquo;.</p>
+<p>SuperAgent formats are extensible, however by default "json" and "form" are supported. To send the data as <code>application/x-www-form-urlencoded</code> simply invoke <code>.type()</code> with "form", where the default is "json". This request will POST the body "name=tj&amp;pet=tobi".</p>
 
 <pre><code>  request.post('/user')
     .type('form')
@@ -186,19 +186,19 @@
     .end(callback)
 </code></pre>
 
-<p> Note: &ldquo;form&rdquo; is aliased as &ldquo;form-data&rdquo; and &ldquo;urlencoded&rdquo; for backwards compat.</p>
+<p>Note: "form" is aliased as "form-data" and "urlencoded" for backwards compat.</p>
 
 <h2>Setting the Content-Type</h2>
 
-<p>  The obvious solution is to use the <code>.set()</code> method:</p>
+<p>The obvious solution is to use the <code>.set()</code> method:</p>
 
 <pre><code> request.post('/user')
    .set('Content-Type', 'application/json')
 </code></pre>
 
-<p>  As a short-hand the <code>.type()</code> method is also available, accepting
+<p>As a short-hand the <code>.type()</code> method is also available, accepting
   the canonicalized MIME type name complete with type/subtype, or
-  simply the extension name such as &ldquo;xml&rdquo;, &ldquo;json&rdquo;, &ldquo;png&rdquo;, etc:</p>
+  simply the extension name such as "xml", "json", "png", etc:</p>
 
 <pre><code> request.post('/user')
    .type('application/json')
@@ -212,7 +212,7 @@
 
 <h2>Query strings</h2>
 
-<p>  When issuing a <strong>GET</strong> request the <code>res.send(obj)</code> method will invoke <code>res.query(obj)</code>, this is a method which may be used with other HTTP methods in order to build up a query-string. For example populating <code>?format=json&amp;dest=/login</code> on a <strong>POST</strong>:</p>
+<p>When issuing a <strong>GET</strong> request the <code>res.send(obj)</code> method will invoke <code>res.query(obj)</code>, this is a method which may be used with other HTTP methods in order to build up a query-string. For example populating <code>?format=json&amp;dest=/login</code> on a <strong>POST</strong>:</p>
 
 <pre><code>request
   .post('/')
@@ -224,15 +224,15 @@
 
 <h2>Parsing response bodies</h2>
 
-<p>  Super Agent will parse known response-body data for you, currently supporting <em>application/x-www-form-urlencoded</em>, <em>application/json</em>, and <em>multipart/form-data</em>.</p>
+<p>Super Agent will parse known response-body data for you, currently supporting <em>application/x-www-form-urlencoded</em>, <em>application/json</em>, and <em>multipart/form-data</em>.</p>
 
 <h3>JSON / Urlencoded</h3>
 
-<p>  The property <code>res.body</code> is the parsed object, for example if a request responded with the JSON string &lsquo;{&ldquo;user&rdquo;:{&ldquo;name&rdquo;:&ldquo;tobi&rdquo;}}&rsquo;, <code>res.body.user.name</code> would be &ldquo;tobi&rdquo;. Likewise the x-www-form-urlencoded value of &ldquo;user[name]=tobi&rdquo; would yield the same result.</p>
+<p>The property <code>res.body</code> is the parsed object, for example if a request responded with the JSON string '{"user":{"name":"tobi"}}', <code>res.body.user.name</code> would be "tobi". Likewise the x-www-form-urlencoded value of "user[name]=tobi" would yield the same result.</p>
 
 <h3>Multipart</h3>
 
-<p>  The Node client supports <em>multipart/form-data</em> via the <a href="https://github.com/felixge/node-formidable">Formidable</a> module. When parsing multipart responses, the object <code>res.files</code> is also available to you. Suppose for example a request responds with the following multipart body:</p>
+<p>The Node client supports <em>multipart/form-data</em> via the <a href="https://github.com/felixge/node-formidable">Formidable</a> module. When parsing multipart responses, the object <code>res.files</code> is also available to you. Suppose for example a request responds with the following multipart body:</p>
 
 <pre><code>--whoop
 Content-Disposition: attachment; name="image"; filename="tobi.png"
@@ -247,43 +247,34 @@ Tobi
 --whoop--
 </code></pre>
 
-<p>  You would have the values <code>res.body.name</code> provided as &ldquo;Tobi&rdquo;, and <code>res.files.image</code> as a <code>File</code> object containing the path on disk, filename, and other properties.</p>
-
-<h3>Response text</h3>
-
-<p>  The <code>res.text</code> property is also available for a string representation of the body as illustrated by this test:</p>
-
-<pre><code>var req = request.post('local/echo');
-req.write('{"name"').should.be.a('boolean');
-req.write(':"tobi"}').should.be.a('boolean');
-req.end(function(res){
-  res.text.should.equal('{"name":"tobi"}');
-});
-</code></pre>
+<p>You would have the values <code>res.body.name</code> provided as "Tobi", and <code>res.files.image</code> as a <code>File</code> object containing the path on disk, filename, and other properties.</p>
 
 <h2>Response properties</h2>
 
-<p>  Many helpful flags and properties are set on the <code>Response</code> object, ranging from the response text, parsed response body, header fields, status flags and more.</p>
+<p>Many helpful flags and properties are set on the <code>Response</code> object, ranging from the response text, parsed response body, header fields, status flags and more.</p>
 
 <h3>Response text</h3>
 
-<p>  The <code>res.text</code> property contains the unparsed response body string.</p>
+<p>The <code>res.text</code> property contains the unparsed response body string. This
+  property is always present for the client API, and only when the mime type
+  matches "text/<em>", "</em>/json", or "x-www-form-urlencoding" by default for node. The
+  reasoning is to conserve memory, as buffering text of large bodies such as multipart files or images is extremely inefficient.</p>
 
 <h3>Response body</h3>
 
-<p>  Much like SuperAgent can auto-serialize request data, it can also automatically parse it. When a parser is defined for the Content-Type, it is parsed, which by default includes &ldquo;application/json&rdquo; and &ldquo;application/x-www-form-urlencoded&rdquo;. The parsed object is then available via <code>res.body</code>.</p>
+<p>Much like SuperAgent can auto-serialize request data, it can also automatically parse it. When a parser is defined for the Content-Type, it is parsed, which by default includes "application/json" and "application/x-www-form-urlencoded". The parsed object is then available via <code>res.body</code>.</p>
 
 <h3>Response header fields</h3>
 
-<p>  The <code>res.header</code> contains an object of parsed header fields, lowercasing field names much like node does. For example <code>res.header['content-length']</code>.</p>
+<p>The <code>res.header</code> contains an object of parsed header fields, lowercasing field names much like node does. For example <code>res.header['content-length']</code>.</p>
 
 <h3>Response Content-Type</h3>
 
-<p>  The Content-Type response header is special-cased, providing <code>res.type</code>, which is void of the charset (if any). For example the Content-Type of &ldquo;text/html; charset=utf8&rdquo; will provide &ldquo;text/html&rdquo; as <code>res.type</code>, and the <code>res.charset</code> property would then contain &ldquo;utf8&rdquo;.</p>
+<p>The Content-Type response header is special-cased, providing <code>res.type</code>, which is void of the charset (if any). For example the Content-Type of "text/html; charset=utf8" will provide "text/html" as <code>res.type</code>, and the <code>res.charset</code> property would then contain "utf8".</p>
 
 <h3>Response status</h3>
 
-<p>  The response status flags help determine if the request was a success, among other useful information, making SuperAgent ideal for interacting with RESTful web services. These flags are currently defined as:</p>
+<p>The response status flags help determine if the request was a success, among other useful information, making SuperAgent ideal for interacting with RESTful web services. These flags are currently defined as:</p>
 
 <pre><code> var type = status / 100 | 0;
 
@@ -310,19 +301,19 @@ req.end(function(res){
 
 <h2>Request timeouts</h2>
 
-<p>  A timeout can be applied by invoking <code>req.timeout(ms)</code>, after which an error
+<p>A timeout can be applied by invoking <code>req.timeout(ms)</code>, after which an error
   will be triggered. To differentiate between other errors the <code>err.timeout</code> property
   is set to the <code>ms</code> value. <strong>NOTE</strong> that this is a timeout applied to the request
   and all subsequent redirects, not per request.</p>
 
 <h2>Basic authentication</h2>
 
-<p>  Basic auth is currently provided by the <em>node</em> client in two forms, first via the URL as &ldquo;user:pass&rdquo;:</p>
+<p>Basic auth is currently provided by the <em>node</em> client in two forms, first via the URL as "user:pass":</p>
 
 <pre><code>request.get('http://tobi:learnboost@local').end(callback);
 </code></pre>
 
-<p>  As well as via the <code>.auth()</code> method:</p>
+<p>As well as via the <code>.auth()</code> method:</p>
 
 <pre><code>request
   .get('http://local')
@@ -332,7 +323,7 @@ req.end(function(res){
 
 <h2>Following redirects</h2>
 
-<p>  By default up to 5 redirects will be followed, however you may specify this with the <code>res.redirects(n)</code> method:</p>
+<p>By default up to 5 redirects will be followed, however you may specify this with the <code>res.redirects(n)</code> method:</p>
 
 <pre><code>request
   .get('/some.png')
@@ -342,7 +333,7 @@ req.end(function(res){
 
 <h2>Piping data</h2>
 
-<p>  The Node client allows you to pipe data to and from the request. For example piping a file&rsquo;s contents as the request:</p>
+<p>The Node client allows you to pipe data to and from the request. For example piping a file's contents as the request:</p>
 
 <pre><code>var request = require('superagent')
   , fs = require('fs');
@@ -353,7 +344,7 @@ req.type('json');
 stream.pipe(req);
 </code></pre>
 
-<p>  Or piping the response to a file:</p>
+<p>Or piping the response to a file:</p>
 
 <pre><code>var request = require('superagent')
   , fs = require('fs');
@@ -365,9 +356,9 @@ req.pipe(stream);
 
 <h2>Multipart requests</h2>
 
-<p>  Super Agent is also great for <em>building</em> multipart requests, providing a both low-level and high-level APIs.</p>
+<p>Super Agent is also great for <em>building</em> multipart requests, providing a both low-level and high-level APIs.</p>
 
-<p>  The low-level API uses <code>Part</code>s to represent a file or field. The <code>.part()</code> method returns a new <code>Part</code>, which provides an API similar to the request itself.</p>
+<p>The low-level API uses <code>Part</code>s to represent a file or field. The <code>.part()</code> method returns a new <code>Part</code>, which provides an API similar to the request itself.</p>
 
 <pre><code> var req = request.post('/upload');
 
@@ -387,7 +378,7 @@ req.pipe(stream);
 
 <h3>Attaching files</h3>
 
-<p>  As mentioned a higher-level API is also provided, in the form of <code>.attach(name, [path], [filename])</code> and <code>.field(name, value)</code>. Attaching several files is simple, you can also provide a custom filename for the attachment, otherwise the basename of the attached file is used.</p>
+<p>As mentioned a higher-level API is also provided, in the form of <code>.attach(name, [path], [filename])</code> and <code>.field(name, value)</code>. Attaching several files is simple, you can also provide a custom filename for the attachment, otherwise the basename of the attached file is used.</p>
 
 <pre><code>request
   .post('/upload')
@@ -399,7 +390,7 @@ req.pipe(stream);
 
 <h3>Field values</h3>
 
-<p>  Much like form fields in HTML, you can set field values with the <code>.field(name, value)</code> method. Suppose you want to upload a few images with your name and email, your request might look something like this:</p>
+<p>Much like form fields in HTML, you can set field values with the <code>.field(name, value)</code> method. Suppose you want to upload a few images with your name and email, your request might look something like this:</p>
 
 <pre><code> request
    .post('/upload')
@@ -411,7 +402,7 @@ req.pipe(stream);
 
 <h2>Compression</h2>
 
-<p>  The Node client supports compressed responses, best of all, you don&rsquo;t have to do anything! It just works.</p>
+<p>The Node client supports compressed responses, best of all, you don't have to do anything! It just works.</p>
     </div>
     <a href="http://github.com/visionmedia/superagent"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub"></a>
   </body>

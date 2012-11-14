@@ -220,6 +220,8 @@
   matches "text/*", "*/json", or "x-www-form-urlencoding" by default for node. The
   reasoning is to conserve memory, as buffering text of large bodies such as multipart files or images is extremely inefficient.
 
+  To force buffering see the "Buffering responses" section.
+
 ### Response body
 
   Much like SuperAgent can auto-serialize request data, it can also automatically parse it. When a parser is defined for the Content-Type, it is parsed, which by default includes "application/json" and "application/x-www-form-urlencoded". The parsed object is then available via `res.body`.
@@ -353,4 +355,9 @@
 
 ## Compression
 
-  The Node client supports compressed responses, best of all, you don't have to do anything! It just works.
+  The node client supports compressed responses, best of all, you don't have to do anything! It just works.
+
+## Buffering responses
+
+  To force buffering of response bodies as `res.text` you may invoke `req.buffer()`. To undo the default of buffering for text responses such
+  as "text/plain", "text/html" etc you may invoke `req.buffer(false)`.
