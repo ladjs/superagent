@@ -260,6 +260,10 @@
      res.notFound = 404 == status;
      res.forbidden = 403 == status;
 
+## Aborting requests
+
+  To abort requests simply invoke the `req.abort()` method.
+
 ## Request timeouts
 
   A timeout can be applied by invoking `req.timeout(ms)`, after which an error

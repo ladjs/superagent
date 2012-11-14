@@ -260,6 +260,8 @@ Tobi
   matches "text/<em>", "</em>/json", or "x-www-form-urlencoding" by default for node. The
   reasoning is to conserve memory, as buffering text of large bodies such as multipart files or images is extremely inefficient.</p>
 
+<p>To force buffering see the "Buffering responses" section.</p>
+
 <h3>Response body</h3>
 
 <p>Much like SuperAgent can auto-serialize request data, it can also automatically parse it. When a parser is defined for the Content-Type, it is parsed, which by default includes "application/json" and "application/x-www-form-urlencoded". The parsed object is then available via <code>res.body</code>.</p>
@@ -298,6 +300,10 @@ Tobi
  res.notFound = 404 == status;
  res.forbidden = 403 == status;
 </code></pre>
+
+<h2>Aborting requests</h2>
+
+<p>To abort requests simply invoke the <code>req.abort()</code> method.</p>
 
 <h2>Request timeouts</h2>
 
@@ -402,7 +408,15 @@ req.pipe(stream);
 
 <h2>Compression</h2>
 
-<p>The Node client supports compressed responses, best of all, you don't have to do anything! It just works.</p>
+<p>The node client supports compressed responses, best of all, you don't have to do anything! It just works.</p>
+
+<h2>Buffering responses</h2>
+
+<p>To force buffering of response bodies as <code>res.text</code> you may invoke <code>req.buffer()</code>. To undo the default of buffering for text responses such
+  as "text/plain", "text/html" etc you may invoke <code>req.buffer(false)</code>.</p>
+
+<p>When buffered the <code>res.buffered</code> flag is provided, you may use this to
+  handle both buffered and unbuffered responses in the same callback.</p>
     </div>
     <a href="http://github.com/visionmedia/superagent"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub"></a>
   </body>
