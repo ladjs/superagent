@@ -118,7 +118,7 @@
 
       request.post('/user')
         .set('Content-Type', 'application/json')
-        .send('{"name":"tj","pet":"tobi"})
+        .send('{"name":"tj","pet":"tobi"}')
         .end(callback)
 
   Since JSON is undoubtably the most common, it's the _default_! The following example is equivalent to the previous.
