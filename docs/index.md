@@ -368,3 +368,31 @@
 
   When buffered the `res.buffered` flag is provided, you may use this to
   handle both buffered and unbuffered responses in the same callback.
+
+## Error handling
+
+  When an error occurs super agent will first check the arity of the callback
+  function given, if two parameters are present the error is passed, as shown
+  below:
+
+    request
+     .post('/upload')
+     .attach('image', 'path/to/tobi.png')
+     .end(function(err, res){
+       
+     });
+
+  When a callback is omitted, or only a `res` parameter is present,
+  an "error" event is emitted:
+
+    request
+    .post('/upload')
+    .attach('image', 'path/to/tobi.png')
+    .on('error', handle)
+    .end(function(res){
+      
+    });
+
+  Note that a 4xx or 5xx response with super agent is _not_ considered an error
+  by default. For example if you get a 500 or 403 response, this status information
+  will be available via `res.error`, `res.status` and the others mentioned in "Response properties", however no `Error` object is passed for these responses. An error includes network failures, parsing errors, etcetera.
