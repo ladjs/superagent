@@ -1,4 +1,11 @@
 
+0.9.9 / 2012-11-14 
+==================
+
+  * add .parse(fn) support
+  * fix socket hangup with dates in querystring. Closes #146
+  * fix socket hangup "error" event when a callback of arity 2 is provided
+
 0.9.8 / 2012-11-03 
 ==================
 
