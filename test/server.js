@@ -41,6 +41,13 @@ app.get('/no-content', function(req, res){
   res.send(204);
 });
 
+app.get('/delay/:ms', function(req, res){
+  var ms = ~~req.params.ms;
+  setTimeout(function(){
+    res.send(200);
+  }, ms);
+});
+
 app.put('/user/:id', function(req, res){
   res.send('updated');
 });
@@ -93,5 +100,5 @@ app.get('/foo', function(req, res){
 
 app.use(express.static(__dirname + '/../'));
 
-app.listen(3001);
+app.listen(3000);
 console.log('Test server listening on port 3000');
