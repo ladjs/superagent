@@ -22,11 +22,11 @@
     "mime": "1.2.5",
     "emitter-component": "0.0.6",
     "methods": "0.0.1",
-    "cookiejar": "1.3.0",
-    "better-assert": "~0.1.0"
+    "cookiejar": "1.3.0"
   },
   "devDependencies": {
     "express": "3.0.3",
+    "better-assert": "~0.1.0",
     "should": "*",
     "mocha": "*"
   },
