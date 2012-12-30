@@ -96,6 +96,21 @@
      
        });
 
+## Dealing with errors
+
+  On a network error (e.g. connection refused or timeout), SuperAgent emits
+  `error` unless you pass `.end()` a callback with two parameters. Then
+  SuperAgent will invoke it with the error first, followed by a null response.
+
+     request
+       .get('http://wrongurl')
+       .end(function(err, res){
+         console.log('ERROR: ', err)
+       });
+
+  On HTTP errors instead, SuperAgent populates the response with flags
+  indicating the error. See `Response status` below.
+
 ## Setting header fields
 
   Setting header fields is simple, invoke `.set()` with a field name and value:
