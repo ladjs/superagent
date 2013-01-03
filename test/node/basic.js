@@ -50,6 +50,10 @@ app.get('/custom', function(req, res){
   res.send('custom stuff');
 });
 
+app.get('/error', function(req, res){
+  res.send(500, 'boom');
+});
+
 app.listen(5000);
 
 describe('request', function(){
@@ -91,6 +95,18 @@ describe('request', function(){
       .get('http://localhost:5000/login')
       .end(function(res){
         assert(res.status == 200);
+        done();
+      });
+    })
+  })
+
+  describe('res.error', function(){
+    it('should should be an Error object', function(done){
+      request
+      .get(':5000/error')
+      .end(function(res){
+        res.error.message.should.equal('got 500 response');
+        res.error.status.should.equal(500);
         done();
       });
     })
