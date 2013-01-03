@@ -38,6 +38,6 @@ test-docs:
 		> docs/test.html
 
 clean:
-	rm -f superagent.js
+	rm -fr superagent.js components
 
 .PHONY: test-cov test docs test-docs clean

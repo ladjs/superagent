@@ -14,7 +14,8 @@
   ],
   "main": "lib/client.js",
   "dependencies": {
-    "component/emitter": "0.0.6"
+    "component/emitter": "*",
+    "RedVentures/reduce": "*"
   },
   "license": "MIT"
 }
