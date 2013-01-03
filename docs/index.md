@@ -23,15 +23,15 @@
 ## Request basics
 
  A request can be initiated by invoking the appropriate method on the `request` object, then calling `.end()` to send the request. For example a simple GET request:
- 
+
      request
        .get('/search')
        .end(function(res){
-       
+
        });
 
   A method string may also be passed:
-  
+
     request('GET', '/search').end(callback);
 
  The __node__ client may also provide absolute urls:
@@ -39,35 +39,35 @@
      request
        .get('http://example.com/search')
        .end(function(res){
-     
+
        });
 
   __DELETE__, __HEAD__, __POST__, __PUT__ and other __HTTP__ verbs may also be used, simply change the method name:
-  
+
     request
       .head('/favicon.ico')
       .end(function(res){
-      
+
       });
 
   __DELETE__ is a special-case, as it's a reserved word, so the method is named `.del()`:
-  
+
     request
       .del('/user/1')
       .end(function(res){
-        
+
       });
 
   The HTTP method defaults to __GET__, so if you wish, the following is valid:
-  
+
      request('/search', function(res){
-       
+
      });
 
 ## Setting header fields
 
   Setting header fields is simple, invoke `.set()` with a field name and value:
-  
+
      request
        .get('/search')
        .set('API-Key', 'foobar')
@@ -75,7 +75,7 @@
        .end(callback);
 
   You may also pass an object to set several fields in a single call:
-  
+
      request
        .get('/search')
        .set({ 'API-Key': 'foobar', Accept: 'application/json' })
@@ -84,7 +84,7 @@
 ## GET requests
 
  The `.query()` method accepts objects, which when used with the __GET__ method will form a query-string. The following will produce the path `/search?query=Manny&range=1..5&order=desc`.
- 
+
      request
        .get('/search')
        .query({ query: 'Manny' })
@@ -95,7 +95,7 @@
        });
 
   Or as a single object:
-  
+
     request
       .get('/search')
       .query({ query: 'Manny', range: '1..5', order: 'desc' })
@@ -104,7 +104,7 @@
       });
 
   The `.query()` method accepts strings as well:
-  
+
       request
         .get('/querystring')
         .query('search=Manny&range=1..5')
@@ -119,7 +119,7 @@
         .query('search=Manny')
         .query('range=1..5')
         .end(function(res){
-        
+
         });
 
 
@@ -139,7 +139,7 @@
         .end(callback)
 
   Or using multiple `.send()` calls:
-  
+
       request.post('/user')
         .send({ name: 'tj' })
         .send({ pet: 'tobi' })
@@ -166,14 +166,14 @@
 ## Setting the Content-Type
 
   The obvious solution is to use the `.set()` method:
-  
+
      request.post('/user')
        .set('Content-Type', 'application/json')
 
   As a short-hand the `.type()` method is also available, accepting
   the canonicalized MIME type name complete with type/subtype, or
   simply the extension name such as "xml", "json", "png", etc:
-  
+
      request.post('/user')
        .type('application/json')
 
@@ -186,7 +186,7 @@
 ## Query strings
 
   When issuing a __GET__ request the `res.send(obj)` method will invoke `res.query(obj)`, this is a method which may be used with other HTTP methods in order to build up a query-string. For example populating `?format=json&dest=/login` on a __POST__:
-  
+
     request
       .post('/')
       .query({ format: 'json' })
@@ -205,11 +205,11 @@
 ### Multipart
 
   The Node client supports _multipart/form-data_ via the [Formidable](https://github.com/felixge/node-formidable) module. When parsing multipart responses, the object `res.files` is also available to you. Suppose for example a request responds with the following multipart body:
-  
+
     --whoop
     Content-Disposition: attachment; name="image"; filename="tobi.png"
     Content-Type: image/png
-    
+
     ... data here ...
     --whoop
     Content-Disposition: form-data; name="name"
@@ -223,7 +223,7 @@
 ## Response properties
 
   Many helpful flags and properties are set on the `Response` object, ranging from the response text, parsed response body, header fields, status flags and more.
-  
+
 ### Response text
 
   The `res.text` property contains the unparsed response body string. This
@@ -248,7 +248,7 @@
 ### Response status
 
   The response status flags help determine if the request was a success, among other useful information, making SuperAgent ideal for interacting with RESTful web services. These flags are currently defined as:
-  
+
      var type = status / 100 | 0;
 
      // status / class
@@ -285,7 +285,7 @@
 ## Basic authentication
 
   Basic auth is currently provided by the _node_ client in two forms, first via the URL as "user:pass":
-    
+
     request.get('http://tobi:learnboost@local').end(callback);
 
   As well as via the `.auth()` method:
@@ -298,7 +298,7 @@
 ## Following redirects
 
   By default up to 5 redirects will be followed, however you may specify this with the `res.redirects(n)` method:
-  
+
     request
       .get('/some.png')
       .redirects(2)
@@ -307,7 +307,7 @@
 ## Piping data
 
   The Node client allows you to pipe data to and from the request. For example piping a file's contents as the request:
-  
+
     var request = require('superagent')
       , fs = require('fs');
 
@@ -317,7 +317,7 @@
     stream.pipe(req);
 
   Or piping the response to a file:
-  
+
     var request = require('superagent')
       , fs = require('fs');
 
@@ -349,7 +349,7 @@
 ### Attaching files
 
   As mentioned a higher-level API is also provided, in the form of `.attach(name, [path], [filename])` and `.field(name, value)`. Attaching several files is simple, you can also provide a custom filename for the attachment, otherwise the basename of the attached file is used.
-  
+
     request
       .post('/upload')
       .attach('avatar', 'path/to/tobi.png', 'user.png')
@@ -390,7 +390,7 @@
      .post('/upload')
      .attach('image', 'path/to/tobi.png')
      .end(function(err, res){
-       
+
      });
 
   When a callback is omitted, or only a `res` parameter is present,
@@ -401,9 +401,19 @@
       .attach('image', 'path/to/tobi.png')
       .on('error', handle)
       .end(function(res){
-        
+
       });
 
   Note that a 4xx or 5xx response with super agent is _not_ considered an error
   by default. For example if you get a 500 or 403 response, this status information
   will be available via `res.error`, `res.status` and the others mentioned in "Response properties", however no `Error` object is passed for these responses. An error includes network failures, parsing errors, etcetera.
+
+  When an HTTP error occurs (4xx or 5xx response) the `res.error` property is an `Error` object,
+  this allows you to perform checks such as:
+
+    if (res.error) {
+      alert('oh no ' + res.error.message);
+    } else {
+      alert('got ' + res.status + ' response');
+    }
+
