@@ -1,4 +1,12 @@
 
+0.11.0 / 2013-01-02 
+==================
+
+  * add .error Error object. Closes #156
+  * add forcing of res.text removal for FF HEAD responses. Closes #162
+  * add reduce component usage. Closes #90
+  * move better-assert dep to development deps
+
 0.10.0 / 2012-11-14 
 ==================
 

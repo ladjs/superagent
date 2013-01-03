@@ -1,4 +1,12 @@
 ;(function(){
+
+
+/**
+ * hasOwnProperty.
+ */
+
+var has = Object.prototype.hasOwnProperty;
+
 /**
  * Require the given path.
  *
@@ -7,27 +15,32 @@
  * @api public
  */
 
-function require(p, parent, orig){
-  var path = require.resolve(p)
-    , mod = require.modules[path];
+function require(path, parent, orig) {
+  var resolved = require.resolve(path);
 
   // lookup failed
-  if (null == path) {
-    orig = orig || p;
+  if (null == resolved) {
+    orig = orig || path;
     parent = parent || 'root';
-    throw new Error('failed to require "' + orig + '" from "' + parent + '"');
+    var err = new Error('Failed to require "' + orig + '" from "' + parent + '"');
+    err.path = orig;
+    err.parent = parent;
+    err.require = true;
+    throw err;
   }
+
+  var module = require.modules[resolved];
 
   // perform real require()
   // by invoking the module's
   // registered function
-  if (!mod.exports) {
-    mod.exports = {};
-    mod.client = mod.component = true;
-    mod.call(this, mod, mod.exports, require.relative(path));
+  if (!module.exports) {
+    module.exports = {};
+    module.client = module.component = true;
+    module.call(this, module.exports, require.relative(resolved), module);
   }
 
-  return mod.exports;
+  return module.exports;
 }
 
 /**
@@ -56,19 +69,26 @@ require.aliases = {};
  * @api private
  */
 
-require.resolve = function(path){
-  var orig = path
-    , reg = path + '.js'
-    , regJSON = path + '.json'
-    , index = path + '/index.js'
-    , indexJSON = path + '/index.json';
+require.resolve = function(path) {
+  if (path.charAt(0) === '/') path = path.slice(1);
+  var index = path + '/index.js';
 
-  return require.modules[reg] && reg
-    || require.modules[regJSON] && regJSON
-    || require.modules[index] && index
-    || require.modules[indexJSON] && indexJSON
-    || require.modules[orig] && orig
-    || require.aliases[index];
+  var paths = [
+    path,
+    path + '.js',
+    path + '.json',
+    path + '/index.js',
+    path + '/index.json'
+  ];
+
+  for (var i = 0; i < paths.length; i++) {
+    var path = paths[i];
+    if (has.call(require.modules, path)) return path;
+  }
+
+  if (has.call(require.aliases, index)) {
+    return require.aliases[index];
+  }
 };
 
 /**
@@ -100,15 +120,15 @@ require.normalize = function(curr, path) {
 };
 
 /**
- * Register module at `path` with callback `fn`.
+ * Register module at `path` with callback `definition`.
  *
  * @param {String} path
- * @param {Function} fn
+ * @param {Function} definition
  * @api private
  */
 
-require.register = function(path, fn){
-  require.modules[path] = fn;
+require.register = function(path, definition) {
+  require.modules[path] = definition;
 };
 
 /**
@@ -119,9 +139,10 @@ require.register = function(path, fn){
  * @api private
  */
 
-require.alias = function(from, to){
-  var fn = require.modules[from];
-  if (!fn) throw new Error('failed to alias "' + from + '", it does not exist');
+require.alias = function(from, to) {
+  if (!has.call(require.modules, from)) {
+    throw new Error('Failed to alias "' + from + '", it does not exist');
+  }
   require.aliases[to] = from;
 };
 
@@ -140,7 +161,7 @@ require.relative = function(parent) {
    * lastIndexOf helper.
    */
 
-  function lastIndexOf(arr, obj){
+  function lastIndexOf(arr, obj) {
     var i = arr.length;
     while (i--) {
       if (arr[i] === obj) return i;
@@ -152,40 +173,41 @@ require.relative = function(parent) {
    * The relative require() itself.
    */
 
-  function fn(path){
-    var orig = path;
-    path = fn.resolve(path);
-    return require(path, parent, orig);
+  function localRequire(path) {
+    var resolved = localRequire.resolve(path);
+    return require(resolved, parent, path);
   }
 
   /**
    * Resolve relative to the parent.
    */
 
-  fn.resolve = function(path){
+  localRequire.resolve = function(path) {
+    var c = path.charAt(0);
+    if ('/' == c) return path.slice(1);
+    if ('.' == c) return require.normalize(p, path);
+
     // resolve deps by returning
     // the dep in the nearest "deps"
     // directory
-    if ('.' != path.charAt(0)) {
-      var segs = parent.split('/');
-      var i = lastIndexOf(segs, 'deps') + 1;
-      if (!i) i = 0;
-      path = segs.slice(0, i + 1).join('/') + '/deps/' + path;
-      return path;
-    }
-    return require.normalize(p, path);
+    var segs = parent.split('/');
+    var i = lastIndexOf(segs, 'deps') + 1;
+    if (!i) i = 0;
+    path = segs.slice(0, i + 1).join('/') + '/deps/' + path;
+    return path;
   };
 
   /**
    * Check if module is defined at `path`.
    */
 
-  fn.exists = function(path){
-    return !! require.modules[fn.resolve(path)];
+  localRequire.exists = function(path) {
+    return has.call(require.modules, localRequire.resolve(path));
   };
 
-  return fn;
-};require.register("component-emitter/index.js", function(module, exports, require){
+  return localRequire;
+};
+require.register("component-emitter/index.js", function(exports, require, module){
 
 /**
  * Expose `Emitter`.
@@ -335,13 +357,40 @@ Emitter.prototype.hasListeners = function(event){
 
 
 });
-require.register("superagent/lib/client.js", function(module, exports, require){
+require.register("RedVentures-reduce/index.js", function(exports, require, module){
+
+/**
+ * Reduce `arr` with `fn`.
+ *
+ * @param {Array} arr
+ * @param {Function} fn
+ * @param {Mixed} initial
+ *
+ * TODO: combatible error handling?
+ */
+
+module.exports = function(arr, fn, initial){  
+  var idx = 0;
+  var len = arr.length;
+  var curr = arguments.length == 3
+    ? initial
+    : arr[idx++];
+
+  while (idx < len) {
+    curr = fn.call(null, curr, arr[idx], ++idx, arr);
+  }
+  
+  return curr;
+};
+});
+require.register("superagent/lib/client.js", function(exports, require, module){
 
 /**
  * Module dependencies.
  */
 
-var Emitter = require('emitter');
+var Emitter = require('emitter')
+  , reduce = require('reduce');
 
 /**
  * Root reference for iframes.
@@ -545,7 +594,7 @@ function type(str){
  */
 
 function params(str){
-  return str.split(/ *; */).reduce(function(obj, str){
+  return reduce(str.split(/ *; */), function(obj, str){
     var parts = str.split(/ *= */)
       , key = parts.shift()
       , val = parts.shift();
@@ -684,7 +733,9 @@ Response.prototype.setStatusProperties = function(status){
   this.ok = 2 == type;
   this.clientError = 4 == type;
   this.serverError = 5 == type;
-  this.error = 4 == type || 5 == type;
+  this.error = (4 == type || 5 == type)
+    ? this.toError()
+    : false;
 
   // sugar
   this.accepted = 202 == status;
@@ -733,7 +784,9 @@ function Request(method, url) {
   this.header = {};
   this.set('X-Requested-With', 'XMLHttpRequest');
   this.on('end', function(){
-    self.callback(null, new Response(self.xhr));
+    var res = new Response(self.xhr);
+    if ('HEAD' == method) res.text = null;
+    self.callback(null, res);
   });
 }
 
@@ -1166,13 +1219,18 @@ request.put = function(url, data, fn){
  */
 
 module.exports = request;
+
 });
 require.alias("component-emitter/index.js", "superagent/deps/emitter/index.js");
 
+require.alias("RedVentures-reduce/index.js", "superagent/deps/reduce/index.js");
+
 require.alias("superagent/lib/client.js", "superagent/index.js");
-  if ("undefined" == typeof module) {
-    window.superagent = require("superagent");
-  } else {
-    module.exports = require("superagent");
-  }
-})();
+
+if (typeof exports == "object") {
+  module.exports = require("superagent");
+} else if (typeof define == "function" && define.amd) {
+  define(require("superagent"));
+} else {
+  window["superagent"] = require("superagent");
+}})();
