@@ -293,7 +293,7 @@ test('POST multiple .send() strings', function(next){
   .send('user[name]=tj')
   .send('user[email]=tj@vision-media.ca')
   .end(function(res){
-    assert(res.header['content-type'] == 'application/x-www-form-urlencoded');
+    assert('application/x-www-form-urlencoded' == res.header['content-type'].split(';')[0]);
     assert(res.text == 'user[name]=tj&user[email]=tj@vision-media.ca')
     next();
   })
