@@ -66,7 +66,7 @@ request.post('/api/pet', cat, function(res){
 
   Install dependencies:
 
-     $ npm install -d
+     $ npm install
 
   Run em!
 
@@ -76,7 +76,7 @@ request.post('/api/pet', cat, function(res){
 
  Install the test server deps (nodejs / express):
 
-    $ npm install -d
+    $ npm install
 
  Start the test server:
 
@@ -84,21 +84,12 @@ request.post('/api/pet', cat, function(res){
 
  Visit `localhost:3000/` in the browser.
 
-## Persisting an agent (with cookies, ie sessions)
+## Browser build
 
-```js
-var request = require('superagent');
-var user1 = request.agent();
-user1
-  .post('http://localhost:4000/signin')
-  .send({ user: 'hunter@hunterloftis.com', password: 'password' })
-  .end(function(err, res) {
-    // user1 will manage its own cookies
-    // res.redirects contains an Array of redirects
-  });
-```
+  The browser build of superagent is located in the `./build` directory.
 
-Examples:
+## Examples:
+
 - [agency tests](superagent/blob/master/test/node/agency.js)
 - [express demo app](https://github.com/hunterloftis/component-test/blob/master/lib/users/test/controller.test.js)
 
@@ -108,25 +99,4 @@ Examples:
 
 ## License
 
-(The MIT License)
-
-Copyright (c) 2011 TJ Holowaychuk &lt;tj@vision-media.ca&gt;
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-'Software'), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  MIT
