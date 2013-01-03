@@ -260,7 +260,7 @@ test('POST json array', function(next){
   .post('/echo')
   .send([1,2,3])
   .end(function(res){
-    assert('application/json' == res.header['content-type']);
+    assert('application/json' == res.header['content-type'].split(';')[0]);
     assert('[1,2,3]' == res.text);
     next();
   });
