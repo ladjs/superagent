@@ -35,6 +35,18 @@ app.get('/relative', function(req, res){
   res.send(302);
 });
 
+app.get('/header', function(req, res){
+  res.redirect('/header/2');
+});
+
+app.post('/header', function(req, res){
+  res.redirect('/header/2');
+});
+
+app.get('/header/2', function(req, res){
+  res.send(req.headers);
+});
+
 app.listen(3003);
 
 describe('request', function(){
@@ -54,6 +66,33 @@ describe('request', function(){
         arr.push('/movies/all/0');
         redirects.should.eql(arr);
         res.text.should.equal('first movie page');
+        done();
+      });
+    })
+
+    it('should retain header fields', function(done){
+      request
+      .get('http://localhost:3003/header')
+      .set('X-Foo', 'bar')
+      .end(function(res){
+        res.body.should.have.property('x-foo', 'bar');
+        done();
+      });
+    })
+
+    it('should remove Content-* fields', function(done){
+      request
+      .post('http://localhost:3003/header')
+      .type('txt')
+      .set('X-Foo', 'bar')
+      .set('X-Bar', 'baz')
+      .send('hey')
+      .end(function(res){
+        res.body.should.have.property('x-foo', 'bar');
+        res.body.should.have.property('x-bar', 'baz');
+        res.body.should.not.have.property('content-type');
+        res.body.should.not.have.property('content-length');
+        res.body.should.not.have.property('transfer-encoding');
         done();
       });
     })
