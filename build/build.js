@@ -70,7 +70,6 @@ require.aliases = {};
  */
 
 require.resolve = function(path) {
-  if (path.charAt(0) === '/') path = path.slice(1);
   var index = path + '/index.js';
 
   var paths = [
@@ -183,18 +182,17 @@ require.relative = function(parent) {
    */
 
   localRequire.resolve = function(path) {
-    var c = path.charAt(0);
-    if ('/' == c) return path.slice(1);
-    if ('.' == c) return require.normalize(p, path);
-
     // resolve deps by returning
     // the dep in the nearest "deps"
     // directory
-    var segs = parent.split('/');
-    var i = lastIndexOf(segs, 'deps') + 1;
-    if (!i) i = 0;
-    path = segs.slice(0, i + 1).join('/') + '/deps/' + path;
-    return path;
+    if ('.' != path.charAt(0)) {
+      var segs = parent.split('/');
+      var i = lastIndexOf(segs, 'deps') + 1;
+      if (!i) i = 0;
+      path = segs.slice(0, i + 1).join('/') + '/deps/' + path;
+      return path;
+    }
+    return require.normalize(p, path);
   };
 
   /**
@@ -832,10 +830,10 @@ Request.prototype.clearTimeout = function(){
 
 Request.prototype.abort = function(){
   if (this.aborted) return;
-  this.xhr.abort();
-  this.emit('abort');
   this.aborted = true;
+  this.xhr.abort();
   this.clearTimeout();
+  this.emit('abort');
   return this;
 };
 
@@ -1013,6 +1011,31 @@ Request.prototype.callback = function(err, res){
 };
 
 /**
+ * Invoke callback with x-domain error.
+ *
+ * @api private
+ */
+
+Request.prototype.crossDomainError = function(){
+  var err = new Error('Origin is not allowed by Access-Control-Allow-Origin');
+  err.crossDomain = true;
+  this.callback(err);
+};
+
+/**
+ * Invoke callback with timeout error.
+ *
+ * @api private
+ */
+
+Request.prototype.timeoutError = function(){
+  var timeout = this._timeout;
+  var err = new Error('timeout of ' + timeout + 'ms exceeded');
+  err.timeout = timeout;
+  this.callback(err);
+};
+
+/**
  * Initiate request, invoking callback `fn(res)`
  * with an instanceof `Response`.
  *
@@ -1033,15 +1056,17 @@ Request.prototype.end = function(fn){
 
   // state change
   xhr.onreadystatechange = function(){
-    if (4 == xhr.readyState && 0 != xhr.status) self.emit('end');
+    if (4 != xhr.readyState) return;
+    if (0 == xhr.status) {
+      if (self.aborted) return self.timeoutError();
+      return self.crossDomainError();
+    }
+    self.emit('end');
   };
 
   // timeout
   if (timeout && !this._timer) {
     this._timer = setTimeout(function(){
-      var err = new Error('timeout of ' + timeout + 'ms exceeded');
-      err.timeout = timeout;
-      self.callback(err);
       self.abort();
     }, timeout);
   }

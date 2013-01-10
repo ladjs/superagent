@@ -470,3 +470,13 @@ test('req.timeout(ms)', function(next){
     next();
   })
 })
+
+test('x-domain failure', function(next){
+  request
+  .get('http://google.com')
+  .end(function(err, res){
+    assert(err, 'error missing');
+    assert(err.crossDomain, 'not .crossDomain');
+    next();
+  });
+});
