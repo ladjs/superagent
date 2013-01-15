@@ -471,6 +471,16 @@ test('req.timeout(ms)', function(next){
   })
 })
 
+test('req.withCredentials()', function(next){
+  request
+  .get('http://localhost:4001/')
+  .end(function(res){
+    assert(200 == res.status);
+    assert('tobi' == res.text);
+    next();
+  })
+})
+
 test('x-domain failure', function(next){
   request
   .get('http://google.com')
