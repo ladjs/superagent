@@ -380,6 +380,21 @@
   When buffered the `res.buffered` flag is provided, you may use this to
   handle both buffered and unbuffered responses in the same callback.
 
+## CORS
+
+  The `.withCredentials()` method enables the ability to send cookies
+  from the origin, however only when "Access-Control-Allow-Origin" is
+  _not_ a wildcard ("*"), and "Access-Control-Allow-Credentials" is "true".
+
+    request
+      .get('http://localhost:4001/')
+      .withCredentials()
+      .end(function(res){
+        assert(200 == res.status);
+        assert('tobi' == res.text);
+        next();
+      })
+
 ## Error handling
 
   When an error occurs super agent will first check the arity of the callback
