@@ -1047,7 +1047,7 @@ Request.prototype.timeoutError = function(){
  */
 
 Request.prototype.withCredentials = function(){
-  this.xhr.withCredentials = true;
+  this._withCredentials = true;
   return this;
 };
 
@@ -1069,6 +1069,9 @@ Request.prototype.end = function(fn){
 
   // store callback
   this._callback = fn || noop;
+
+  // CORS
+  if (this._withCredentials) xhr.withCredentials = true;
 
   // state change
   xhr.onreadystatechange = function(){
