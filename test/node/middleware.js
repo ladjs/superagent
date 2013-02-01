@@ -16,7 +16,7 @@ describe('req.use(Function)', function(){
     request
       .get('http://localhost:3045/')
       .use(function(req, next) {
-        req.setHeader("x-test","This is a test");
+        req.set("x-test","This is a test");
         next();
       })
       .end(function(err, res){
@@ -42,7 +42,7 @@ describe('req.use(Function)', function(){
     request
       .get('http://localhost:3045/')
       .use(function(req, next) {
-        req.setHeader("x-test","This is a test");
+        req.set("x-test","This is a test");
         next(null, function(res, prev) {
           res.on('data', function(data) {
             res.headers['x-test-inject'] = "This is a header";
@@ -53,8 +53,31 @@ describe('req.use(Function)', function(){
       .end(function(err, res){
         should.exist(res);
         should.exist(res.headers['x-test-inject']);
+        res.headers['x-test-inject'].should.eql("This is a header");
         done();
       });
   });
+
+  it("should call the response middleware in reverse", function(done) {
+    request
+      .get('http://localhost:3045/')
+      .use(function(req, next) {
+        next(null, function(res, prev) {
+          res.order = 1;
+          prev();
+        });
+      })
+      .use(function(req, next) {
+        next(null, function(res, prev) {
+          res.order = 2;
+          prev();
+        });
+      })
+      .end(function(err, res){
+        should.exist(res);
+        res.order.should.eql(1);
+        done();
+      });
+  })
 
 });
