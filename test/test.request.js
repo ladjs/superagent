@@ -458,6 +458,59 @@ test('request(url, fn)', function(next){
   });
 });
 
+test('use(fn) - modify request', function(done) {
+  request
+    .post('/user/0/pet')
+    .use(function(req, next) {
+      req.send({pet: "loki"});
+      next();
+    })
+    .type('json')
+    .send({ pet: 'tobi' })
+    .end(function(err, res) {
+      if(err) return done(err);
+      assert('added pet "loki"' == res.text);
+      done();
+    });
+});
+
+test('use(fn) - modify response', function(done) {
+  request('/foo')
+    .use(function(req, next) {
+      next(null, function(res, prev) {
+        res.headers['content-type'] = 'application/json';
+        res.text = '{"baz":"bar"}';
+        prev();
+      });
+    })
+    .end(function(err, res) {
+      if(err) return done(err);
+      assert('bar' == res.body.baz);
+      done();
+    });
+});
+
+test('use(fn) - call res in reverse order', function(done) {
+  request('/foo')
+    .use(function(req, next) {
+      next(null, function(req, prev) {
+        req.test = 1;
+        prev();
+      });
+    })
+    .use(function(req, next) {
+      next(null, function(req, prev) {
+        req.test = 2;
+        prev();
+      });
+    })
+    .end(function(err, res) {
+      if(err) return done(err);
+      assert(1 == res.test);
+      done()
+    });
+});
+
 test('req.timeout(ms)', function(next){
   request
   .get('/delay/3000')

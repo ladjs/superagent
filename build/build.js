@@ -215,7 +215,7 @@ module.exports = Emitter;
 
 /**
  * Initialize a new `Emitter`.
- * 
+ *
  * @api public
  */
 
@@ -288,7 +288,9 @@ Emitter.prototype.once = function(event, fn){
  * @api public
  */
 
-Emitter.prototype.off = function(event, fn){
+Emitter.prototype.off =
+Emitter.prototype.removeListener =
+Emitter.prototype.removeAllListeners = function(event, fn){
   this._callbacks = this._callbacks || {};
   var callbacks = this._callbacks[event];
   if (!callbacks) return this;
@@ -310,7 +312,7 @@ Emitter.prototype.off = function(event, fn){
  *
  * @param {String} event
  * @param {Mixed} ...
- * @return {Emitter} 
+ * @return {Emitter}
  */
 
 Emitter.prototype.emit = function(event){
@@ -352,7 +354,6 @@ Emitter.prototype.listeners = function(event){
 Emitter.prototype.hasListeners = function(event){
   return !! this.listeners(event).length;
 };
-
 
 });
 require.register("RedVentures-reduce/index.js", function(exports, require, module){
@@ -653,9 +654,8 @@ function Response(xhr, options) {
   this.xhr = xhr;
   this.text = xhr.responseText;
   this.setStatusProperties(xhr.status);
-  this.header = parseHeader(xhr.getAllResponseHeaders());
+  this.header = this.headers = parseHeader(xhr.getAllResponseHeaders());
   this.setHeaderProperties(this.header);
-  this.body = this.parseBody(this.text);
 }
 
 /**
@@ -780,9 +780,10 @@ function Request(method, url) {
   this.method = method;
   this.url = url;
   this.header = {};
+  this.stacks = {req: [], res: []};
   this.set('X-Requested-With', 'XMLHttpRequest');
   this.on('end', function(){
-    var res = new Response(self.xhr);
+    var res = self.res;
     if ('HEAD' == method) res.text = null;
     self.callback(null, res);
   });
@@ -995,6 +996,18 @@ Request.prototype.send = function(data){
 };
 
 /**
+ * Use middleware for manipulating req/res.
+ *
+ * @param {Function} fn
+ * @return {Boolean}
+ * @api public
+ */
+Request.prototype.use = function(fn) {
+  this.stacks.req.push({handle: fn});
+  return this;
+};
+
+/**
  * Invoke the callback with `err` and `res`
  * and handle arity check.
  *
@@ -1052,6 +1065,68 @@ Request.prototype.withCredentials = function(){
 };
 
 /**
+ * Handle requests, punting them down
+ * the middleware stack.
+ *
+ * @param {Request} req
+ * @param {Function} out
+ * @param {Boolean} resp
+ * @api private
+ */
+
+Request.prototype.handle = function(req, out, resp) {
+  var stack
+    , self = this
+    , index = 0
+    , resp = !!resp;
+
+  if(resp) {
+    stack = self.stacks.res;
+    index = stack.length-1;
+  }
+  else {
+    self.stacks.res = [];
+    stack = self.stacks.req;
+  }
+
+  function next(err, prev) {
+
+    // Add the res callback to the stack
+    if(prev && !resp) self.stacks.res.push({handle: prev});
+
+    var layer, status, c;
+
+    // next callback
+    layer = resp ? stack[index--] : stack[index++];
+
+    // all done
+    if (!layer) {
+      // delegate to parent
+      if (out) return out(err);
+      return;
+    }
+
+    try {
+      var arity = layer.handle.length;
+      if (err) {
+        if (arity === 3) {
+          layer.handle(err, req, next);
+        } else {
+          next(err);
+        }
+      } else if (arity < 3) {
+        layer.handle(req, next);
+      } else {
+        next();
+      }
+    } catch (e) {
+      next(e);
+    }
+  }
+  next();
+};
+
+/**
  * Initiate request, invoking callback `fn(res)`
  * with an instanceof `Response`.
  *
@@ -1063,9 +1138,6 @@ Request.prototype.withCredentials = function(){
 Request.prototype.end = function(fn){
   var self = this;
   var xhr = this.xhr = getXHR();
-  var query = this._query.join('&');
-  var timeout = this._timeout;
-  var data = this._data;
 
   // store callback
   this._callback = fn || noop;
@@ -1073,48 +1145,68 @@ Request.prototype.end = function(fn){
   // CORS
   if (this._withCredentials) xhr.withCredentials = true;
 
-  // state change
-  xhr.onreadystatechange = function(){
-    if (4 != xhr.readyState) return;
-    if (0 == xhr.status) {
-      if (self.aborted) return self.timeoutError();
-      return self.crossDomainError();
+  this.handle(self, function(err) {
+    if(err) return fn(err);
+
+    var query = self._query.join('&');
+    var timeout = self._timeout;
+    var data = self._data;
+
+    // state change
+    xhr.onreadystatechange = function(){
+      if (4 != xhr.readyState) return;
+      if (0 == xhr.status) {
+        if (self.aborted) return self.timeoutError();
+        return self.crossDomainError();
+      }
+      var res = self.res = new Response(xhr);
+      self.handle(res, function(err) {
+        if(err) {
+          self.emit('error', err);
+          self.emit('end');
+          return fn(err);
+        }
+        // Re-apply the headers
+        res.setHeaderProperties(res.header);
+        res.body = res.parseBody(res.text);
+        self.emit('end');
+      }, true);
+    };
+
+    // timeout
+    if (timeout && !self._timer) {
+      self._timer = setTimeout(function(){
+        self.abort();
+      }, timeout);
     }
-    self.emit('end');
-  };
 
-  // timeout
-  if (timeout && !this._timer) {
-    this._timer = setTimeout(function(){
-      self.abort();
-    }, timeout);
-  }
+    // querystring
+    if (query) {
+      query = request.serializeObject(query);
+      self.url += ~self.url.indexOf('?')
+        ? '&' + query
+        : '?' + query;
+    }
 
-  // querystring
-  if (query) {
-    query = request.serializeObject(query);
-    this.url += ~this.url.indexOf('?')
-      ? '&' + query
-      : '?' + query;
-  }
+    // initiate request
+    xhr.open(self.method, self.url, true);
 
-  // initiate request
-  xhr.open(this.method, this.url, true);
+    // body
+    if ('GET' != self.method && 'HEAD' != self.method && 'string' != typeof data) {
+      // serialize stuff
+      var serialize = request.serialize[self.header['content-type']];
+      if (serialize) data = serialize(data);
+    }
 
-  // body
-  if ('GET' != this.method && 'HEAD' != this.method && 'string' != typeof data) {
-    // serialize stuff
-    var serialize = request.serialize[this.header['content-type']];
-    if (serialize) data = serialize(data);
-  }
+    // set header fields
+    for (var field in self.header) {
+      xhr.setRequestHeader(field, self.header[field]);
+    }
 
-  // set header fields
-  for (var field in this.header) {
-    xhr.setRequestHeader(field, this.header[field]);
-  }
+    // send stuff
+    xhr.send(data);
 
-  // send stuff
-  xhr.send(data);
+  });
   return this;
 };
 
