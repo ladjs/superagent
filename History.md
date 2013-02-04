@@ -1,4 +1,14 @@
 
+0.12.2 / 2013-02-04 
+==================
+
+  * add test to check if response acts as a readable stream
+  * add ReadableStream in the Response prototype.
+  * add test to assert correct redirection when the host changes in the location header.
+  * add default Accept-Encoding. Closes #155
+  * fix req.pipe() return value of original stream for node parity. Closes #171
+  * remove the host header when cleaning headers to properly follow the redirection.
+
 0.12.1 / 2013-01-10 
 ==================
 
