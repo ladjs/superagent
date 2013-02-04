@@ -17,21 +17,23 @@ describe('response', function(){
         .buffer(false);
 
       req.end(function(err,res){
-        if(err) return done(err);
+        if (err) return done(err);
         var trackEndEvent = 0;
         var trackCloseEvent = 0;
         res.on('end',function(){
           trackEndEvent++;
         });
+
         res.on('close',function(){
           trackCloseEvent++;
           trackEndEvent.should.equal(1);
           trackCloseEvent.should.equal(1);
           done();
         });
-        (function(){res.pause();}).should.not.throw();
-        (function(){res.resume();}).should.not.throw();
-        (function(){res.destroy();}).should.not.throw();
+
+        (function(){ res.pause() }).should.not.throw();
+        (function(){ res.resume() }).should.not.throw();
+        (function(){ res.destroy() }).should.not.throw();
       });
     });
 });
