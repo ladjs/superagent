@@ -215,7 +215,7 @@ module.exports = Emitter;
 
 /**
  * Initialize a new `Emitter`.
- * 
+ *
  * @api public
  */
 
@@ -310,7 +310,7 @@ Emitter.prototype.off = function(event, fn){
  *
  * @param {String} event
  * @param {Mixed} ...
- * @return {Emitter} 
+ * @return {Emitter}
  */
 
 Emitter.prototype.emit = function(event){
@@ -367,7 +367,7 @@ require.register("RedVentures-reduce/index.js", function(exports, require, modul
  * TODO: combatible error handling?
  */
 
-module.exports = function(arr, fn, initial){  
+module.exports = function(arr, fn, initial){
   var idx = 0;
   var len = arr.length;
   var curr = arguments.length == 3
@@ -377,7 +377,7 @@ module.exports = function(arr, fn, initial){
   while (idx < len) {
     curr = fn.call(null, curr, arr[idx], ++idx, arr);
   }
-  
+
   return curr;
 };
 });
@@ -1274,7 +1274,7 @@ require.alias("superagent/lib/client.js", "superagent/index.js");
 if (typeof exports == "object") {
   module.exports = require("superagent");
 } else if (typeof define == "function" && define.amd) {
-  define(require("superagent"));
+  define(function () { return require("superagent"); });
 } else {
   window["superagent"] = require("superagent");
 }})();
