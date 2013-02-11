@@ -1,4 +1,9 @@
 
+0.12.4 / 2013-02-11 
+==================
+
+  * fix get content-type even if can't get other headers in firefox. fixes #181
+
 0.12.3 / 2013-02-11 
 ==================
 
