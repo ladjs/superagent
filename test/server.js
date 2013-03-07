@@ -103,6 +103,20 @@ app.get('/foo', function(req, res){
     .send('foo=bar');
 });
 
+app.get('/accept', function(req, res){
+  res.format({
+    text: function(){
+      res.send('text')
+    },
+    html: function(){
+      res.send('html')
+    },
+    json: function(){
+      res.send({message: 'json'})
+    }
+  })
+})
+
 app.use(express.static(__dirname + '/../'));
 
 app.listen(4000);
