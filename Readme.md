@@ -90,7 +90,7 @@ request.post('/api/pet', cat, function(res){
 
 ## Examples:
 
-- [agency tests](superagent/blob/master/test/node/agency.js)
+- [agency tests](https://github.com/visionmedia/superagent/blob/master/test/node/agency.js)
 - [express demo app](https://github.com/hunterloftis/component-test/blob/master/lib/users/test/controller.test.js)
 
 ## Wiki
