@@ -70,6 +70,7 @@ require.aliases = {};
  */
 
 require.resolve = function(path) {
+  if (path.charAt(0) === '/') path = path.slice(1);
   var index = path + '/index.js';
 
   var paths = [
@@ -182,17 +183,18 @@ require.relative = function(parent) {
    */
 
   localRequire.resolve = function(path) {
+    var c = path.charAt(0);
+    if ('/' == c) return path.slice(1);
+    if ('.' == c) return require.normalize(p, path);
+
     // resolve deps by returning
     // the dep in the nearest "deps"
     // directory
-    if ('.' != path.charAt(0)) {
-      var segs = parent.split('/');
-      var i = lastIndexOf(segs, 'deps') + 1;
-      if (!i) i = 0;
-      path = segs.slice(0, i + 1).join('/') + '/deps/' + path;
-      return path;
-    }
-    return require.normalize(p, path);
+    var segs = parent.split('/');
+    var i = lastIndexOf(segs, 'deps') + 1;
+    if (!i) i = 0;
+    path = segs.slice(0, i + 1).join('/') + '/deps/' + path;
+    return path;
   };
 
   /**
@@ -205,7 +207,25 @@ require.relative = function(parent) {
 
   return localRequire;
 };
+require.register("component-indexof/index.js", function(exports, require, module){
+
+var indexOf = [].indexOf;
+
+module.exports = function(arr, obj){
+  if (indexOf) return arr.indexOf(obj);
+  for (var i = 0; i < arr.length; ++i) {
+    if (arr[i] === obj) return i;
+  }
+  return -1;
+};
+});
 require.register("component-emitter/index.js", function(exports, require, module){
+
+/**
+ * Module dependencies.
+ */
+
+var index = require('indexof');
 
 /**
  * Expose `Emitter`.
@@ -215,7 +235,7 @@ module.exports = Emitter;
 
 /**
  * Initialize a new `Emitter`.
- * 
+ *
  * @api public
  */
 
@@ -288,8 +308,18 @@ Emitter.prototype.once = function(event, fn){
  * @api public
  */
 
-Emitter.prototype.off = function(event, fn){
+Emitter.prototype.off =
+Emitter.prototype.removeListener =
+Emitter.prototype.removeAllListeners = function(event, fn){
   this._callbacks = this._callbacks || {};
+
+  // all
+  if (0 == arguments.length) {
+    this._callbacks = {};
+    return this;
+  }
+
+  // specific event
   var callbacks = this._callbacks[event];
   if (!callbacks) return this;
 
@@ -300,7 +330,7 @@ Emitter.prototype.off = function(event, fn){
   }
 
   // remove specific handler
-  var i = callbacks.indexOf(fn._off || fn);
+  var i = index(callbacks, fn._off || fn);
   if (~i) callbacks.splice(i, 1);
   return this;
 };
@@ -310,7 +340,7 @@ Emitter.prototype.off = function(event, fn){
  *
  * @param {String} event
  * @param {Mixed} ...
- * @return {Emitter} 
+ * @return {Emitter}
  */
 
 Emitter.prototype.emit = function(event){
@@ -352,7 +382,6 @@ Emitter.prototype.listeners = function(event){
 Emitter.prototype.hasListeners = function(event){
   return !! this.listeners(event).length;
 };
-
 
 });
 require.register("RedVentures-reduce/index.js", function(exports, require, module){
@@ -653,10 +682,26 @@ function Response(xhr, options) {
   this.xhr = xhr;
   this.text = xhr.responseText;
   this.setStatusProperties(xhr.status);
-  this.header = parseHeader(xhr.getAllResponseHeaders());
+  this.header = this.headers = parseHeader(xhr.getAllResponseHeaders());
+  // getAllResponseHeaders sometimes falsely returns "" for CORS requests, but
+  // getResponseHeader still works. so we get content-type even if getting
+  // other headers fails.
+  this.header['content-type'] = xhr.getResponseHeader('content-type');
   this.setHeaderProperties(this.header);
   this.body = this.parseBody(this.text);
 }
+
+/**
+ * Get case-insensitive `field` value.
+ *
+ * @param {String} field
+ * @return {String}
+ * @api public
+ */
+
+Response.prototype.get = function(field){
+  return this.header[field.toLowerCase()];
+};
 
 /**
  * Set header related properties:
@@ -1266,6 +1311,7 @@ module.exports = request;
 
 });
 require.alias("component-emitter/index.js", "superagent/deps/emitter/index.js");
+require.alias("component-indexof/index.js", "component-emitter/deps/indexof/index.js");
 
 require.alias("RedVentures-reduce/index.js", "superagent/deps/reduce/index.js");
 
@@ -1274,7 +1320,7 @@ require.alias("superagent/lib/client.js", "superagent/index.js");
 if (typeof exports == "object") {
   module.exports = require("superagent");
 } else if (typeof define == "function" && define.amd) {
-  define(require("superagent"));
+  define(function(){ return require("superagent"); });
 } else {
   window["superagent"] = require("superagent");
 }})();
