@@ -167,6 +167,26 @@ test('request .type() with alias', function(next){
   });
 });
 
+test('request .accept()', function(next){
+  request
+  .get('/accept')
+  .accept('json')
+  .end(function(res){
+    assert(res.body.message === 'json', 'response text');
+    next();
+  });
+});
+
+test('request .accept() with alias', function(next){
+  request
+  .get('/accept')
+  .accept('application/json')
+  .end(function(res){
+    assert(res.body.message === 'json', 'response text');
+    next();
+  });
+});
+
 test('request .get() with no data or callback', function(next){
   request.get('/echo-header/content-type');
   next();
