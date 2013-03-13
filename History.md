@@ -1,4 +1,12 @@
 
+0.13.0 / 2013-03-13 
+==================
+
+  * add progress events to client
+  * add simple example
+  * add res.headers as alias of res.header for browser client
+  * add res.get(field) to node/client
+
 0.12.4 / 2013-02-11 
 ==================
 
