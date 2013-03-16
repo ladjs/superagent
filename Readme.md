@@ -49,7 +49,7 @@ request
   .send({ name: 'Manny', species: 'cat' })
   .set('X-API-Key', 'foobar')
   .set('Accept', 'application/json')
-  .end(function(res){
+  .end(function(error, res){
 
   });
 ```
@@ -57,7 +57,7 @@ request
 building on the existing API internally we also provide something similar to `$.post()` for those times in life where your interactions are very basic:
 
 ```js
-request.post('/api/pet', cat, function(res){
+request.post('/api/pet', cat, function(error, res){
 
 });
 ```
