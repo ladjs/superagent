@@ -491,3 +491,14 @@ test('x-domain failure', function(next){
     next();
   });
 });
+
+test('basic auth', function(next){
+  request
+  .post('/auth')
+  .auth('foo', 'bar')
+  .end(function(res){
+    assert('foo' == res.body.user);
+    assert('bar' == res.body.pass);
+    next();
+  });
+});
