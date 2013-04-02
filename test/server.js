@@ -103,6 +103,16 @@ app.get('/foo', function(req, res){
     .send('foo=bar');
 });
 
+app.post('/auth', function(req, res) {
+  var auth = req.headers.authorization,
+      parts = auth.split(' '),
+      credentials = new Buffer(parts[1], 'base64').toString().split(':'),
+      user = credentials[0],
+      pass = credentials[1];
+
+  res.send({ user : user, pass : pass });
+});
+
 app.use(express.static(__dirname + '/../'));
 
 app.listen(4000);
