@@ -1,4 +1,10 @@
 
+0.14.0 / 2013-04-02 
+==================
+
+  * add client-side basic auth
+  * fix retaining of .set() header field case
+
 0.13.0 / 2013-03-13 
 ==================
 
