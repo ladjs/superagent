@@ -321,7 +321,7 @@
     var request = require('superagent')
       , fs = require('fs');
 
-    var stream = fs.createWeadStream('path/to/my.json');
+    var stream = fs.createWriteStream('path/to/my.json');
     var req = request.get('/some.json');
     req.pipe(stream);
 
