@@ -1353,5 +1353,5 @@ if (typeof exports == "object") {
 } else if (typeof define == "function" && define.amd) {
   define(function(){ return require("superagent"); });
 } else {
-  window["superagent"] = require("superagent");
+  this["superagent"] = require("superagent");
 }})();
