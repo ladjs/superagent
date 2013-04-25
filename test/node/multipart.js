@@ -14,6 +14,19 @@ app.post('/echo', function(req, res){
   req.pipe(res);
 });
 
+
+app.post('/contentLength', function(req, res){
+  var data = "";
+  req.on("data", function(chunk) {
+    data += chunk;
+  });
+
+  req.on("end", function() {
+    res.set("Content-Type", "text/plain");
+    res.end(Buffer.byteLength(data).toString());
+  });
+});
+
 app.listen(3005);
 
 function boundary(ct) {
@@ -248,6 +261,40 @@ describe('Part', function(){
         file.name.should.equal('my.txt');
         file.type.should.equal('text/plain');
         done();
+      });
+    })
+  })
+
+  describe('#contentLength(fn)', function(){
+    it('calculates correctly for attachments only', function(done){
+      var req = request.post('http://localhost:3005/contentLength');
+
+      req.attach('document', 'test/node/fixtures/user.html');
+
+      req.contentLength(function(calculatedSize) {
+
+        req.end(function(res){
+          var expectedSize = parseInt(res.text, 0);
+          calculatedSize.should.equal(expectedSize);
+          done();
+        });
+      });
+    })
+
+    it('calculates correctly when fields are added', function(done){
+      var req = request.post('http://localhost:3005/contentLength');
+
+      req.field('name', 'Tobi');
+      req.attach('document', 'test/node/fixtures/user.html');
+      req.field('species', 'ferret');
+
+      req.contentLength(function(calculatedSize) {
+
+        req.end(function(res){
+          var expectedSize = parseInt(res.text, 0);
+          calculatedSize.should.equal(expectedSize);
+          done();
+        });
       });
     })
   })
