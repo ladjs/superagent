@@ -281,11 +281,43 @@ describe('Part', function(){
       });
     })
 
+    it('calculates correctly with multiple attachments', function(done){
+      var req = request.post('http://localhost:3005/contentLength');
+
+      req.attach('document', 'test/node/fixtures/user.html');
+      req.attach('document2', 'test/node/fixtures/user.html');
+
+      req.contentLength(function(calculatedSize) {
+
+        req.end(function(res){
+          var expectedSize = parseInt(res.text, 0);
+          calculatedSize.should.equal(expectedSize);
+          done();
+        });
+      });
+    })
+
     it('calculates correctly when fields are added', function(done){
       var req = request.post('http://localhost:3005/contentLength');
 
       req.field('name', 'Tobi');
       req.attach('document', 'test/node/fixtures/user.html');
+      req.field('species', 'ferret');
+
+      req.contentLength(function(calculatedSize) {
+
+        req.end(function(res){
+          var expectedSize = parseInt(res.text, 0);
+          calculatedSize.should.equal(expectedSize);
+          done();
+        });
+      });
+    })
+
+    it('calculates correctly without attachments', function(done){
+      var req = request.post('http://localhost:3005/contentLength');
+
+      req.field('name', 'Tobi');
       req.field('species', 'ferret');
 
       req.contentLength(function(calculatedSize) {
