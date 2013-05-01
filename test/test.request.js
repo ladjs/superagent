@@ -388,6 +388,17 @@ test('GET querystring multiple objects', function(next){
   });
 });
 
+test('GET querystring empty objects', function(next){
+  var req = request
+  .get('/querystring')
+  .query({})
+  .end(function(res){
+    assert.eql(req._query, []);
+    assert.eql(res.body, {});
+    next();
+  });
+});
+
 test('GET querystring with strings', function(next){
   request
   .get('/querystring')
