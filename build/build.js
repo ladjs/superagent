@@ -409,8 +409,8 @@ require.register("superagent/lib/client.js", function(exports, require, module){
  * Module dependencies.
  */
 
-var Emitter = require('emitter')
-  , reduce = require('reduce');
+var Emitter = require('emitter');
+var reduce = require('reduce');
 
 /**
  * Root reference for iframes.
@@ -425,6 +425,30 @@ var root = 'undefined' == typeof window
  */
 
 function noop(){};
+
+/**
+ * Check if `obj` is a host object,
+ * we don't want to serialize these :)
+ *
+ * TODO: future proof, move to compoent land
+ *
+ * @param {Object} obj
+ * @return {Boolean}
+ * @api private
+ */
+
+function isHost(obj) {
+  var str = {}.toString.call(obj);
+
+  switch (str) {
+    case '[object File]':
+    case '[object Blob]':
+    case '[object FormData]':
+      return true;
+    default:
+      return false;
+  }
+}
 
 /**
  * Determine XHR.
@@ -1177,7 +1201,7 @@ Request.prototype.end = function(fn){
   xhr.open(this.method, this.url, true);
 
   // body
-  if ('GET' != this.method && 'HEAD' != this.method && 'string' != typeof data) {
+  if ('GET' != this.method && 'HEAD' != this.method && 'string' != typeof data && !isHost(data)) {
     // serialize stuff
     var serialize = request.serialize[this.getHeader('Content-Type')];
     if (serialize) data = serialize(data);
@@ -1342,9 +1366,11 @@ module.exports = request;
 
 });
 require.alias("component-emitter/index.js", "superagent/deps/emitter/index.js");
+require.alias("component-emitter/index.js", "emitter/index.js");
 require.alias("component-indexof/index.js", "component-emitter/deps/indexof/index.js");
 
 require.alias("RedVentures-reduce/index.js", "superagent/deps/reduce/index.js");
+require.alias("RedVentures-reduce/index.js", "reduce/index.js");
 
 require.alias("superagent/lib/client.js", "superagent/index.js");
 

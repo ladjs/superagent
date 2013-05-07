@@ -1,4 +1,9 @@
 
+0.14.2/ 2013-05-07 
+==================
+
+  * add host object check to fix serialization of File/Blobs etc as json
+
 0.14.1 / 2013-04-09 
 ==================
 
