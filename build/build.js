@@ -503,8 +503,10 @@ function serialize(obj) {
   if (!isObject(obj)) return obj;
   var pairs = [];
   for (var key in obj) {
-    pairs.push(encodeURIComponent(key)
-      + '=' + encodeURIComponent(obj[key]));
+    if ('undefined' !== typeof obj[key]) {
+      pairs.push(encodeURIComponent(key)
+        + '=' + encodeURIComponent(obj[key]));
+    }
   }
   return pairs.join('&');
 }
@@ -1366,11 +1368,9 @@ module.exports = request;
 
 });
 require.alias("component-emitter/index.js", "superagent/deps/emitter/index.js");
-require.alias("component-emitter/index.js", "emitter/index.js");
 require.alias("component-indexof/index.js", "component-emitter/deps/indexof/index.js");
 
 require.alias("RedVentures-reduce/index.js", "superagent/deps/reduce/index.js");
-require.alias("RedVentures-reduce/index.js", "reduce/index.js");
 
 require.alias("superagent/lib/client.js", "superagent/index.js");
 
@@ -1379,5 +1379,5 @@ if (typeof exports == "object") {
 } else if (typeof define == "function" && define.amd) {
   define(function(){ return require("superagent"); });
 } else {
-  this["superagent"] = require("superagent");
+  window["superagent"] = require("superagent");
 }})();
