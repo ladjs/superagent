@@ -1,4 +1,12 @@
 
+0.14.4 / 2013-05-22 
+==================
+
+ * add superagent.js build output
+ * update qs
+ * update emitter-component
+ * revert "add browser field to support browserify" see GH-221
+
 0.14.3 / 2013-05-18 
 ==================
 
