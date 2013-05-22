@@ -19,13 +19,12 @@ lib-cov:
 	jscoverage lib lib-cov
 
 superagent.js: components
-	component build --standalone superagent
+	@component build \
+	  --standalone superagent \
+	  --out . --name superagent
 
 components:
 	component install
-
-superagent.min.js: superagent.js
-	uglifyjs --no-mangle $< > $@
 
 test-server:
 	@node test/server
