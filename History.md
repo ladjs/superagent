@@ -1,4 +1,9 @@
 
+0.14.5 / 2013-05-23 
+==================
+
+ * add flag to ensure the callback is __never__ invoked twice
+
 0.14.4 / 2013-05-22 
 ==================
 
