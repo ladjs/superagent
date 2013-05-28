@@ -219,6 +219,7 @@ describe('request', function(){
     it('should map "json"', function(done){
       request
       .post('http://localhost:5000/echo')
+      .send({ foo : 'bar' })
       .type('json')
       .end(function(res){
         res.should.be.json;
