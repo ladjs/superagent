@@ -14,6 +14,11 @@ app.get('/json', function(req, res){
   res.send({ name: 'manny' });
 });
 
+app.get('/hal-json', function(req, res){
+  res.set('content-type', 'application/hal+json');
+  res.send({ name: 'hal 5000' });
+});
+
 app.listen(3005);
 
 describe('req.send(Object) as "json"', function(){
@@ -73,6 +78,18 @@ describe('res.body', function(){
       .end(function(res){
         res.text.should.equal('{"name":"manny"}');
         res.body.should.eql({ name: 'manny' });
+        done();
+      });
+    })
+  })
+
+  describe('application/hal+json', function(){
+    it('should parse the body', function(done){
+      request
+      .get('http://localhost:3005/hal-json')
+      .end(function(res){
+        res.text.should.equal('{"name":"hal 5000"}');
+        res.body.should.eql({ name: 'hal 5000' });
         done();
       });
     })
