@@ -326,6 +326,15 @@ test('GET json', function(next){
   });
 });
 
+test('GET hal-json', function(next){
+  request
+  .get('/hal-pets')
+  .end(function(res){
+    assert.eql(res.body, ['tobi', 'loki', 'jane']);
+    next();
+  });
+});
+
 test('GET x-www-form-urlencoded', function(next){
   request
   .get('/foo')
