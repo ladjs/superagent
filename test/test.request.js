@@ -356,15 +356,6 @@ test('POST shorthand without callback', function(next){
   });
 });
 
-test('request X-Requested-With', function(next){
-  request
-  .get('/echo-header/x-requested-with')
-  .end(function(res){
-    assert('XMLHttpRequest' == res.text);
-    next();
-  });
-});
-
 test('GET querystring object', function(next){
   request
   .get('/querystring')
