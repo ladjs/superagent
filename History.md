@@ -1,4 +1,10 @@
 
+0.14.8 / 2013-06-13 
+==================
+
+ * set .agent = false always
+ * remove X-Requested-With. Closes #189
+
 0.14.7 / 2013-06-06 
 ==================
 
