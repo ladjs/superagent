@@ -22,7 +22,8 @@
     "mime": "1.2.5",
     "emitter-component": "1.0.0",
     "methods": "0.0.1",
-    "cookiejar": "1.3.0"
+    "cookiejar": "1.3.0",
+    "debug": "~0.7.2"
   },
   "devDependencies": {
     "express": "3.0.3",
