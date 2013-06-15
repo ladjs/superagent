@@ -1,4 +1,10 @@
 
+0.14.9 / 2013-06-15 
+==================
+
+ * add debug()s to the node client
+ * add .abort() method to node client
+
 0.14.8 / 2013-06-13 
 ==================
 
