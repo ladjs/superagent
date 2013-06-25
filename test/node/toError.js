@@ -20,7 +20,7 @@ describe('res.toError()', function(){
       assert(err.status == 400);
       assert(err.method == 'GET');
       assert(err.path == '/');
-      assert(err.message == 'can not GET / (400)');
+      assert(err.message == 'cannot GET / (400)');
       done();
     });
   })

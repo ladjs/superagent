@@ -105,7 +105,7 @@ describe('request', function(){
       request
       .get(':5000/error')
       .end(function(res){
-        res.error.message.should.equal('can not GET /error (500)');
+        res.error.message.should.equal('cannot GET /error (500)');
         res.error.status.should.equal(500);
         done();
       });
