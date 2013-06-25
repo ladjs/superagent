@@ -1,4 +1,9 @@
 
+0.15.0 / 2013-06-25 
+==================
+
+ * make `Response#toError()` have a more meaningful `message`
+
 0.14.9 / 2013-06-15 
 ==================
 
