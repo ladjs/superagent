@@ -6,7 +6,7 @@ var request = require('../../')
   , fs = require('fs');
 
 app.get('/', function(req, res){
-  res.header('Content-Type', 'multipart/form-data; boundary=awesome');
+  res.set('Content-Type', 'multipart/form-data; boundary=awesome');
   // res.write('\r\n'); TODO: formidable bug
   res.write('--awesome\r\n');
   res.write('Content-Disposition: attachment; name="image"; filename="something.png"\r\n');
