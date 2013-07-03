@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "qs": "0.6.5",
-    "formidable": "1.0.9",
+    "formidable": "1.0.14",
     "mime": "1.2.5",
     "emitter-component": "1.0.0",
     "methods": "0.0.1",
