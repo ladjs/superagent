@@ -27,7 +27,8 @@ app.listen(3007);
 describe('request multipart/form-data', function(){
   describe('req.body', function(){
     it('should be populated with fields', function(done){
-      request.get('http://localhost:3007/', function(res){
+      request.get('http://localhost:3007/', function(err, res){
+        if (err) return done(err);
         res.status.should.equal(200);
         res.body.should.eql({ name: 'tobi' });
         res.files.image.name.should.equal('something.png');
