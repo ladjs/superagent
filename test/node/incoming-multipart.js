@@ -19,7 +19,9 @@ app.get('/', function(req, res){
   res.write('\r\n');
   res.write('tobi');
   res.write('\r\n--awesome--');
-  res.end();
+  setTimeout(function(){ // TODO: lolnode...
+    res.end();
+  }, 1000);
 });
 
 app.listen(3007);

@@ -33,7 +33,8 @@ describe('Request', function(){
   it('should default res.files to {}', function(done){
     var req = request.post('http://localhost:3005/echo');
 
-    req.end(function(res){
+    req.end(function(err, res){
+      if (err) return done(err);
       res.files.should.eql({});
       res.body.should.eql({});
       done();
@@ -48,7 +49,8 @@ describe('Request', function(){
       req.field('user[age]', '2');
       req.field('user[species]', 'ferret');
 
-      req.end(function(res){
+      req.end(function(err, res){
+        if (err) return done(err);
         res.body['user[name]'].should.equal('tobi');
         res.body['user[age]'].should.equal('2');
         res.body['user[species]'].should.equal('ferret');
@@ -63,7 +65,8 @@ describe('Request', function(){
       req.attach('document', 'test/node/fixtures/user.html');
       req.field('species', 'ferret');
 
-      req.end(function(res){
+      req.end(function(err, res){
+        if (err) return done(err);
         res.body.name.should.equal('Tobi');
         res.body.species.should.equal('ferret');
 
@@ -84,7 +87,8 @@ describe('Request', function(){
       req.attach('two', 'test/node/fixtures/user.json');
       req.attach('three', 'test/node/fixtures/user.txt');
 
-      req.end(function(res){
+      req.end(function(err, res){
+        if (err) return done(err);
         var html = res.files.one;
         var json = res.files.two
         var text = res.files.three;
@@ -119,7 +123,8 @@ describe('Request', function(){
           done();
         });
 
-        req.end(function(res){
+        req.end(function(err, res){
+          if (err) return done(err);
           assert(0, 'end() was called');
         });
       })
@@ -131,7 +136,8 @@ describe('Request', function(){
       request
       .post(':3005/echo')
       .attach('document', 'test/node/fixtures/user.html', 'doc.html')
-      .end(function(res){
+      .end(function(err, res){
+        if (err) return done(err);
         var html = res.files.document;
         html.name.should.equal('doc.html');
         html.type.should.equal('text/html');
@@ -153,7 +159,8 @@ describe('Part', function(){
         .set('Content-Type', 'image/png')
         .write('some image data');
 
-      req.end(function(res){
+      req.end(function(err, res){
+        if (err) return done(err);
         var ct = res.header['content-type'];
         ct.should.include('multipart/form-data; boundary=');
         res.body.should.eql({});
@@ -187,7 +194,8 @@ describe('Part', function(){
         .set('Content-Type', 'text/plain')
         .write('tobi');
 
-      req.end(function(res){
+      req.end(function(err, res){
+        if (err) return done(err);
         res.body.name.should.equal('tobi');
         Object.keys(res.files).should.eql(['myimage.png', 'another.png']);
         done();
@@ -207,7 +215,8 @@ describe('Part', function(){
         .set('Content-Disposition', 'form-data; name="name"')
         .write('Tobi');
 
-      req.end(function(res){
+      req.end(function(err, res){
+        if (err) return done(err);
         res.header['content-type'].should.include('boundary=');
         res.body.name.should.equal('Tobi');
         done();
@@ -225,7 +234,8 @@ describe('Part', function(){
         .name('user[name]')
         .write('Tobi');
 
-      req.end(function(res){
+      req.end(function(err, res){
+        if (err) return done(err);
         res.body['user[name]'].should.equal('Tobi');
         done();
       });
@@ -243,7 +253,8 @@ describe('Part', function(){
         .attachment('file', 'path/to/my.txt')
         .write('Tobi');
 
-      req.end(function(res){
+      req.end(function(err, res){
+        if (err) return done(err);
         var file = res.files.file;
         file.name.should.equal('my.txt');
         file.type.should.equal('text/plain');
