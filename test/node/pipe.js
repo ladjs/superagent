@@ -29,7 +29,7 @@ describe('request pipe', function(){
     stream.pipe(req);
   })
 
-  it('should act as areadable stream', function(done){
+  it('should act as a readable stream', function(done){
     var stream = fs.createWriteStream('test/node/fixtures/tmp.json');
 
     var req = request.get('http://localhost:3025')
