@@ -1,4 +1,12 @@
 
+0.15.3 / 2013-07-05 
+==================
+
+ * fix .pipe() unzipping on more recent nodes. Closes #240
+ * fix passing an empty object to .query() no longer appends "?"
+ * fix formidable error handling
+ * update formidable
+
 0.15.2 / 2013-07-02 
 ==================
 
