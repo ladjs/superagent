@@ -32,10 +32,10 @@ describe('request pipe', function(){
   it('should act as a readable stream', function(done){
     var stream = fs.createWriteStream('test/node/fixtures/tmp.json');
 
-    var req = request.get('http://localhost:3025')
-    .type('json');
+    var req = request.get('http://localhost:3025');
+    req.type('json');
 
-    req.on('end', function() {
+    req.on('end', function(){
       JSON.parse(fs.readFileSync('test/node/fixtures/tmp.json', 'utf8')).should.eql({ name: 'tobi' });
       done();
     });
@@ -43,7 +43,7 @@ describe('request pipe', function(){
   })
 });
 
-function removeTmpfile(done) {
+function removeTmpfile(done){
   fs.unlink('test/node/fixtures/tmp.json', function(err){
     done();
   });
