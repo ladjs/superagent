@@ -1,4 +1,9 @@
 
+0.15.4 / 2013-07-09 
+==================
+
+ * node: add a Request#agent() function to set the http Agent to use
+
 0.15.3 / 2013-07-05 
 ==================
 
