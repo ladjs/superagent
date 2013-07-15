@@ -86,7 +86,7 @@ request.post('/api/pet', cat, function(error, res){
 
 ## Browser build
 
-  The browser build of superagent is located in the `./build` directory.
+  The browser build of superagent is located in ./superagent.js
 
 ## Examples:
 
