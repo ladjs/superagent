@@ -97,6 +97,10 @@ app.get('/pets', function(req, res){
   res.send(['tobi', 'loki', 'jane']);
 });
 
+app.get('/text', function(req, res){
+  res.send("just some text");
+});
+
 app.get('/foo', function(req, res){
   res
     .header('Content-Type', 'application/x-www-form-urlencoded')
