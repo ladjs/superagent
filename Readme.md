@@ -82,7 +82,7 @@ request.post('/api/pet', cat, function(error, res){
 
     $ make test-server
 
- Visit `localhost:3000/` in the browser.
+ Visit `localhost:4000/` in the browser.
 
 ## Browser build
 
