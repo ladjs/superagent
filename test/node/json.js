@@ -5,6 +5,8 @@ var EventEmitter = require('events').EventEmitter
   , assert = require('assert')
   , app = express();
 
+app.set('json spaces',0);
+
 app.all('/echo', function(req, res){
   res.writeHead(200, req.headers);
   req.pipe(res);
