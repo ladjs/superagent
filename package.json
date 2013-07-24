@@ -31,12 +31,17 @@
     "should": "*",
     "mocha": "*"
   },
+  "browser": {
+    "./lib/node/index.js": "./lib/client.js",
+    "reduce": "./lib/reduce.js",
+    "emitter": "emitter-component"
+  },
   "component": {
     "scripts": {
       "superagent": "lib/client.js"
     }
   },
-  "main": "lib/node",
+  "main": "./lib/node/index.js",
   "engines": {
     "node": "*"
   }
