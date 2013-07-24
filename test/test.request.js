@@ -310,7 +310,7 @@ test('GET .type', function(next){
 
 test('GET Content-Type params', function(next){
   request
-  .get('/pets')
+  .get('/text')
   .end(function(res){
     assert('utf-8' == res.charset);
     next();
