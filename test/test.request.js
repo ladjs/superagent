@@ -233,6 +233,20 @@ test('request .set(object)', function(next){
   });
 });
 
+test('request .set(typeof field !== "string")', function(next){
+  request
+  .get('/echo-header/content-type')
+  .set({ 'Content-Type': 'text/plain' })
+  .set(undefined)
+  .set(null)
+  .set(123)
+  .send('wahoo')
+  .end(function(res){
+    assert('text/plain' == res.text);
+    next();
+  });
+});
+
 test('POST urlencoded', function(next){
   request
   .post('/pet')
