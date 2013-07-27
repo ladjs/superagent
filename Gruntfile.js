@@ -21,10 +21,27 @@ module.exports = function(grunt) {
         timeout: 2000,
         growl: true
       }
+    },
+    component: {
+      install: { options: { action: 'install' } },
+      build: {
+        options: {
+          action: 'build',
+          args: {
+            standalone: 'superagent',
+            out: '.',
+            name: 'superagent'
+          }
+        }
+      }
     }
   });
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-mocha-cov');
-  grunt.registerTask('test', ['mochacov:test'])
-  grunt.registerTask('test-cov', ['mochacov:coverage'])
+  grunt.loadNpmTasks('grunt-component');
+  grunt.registerTask('test', ['mochacov:test']);
+  grunt.registerTask('test-cov', ['mochacov:coverage']);
+  grunt.registerTask('components', ['component:install']);
+  grunt.registerTask('superagent.js', ['component']);
+  grunt.registerTask('default', ['component']);
 };

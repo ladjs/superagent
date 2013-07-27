@@ -21,13 +21,11 @@ test-cov: lib-cov
 lib-cov:
 	jscoverage lib lib-cov
 
-superagent.js: components
-	@component build \
-	  --standalone superagent \
-	  --out . --name superagent
+superagent.js:
+	@node_modules/.bin/grunt component
 
 components:
-	component install
+	@node_modules/.bin/grunt component:install
 
 test-server:
 	@node test/server
