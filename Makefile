@@ -37,6 +37,6 @@ test-docs:
 		> docs/test.html
 
 clean:
-	rm -fr superagent.js components
+	node_modules/.bin/grunt clean
 
 .PHONY: test-cov test docs test-docs clean

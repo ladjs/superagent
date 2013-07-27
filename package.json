@@ -29,7 +29,10 @@
     "express": "3.3.1",
     "better-assert": "~0.1.0",
     "should": "*",
-    "mocha": "*"
+    "mocha": "*",
+    "grunt-cli": "~0.1.9",
+    "grunt": "~0.4.1",
+    "grunt-contrib-clean": "~0.5.0"
   },
   "component": {
     "scripts": {
