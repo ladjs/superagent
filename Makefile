@@ -4,6 +4,9 @@ REPORTER = dot
 
 all: superagent.js
 
+new-test:
+	@NODE_ENV=test node_modules/.bin/grunt test
+
 test:
 	@NODE_ENV=test ./node_modules/.bin/mocha \
 		--require should \

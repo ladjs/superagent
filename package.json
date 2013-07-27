@@ -32,7 +32,8 @@
     "mocha": "*",
     "grunt-cli": "~0.1.9",
     "grunt": "~0.4.1",
-    "grunt-contrib-clean": "~0.5.0"
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-mocha-cov": "~0.0.7"
   },
   "component": {
     "scripts": {
