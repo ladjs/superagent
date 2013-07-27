@@ -44,5 +44,6 @@
   "main": "lib/node",
   "engines": {
     "node": "*"
-  }
+  },
+  "scripts": { "test": "node_modules/.bin/grunt test" }
 }
