@@ -4,6 +4,9 @@ REPORTER = dot
 
 all: superagent.js
 
+new-test:
+	@NODE_ENV=test node_modules/.bin/grunt test
+
 test:
 	@NODE_ENV=test ./node_modules/.bin/mocha \
 		--require should \
@@ -18,13 +21,11 @@ test-cov: lib-cov
 lib-cov:
 	jscoverage lib lib-cov
 
-superagent.js: components
-	@component build \
-	  --standalone superagent \
-	  --out . --name superagent
+superagent.js:
+	@node_modules/.bin/grunt component
 
 components:
-	component install
+	@node_modules/.bin/grunt component:install
 
 test-server:
 	@node test/server
@@ -37,6 +38,6 @@ test-docs:
 		> docs/test.html
 
 clean:
-	rm -fr superagent.js components
+	node_modules/.bin/grunt clean
 
 .PHONY: test-cov test docs test-docs clean

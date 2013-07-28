@@ -1,5 +1,7 @@
 # SuperAgent
 
+[![Build Status](https://travis-ci.org/visionmedia/superagent.png)](https://travis-ci.org/visionmedia/superagent)
+
   SuperAgent is a small progressive __client-side__ HTTP request library, and __Node.js__ module with the same API, sporting many high-level HTTP client features. View the [docs](http://visionmedia.github.com/superagent/).
 
 ![super agent](http://f.cl.ly/items/3d282n3A0h0Z0K2w0q2a/Screenshot.png)
