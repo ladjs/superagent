@@ -3,7 +3,6 @@ request = superagent;
 
 function serialize(obj, res) {
   var val = request.serializeObject(obj);
-  console.log(val)
   assert(val == res
     , JSON.stringify(obj) + ' to "' + res + '" serialization failed. got: '
     + '"' + val + '"');
@@ -22,7 +21,8 @@ test('test .serializeObject() basics', function(){
   serialize('test', 'test');
   serialize('foo=bar', 'foo=bar');
   serialize({ foo: 'bar' }, 'foo=bar');
-  serialize({ foo: null }, 'foo=null');
+  serialize({ foo: null }, '');
+  serialize({ foo: 'null' }, 'foo=null');
   serialize({ foo: undefined }, '');
   serialize({ foo: 'undefined' }, 'foo=undefined');
   serialize({ name: 'tj', age: 24 }, 'name=tj&age=24');
