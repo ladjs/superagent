@@ -64,7 +64,6 @@ require.aliases = {};
 
 require.resolve = function(path) {
   if (path.charAt(0) === '/') path = path.slice(1);
-  var index = path + '/index.js';
 
   var paths = [
     path,
@@ -77,10 +76,7 @@ require.resolve = function(path) {
   for (var i = 0; i < paths.length; i++) {
     var path = paths[i];
     if (require.modules.hasOwnProperty(path)) return path;
-  }
-
-  if (require.aliases.hasOwnProperty(index)) {
-    return require.aliases[index];
+    if (require.aliases.hasOwnProperty(path)) return require.aliases[path];
   }
 };
 
@@ -201,11 +197,8 @@ require.relative = function(parent) {
   return localRequire;
 };
 require.register("component-indexof/index.js", function(exports, require, module){
-
-var indexOf = [].indexOf;
-
 module.exports = function(arr, obj){
-  if (indexOf) return arr.indexOf(obj);
+  if (arr.indexOf) return arr.indexOf(obj);
   for (var i = 0; i < arr.length; ++i) {
     if (arr[i] === obj) return i;
   }
@@ -404,7 +397,6 @@ module.exports = function(arr, fn, initial){
 };
 });
 require.register("superagent/lib/client.js", function(exports, require, module){
-
 /**
  * Module dependencies.
  */
@@ -454,16 +446,30 @@ function isHost(obj) {
  * Determine XHR.
  */
 
-function getXHR() {
-  if (root.XMLHttpRequest
-    && ('file:' != root.location.protocol || !root.ActiveXObject)) {
-    return new XMLHttpRequest;
-  } else {
-    try { return new ActiveXObject('Microsoft.XMLHTTP'); } catch(e) {}
-    try { return new ActiveXObject('Msxml2.XMLHTTP.6.0'); } catch(e) {}
-    try { return new ActiveXObject('Msxml2.XMLHTTP.3.0'); } catch(e) {}
-    try { return new ActiveXObject('Msxml2.XMLHTTP'); } catch(e) {}
+function getXHR(method) {
+  if (method) {
+    method = method.toLowerCase();
   }
+
+  if (root.ActiveXObject) {
+    if ('file:' === root.location.protocol || 'patch' === method) {
+      return getIEXHR();
+    } else if (root.XMLHttpRequest) {
+      return new XMLHttpRequest;
+    } else {
+      return getIEXHR();
+    }
+  } else {
+    return new XMLHttpRequest;
+  }
+  return false;
+}
+
+function getIEXHR() {
+  try { return new ActiveXObject('Microsoft.XMLHTTP'); } catch(e) {}
+  try { return new ActiveXObject('Msxml2.XMLHTTP.6.0'); } catch(e) {}
+  try { return new ActiveXObject('Msxml2.XMLHTTP.3.0'); } catch(e) {}
+  try { return new ActiveXObject('Msxml2.XMLHTTP'); } catch(e) {}
   return false;
 }
 
@@ -694,16 +700,17 @@ function params(str){
  * @api private
  */
 
-function Response(xhr, options) {
+function Response(req, options) {
   options = options || {};
-  this.xhr = xhr;
-  this.text = xhr.responseText;
-  this.setStatusProperties(xhr.status);
-  this.header = this.headers = parseHeader(xhr.getAllResponseHeaders());
+  this.req = req;
+  this.xhr = this.req.xhr;
+  this.text = this.xhr.responseText;
+  this.setStatusProperties(this.xhr.status);
+  this.header = this.headers = parseHeader(this.xhr.getAllResponseHeaders());
   // getAllResponseHeaders sometimes falsely returns "" for CORS requests, but
   // getResponseHeader still works. so we get content-type even if getting
   // other headers fails.
-  this.header['content-type'] = xhr.getResponseHeader('content-type');
+  this.header['content-type'] = this.xhr.getResponseHeader('content-type');
   this.setHeaderProperties(this.header);
   this.body = this.parseBody(this.text);
 }
@@ -815,9 +822,16 @@ Response.prototype.setStatusProperties = function(status){
  */
 
 Response.prototype.toError = function(){
-  var msg = 'got ' + this.status + ' response';
+  var req = this.req;
+  var method = req.method;
+  var path = req.path;
+
+  var msg = 'cannot ' + method + ' ' + path + ' (' + this.status + ')';
   var err = new Error(msg);
   err.status = this.status;
+  err.method = method;
+  err.path = path;
+
   return err;
 };
 
@@ -843,20 +857,18 @@ function Request(method, url) {
   this.url = url;
   this.header = {};
   this._header = {};
-  this.set('X-Requested-With', 'XMLHttpRequest');
   this.on('end', function(){
-    var res = new Response(self.xhr);
+    var res = new Response(self);
     if ('HEAD' == method) res.text = null;
     self.callback(null, res);
   });
 }
 
 /**
- * Inherit from `Emitter.prototype`.
+ * Mixin `Emitter`.
  */
 
-Request.prototype = new Emitter;
-Request.prototype.constructor = Request;
+Emitter(Request.prototype);
 
 /**
  * Set timeout to `ms`.
@@ -1153,7 +1165,7 @@ Request.prototype.withCredentials = function(){
 
 Request.prototype.end = function(fn){
   var self = this;
-  var xhr = this.xhr = getXHR();
+  var xhr = this.xhr = getXHR(this.method);
   var query = this._query.join('&');
   var timeout = this._timeout;
   var data = this._data;
@@ -1365,6 +1377,8 @@ request.put = function(url, data, fn){
 module.exports = request;
 
 });
+
+
 require.alias("component-emitter/index.js", "superagent/deps/emitter/index.js");
 require.alias("component-emitter/index.js", "emitter/index.js");
 require.alias("component-indexof/index.js", "component-emitter/deps/indexof/index.js");
@@ -1372,9 +1386,7 @@ require.alias("component-indexof/index.js", "component-emitter/deps/indexof/inde
 require.alias("RedVentures-reduce/index.js", "superagent/deps/reduce/index.js");
 require.alias("RedVentures-reduce/index.js", "reduce/index.js");
 
-require.alias("superagent/lib/client.js", "superagent/index.js");
-
-if (typeof exports == "object") {
+require.alias("superagent/lib/client.js", "superagent/index.js");if (typeof exports == "object") {
   module.exports = require("superagent");
 } else if (typeof define == "function" && define.amd) {
   define(function(){ return require("superagent"); });
