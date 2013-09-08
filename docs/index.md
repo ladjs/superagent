@@ -1,6 +1,6 @@
 # SuperAgent
 
- Super Agent is light-weight progressive ajax API crafted for flexibility, readability, and a low learning curve after being frustrated with many of the existing request APIs.
+ Super Agent 是个专注于灵活性、可读性的发展中的轻量型的ajax API，并在（作者）经受了许多现存的请求API折磨后（写出了该）有较低的学习曲线（的请求API）。
 
      request
        .post('/api/pet')
@@ -15,9 +15,9 @@
          }
        });
 
-## Request basics
+## 请求基础
 
- A request can be initiated by invoking the appropriate method on the `request` object, then calling `.end()` to send the request. For example a simple GET request:
+ 请求可以通过在 `request` 对象上调用对应的方法初始化，然后调用 `.end()` （方法）来发送请求。例如（这个）简单的GET请求：
  
      request
        .get('/search')
@@ -25,7 +25,7 @@
        
        });
 
- The __node__ client may also provide absolute urls:
+ 该 __node__ 客户端也可以提供绝对url（路径）：
 
      request
        .get('http://example.com/search')
@@ -33,7 +33,7 @@
      
        });
 
-  __DELETE__, __HEAD__, __POST__, __PUT__ and other __HTTP__ verbs may also be used, simply change the method name:
+  __DELETE__, __HEAD__, __POST__, __PUT__ 和其他 __HTTP__ 动词也可以被使用，简单的改变方法名（即可）：
   
     request
       .head('/favicon.ico')
@@ -41,7 +41,7 @@
       
       });
 
-  __DELETE__ is a special-case, as it's a reserved word, so the method is named `.del()`:
+  __DELETE__ 这个比较特殊，因为它是个保留字，因此方法名为 `.del()` ：
   
     request
       .del('/user/1')
@@ -49,9 +49,9 @@
         
       });
 
-### Crafting requests
+### 各种各样的请求
 
-  SuperAgent's flexible API gives you the granularity you need, _when_ you need, yet more concise variations help reduce the amount of code necessary. For example the following GET request:
+SuperAgent的灵活的API在你 __需要__ 的时候给你需要的粒度，更多简洁的变化帮助你在必要（的时候）减少代码总量。比如接下来该GET请求：
   
     request
       .get('/search')
@@ -59,20 +59,20 @@
     
       });
 
-  Could also be defined as the following, where a callback is given to the HTTP verb method:
+  也可以被定义如下，一个回调（函数）被给予到这个HTTP动词方法：
   
     request
       .get('/search', function(res){
     
       });
 
-   Taking this further the default HTTP verb is __GET__ so the following works as well:
+   更进一步默认的HTTP动词是 __GET__ 因此接下来的（代码）也可一样工作：
    
      request('/search', function(res){
  
      });
 
-   This applies to more complicated requests as well, for example the following __GET__ request with a query-string can be written in the chaining manner:
+   这也可以应用到更复杂的请求上，比如接下来这个带查询字符串的 __GET__ 请求可以以链式方法写：
    
      request
        .get('/search')
@@ -81,7 +81,7 @@
          
        });
 
-   Or one may pass the query-string object to `.get()`:
+   或者也可以传入查询字符串到 `.get()` （方法）：
    
      request
        .get('/search', { query: 'tobi the ferret' })
@@ -89,18 +89,16 @@
        
        });
   
-  Taking this even further the callback may be passed as well:
+  更进一步处理则回调函数也可以一起传入：
   
      request
        .get('/search', { query: 'tobi the ferret' }, function(res){
      
        });
 
-## Dealing with errors
+## 处理错误
 
-  On a network error (e.g. connection refused or timeout), SuperAgent emits
-  `error` unless you pass `.end()` a callback with two parameters. Then
-  SuperAgent will invoke it with the error first, followed by a null response.
+  在（出现）网络错误（例如：链接拒绝或超时）时，SuperAgent发出 `error` 事件除非你传入带两个参数的回调到 `.end()` （方法）。然后SuperAgent将用错误信息为第一个（参数），接着为一个null响应（的参数）调用它。
 
      request
        .get('http://wrongurl')
@@ -108,12 +106,11 @@
          console.log('ERROR: ', err)
        });
 
-  On HTTP errors instead, SuperAgent populates the response with flags
-  indicating the error. See `Response status` below.
+  在HTTP错误时，SuperAgent带标志填充响应以说明（是哪种）错误。查看下面的`Response status`（以了解详情）。
 
-## Setting header fields
+## 设置header字段
 
-  Setting header fields is simple, invoke `.set()` with a field name and value:
+  设置header字段很简单，以一个字段名及值调用 `.set()` （方法即可）：
   
      request
        .get('/search')
@@ -121,10 +118,10 @@
        .set('Accept', 'application/json')
        .end(callback);
 
-## GET requests
+## GET 请求
 
- The `.data()` method accepts objects, which when used with the __GET__ method will form a query-string. The following will produce the path `/search?query=Manny&range=1..5&order=desc`.
- 
+ `.data()` 方法接受对象（参数），在与 __GET__ 方法一起使用时将形成查询字符串。接下来（的代码）将生成路径 `/search?query=Manny&range=1..5&order=desc` 。
+
      request
        .get('/search')
        .data({ query: 'Manny' })
@@ -134,7 +131,7 @@
 
        });
 
-  The `.data()` method accepts strings as well:
+   `.data()` 方法也接受字符串（参数）：
   
       request
         .get('/querystring')
@@ -143,29 +140,29 @@
 
         });
 
-### POST / PUT requests
+### POST / PUT 请求
 
-  A typical JSON __POST__ request might look a little like the following, where we set the Content-Type header field appropriately, and "write" some data, in this case just a JSON string.
+  一个典型的JSON __POST__ 请求可能看起来像这样，我们在这里设置了对应的Content-Type header 字段及 "write" 一些数据，在这个例子里只是个JSON字符串。
 
       request.post('/user')
         .set('Content-Type', 'application/json')
         .data('{"name":"tj","pet":"tobi"})
         .end(callback)
 
-  Since JSON is undoubtably the most common, it's the _default_! The following example is equivalent to the previous.
+  因为JSON无疑是最普遍（使用的），（所以）它是 _默认_ 的！接下来的例子和前面的是等同的。
 
       request.post('/user')
         .data({ name: 'tj', pet: 'tobi' })
         .end(callback)
 
-  Or using multiple `.data()` calls:
+  或者使用多次  `.data()` 调用：
   
       request.post('/user')
         .data({ name: 'tj' })
         .data({ pet: 'tobi' })
         .end(callback)
 
-  SuperAgent formats are extensible, however by default "json" and "form" are supported. To send the data as `application/x-www-form-urlencoded` simply invoke `.type()` with "form-data", where the default is "json". This request will POST the body "name=tj&pet=tobi".
+  SuperAgent格式是可扩展的，不过默认支持 "json" 和 "form"。 简单的带"form-data"参数调用 `.type()` 来发送 `application/x-www-form-urlencoded` 数据，默认参数是“json”。该请求将POST该body "name=tj&pet=tobi"。
 
       request.post('/user')
         .type('form')
@@ -173,30 +170,30 @@
         .data({ pet: 'tobi' })
         .end(callback)
 
-## Response properties
+## 响应属性
 
-  Many helpful flags and properties are set on the `Response` object, ranging from the response text, parsed response body, header fields, status flags and more.
+  许多有帮助的标志和属性被设置在`Response`对象上，包括响应文本、解析后的响应体、header字段、状态标志及其它。
   
-### Response text
+### 响应文本
 
-  The `res.text` property contains the unparsed response body string.
+  这个 `res.text` 属性包含未解析的响应体字符串。
 
-### Response body
+### 响应体
 
-  Much like SuperAgent can auto-serialize request data, it can also automatically parse it. When a parser is defined for the Content-Type, it is parsed, which by default includes "application/json" and "application/x-www-form-urlencoded". The parsed object is then available via `res.body`.
+  类似SuperAgent能自动序列化请求数据，也能自动解析它。当某种Content-Type的解析器被定义时，它将被解析，默认已经有"application/json" and "application/x-www-form-urlencoded"。该解析过的对象将可通过`res.body`获得。
 
-### Response header fields
+### 响应header字段
 
-  The `res.header` contains an object of parsed header fields, lowercasing field names much like node does. For example `res.header['content-length']`.
+  该 `res.header` 包含一个解析过的header字段，类似node的做法，将字段名都小写化。例如 `res.header['content-length']`。
 
-### Response Content-Type
+### 响应 Content-Type
 
-  The Content-Type response header is special-cased, providing `res.contentType`, which is void of the charset (if any). For example the Content-Type of "text/html; charset=utf8" will provide "text/html" as `res.contentType`, and the `res.charset` property would then contain "utf8".
+  该 Content-Type 响应header是个特例，提供的`res.contentType`没有字符集。比如"text/html; charset=utf8"的Content-Type将设置 "text/html" 为 `res.contentType`，而`res.charset`属性将包含"utf8"。
 
-### Response status
+### 响应状态
 
-  The response status flags help determine if the request was a success, among other useful information, making SuperAgent ideal for interacting with RESTful web services. These flags are currently defined as:
-  
+  该响应状态标志帮助确定该请求是否成功，当中的其它有用的信息，使得SuperAgent是作为与RESTful web服务交互的理想（工具）。这些标志当前定义为：
+
      var type = status / 100 | 0;
 
      // status / class
