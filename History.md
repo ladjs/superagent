@@ -1,4 +1,88 @@
 
+0.15.4 / 2013-07-09 
+==================
+
+ * node: add a Request#agent() function to set the http Agent to use
+
+0.15.3 / 2013-07-05 
+==================
+
+ * fix .pipe() unzipping on more recent nodes. Closes #240
+ * fix passing an empty object to .query() no longer appends "?"
+ * fix formidable error handling
+ * update formidable
+
+0.15.2 / 2013-07-02 
+==================
+
+ * fix: emit 'end' when piping.
+
+0.15.1 / 2013-06-26 
+==================
+
+ * add try/catch around parseLinks
+
+0.15.0 / 2013-06-25 
+==================
+
+ * make `Response#toError()` have a more meaningful `message`
+
+0.14.9 / 2013-06-15 
+==================
+
+ * add debug()s to the node client
+ * add .abort() method to node client
+
+0.14.8 / 2013-06-13 
+==================
+
+ * set .agent = false always
+ * remove X-Requested-With. Closes #189
+
+0.14.7 / 2013-06-06 
+==================
+
+ * fix unzip error handling
+
+0.14.6 / 2013-05-23 
+==================
+
+ * fix HEAD unzip bug
+
+0.14.5 / 2013-05-23 
+==================
+
+ * add flag to ensure the callback is __never__ invoked twice
+
+0.14.4 / 2013-05-22 
+==================
+
+ * add superagent.js build output
+ * update qs
+ * update emitter-component
+ * revert "add browser field to support browserify" see GH-221
+
+0.14.3 / 2013-05-18 
+==================
+
+ * add browser field to support browserify
+
+0.14.2/ 2013-05-07 
+==================
+
+  * add host object check to fix serialization of File/Blobs etc as json
+
+0.14.1 / 2013-04-09 
+==================
+
+  * update qs
+
+0.14.0 / 2013-04-02 
+==================
+
+  * add client-side basic auth
+  * fix retaining of .set() header field case
+
 0.13.0 / 2013-03-13 
 ==================
 

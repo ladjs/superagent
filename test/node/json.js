@@ -14,12 +14,12 @@ app.get('/json', function(req, res){
   res.send({ name: 'manny' });
 });
 
-app.listen(3001);
+app.listen(3005);
 
 describe('req.send(Object) as "json"', function(){
   it('should default to json', function(done){
     request
-    .post('http://localhost:3001/echo')
+    .post('http://localhost:3005/echo')
     .send({ name: 'tobi' })
     .end(function(res){
       res.should.be.json
@@ -30,7 +30,7 @@ describe('req.send(Object) as "json"', function(){
 
   it('should work with arrays', function(done){
     request
-    .post('http://localhost:3001/echo')
+    .post('http://localhost:3005/echo')
     .send([1,2,3])
     .end(function(res){
       res.should.be.json
@@ -41,7 +41,7 @@ describe('req.send(Object) as "json"', function(){
 
   it('should work with GET', function(done){
     request
-    .get('http://localhost:3001/echo')
+    .get('http://localhost:3005/echo')
     .send({ tobi: 'ferret' })
     .end(function(res){
       res.should.be.json
@@ -53,7 +53,7 @@ describe('req.send(Object) as "json"', function(){
   describe('when called several times', function(){
     it('should merge the objects', function(done){
       request
-      .post('http://localhost:3001/echo')
+      .post('http://localhost:3005/echo')
       .send({ name: 'tobi' })
       .send({ age: 1 })
       .end(function(res){
@@ -69,7 +69,7 @@ describe('res.body', function(){
   describe('application/json', function(){
     it('should parse the body', function(done){
       request
-      .get('http://localhost:3001/json')
+      .get('http://localhost:3005/json')
       .end(function(res){
         res.text.should.equal('{"name":"manny"}');
         res.body.should.eql({ name: 'manny' });

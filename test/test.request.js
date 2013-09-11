@@ -310,7 +310,7 @@ test('GET .type', function(next){
 
 test('GET Content-Type params', function(next){
   request
-  .get('/pets')
+  .get('/text')
   .end(function(res){
     assert('utf-8' == res.charset);
     next();
@@ -356,15 +356,6 @@ test('POST shorthand without callback', function(next){
   });
 });
 
-test('request X-Requested-With', function(next){
-  request
-  .get('/echo-header/x-requested-with')
-  .end(function(res){
-    assert('XMLHttpRequest' == res.text);
-    next();
-  });
-});
-
 test('GET querystring object', function(next){
   request
   .get('/querystring')
@@ -393,6 +384,17 @@ test('GET querystring multiple objects', function(next){
   .query({ order: 'desc' })
   .end(function(res){
     assert.eql(res.body, { search: 'Manny', range: '1..5', order: 'desc' });
+    next();
+  });
+});
+
+test('GET querystring empty objects', function(next){
+  var req = request
+  .get('/querystring')
+  .query({})
+  .end(function(res){
+    assert.eql(req._query, []);
+    assert.eql(res.body, {});
     next();
   });
 });
@@ -488,6 +490,17 @@ test('x-domain failure', function(next){
   .end(function(err, res){
     assert(err, 'error missing');
     assert(err.crossDomain, 'not .crossDomain');
+    next();
+  });
+});
+
+test('basic auth', function(next){
+  request
+  .post('/auth')
+  .auth('foo', 'bar')
+  .end(function(res){
+    assert('foo' == res.body.user);
+    assert('bar' == res.body.pass);
     next();
   });
 });

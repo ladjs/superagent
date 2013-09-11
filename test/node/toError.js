@@ -18,7 +18,9 @@ describe('res.toError()', function(){
     .end(function(res){
       var err = res.toError();
       assert(err.status == 400);
-      assert(err.message == 'got 400 response');
+      assert(err.method == 'GET');
+      assert(err.path == '/');
+      assert(err.message == 'cannot GET / (400)');
       done();
     });
   })

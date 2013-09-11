@@ -82,11 +82,11 @@ request.post('/api/pet', cat, function(error, res){
 
     $ make test-server
 
- Visit `localhost:3000/` in the browser.
+ Visit `localhost:4000/` in the browser.
 
 ## Browser build
 
-  The browser build of superagent is located in the `./build` directory.
+  The browser build of superagent is located in ./superagent.js
 
 ## Examples:
 
