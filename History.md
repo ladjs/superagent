@@ -1,4 +1,10 @@
 
+0.15.5 / 2013-10-09 
+==================
+
+ * add browser field to support browserify
+ * fix .field() value number support
+
 0.15.4 / 2013-07-09 
 ==================
 
