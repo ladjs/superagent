@@ -23,8 +23,7 @@
     "emitter-component": "1.0.0",
     "methods": "0.0.1",
     "cookiejar": "1.3.0",
-    "debug": "~0.7.2",
-    "reduce": "RedVentures/reduce#346d59"
+    "debug": "~0.7.2"
   },
   "devDependencies": {
     "express": "3.3.1",
