@@ -1,9 +1,9 @@
 
-var EventEmitter = require('events').EventEmitter
-  , request = require('../../')
+var request = require('../../')
   , express = require('express')
   , assert = require('assert')
-  , app = express();
+  , app = express()
+  , Stream = require('stream');
 
 app.all('/echo', function(req, res){
   res.writeHead(200, req.headers);
@@ -27,6 +27,39 @@ describe('req.send(Object) as "json"', function(){
       done();
     });
   })
+
+  it('should catch error when serializing (callback style)',function(done){
+    function CircularReference(){
+      this.circular = this;
+    }
+
+    request
+    .post('http://localhost:3005/echo')
+    .send(new CircularReference())
+    .end(function(err,res){
+      err.should.be.an.instanceOf(Error);
+      done();
+    });
+  });
+
+  it('should catch error when serializing (pipe style)',function(done){
+    function CircularReference(){
+      this.circular = this;
+    }
+    var s = new Stream();
+    s.writable = true;
+    s.write = function(data){
+      // don't care
+    };
+    request
+    .post('http://localhost:3005/echo')
+    .send(new CircularReference())
+    .on('error',function(err){
+      err.should.be.an.instanceOf(Error);
+      done();
+    })
+    .pipe(s);
+  });
 
   it('should work with arrays', function(done){
     request
