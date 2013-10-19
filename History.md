@@ -1,4 +1,10 @@
 
+0.15.7 / 2013-10-19 
+==================
+
+ * pin should.js to 1.3.0 due to breaking change in 2.0.x
+ * fix browserify regression
+
 0.15.5 / 2013-10-09 
 ==================
 

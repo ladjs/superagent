@@ -1,6 +1,6 @@
 {
   "name": "superagent",
-  "version": "0.15.6",
+  "version": "0.15.7",
   "description": "elegant & feature rich browser / node HTTP with a fluent API",
   "keywords": [
     "http",
