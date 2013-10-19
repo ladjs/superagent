@@ -12,6 +12,9 @@
   "contributors": [
     "Hunter Loftis <hunter@hunterloftis.com>"
   ],
+  "scripts": {
+    "test": "node_modules/mocha/bin/mocha test/node/*.js"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/visionmedia/superagent.git"
