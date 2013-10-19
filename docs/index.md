@@ -76,17 +76,10 @@
    
      request
        .get('/search')
-       .data({ query: 'tobi the ferret' })
+       .query({ query-arg-1: 'tobi the ferret' })
+       .query({ query-arg-2: 'tobi the ferret is amazing' })
        .end(function(res){
          
-       });
-
-   Or one may pass the query-string object to `.get()`:
-   
-     request
-       .get('/search', { query: 'tobi the ferret' })
-       .end(function(res){
-       
        });
   
   Taking this even further the callback may be passed as well:
