@@ -1255,6 +1255,12 @@ function request(method, url) {
   return new Request(method, url);
 }
 
+request.use = function(fn) {
+  fn(this);
+  return this;
+}
+
+
 /**
  * GET `url` with optional callback `fn(res)`.
  *
