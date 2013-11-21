@@ -861,6 +861,16 @@ function Request(method, url) {
 Emitter(Request.prototype);
 
 /**
+ * Allow for extension
+ */
+
+Request.prototype.use = function(fn) {
+  fn(this);
+  return this;
+}
+
+
+/**
  * Set timeout to `ms`.
  *
  * @param {Number} ms
@@ -1254,12 +1264,6 @@ function request(method, url) {
 
   return new Request(method, url);
 }
-
-request.use = function(fn) {
-  fn(this);
-  return this;
-}
-
 
 /**
  * GET `url` with optional callback `fn(res)`.
