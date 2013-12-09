@@ -4,6 +4,22 @@
 
 ![super agent](http://f.cl.ly/items/3d282n3A0h0Z0K2w0q2a/Screenshot.png)
 
+## Installation
+
+  node:
+
+```
+$ npm install superagent
+```
+
+  component:
+
+```
+$ component install visionmedia/superagent
+```
+
+  with script tags use ./superagent.js
+
 ## Motivation
 
   This library spawned from my frustration with jQuery's weak & inconsistent Ajax support. jQuery's API while having recently added some promise-like support, is largely static, forcing you to build up big objects containing all the header fields and options, not to mention most of the options are awkwardly named "type" instead of "method", etc. Onto examples!
