@@ -112,7 +112,7 @@ request.get('/some-url')
 ```
 
 Existing plugins:
- * [no_cache](https://github.com/johntron/no-cache) - prevents caching by including Cache-Control header
+ * [superagent-no-cache](https://github.com/johntron/superagent-no-cache) - prevents caching by including Cache-Control header
  * [superagent-prefix](https://github.com/johntron/superagent-prefix) - prefixes absolute URLs (useful in test environment)
 
 Please prefix your plugin component with `superagent-*`
