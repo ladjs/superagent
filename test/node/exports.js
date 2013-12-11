@@ -5,7 +5,7 @@ describe('exports', function(){
   it('should expose Part', function(){
     request.Part.should.be.a('function');
   })
-  
+
   it('should expose .protocols', function(){
     Object.keys(request.protocols)
       .should.eql(['http:', 'https:']);
@@ -15,9 +15,9 @@ describe('exports', function(){
     Object.keys(request.serialize)
       .should.eql(['application/x-www-form-urlencoded', 'application/json']);
   })
-  
+
   it('should expose .parse', function(){
     Object.keys(request.parse)
-      .should.eql(['application/x-www-form-urlencoded', 'application/json', 'text']);
+      .should.eql(['application/x-www-form-urlencoded', 'application/json', 'text', 'image']);
   })
 })
