@@ -115,9 +115,9 @@ Existing plugins:
  * [no_cache](https://github.com/johntron/no-cache) - prevents caching by including Cache-Control header
  * [superagent-prefix](https://github.com/johntron/superagent-prefix) - prefixes absolute URLs (useful in test environment)
 
-## Wiki
+Please prefix your plugin component with `superagent-*`
 
-  For superagent extensions such as couchdb and oauth visit the [wiki](https://github.com/visionmedia/superagent/wiki).
+For superagent extensions such as couchdb and oauth visit the [wiki](https://github.com/visionmedia/superagent/wiki).
 
 ## License
 
