@@ -93,6 +93,27 @@ request.post('/api/pet', cat, function(error, res){
 - [agency tests](https://github.com/visionmedia/superagent/blob/master/test/node/agency.js)
 - [express demo app](https://github.com/hunterloftis/component-test/blob/master/lib/users/test/controller.test.js)
 
+# Plugins
+
+Usage:
+
+```js
+var request = require('superagent'),
+    no_cache = require('no-cache'),
+    prefix = require('superagent-prefix')('/static');
+
+request.get('/some-url')
+    .use(no_cache)
+    .use(prefix)
+    .end(function(res) {
+        // Do something
+    };
+```
+
+Existing plugins:
+ * [no_cache](https://github.com/johntron/no-cache) - prevents caching by including Cache-Control header
+ * [superagent-prefix](https://github.com/johntron/superagent-prefix) - prefixes absolute URLs (useful in test environment)
+
 ## Wiki
 
   For superagent extensions such as couchdb and oauth visit the [wiki](https://github.com/visionmedia/superagent/wiki).
