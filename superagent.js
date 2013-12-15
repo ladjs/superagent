@@ -448,16 +448,30 @@ function isHost(obj) {
  * Determine XHR.
  */
 
-function getXHR() {
-  if (root.XMLHttpRequest
-    && ('file:' != root.location.protocol || !root.ActiveXObject)) {
-    return new XMLHttpRequest;
-  } else {
-    try { return new ActiveXObject('Microsoft.XMLHTTP'); } catch(e) {}
-    try { return new ActiveXObject('Msxml2.XMLHTTP.6.0'); } catch(e) {}
-    try { return new ActiveXObject('Msxml2.XMLHTTP.3.0'); } catch(e) {}
-    try { return new ActiveXObject('Msxml2.XMLHTTP'); } catch(e) {}
+function getXHR(method) {
+  if (method) {
+    method = method.toLowerCase();
   }
+
+  if (root.ActiveXObject) {
+    if ('file:' === root.location.protocol || 'patch' === method) {
+      return getIEXHR();
+    } else if (root.XMLHttpRequest) {
+      return new XMLHttpRequest;
+    } else {
+      return getIEXHR();
+    }
+  } else {
+    return new XMLHttpRequest;
+  }
+  return false;
+}
+
+function getIEXHR() {
+  try { return new ActiveXObject('Microsoft.XMLHTTP'); } catch(e) {}
+  try { return new ActiveXObject('Msxml2.XMLHTTP.6.0'); } catch(e) {}
+  try { return new ActiveXObject('Msxml2.XMLHTTP.3.0'); } catch(e) {}
+  try { return new ActiveXObject('Msxml2.XMLHTTP'); } catch(e) {}
   return false;
 }
 
@@ -1155,7 +1169,7 @@ Request.prototype.withCredentials = function(){
 
 Request.prototype.end = function(fn){
   var self = this;
-  var xhr = this.xhr = getXHR();
+  var xhr = this.xhr = getXHR(this.method);
   var query = this._query.join('&');
   var timeout = this._timeout;
   var data = this._data;
