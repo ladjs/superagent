@@ -10,7 +10,7 @@ app.get('/login', function(req, res){
   res.send('<form id="login"></form>');
 });
 
-app.post('/echo', function(req, res){
+app.all('/echo', function(req, res){
   res.writeHead(200, req.headers);
   req.pipe(res);
 });
