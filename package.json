@@ -2,6 +2,9 @@
   "name": "superagent",
   "version": "0.15.7",
   "description": "elegant & feature rich browser / node HTTP with a fluent API",
+  "scripts": {
+    "test": "make test"
+  },
   "keywords": [
     "http",
     "ajax",
