@@ -1,4 +1,12 @@
 
+0.16.0 / 2013-12-15
+==================
+
+ * add request .accept()
+ * add xml mime type to request.types
+ * fix Content-Type and Charset
+ * fix parse body on HEAD requests
+
 0.15.7 / 2013-10-19 
 ==================
 

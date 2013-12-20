@@ -10,7 +10,7 @@ app.get('/login', function(req, res){
   res.send('<form id="login"></form>');
 });
 
-app.post('/echo', function(req, res){
+app.all('/echo', function(req, res){
   res.writeHead(200, req.headers);
   req.pipe(res);
 });
@@ -232,6 +232,48 @@ describe('request', function(){
       .type('html')
       .end(function(res){
         res.header['content-type'].should.equal('text/html');
+        done();
+      });
+    })
+  })
+
+  describe('req.accept(str)', function(){
+    it('should set Accept', function(done){
+      request
+      .get('http://localhost:5000/echo')
+      .accept('text/x-foo')
+      .end(function(res){
+         res.header['accept'].should.equal('text/x-foo');
+         done();
+      });
+    })
+
+    it('should map "json"', function(done){
+      request
+      .get('http://localhost:5000/echo')
+      .accept('json')
+      .end(function(res){
+        res.header['accept'].should.equal('application/json');
+        done();
+      });
+    })
+
+    it('should map "xml"', function(done){
+      request
+      .get('http://localhost:5000/echo')
+      .accept('xml')
+      .end(function(res){
+        res.header['accept'].should.equal('application/xml');
+        done();
+      });
+    })
+
+    it('should map "html"', function(done){
+      request
+      .get('http://localhost:5000/echo')
+      .accept('html')
+      .end(function(res){
+        res.header['accept'].should.equal('text/html');
         done();
       });
     })
