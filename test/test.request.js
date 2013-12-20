@@ -187,6 +187,46 @@ test('request .send() with callback only', function(next){
   });
 });
 
+test('request .accept() with json', function(next){
+  request
+  .get('/echo-header/accept')
+  .accept('json')
+  .end(function(res){
+    assert('application/json' == res.text);
+    next();
+  });
+});
+
+test('request .accept() with application/json', function(next){
+  request
+  .get('/echo-header/accept')
+  .accept('application/json')
+  .end(function(res){
+    assert('application/json' == res.text);
+    next();
+  });
+});
+
+test('request .accept() with xml', function(next){
+  request
+  .get('/echo-header/accept')
+  .accept('xml')
+  .end(function(res){
+    assert('application/xml' == res.text);
+    next();
+  });
+});
+
+test('request .accept() with application/xml', function(next){
+  request
+  .get('/echo-header/accept')
+  .accept('application/xml')
+  .end(function(res){
+    assert('application/xml' == res.text);
+    next();
+  });
+});
+
 // FIXME: ie6 will POST rather than GET here due to data(),
 //        but I'm not 100% sure why.  Newer IEs are OK.
 test('request .end()', function(next){

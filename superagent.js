@@ -27,10 +27,14 @@ function require(path, parent, orig) {
   // perform real require()
   // by invoking the module's
   // registered function
-  if (!module.exports) {
-    module.exports = {};
-    module.client = module.component = true;
-    module.call(this, module.exports, require.relative(resolved), module);
+  if (!module._resolving && !module.exports) {
+    var mod = {};
+    mod.exports = {};
+    mod.client = mod.component = true;
+    module._resolving = true;
+    module.call(this, mod.exports, require.relative(resolved), mod);
+    delete module._resolving;
+    module.exports = mod.exports;
   }
 
   return module.exports;
@@ -196,22 +200,7 @@ require.relative = function(parent) {
 
   return localRequire;
 };
-require.register("component-indexof/index.js", function(exports, require, module){
-module.exports = function(arr, obj){
-  if (arr.indexOf) return arr.indexOf(obj);
-  for (var i = 0; i < arr.length; ++i) {
-    if (arr[i] === obj) return i;
-  }
-  return -1;
-};
-});
 require.register("component-emitter/index.js", function(exports, require, module){
-
-/**
- * Module dependencies.
- */
-
-var index = require('indexof');
 
 /**
  * Expose `Emitter`.
@@ -280,7 +269,7 @@ Emitter.prototype.once = function(event, fn){
     fn.apply(this, arguments);
   }
 
-  fn._off = on;
+  on.fn = fn;
   this.on(event, on);
   return this;
 };
@@ -318,8 +307,14 @@ Emitter.prototype.removeEventListener = function(event, fn){
   }
 
   // remove specific handler
-  var i = index(callbacks, fn._off || fn);
-  if (~i) callbacks.splice(i, 1);
+  var cb;
+  for (var i = 0; i < callbacks.length; i++) {
+    cb = callbacks[i];
+    if (cb === fn || cb.fn === fn) {
+      callbacks.splice(i, 1);
+      break;
+    }
+  }
   return this;
 };
 
@@ -548,6 +543,7 @@ request.parseString = parseString;
 request.types = {
   html: 'text/html',
   json: 'application/json',
+  xml: 'application/xml',
   urlencoded: 'application/x-www-form-urlencoded',
   'form': 'application/x-www-form-urlencoded',
   'form-data': 'application/x-www-form-urlencoded'
@@ -974,6 +970,31 @@ Request.prototype.type = function(type){
 };
 
 /**
+ * Set Accept to `type`, mapping values from `request.types`.
+ *
+ * Examples:
+ *
+ *      superagent.types.json = 'application/json';
+ *
+ *      request.get('/agent')
+ *        .accept('json')
+ *        .end(callback);
+ *
+ *      request.get('/agent')
+ *        .accept('application/json')
+ *        .end(callback);
+ *
+ * @param {String} accept
+ * @return {Request} for chaining
+ * @api public
+ */
+
+Request.prototype.accept = function(type){
+  this.set('Accept', request.types[type] || type);
+  return this;
+};
+
+/**
  * Set Authorization field value with `user` and `pass`.
  *
  * @param {String} user
@@ -1371,7 +1392,6 @@ module.exports = request;
 
 require.alias("component-emitter/index.js", "superagent/deps/emitter/index.js");
 require.alias("component-emitter/index.js", "emitter/index.js");
-require.alias("component-indexof/index.js", "component-emitter/deps/indexof/index.js");
 
 require.alias("RedVentures-reduce/index.js", "superagent/deps/reduce/index.js");
 require.alias("RedVentures-reduce/index.js", "reduce/index.js");
