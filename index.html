@@ -221,6 +221,24 @@
    .type('png')
 </code></pre>
 
+<h2>Setting Accept</h2>
+
+<p>In a similar fashion to the <code>.type()</code> method it is also possible to
+  set the Accept header via the short hand method <code>.accept()</code>. Which
+  references <code>request.types</code> as well allowing you to specify either the
+  full canonicalized MIME type name as type/subtype, or the extension suffix form as
+  "xml", "json", "png", etc for convenience:</p>
+
+<pre><code> request.get('/user')
+   .accept('application/json')
+
+ request.get('/user')
+   .accept('json')
+
+ request.get('/user')
+   .accept('png')
+</code></pre>
+
 <h2>Query strings</h2>
 
 <p>When issuing a <strong>GET</strong> request the <code>res.send(obj)</code> method will invoke <code>res.query(obj)</code>, this is a method which may be used with other HTTP methods in order to build up a query-string. For example populating <code>?format=json&amp;dest=/login</code> on a <strong>POST</strong>:</p>
