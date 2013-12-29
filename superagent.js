@@ -492,8 +492,10 @@ function serialize(obj) {
   if (!isObject(obj)) return obj;
   var pairs = [];
   for (var key in obj) {
-    pairs.push(encodeURIComponent(key)
-      + '=' + encodeURIComponent(obj[key]));
+    if (null != obj[key]) {
+      pairs.push(encodeURIComponent(key)
+        + '=' + encodeURIComponent(obj[key]));
+    }
   }
   return pairs.join('&');
 }
