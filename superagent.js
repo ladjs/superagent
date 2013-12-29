@@ -379,7 +379,7 @@ require.register("RedVentures-reduce/index.js", function(exports, require, modul
  * TODO: combatible error handling?
  */
 
-module.exports = function(arr, fn, initial){  
+module.exports = function(arr, fn, initial){
   var idx = 0;
   var len = arr.length;
   var curr = arguments.length == 3
@@ -389,7 +389,7 @@ module.exports = function(arr, fn, initial){
   while (idx < len) {
     curr = fn.call(null, curr, arr[idx], ++idx, arr);
   }
-  
+
   return curr;
 };
 });
@@ -1184,9 +1184,6 @@ Request.prototype.end = function(fn){
   // store callback
   this._callback = fn || noop;
 
-  // CORS
-  if (this._withCredentials) xhr.withCredentials = true;
-
   // state change
   xhr.onreadystatechange = function(){
     if (4 != xhr.readyState) return;
@@ -1222,6 +1219,9 @@ Request.prototype.end = function(fn){
 
   // initiate request
   xhr.open(this.method, this.url, true);
+
+  // CORS
+  if (this._withCredentials) xhr.withCredentials = true;
 
   // body
   if ('GET' != this.method && 'HEAD' != this.method && 'string' != typeof data && !isHost(data)) {
