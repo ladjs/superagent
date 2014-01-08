@@ -1,0 +1,13 @@
+ui: mocha-tdd
+server: ./test/server.js
+browsers:
+  - name: chrome
+    version: latest
+    platform: 'Mac 10.9'
+  - name: chrome
+    version: latest
+    platform: 'Windows 2008'
+  - name: firefox
+    version: latest
+  - name: ie
+    version: latest
