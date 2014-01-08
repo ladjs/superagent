@@ -1,11 +1,16 @@
 
-0.16.0 / 2013-12-15
+0.16.0 / 2014-01-07
 ==================
 
- * add request .accept()
- * add xml mime type to request.types
- * fix Content-Type and Charset
- * fix parse body on HEAD requests
+ * remove support for 0.6 (superjoe30)
+ * fix CORS withCredentials (wejendorp)
+ * add "test" script (superjoe30)
+ * add request .accept() method (nickl-)
+ * add xml to mime types mappings (nickl-)
+ * fix parse body error on HEAD requests (gjohnson)
+ * fix documentation typos (matteofigus)
+ * fix content-type + charset (bengourley)
+ * fix null values on query parameters (cristiandouce)
 
 0.15.7 / 2013-10-19 
 ==================
