@@ -26,8 +26,11 @@ superagent.js: components
 components:
 	component install
 
-test-server:
-	@node test/server
+test-client-local:
+	./node_modules/.bin/zuul --local -- test/index.js
+
+test-client-sauce:
+	./node_modules/.bin/zuul -- test/index.js
 
 docs: test-docs
 
@@ -39,4 +42,4 @@ test-docs:
 clean:
 	rm -fr superagent.js components
 
-.PHONY: test-cov test docs test-docs clean
+.PHONY: test-cov test docs test-docs clean test-client-local test-client-sauce
