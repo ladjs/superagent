@@ -94,11 +94,14 @@ request.post('/api/pet', cat, function(error, res){
 
     $ npm install
 
- Start the test server:
+ Start the test server for local client testing:
 
-    $ make test-server
+    $ make test-client-local
 
- Visit `localhost:4000/` in the browser.
+ Visit the URL shown in your browser of choice.
+
+
+
 
 ## Browser build
 
