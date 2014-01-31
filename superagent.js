@@ -367,7 +367,7 @@ Emitter.prototype.hasListeners = function(event){
 };
 
 });
-require.register("RedVentures-reduce/index.js", function(exports, require, module){
+require.register("component-reduce/index.js", function(exports, require, module){
 
 /**
  * Reduce `arr` with `fn`.
@@ -698,9 +698,23 @@ function Response(req, options) {
   // other headers fails.
   this.header['content-type'] = this.xhr.getResponseHeader('content-type');
   this.setHeaderProperties(this.header);
-  this.body = this.req.method != 'HEAD'
-    ? this.parseBody(this.text)
-    : null;
+  if (this.req.method != 'HEAD') {
+      try {
+        this.body = this.parseBody(this.text);
+      }
+      catch (e) {
+        this.ok = false;
+        var msg = 'cannot ' + method + ' ' + path + ' (' + this.status + ')';
+        var err = new Error(msg);
+        err.status = this.status;
+        err.method = method;
+        err.path = path;
+        this.error = err;
+      }
+  }
+  else {
+    this.body = null;
+  }
 }
 
 /**
@@ -1397,8 +1411,8 @@ module.exports = request;
 require.alias("component-emitter/index.js", "superagent/deps/emitter/index.js");
 require.alias("component-emitter/index.js", "emitter/index.js");
 
-require.alias("RedVentures-reduce/index.js", "superagent/deps/reduce/index.js");
-require.alias("RedVentures-reduce/index.js", "reduce/index.js");
+require.alias("component-reduce/index.js", "superagent/deps/reduce/index.js");
+require.alias("component-reduce/index.js", "reduce/index.js");
 
 require.alias("superagent/lib/client.js", "superagent/index.js");if (typeof exports == "object") {
   module.exports = require("superagent");
