@@ -707,9 +707,6 @@ function Response(req, options) {
         this.body = this.text;
         var msg = 'Malformed JSON';
         var err = new Error(msg);
-        err.status = this.status;
-        err.method = method;
-        err.path = path;
         this.error = err;
       }
   }
