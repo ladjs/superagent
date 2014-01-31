@@ -704,7 +704,8 @@ function Response(req, options) {
       }
       catch (e) {
         this.ok = false;
-        var msg = 'cannot ' + method + ' ' + path + ' (' + this.status + ')';
+        this.body = this.text;
+        var msg = 'malformed JSON response';
         var err = new Error(msg);
         err.status = this.status;
         err.method = method;
