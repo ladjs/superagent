@@ -1176,6 +1176,17 @@ Request.prototype.withCredentials = function(){
   return this;
 };
 
+Request.prototype.setXHR = function(xhr){
+	return this.xhr = xhr;
+};
+
+Request.prototype.getXHR = function(){
+	if(!this.xhr){
+		this.xhr = getXHR();
+	}
+	return this.xhr;
+};
+
 /**
  * Initiate request, invoking callback `fn(res)`
  * with an instanceof `Response`.
@@ -1187,7 +1198,7 @@ Request.prototype.withCredentials = function(){
 
 Request.prototype.end = function(fn){
   var self = this;
-  var xhr = this.xhr = getXHR();
+  var xhr = this.xhr = this.getXHR();
   var query = this._query.join('&');
   var timeout = this._timeout;
   var data = this._data;
