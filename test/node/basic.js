@@ -367,6 +367,15 @@ describe('request', function(){
         done();
       });
     })
+
+    it('should emit request', function(done){
+      var req = request.post('http://localhost:5000/echo');
+      req.on('request', function(request){
+        assert(req == request);
+        done();
+      });
+      req.end();
+    })
   })
 
   describe('.buffer()', function(){

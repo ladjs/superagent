@@ -27,14 +27,10 @@ function require(path, parent, orig) {
   // perform real require()
   // by invoking the module's
   // registered function
-  if (!module._resolving && !module.exports) {
-    var mod = {};
-    mod.exports = {};
-    mod.client = mod.component = true;
-    module._resolving = true;
-    module.call(this, mod.exports, require.relative(resolved), mod);
-    delete module._resolving;
-    module.exports = mod.exports;
+  if (!module.exports) {
+    module.exports = {};
+    module.client = module.component = true;
+    module.call(this, module.exports, require.relative(resolved), module);
   }
 
   return module.exports;
@@ -367,7 +363,7 @@ Emitter.prototype.hasListeners = function(event){
 };
 
 });
-require.register("RedVentures-reduce/index.js", function(exports, require, module){
+require.register("component-reduce/index.js", function(exports, require, module){
 
 /**
  * Reduce `arr` with `fn`.
@@ -1401,13 +1397,11 @@ module.exports = request;
 });
 
 
-
-
 require.alias("component-emitter/index.js", "superagent/deps/emitter/index.js");
 require.alias("component-emitter/index.js", "emitter/index.js");
 
-require.alias("RedVentures-reduce/index.js", "superagent/deps/reduce/index.js");
-require.alias("RedVentures-reduce/index.js", "reduce/index.js");
+require.alias("component-reduce/index.js", "superagent/deps/reduce/index.js");
+require.alias("component-reduce/index.js", "reduce/index.js");
 
 require.alias("superagent/lib/client.js", "superagent/index.js");if (typeof exports == "object") {
   module.exports = require("superagent");
