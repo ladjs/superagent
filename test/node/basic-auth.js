@@ -36,4 +36,16 @@ describe('Basic auth', function(){
       });
     })
   })
+
+  describe('req.auth(user + ":" + pass)', function(){
+    it('should set authorization', function(done){
+      request
+      .get('http://localhost:3010')
+      .auth('tobi:learnboost')
+      .end(function(res){
+        res.status.should.eql(200);
+        done();
+      });
+    })
+  })
 })
