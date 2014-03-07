@@ -78,6 +78,33 @@ request.post('/api/pet', cat, function(error, res){
 });
 ```
 
+# Plugins
+
+Usage:
+
+```js
+var nocache = require('no-cache');
+var request = require('superagent');
+var prefix = require('superagent-prefix')('/static');
+
+prefix(request); // Prefixes *all* requests
+
+request
+.get('/some-url')
+.use(nocache) // Prevents caching of *only* this request
+.end(function(res){
+    // Do something
+});
+```
+
+Existing plugins:
+ * [superagent-no-cache](https://github.com/johntron/superagent-no-cache) - prevents caching by including Cache-Control header
+ * [superagent-prefix](https://github.com/johntron/superagent-prefix) - prefixes absolute URLs (useful in test environment)
+
+Please prefix your plugin component with `superagent-*`
+
+For superagent extensions such as couchdb and oauth visit the [wiki](https://github.com/visionmedia/superagent/wiki).
+
 ## Running node tests
 
   Install dependencies:
@@ -109,31 +136,6 @@ request.post('/api/pet', cat, function(error, res){
 - [agency tests](https://github.com/visionmedia/superagent/blob/master/test/node/agency.js)
 - [express demo app](https://github.com/hunterloftis/component-test/blob/master/lib/users/test/controller.test.js)
 
-# Plugins
-
-Usage:
-
-```js
-var request = require('superagent'),
-    no_cache = require('no-cache'),
-    prefix = require('superagent-prefix')('/static');
-
-prefix(request); // Prefixes *all* requests
-
-request.get('/some-url')
-    .use(no_cache) // Prevents caching of *only* this request
-    .end(function(res) {
-        // Do something
-    };
-```
-
-Existing plugins:
- * [superagent-no-cache](https://github.com/johntron/superagent-no-cache) - prevents caching by including Cache-Control header
- * [superagent-prefix](https://github.com/johntron/superagent-prefix) - prefixes absolute URLs (useful in test environment)
-
-Please prefix your plugin component with `superagent-*`
-
-For superagent extensions such as couchdb and oauth visit the [wiki](https://github.com/visionmedia/superagent/wiki).
 
 ## License
 
