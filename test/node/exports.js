@@ -3,7 +3,7 @@ var request = require('../../');
 
 describe('exports', function(){
   it('should expose Part', function(){
-    request.Part.should.be.a('function');
+    request.Part.should.be.a.function;
   })
   
   it('should expose .protocols', function(){
