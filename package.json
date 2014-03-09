@@ -20,7 +20,7 @@
     "url": "git://github.com/visionmedia/superagent.git"
   },
   "dependencies": {
-    "qs": "0.6.5",
+    "qs": "0.6.6",
     "formidable": "1.0.14",
     "mime": "1.2.5",
     "emitter-component": "1.0.0",
