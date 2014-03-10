@@ -20,7 +20,7 @@
     "url": "git://github.com/visionmedia/superagent.git"
   },
   "dependencies": {
-    "qs": "0.6.5",
+    "qs": "0.6.6",
     "formidable": "1.0.14",
     "mime": "1.2.5",
     "component-emitter": "1.1.2",
@@ -32,9 +32,9 @@
   },
   "devDependencies": {
     "zuul": "~1.3.0",
-    "express": "3.3.1",
+    "express": "3.5.0",
     "better-assert": "~0.1.0",
-    "should": "1.3.0",
+    "should": "3.1.3",
     "mocha": "*"
   },
   "browser": {
