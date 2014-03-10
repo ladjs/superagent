@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "zuul": "~1.3.0",
-    "express": "3.3.1",
+    "express": "3.5.0",
     "better-assert": "~0.1.0",
     "should": "3.1.3",
     "mocha": "*"
