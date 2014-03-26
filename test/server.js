@@ -134,6 +134,4 @@ app.get('/xdomain', function(req, res){
 
 app.use(express.static(__dirname + '/../'));
 
-var server = app.listen(process.env.ZUUL_PORT, function() {
-  //console.log('Test server listening on port %d', server.address().port);
-});
+var server = app.listen(process.env.ZUUL_PORT || 4000);
