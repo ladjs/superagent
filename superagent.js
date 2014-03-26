@@ -27,10 +27,14 @@ function require(path, parent, orig) {
   // perform real require()
   // by invoking the module's
   // registered function
-  if (!module.exports) {
-    module.exports = {};
-    module.client = module.component = true;
-    module.call(this, module.exports, require.relative(resolved), module);
+  if (!module._resolving && !module.exports) {
+    var mod = {};
+    mod.exports = {};
+    mod.client = mod.component = true;
+    module._resolving = true;
+    module.call(this, mod.exports, require.relative(resolved), mod);
+    delete module._resolving;
+    module.exports = mod.exports;
   }
 
   return module.exports;
@@ -1248,6 +1252,7 @@ Request.prototype.end = function(fn){
   }
 
   // send stuff
+  this.emit('request', this);
   xhr.send(data);
   return this;
 };
@@ -1401,6 +1406,8 @@ module.exports = request;
 });
 
 
+
+
 require.alias("component-emitter/index.js", "superagent/deps/emitter/index.js");
 require.alias("component-emitter/index.js", "emitter/index.js");
 
@@ -1410,7 +1417,7 @@ require.alias("component-reduce/index.js", "reduce/index.js");
 require.alias("superagent/lib/client.js", "superagent/index.js");if (typeof exports == "object") {
   module.exports = require("superagent");
 } else if (typeof define == "function" && define.amd) {
-  define(function(){ return require("superagent"); });
+  define([], function(){ return require("superagent"); });
 } else {
   this["superagent"] = require("superagent");
 }})();
