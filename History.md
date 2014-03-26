@@ -1,6 +1,7 @@
 Unreleased
 ==========
 
+ * add support for XHR2 file upload using `FormData`, `File`, and `Blob` (gasi)
  * use local `component` binary to ensure consistent builds between developers (gasi)
 
 0.17.0 / 2014-03-06
