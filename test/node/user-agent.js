@@ -34,4 +34,15 @@ describe('req.get()', function(){
       done();
     });
   });
+
+  it('should be able to wipe user-agent', function(done){
+    request
+    .get('http://localhost:3345/ua')
+    .remove('User-Agent')
+    .end(function(err, res){
+      assert(res.headers);
+      assert(res.headers['user-agent'] == void 0);
+      done();
+    });
+  });
 });
