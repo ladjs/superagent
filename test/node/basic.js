@@ -205,11 +205,11 @@ describe('request', function(){
     })
   })
 
-  describe('req.remove(field)', function(){
+  describe('req.unset(field)', function(){
     it('should remove the header field', function(done){
       request
       .post('http://localhost:5000/echo')
-      .remove('User-Agent')
+      .unset('User-Agent')
       .end(function(res){
         assert(void 0 == res.header['user-agent']);
         done();

@@ -38,7 +38,7 @@ describe('req.get()', function(){
   it('should be able to wipe user-agent', function(done){
     request
     .get('http://localhost:3345/ua')
-    .remove('User-Agent')
+    .unset('User-Agent')
     .end(function(err, res){
       assert(res.headers);
       assert(res.headers['user-agent'] == void 0);
