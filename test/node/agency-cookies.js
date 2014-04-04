@@ -21,7 +21,6 @@ app.listen(4001);
 describe('request', function() {
   describe('persistent agent', function() {
     var agent1 = request.agent();
-
     it('should set cookie in end callback', function (done) {
       agent1
       .get('http://localhost:4001/setcookie')
