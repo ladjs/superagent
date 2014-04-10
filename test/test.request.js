@@ -33,6 +33,7 @@ test('request() GET 5xx', function(next){
   request('GET', '/error').end(function(res){
     assert(!res.ok, 'response should not be ok');
     assert(res.error, 'response should be an error');
+    assert('/error' == res.error.path, 'response error.path should be /error');
     assert(!res.clientError, 'response should not be a client error');
     assert(res.serverError, 'response should be a server error');
     next();
@@ -43,6 +44,7 @@ test('request() GET 4xx', function(next){
   request('GET', '/notfound').end(function(res){
     assert(!res.ok, 'response should not be ok');
     assert(res.error, 'response should be an error');
+    assert('/notfound' == res.error.path, 'response error.path should be /notfound');
     assert(res.clientError, 'response should be a client error');
     assert(!res.serverError, 'response should not be a server error');
     next();
