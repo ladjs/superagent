@@ -29,6 +29,17 @@ test('request() simple HEAD', function(next){
   });
 });
 
+test('request() error object', function(next) {
+  request('GET', '/error').end(function(res) {
+    assert(res.error, 'response should be an error');
+    assert(res.error.message == 'cannot GET /error (500)');
+    assert(res.error.status == 500);
+    assert(res.error.method == 'GET');
+    assert(res.error.url == '/error');
+    next();
+  });
+});
+
 test('request() GET 5xx', function(next){
   request('GET', '/error').end(function(res){
     assert(!res.ok, 'response should not be ok');
