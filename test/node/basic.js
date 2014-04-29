@@ -205,6 +205,18 @@ describe('request', function(){
     })
   })
 
+  describe('req.unset(field)', function(){
+    it('should remove the header field', function(done){
+      request
+      .post('http://localhost:5000/echo')
+      .unset('User-Agent')
+      .end(function(res){
+        assert(void 0 == res.header['user-agent']);
+        done();
+      })
+    })
+  })
+
   describe('req.type(str)', function(){
     it('should set the Content-Type', function(done){
       request
