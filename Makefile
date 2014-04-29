@@ -1,4 +1,4 @@
-
+COMPONENT=./node_modules/.bin/component
 TESTS = test/node/*.js
 REPORTER = dot
 
@@ -19,12 +19,12 @@ lib-cov:
 	jscoverage lib lib-cov
 
 superagent.js: components
-	@component build \
+	@$(COMPONENT) build \
 	  --standalone superagent \
 	  --out . --name superagent
 
 components:
-	component install
+	$(COMPONENT) install
 
 test-server:
 	@node test/server

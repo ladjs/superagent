@@ -125,11 +125,11 @@ For superagent extensions such as couchdb and oauth visit the [wiki](https://git
 
     $ make test-server
 
- Visit `localhost:4000/` in the browser.
+ Visit <http://localhost:4000/> in the browser.
 
 ## Browser build
 
-  The browser build of superagent is located in ./superagent.js
+  The browser build of superagent is located in [`./superagent.js`](./superagent.js).
 
 ## Examples:
 

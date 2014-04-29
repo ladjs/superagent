@@ -27,10 +27,14 @@ function require(path, parent, orig) {
   // perform real require()
   // by invoking the module's
   // registered function
-  if (!module.exports) {
-    module.exports = {};
-    module.client = module.component = true;
-    module.call(this, module.exports, require.relative(resolved), module);
+  if (!module._resolving && !module.exports) {
+    var mod = {};
+    mod.exports = {};
+    mod.client = mod.component = true;
+    module._resolving = true;
+    module.call(this, mod.exports, require.relative(resolved), mod);
+    delete module._resolving;
+    module.exports = mod.exports;
   }
 
   return module.exports;
@@ -1111,7 +1115,11 @@ Request.prototype.send = function(data){
   }
 
   if (!obj) return this;
-  if (!type) this.type('json');
+  // Don’t set the content type for host objects as the browser automatically
+  // adds the appropriate content type, e.g. for `FormData` that would be
+  // `Content-Type: multipart/form-data; boundary=<boundary>` where there is no
+  // API to retrieve the value of `<boundary`> ourselves.
+  if (!type && !isHost(this._data)) this.type('json');
   return this;
 };
 
@@ -1244,6 +1252,7 @@ Request.prototype.end = function(fn){
   }
 
   // send stuff
+  this.emit('request', this);
   xhr.send(data);
   return this;
 };
@@ -1397,6 +1406,8 @@ module.exports = request;
 });
 
 
+
+
 require.alias("component-emitter/index.js", "superagent/deps/emitter/index.js");
 require.alias("component-emitter/index.js", "emitter/index.js");
 
@@ -1406,7 +1417,7 @@ require.alias("component-reduce/index.js", "reduce/index.js");
 require.alias("superagent/lib/client.js", "superagent/index.js");if (typeof exports == "object") {
   module.exports = require("superagent");
 } else if (typeof define == "function" && define.amd) {
-  define(function(){ return require("superagent"); });
+  define([], function(){ return require("superagent"); });
 } else {
   this["superagent"] = require("superagent");
 }})();
