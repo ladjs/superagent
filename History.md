@@ -1,4 +1,15 @@
 
+0.18.0 / 2014-04-29
+===================
+
+* Use "form-data" module for the multipart/form-data implementation. (TooTallNate)
+* Add basic `field()` and `attach()` functions for HTML5 FormData. (TooTallNate)
+* Deprecate `part()`. (TooTallNate)
+* Set default user-agent header. (bevacqua)
+* Add `unset()` method for removing headers. (bevacqua)
+* Update cookiejar. (missinglink)
+* Fix response error formatting. (shesek)
+
 0.17.0 / 2014-03-06
 ===================
 
