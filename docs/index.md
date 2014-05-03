@@ -4,7 +4,7 @@
 
      request
        .post('/api/pet')
-       .data({ name: 'Manny', species: 'cat' })
+       .send({ name: 'Manny', species: 'cat' })
        .set('X-API-Key', 'foobar')
        .set('Accept', 'application/json')
        .end(function(res){
@@ -76,7 +76,7 @@
    
      request
        .get('/search')
-       .data({ query: 'tobi the ferret' })
+       .send({ query: 'tobi the ferret' })
        .end(function(res){
          
        });
@@ -123,22 +123,22 @@
 
 ## GET requests
 
- The `.data()` method accepts objects, which when used with the __GET__ method will form a query-string. The following will produce the path `/search?query=Manny&range=1..5&order=desc`.
+ The `.send()` method accepts objects, which when used with the __GET__ method will form a query-string. The following will produce the path `/search?query=Manny&range=1..5&order=desc`.
  
      request
        .get('/search')
-       .data({ query: 'Manny' })
-       .data({ range: '1..5' })
-       .data({ order: 'desc' })
+       .send({ query: 'Manny' })
+       .send({ range: '1..5' })
+       .send({ order: 'desc' })
        .end(function(res){
 
        });
 
-  The `.data()` method accepts strings as well:
+  The `.send()` method accepts strings as well:
   
       request
         .get('/querystring')
-        .data('search=Manny&range=1..5')
+        .send('search=Manny&range=1..5')
         .end(function(res){
 
         });
@@ -149,28 +149,28 @@
 
       request.post('/user')
         .set('Content-Type', 'application/json')
-        .data('{"name":"tj","pet":"tobi"})
+        .send('{"name":"tj","pet":"tobi"})
         .end(callback)
 
   Since JSON is undoubtably the most common, it's the _default_! The following example is equivalent to the previous.
 
       request.post('/user')
-        .data({ name: 'tj', pet: 'tobi' })
+        .send({ name: 'tj', pet: 'tobi' })
         .end(callback)
 
-  Or using multiple `.data()` calls:
+  Or using multiple `.send()` calls:
   
       request.post('/user')
-        .data({ name: 'tj' })
-        .data({ pet: 'tobi' })
+        .send({ name: 'tj' })
+        .send({ pet: 'tobi' })
         .end(callback)
 
   SuperAgent formats are extensible, however by default "json" and "form" are supported. To send the data as `application/x-www-form-urlencoded` simply invoke `.type()` with "form-data", where the default is "json". This request will POST the body "name=tj&pet=tobi".
 
       request.post('/user')
         .type('form')
-        .data({ name: 'tj' })
-        .data({ pet: 'tobi' })
+        .send({ name: 'tj' })
+        .send({ pet: 'tobi' })
         .end(callback)
 
 ## Response properties
