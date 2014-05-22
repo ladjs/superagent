@@ -1,0 +1,15 @@
+ {
+   "name": "superagent",
+   "main": [
+     "lib/client.js"
+   ],
+   "ignore": [
+     "docs",
+     "examples",
+     "test"
+   ],
+   "dependencies": {
+     "emitter": "https://github.com/component/emitter.git",
+     "reduce": "https://github.com/component/reduce.git"
+   }
+ }
