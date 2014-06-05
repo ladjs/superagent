@@ -535,3 +535,19 @@ test('basic auth', function(next){
     next();
   });
 });
+
+test('xhr2 download file', function(next) {
+  request.parse['application/vnd.superagent'] = function (obj) {
+    return obj;
+  };
+
+  request
+  .get('/arraybuffer')
+  .on('request', function () {
+    this.xhr.responseType = 'arraybuffer';
+  })
+  .end(function(res) {
+    assert(res.body instanceof ArrayBuffer);
+    next();
+  });
+});
