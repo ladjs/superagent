@@ -35,7 +35,7 @@ $.get('/user/1', function(data, textStatus, xhr){
 Great, it's ok, but it's kinda lame having 3 arguments just to access something on the `xhr`. Our equivalent would be:
 
 ```js
-request.get('/user/1', function(res){
+request.get('/user/1', function(error, res){
 
 });
 ```
@@ -92,7 +92,7 @@ prefix(request); // Prefixes *all* requests
 request
 .get('/some-url')
 .use(nocache) // Prevents caching of *only* this request
-.end(function(res){
+.end(function(error, res){
     // Do something
 });
 ```
