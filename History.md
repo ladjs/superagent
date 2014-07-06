@@ -1,4 +1,13 @@
 
+0.18.1 / 2014-07-05
+==================
+
+ * Upgrade cookiejar dependency (juanpin)
+ * Support image mime types (nebulade)
+ * Make .agent chainable (kof)
+ * Upgrade debug (TooTallNate)
+ * Fix docs (aheckmann)
+
 0.18.0 / 2014-04-29
 ===================
 
