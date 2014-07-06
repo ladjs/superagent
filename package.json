@@ -25,7 +25,7 @@
     "mime": "1.2.11",
     "component-emitter": "1.1.2",
     "methods": "1.0.1",
-    "cookiejar": "2.0.0",
+    "cookiejar": "2.0.1",
     "debug": "~1.0.1",
     "reduce-component": "1.0.1",
     "extend": "~1.2.1",
