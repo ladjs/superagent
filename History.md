@@ -1,3 +1,8 @@
+0.18.2 / 2014-07-12
+==================
+
+ * Handle parser errors. (kof)
+ * Ensure not to use default parsers when there is a user defined one. (kof)
 
 0.18.1 / 2014-07-05
 ==================
