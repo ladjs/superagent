@@ -45,4 +45,30 @@ describe('req.parse(fn)', function(){
       done();
     });
   })
+
+  it('should emit error if parser throws', function(done){
+    request
+    .get('http://localhost:3033/manny')
+    .parse(function() {
+      throw new Error('I am broken');
+    })
+    .on('error', function(err) {
+      err.message.should.equal('I am broken');
+      done();
+    })
+    .end();
+  })
+
+  it('should emit error if parser returns an error', function(done){
+    request
+    .get('http://localhost:3033/manny')
+    .parse(function(res, fn) {
+      fn(new Error('I am broken'));
+    })
+    .on('error', function(err) {
+      err.message.should.equal('I am broken');
+      done();
+    })
+    .end()
+  })
 })

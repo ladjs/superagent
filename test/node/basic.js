@@ -232,6 +232,7 @@ describe('request', function(){
       request
       .post('http://localhost:5000/echo')
       .type('json')
+      .send('{"a": 1}')
       .end(function(res){
         res.should.be.json;
         done();
