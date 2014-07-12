@@ -2,15 +2,18 @@
 var assert = require('assert');
 var request = require('../');
 
+var serializeObject = require('../lib/client/serialize').urlencoded;
+var parseString = require('../lib/client/parse').urlencoded;
+
 function serialize(obj, res) {
-  var val = request.serializeObject(obj);
+  var val = serializeObject(obj);
   assert(val == res
     , JSON.stringify(obj) + ' to "' + res + '" serialization failed. got: '
     + '"' + val + '"');
 }
 
 function parse(str, obj) {
-  var val = request.parseString(str);
+  var val = parseString(str);
   assert.deepEqual(val
     , obj
     , '"' + str + '" to '
