@@ -698,9 +698,21 @@ function Response(req, options) {
   // other headers fails.
   this.header['content-type'] = this.xhr.getResponseHeader('content-type');
   this.setHeaderProperties(this.header);
-  this.body = this.req.method != 'HEAD'
-    ? this.parseBody(this.text)
-    : null;
+  if (this.req.method != 'HEAD') {
+      try {
+        this.body = this.parseBody(this.text);
+      }
+      catch (e) {
+        this.ok = false;
+        this.body = this.text;
+        var msg = 'Malformed JSON';
+        var err = new Error(msg);
+        this.error = err;
+      }
+  }
+  else {
+    this.body = null;
+  }
 }
 
 /**
