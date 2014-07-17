@@ -443,16 +443,33 @@ function isHost(obj) {
  * Determine XHR.
  */
 
-function getXHR() {
-  if (root.XMLHttpRequest
-    && ('file:' != root.location.protocol || !root.ActiveXObject)) {
-    return new XMLHttpRequest;
+function getXHR(isXDomainRequest) {
+  if (isXDomainRequest === true) {
+    if (typeof new XMLHttpRequest().withCredentials !== 'undefined') {
+      // Check if the XMLHttpRequest object has a "withCredentials" property.
+      // "withCredentials" only exists on XMLHTTPRequest2 objects.
+      
+      return new XMLHttpRequest();
+    } else if (typeof XDomainRequest !== "undefined") {
+      // Otherwise, check if XDomainRequest.
+      // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
+      
+      return new XDomainRequest();
+    } else {
+      return false;
+    }
   } else {
-    try { return new ActiveXObject('Microsoft.XMLHTTP'); } catch(e) {}
-    try { return new ActiveXObject('Msxml2.XMLHTTP.6.0'); } catch(e) {}
-    try { return new ActiveXObject('Msxml2.XMLHTTP.3.0'); } catch(e) {}
-    try { return new ActiveXObject('Msxml2.XMLHTTP'); } catch(e) {}
+    if (root.XMLHttpRequest
+      && ('file:' != root.location.protocol || !root.ActiveXObject)) {
+      return new XMLHttpRequest();
+    } else {
+      try { return new ActiveXObject('Microsoft.XMLHTTP'); } catch(e) {}
+      try { return new ActiveXObject('Msxml2.XMLHTTP.6.0'); } catch(e) {}
+      try { return new ActiveXObject('Msxml2.XMLHTTP.3.0'); } catch(e) {}
+      try { return new ActiveXObject('Msxml2.XMLHTTP'); } catch(e) {}
+    }
   }
+
   return false;
 }
 
@@ -691,13 +708,20 @@ function Response(req, options) {
   this.req = req;
   this.xhr = this.req.xhr;
   this.text = this.xhr.responseText;
-  this.setStatusProperties(this.xhr.status);
+  this.setStatusProperties(typeof this.xhr.status !== 'undefined' ? this.xhr.status : 0);
+  if (typeof this.xhr.getAllResponseHeaders !== 'undefined' &&
+      typeof this.xhr.getResponseHeader !== 'undefined') {
   this.header = this.headers = parseHeader(this.xhr.getAllResponseHeaders());
   // getAllResponseHeaders sometimes falsely returns "" for CORS requests, but
   // getResponseHeader still works. so we get content-type even if getting
   // other headers fails.
   this.header['content-type'] = this.xhr.getResponseHeader('content-type');
   this.setHeaderProperties(this.header);
+  } else if (typeof this.xhr.contentType !== 'undefined') {
+    this.header = this.headers = {};
+    this.header['content-type'] = this.xhr.contentType;
+    this.setHeaderProperties(this.header);
+  }
   this.body = this.req.method != 'HEAD'
     ? this.parseBody(this.text)
     : null;
@@ -750,7 +774,7 @@ Response.prototype.setHeaderProperties = function(header){
 
 Response.prototype.parseBody = function(str){
   var parse = request.parse[this.type];
-  return parse
+  return parse && str && str.length
     ? parse(str)
     : null;
 };
@@ -1232,7 +1256,18 @@ Request.prototype.withCredentials = function(){
 
 Request.prototype.end = function(fn){
   var self = this;
-  var xhr = this.xhr = getXHR();
+  
+  var isXDomainRequest = false;
+
+  if (typeof root.location !== 'undefined') {
+    var hostnameMatch = this.url.match(/http[s]?:\/\/([^\/]*)/);
+
+    if (hostnameMatch && hostnameMatch[1] !== root.location.hostname) {
+      isXDomainRequest = true;
+    }
+  }
+
+  var xhr = this.xhr = getXHR(isXDomainRequest);
   var query = this._query.join('&');
   var timeout = this._timeout;
   var data = this._formData || this._data;
@@ -1241,6 +1276,7 @@ Request.prototype.end = function(fn){
   this._callback = fn || noop;
 
   // state change
+  if (typeof xhr.onreadystatechange !== 'undefined') {
   xhr.onreadystatechange = function(){
     if (4 != xhr.readyState) return;
     if (0 == xhr.status) {
@@ -1249,6 +1285,20 @@ Request.prototype.end = function(fn){
     }
     self.emit('end');
   };
+  } else {
+    xhr.onload = function () {
+      if (self.aborted) return self.timeoutError();
+      self.emit('end');
+    }
+
+    xhr.onerror = function () {
+      self.emit('end');
+    }
+
+    xhr.ontimeout = function () {
+      return self.timeoutError();
+    }
+  }
 
   // progress
   if (xhr.upload) {
@@ -1289,7 +1339,9 @@ Request.prototype.end = function(fn){
   // set header fields
   for (var field in this.header) {
     if (null == this.header[field]) continue;
+    if (typeof xhr.setRequestHeader !== 'undefined') {
     xhr.setRequestHeader(field, this.header[field]);
+  }
   }
 
   // send stuff
