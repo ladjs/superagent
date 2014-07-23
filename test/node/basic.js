@@ -100,6 +100,17 @@ describe('request', function(){
     })
   })
 
+  describe('req.response', function(){
+    it('should eql Response', function(done){
+      var req = request
+      .post(':5000/xml')
+      .end(function(err, res){
+        req.response.should.equal(res);
+        done();
+      });
+    });
+  });
+
   describe('res.error', function(){
     it('should should be an Error object', function(done){
       request
