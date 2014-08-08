@@ -460,7 +460,7 @@ function getXHR(isXDomainRequest) {
     }
   } else {
     if (root.XMLHttpRequest
-      && ('file:' != root.location.protocol || !root.ActiveXObject)) {
+      && ('file:' !== root.location.protocol || !root.ActiveXObject)) {
       return new XMLHttpRequest();
     } else {
       try { return new ActiveXObject('Microsoft.XMLHTTP'); } catch(e) {}
@@ -1348,6 +1348,17 @@ Request.prototype.end = function(fn){
   this.emit('request', this);
   xhr.send(data);
   return this;
+};
+
+/**
+ * Thunkify request for use with es6 generators
+ *
+ * @return {Thunk} for evaluation
+ * @api public
+ */
+
+Request.prototype.thunkify = function() {
+  return utils.thunkifyRequest(this);
 };
 
 /**
