@@ -21,6 +21,7 @@ describe('res.toError()', function(){
       assert(err.method == 'GET');
       assert(err.path == '/');
       assert(err.message == 'cannot GET / (400)');
+      assert(err.text == 'invalid json');
       done();
     });
   })
