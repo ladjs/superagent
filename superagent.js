@@ -27,14 +27,10 @@ function require(path, parent, orig) {
   // perform real require()
   // by invoking the module's
   // registered function
-  if (!module._resolving && !module.exports) {
-    var mod = {};
-    mod.exports = {};
-    mod.client = mod.component = true;
-    module._resolving = true;
-    module.call(this, mod.exports, require.relative(resolved), mod);
-    delete module._resolving;
-    module.exports = mod.exports;
+  if (!module.exports) {
+    module.exports = {};
+    module.client = module.component = true;
+    module.call(this, module.exports, require.relative(resolved), module);
   }
 
   return module.exports;
@@ -68,6 +64,7 @@ require.aliases = {};
 
 require.resolve = function(path) {
   if (path.charAt(0) === '/') path = path.slice(1);
+  var index = path + '/index.js';
 
   var paths = [
     path,
@@ -80,7 +77,10 @@ require.resolve = function(path) {
   for (var i = 0; i < paths.length; i++) {
     var path = paths[i];
     if (require.modules.hasOwnProperty(path)) return path;
-    if (require.aliases.hasOwnProperty(path)) return require.aliases[path];
+  }
+
+  if (require.aliases.hasOwnProperty(index)) {
+    return require.aliases[index];
   }
 };
 
@@ -393,6 +393,139 @@ module.exports = function(arr, fn, initial){
   return curr;
 };
 });
+require.register("component-trim/index.js", function(exports, require, module){
+
+exports = module.exports = trim;
+
+function trim(str){
+  if (str.trim) return str.trim();
+  return str.replace(/^\s*|\s*$/g, '');
+}
+
+exports.left = function(str){
+  if (str.trimLeft) return str.trimLeft();
+  return str.replace(/^\s*/, '');
+};
+
+exports.right = function(str){
+  if (str.trimRight) return str.trimRight();
+  return str.replace(/\s*$/, '');
+};
+
+});
+require.register("component-type/index.js", function(exports, require, module){
+/**
+ * toString ref.
+ */
+
+var toString = Object.prototype.toString;
+
+/**
+ * Return the type of `val`.
+ *
+ * @param {Mixed} val
+ * @return {String}
+ * @api public
+ */
+
+module.exports = function(val){
+  switch (toString.call(val)) {
+    case '[object Date]': return 'date';
+    case '[object RegExp]': return 'regexp';
+    case '[object Arguments]': return 'arguments';
+    case '[object Array]': return 'array';
+    case '[object Error]': return 'error';
+  }
+
+  if (val === null) return 'null';
+  if (val === undefined) return 'undefined';
+  if (val !== val) return 'nan';
+  if (val && val.nodeType === 1) return 'element';
+
+  val = val.valueOf
+    ? val.valueOf()
+    : Object.prototype.valueOf.apply(val)
+
+  return typeof val;
+};
+
+});
+require.register("component-querystring/index.js", function(exports, require, module){
+
+/**
+ * Module dependencies.
+ */
+
+var encode = encodeURIComponent;
+var decode = decodeURIComponent;
+var trim = require('trim');
+var type = require('type');
+
+/**
+ * Parse the given query `str`.
+ *
+ * @param {String} str
+ * @return {Object}
+ * @api public
+ */
+
+exports.parse = function(str){
+  if ('string' != typeof str) return {};
+
+  str = trim(str);
+  if ('' == str) return {};
+  if ('?' == str.charAt(0)) str = str.slice(1);
+
+  var obj = {};
+  var pairs = str.split('&');
+  for (var i = 0; i < pairs.length; i++) {
+    var parts = pairs[i].split('=');
+    var key = decode(parts[0]);
+    var m;
+
+    if (m = /(\w+)\[(\d+)\]/.exec(key)) {
+      obj[m[1]] = obj[m[1]] || [];
+      obj[m[1]][m[2]] = decode(parts[1]);
+      continue;
+    }
+
+    obj[parts[0]] = null == parts[1]
+      ? ''
+      : decode(parts[1]);
+  }
+
+  return obj;
+};
+
+/**
+ * Stringify the given `obj`.
+ *
+ * @param {Object} obj
+ * @return {String}
+ * @api public
+ */
+
+exports.stringify = function(obj){
+  if (!obj) return '';
+  var pairs = [];
+
+  for (var key in obj) {
+    var value = obj[key];
+
+    if ('array' == type(value)) {
+      for (var i = 0; i < value.length; ++i) {
+        pairs.push(encode(key + '[' + i + ']') + '=' + encode(value[i]));
+      }
+      continue;
+    }
+
+    pairs.push(encode(key) + '=' + encode(obj[key]));
+  }
+
+  return pairs.join('&');
+};
+
+});
 require.register("superagent/lib/client.js", function(exports, require, module){
 /**
  * Module dependencies.
@@ -400,6 +533,7 @@ require.register("superagent/lib/client.js", function(exports, require, module){
 
 var Emitter = require('emitter');
 var reduce = require('reduce');
+var qs = require('querystring');
 
 /**
  * Root reference for iframes.
@@ -448,19 +582,19 @@ function getXHR(isXDomainRequest) {
     if (typeof new XMLHttpRequest().withCredentials !== 'undefined') {
       // Check if the XMLHttpRequest object has a "withCredentials" property.
       // "withCredentials" only exists on XMLHTTPRequest2 objects.
-      
+
       return new XMLHttpRequest();
     } else if (typeof XDomainRequest !== "undefined") {
       // Otherwise, check if XDomainRequest.
       // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
-      
+
       return new XDomainRequest();
     } else {
       return false;
     }
   } else {
     if (root.XMLHttpRequest
-      && ('file:' != root.location.protocol || !root.ActiveXObject)) {
+      && ('file:' !== root.location.protocol || !root.ActiveXObject)) {
       return new XMLHttpRequest();
     } else {
       try { return new ActiveXObject('Microsoft.XMLHTTP'); } catch(e) {}
@@ -498,59 +632,16 @@ function isObject(obj) {
 }
 
 /**
- * Serialize the given `obj`.
- *
- * @param {Object} obj
- * @return {String}
- * @api private
- */
-
-function serialize(obj) {
-  if (!isObject(obj)) return obj;
-  var pairs = [];
-  for (var key in obj) {
-    if (null != obj[key]) {
-      pairs.push(encodeURIComponent(key)
-        + '=' + encodeURIComponent(obj[key]));
-    }
-  }
-  return pairs.join('&');
-}
-
-/**
  * Expose serialization method.
  */
 
- request.serializeObject = serialize;
-
- /**
-  * Parse the given x-www-form-urlencoded `str`.
-  *
-  * @param {String} str
-  * @return {Object}
-  * @api private
-  */
-
-function parseString(str) {
-  var obj = {};
-  var pairs = str.split('&');
-  var parts;
-  var pair;
-
-  for (var i = 0, len = pairs.length; i < len; ++i) {
-    pair = pairs[i];
-    parts = pair.split('=');
-    obj[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1]);
-  }
-
-  return obj;
-}
+request.serializeObject = qs.stringify;
 
 /**
  * Expose parser.
  */
 
-request.parseString = parseString;
+request.parseString = qs.parse;
 
 /**
  * Default MIME type map.
@@ -578,7 +669,7 @@ request.types = {
  */
 
  request.serialize = {
-   'application/x-www-form-urlencoded': serialize,
+   'application/x-www-form-urlencoded': qs.stringify,
    'application/json': JSON.stringify
  };
 
@@ -592,7 +683,7 @@ request.types = {
   */
 
 request.parse = {
-  'application/x-www-form-urlencoded': parseString,
+  'application/x-www-form-urlencoded': qs.parse,
   'application/json': JSON.parse
 };
 
@@ -1059,7 +1150,7 @@ Request.prototype.auth = function(user, pass){
 */
 
 Request.prototype.query = function(val){
-  if ('string' != typeof val) val = serialize(val);
+  if ('string' != typeof val) val = request.serializeObject(val);
   if (val) this._query.push(val);
   return this;
 };
@@ -1256,7 +1347,7 @@ Request.prototype.withCredentials = function(){
 
 Request.prototype.end = function(fn){
   var self = this;
-  
+
   var isXDomainRequest = false;
 
   if (typeof root.location !== 'undefined') {
@@ -1317,7 +1408,6 @@ Request.prototype.end = function(fn){
 
   // querystring
   if (query) {
-    query = request.serializeObject(query);
     this.url += ~this.url.indexOf('?')
       ? '&' + query
       : '?' + query;
@@ -1497,20 +1587,24 @@ request.put = function(url, data, fn){
 module.exports = request;
 
 });
-
-
-
-
 require.alias("component-emitter/index.js", "superagent/deps/emitter/index.js");
 require.alias("component-emitter/index.js", "emitter/index.js");
 
 require.alias("component-reduce/index.js", "superagent/deps/reduce/index.js");
 require.alias("component-reduce/index.js", "reduce/index.js");
 
-require.alias("superagent/lib/client.js", "superagent/index.js");if (typeof exports == "object") {
+require.alias("component-querystring/index.js", "superagent/deps/querystring/index.js");
+require.alias("component-querystring/index.js", "querystring/index.js");
+require.alias("component-trim/index.js", "component-querystring/deps/trim/index.js");
+
+require.alias("component-type/index.js", "component-querystring/deps/type/index.js");
+
+require.alias("superagent/lib/client.js", "superagent/index.js");
+
+if (typeof exports == "object") {
   module.exports = require("superagent");
 } else if (typeof define == "function" && define.amd) {
-  define([], function(){ return require("superagent"); });
+  define(function(){ return require("superagent"); });
 } else {
   this["superagent"] = require("superagent");
 }})();
