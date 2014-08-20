@@ -111,7 +111,7 @@ describe('req.query(Object)', function(){
     .del('http://localhost:3006/')
     .query({ at: date })
     .end(function(res){
-      assert(String(date) == res.body.at);
+      assert(date.toISOString() == res.body.at);
       done();
     });
   })

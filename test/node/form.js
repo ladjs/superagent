@@ -40,7 +40,7 @@ describe('req.send(Object) as "form"', function(){
       .send({ age: '1' })
       .end(function(res){
         res.header['content-type'].should.equal('application/x-www-form-urlencoded');
-        res.text.should.equal('name[first]=tobi&name[last]=holowaychuk&age=1');
+        res.text.should.equal('name%5Bfirst%5D=tobi&name%5Blast%5D=holowaychuk&age=1');
         done();
       });
     })
