@@ -1,4 +1,3 @@
-
 var request = require('../..')
   , express = require('express')
   , assert = require('better-assert')
