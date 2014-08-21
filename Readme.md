@@ -20,6 +20,14 @@ $ component install visionmedia/superagent
 
   with script tags use ./superagent.js
 
+  bower: 
+
+```
+$ bower install superagent
+```
+
+*Note: To use superagent with browserify + debowerify use `require('superagent/lib/client')`*
+
 ## Motivation
 
   This library spawned from my frustration with jQuery's weak & inconsistent Ajax support. jQuery's API, while having recently added some promise-like support, is largely static, forcing you to build up big objects containing all the header fields and options, not to mention most of the options are awkwardly named "type" instead of "method", etc. Onto examples!
