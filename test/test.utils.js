@@ -19,12 +19,12 @@ function parse(str, obj) {
 }
 
 test('test .serializeObject() basics', function(){
-  serialize('test', 'test');
-  serialize('foo=bar', 'foo=bar');
+  serialize('test', '');
+  serialize('foo=bar', '');
   serialize({ foo: 'bar' }, 'foo=bar');
-  serialize({ foo: null }, '');
+  serialize({ foo: null }, 'foo=');
   serialize({ foo: 'null' }, 'foo=null');
-  serialize({ foo: undefined }, '');
+  serialize({ foo: undefined }, 'foo=');
   serialize({ foo: 'undefined' }, 'foo=undefined');
   serialize({ name: 'tj', age: 24 }, 'name=tj&age=24');
 });
@@ -37,7 +37,7 @@ test('test .serializeObject() encoding', function(){
 test('test .parseString()', function(){
   parse('name=tj', { name: 'tj' });
   parse('name=Manny&species=cat', { name: 'Manny', species: 'cat' });
-  parse('redirect=/&ok', { redirect: '/', ok: 'undefined' });
+  parse('redirect=/&ok', { redirect: '/', ok: '' });
 });
 
 test('test .parseString() decoding', function(){
