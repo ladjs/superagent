@@ -444,7 +444,7 @@ function isHost(obj) {
  */
 
 function getXHR() {
-  if (root.XMLHttpRequest &&'file:' != root.location.protocol) {
+  if (root.XMLHttpRequest && 'file:' != root.location.protocol) {
     return new XMLHttpRequest;
   } else {
     try { return new ActiveXObject('Microsoft.XMLHTTP'); } catch(e) {}
