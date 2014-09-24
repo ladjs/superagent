@@ -1,3 +1,16 @@
+0.19.0 / 2014-09-24
+==================
+
+ * Add unset() to browser. (shesek)
+ * Prefer XHR over ActiveX. (omeid)
+ * Catch parse errors. (jacwright)
+ * Update qs dependency. (wercker)
+ * Add use() to node. (Financial-Times)
+ * Add response text to errors. (yields)
+ * Don't send empty cookie headers. (undoZen)
+ * Don't parse empty response bodies. (DveMac)
+ * Use hostname when setting cookie host. (prasunsultania)
+
 0.18.2 / 2014-07-12
 ==================
 

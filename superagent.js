@@ -444,7 +444,8 @@ function isHost(obj) {
  */
 
 function getXHR() {
-  if (root.XMLHttpRequest && 'file:' != root.location.protocol) {
+  if (root.XMLHttpRequest
+    && ('file:' != root.location.protocol || !root.ActiveXObject)) {
     return new XMLHttpRequest;
   } else {
     try { return new ActiveXObject('Microsoft.XMLHTTP'); } catch(e) {}
@@ -749,7 +750,7 @@ Response.prototype.setHeaderProperties = function(header){
 
 Response.prototype.parseBody = function(str){
   var parse = request.parse[this.type];
-  return parse
+  return parse && str && str.length
     ? parse(str)
     : null;
 };
@@ -845,9 +846,16 @@ function Request(method, url) {
   this.header = {};
   this._header = {};
   this.on('end', function(){
-    var res = new Response(self);
-    if ('HEAD' == method) res.text = null;
-    self.callback(null, res);
+    try {
+      var res = new Response(self);
+      if ('HEAD' == method) res.text = null;
+      self.callback(null, res);
+    } catch(e) {
+      var err = new Error('Parser is unable to parse the response');
+      err.parse = true;
+      err.original = e;
+      self.callback(err);
+    }
   });
 }
 
@@ -937,6 +945,26 @@ Request.prototype.set = function(field, val){
   }
   this._header[field.toLowerCase()] = val;
   this.header[field] = val;
+  return this;
+};
+
+/**
+ * Remove header `field`.
+ *
+ * Example:
+ *
+ *      req.get('/')
+ *        .unset('User-Agent')
+ *        .end(callback);
+ *
+ * @param {String} field
+ * @return {Request} for chaining
+ * @api public
+ */
+
+Request.prototype.unset = function(field){
+  delete this._header[field.toLowerCase()];
+  delete this.header[field];
   return this;
 };
 
