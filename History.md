@@ -1,3 +1,8 @@
+0.19.1 / 2014-09-24
+==================
+
+ * Fix basic auth issue when password is falsey value.
+
 0.19.0 / 2014-09-24
 ==================
 
