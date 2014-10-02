@@ -77,4 +77,17 @@ describe('res.body', function(){
       });
     })
   })
+
+  describe('HEAD requests', function(){
+    it('should not throw a parse error', function(done){
+      request
+      .head('http://localhost:3005/json')
+      .end(function(err, res){
+        assert(err === null);
+        assert(res.text === undefined)
+        assert(Object.keys(res.body).length === 0)
+        done();
+      });
+    });
+  });
 })
