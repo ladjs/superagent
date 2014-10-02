@@ -100,6 +100,37 @@ describe('request', function(){
     })
   })
 
+  describe('req.toJSON()', function(){
+    it('should describe the request', function(done){
+      request
+      .post(':5000/echo')
+      .send({ foo: 'baz' })
+      .end(function(res){
+        var obj = res.request.toJSON();
+        assert('POST' == obj.method);
+        assert(':5000/echo' == obj.url);
+        assert('baz' == obj.data.foo);
+        done();
+      });
+    })
+  })
+
+  describe('res.toJSON()', function(){
+    it('should describe the response', function(done){
+      request
+      .post(':5000/echo')
+      .send({ foo: 'baz' })
+      .end(function(res){
+        var obj = res.toJSON();
+        assert('object' == typeof obj.header);
+        assert('object' == typeof obj.req);
+        assert(200 == obj.status);
+        assert('{"foo":"baz"}' == obj.text);
+        done();
+      });
+    });
+  })
+
   describe('res.error', function(){
     it('should should be an Error object', function(done){
       request
