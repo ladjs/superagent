@@ -1,7 +1,14 @@
+0.20.0 / 2014-10-02
+==================
+
+ * Add toJSON() to request and response instances. (yields)
+ * Prevent HEAD requests from getting parsed. (gjohnson)
+ * Update debug. (TooTallNate)
+
 0.19.1 / 2014-09-24
 ==================
 
- * Fix basic auth issue when password is falsey value.
+ * Fix basic auth issue when password is falsey value. (gjohnson)
 
 0.19.0 / 2014-09-24
 ==================
