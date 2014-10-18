@@ -96,8 +96,8 @@ test('request() GET 204 No Content', function(next){
 });
 
 test('request() header parsing', function(next){
-  request('GET', '/notfound').end(function(res){
-    assert('text/plain' == res.header['content-type']);
+  request('GET', '/foo').end(function(res){
+    assert('application/x-www-form-urlencoded' == res.header['content-type']);
     assert('Express' == res.header['x-powered-by']);
     next();
   });
