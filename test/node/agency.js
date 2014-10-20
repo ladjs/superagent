@@ -2,10 +2,16 @@ var express = require('express')
   , app = express()
   , request = require('../../')
   , assert = require('assert')
-  , should = require('should');
+  , should = require('should')
+  , cookieParser = require('cookie-parser')
+  , session = require('express-session');
 
-app.use(express.cookieParser());
-app.use(express.session({ secret: 'secret' }));
+app.use(cookieParser());
+app.use(session({
+  secret: 'secret',
+  resave: true,
+  saveUninitialized: true
+}));
 
 app.post('/signin', function(req, res) {
   req.session.user = 'hunter@hunterloftis.com';
@@ -13,19 +19,19 @@ app.post('/signin', function(req, res) {
 });
 
 app.get('/dashboard', function(req, res) {
-  if (req.session.user) return res.send(200, 'dashboard');
-  res.send(401, 'dashboard');
+  if (req.session.user) return res.status(200).send('dashboard');
+  res.status(401).send('dashboard');
 });
 
 app.all('/signout', function(req, res) {
   req.session.regenerate(function() {
-    res.send(200, 'signout');
+    res.status(200).send('signout');
   });
 });
 
 app.get('/', function(req, res) {
   if (req.session.user) return res.redirect('/dashboard');
-  res.send(200, 'home');
+  res.status(200).send('home');
 });
 
 app.post('/redirect', function(req, res) {
@@ -33,7 +39,7 @@ app.post('/redirect', function(req, res) {
 });
 
 app.get('/simple', function(req, res) {
-  res.send(200, 'simple');
+  res.status(200).send('simple');
 });
 
 app.listen(4000);

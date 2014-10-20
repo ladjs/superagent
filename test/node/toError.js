@@ -6,7 +6,7 @@ var request = require('../..')
   , url = require('url');
 
 app.get('/', function(req, res){
-  res.send(400, 'invalid json');
+  res.status(400).send('invalid json');
 });
 
 app.listen(8888);
