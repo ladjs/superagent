@@ -17,7 +17,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/visionmedia/superagent.git"
+    "url": "git://github.com/tj/superagent.git"
   },
   "dependencies": {
     "qs": "1.2.0",
