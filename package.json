@@ -26,7 +26,7 @@
     "component-emitter": "1.1.2",
     "methods": "1.0.1",
     "cookiejar": "2.0.1",
-    "debug": "~2.0.0",
+    "debug": "2",
     "reduce-component": "1.0.1",
     "extend": "~1.2.1",
     "form-data": "0.1.3",
