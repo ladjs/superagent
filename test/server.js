@@ -132,6 +132,12 @@ app.get('/xdomain', function(req, res){
   res.send(req.cookies.name);
 });
 
+app.get('/arraybuffer', function(req, res) {
+  var content = new ArrayBuffer(1000);
+  res.set('Content-Type', 'application/vnd.superagent');
+  res.send(content);
+});
+
 app.use(express.static(__dirname + '/../'));
 
 var server = app.listen(process.env.ZUUL_PORT, function() {
