@@ -1,3 +1,13 @@
+
+0.21.0 / 2014-11-11
+==================
+
+ * Trim text before parsing json (gjohnson)
+ * Update tests to express 4 (gaastonsr)
+ * Prevent double callback when error is thrown (pgn-vole)
+ * Fix missing clearTimeout (nickdima)
+ * Update debug (TooTallNate)
+
 0.20.0 / 2014-10-02
 ==================
 
