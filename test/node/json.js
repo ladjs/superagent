@@ -14,6 +14,11 @@ app.get('/json', function(req, res){
   res.send({ name: 'manny' });
 });
 
+app.get('/no-content', function(req, res){
+  res.status(204);
+  res.end();
+});
+
 app.listen(3005);
 
 describe('req.send(Object) as "json"', function(){
@@ -86,6 +91,20 @@ describe('res.body', function(){
         assert(err === null);
         assert(res.text === undefined)
         assert(Object.keys(res.body).length === 0)
+        done();
+      });
+    });
+  });
+
+  describe('No content', function(){
+    it('should not throw a parse error', function(done){
+      request
+      .get('http://localhost:3005/no-content')
+      .end(function(err, res){
+        assert(err === null);
+        console.log(res);
+        assert(res.text === undefined);
+        assert(Object.keys(res.body).length === 0);
         done();
       });
     });
