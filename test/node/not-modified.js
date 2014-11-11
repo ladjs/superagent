@@ -6,9 +6,9 @@ var request = require('../../')
 
 app.get('/', function(req, res){
   if (req.header('if-modified-since')) {
-    res.send(304);
+    res.status(304).end();
   } else {
-    res.send('' + Date.now())
+    res.send('' + Date.now());
   }
 });
 

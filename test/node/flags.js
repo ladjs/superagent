@@ -10,23 +10,23 @@ app.get('/error', function(req, res){
 });
 
 app.get('/login', function(req, res){
-  res.send('<form id="login"></form>');
+  res.status(200).send('<form id="login"></form>');
 });
 
 app.get('/bad-request', function(req, res){
-  res.send(400);
+  res.status(400).end();
 });
 
 app.get('/unauthorized', function(req, res){
-  res.send(401);
+  res.status(401).end();
 });
 
 app.get('/not-acceptable', function(req, res){
-  res.send(406);
+  res.status(406).end();
 });
 
 app.get('/no-content', function(req, res){
-  res.send(204);
+  res.status(204).end();
 });
 
 app.listen(3004);

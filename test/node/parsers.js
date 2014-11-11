@@ -6,7 +6,7 @@ var request = require('../..')
   , app = express();
 
 app.get('/manny', function(req, res){
-  res.send('{"name":"manny"}');
+  res.status(200).json({name:"manny"});
 });
 
 

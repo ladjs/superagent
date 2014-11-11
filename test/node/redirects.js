@@ -32,7 +32,7 @@ app.get('/tobi', function(req, res){
 
 app.get('/relative', function(req, res){
   res.set('Location', '/tobi');
-  res.send(302);
+  res.status(302).end();
 });
 
 app.get('/header', function(req, res){

@@ -2,9 +2,10 @@
 var request = require('../../')
   , express = require('express')
   , app = express()
-  , fs = require('fs');
+  , fs = require('fs')
+  , bodyParser = require('body-parser');
 
-app.use(express.bodyParser());
+app.use(bodyParser.json());
 
 app.post('/', function(req, res){
   res.send(req.body);

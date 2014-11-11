@@ -3,13 +3,14 @@ var EventEmitter = require('events').EventEmitter
   , request = require('../../')
   , express = require('express')
   , assert = require('assert')
-  , app = express();
+  , app = express()
+  , basicAuth = require('basic-auth-connect');
 
-app.get('/', express.basicAuth('tobi', 'learnboost'), function(req, res){
+app.get('/', basicAuth('tobi', 'learnboost'), function(req, res){
   res.end('you win!');
 });
 
-app.get('/again', express.basicAuth('tobi', ''), function(req, res){
+app.get('/again', basicAuth('tobi', ''), function(req, res){
   res.end('you win again!');
 });
 
