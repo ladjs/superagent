@@ -1202,6 +1202,7 @@ Request.prototype.send = function(data){
 
 Request.prototype.callback = function(err, res){
   var fn = this._callback;
+  this.clearTimeout();
   if (2 == fn.length) return fn(err, res);
   if (err) return this.emit('error', err);
   fn(res);
