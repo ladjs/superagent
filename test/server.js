@@ -4,6 +4,8 @@
  */
 
 var express = require('express');
+var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 
 var app = express();
 
@@ -15,8 +17,9 @@ app.use(function(req, res, next){
   req.pipe(res);
 });
 
-app.use(express.bodyParser());
-app.use(express.cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(cookieParser());
 
 app.use(function(req, res, next){
   res.cookie('name', 'tobi');
@@ -42,19 +45,19 @@ app.get('/error', function(req, res){
 });
 
 app.get('/unauthorized', function(req, res){
-  res.send(401);
+  res.sendStatus(401);
 });
 
 app.get('/bad-request', function(req, res){
-  res.send(400);
+  res.sendStatus(400);
 });
 
 app.get('/not-acceptable', function(req, res){
-  res.send(406);
+  res.sendStatus(406);
 });
 
 app.get('/no-content', function(req, res){
-  res.send(204);
+  res.sendStatus(204);
 });
 
 app.get('/delay/const', function (req, res) {
@@ -64,7 +67,7 @@ app.get('/delay/const', function (req, res) {
 app.get('/delay/:ms', function(req, res){
   var ms = ~~req.params.ms;
   setTimeout(function(){
-    res.send(200);
+    res.sendStatus(200);
   }, ms);
 });
 
@@ -96,7 +99,7 @@ app.post('/user', function(req, res){
   res.send('created');
 });
 
-app.del('/user/:id', function(req, res){
+app.delete('/user/:id', function(req, res){
   res.send('deleted');
 });
 
