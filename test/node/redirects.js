@@ -22,6 +22,16 @@ app.get('/movies/all/0', function(req, res){
   res.send('first movie page');
 });
 
+app.get('/movies/random', function(req, res){
+  res.redirect('/movie/4');
+});
+
+app.get('/movie/4', function(req, res){
+  setTimeout(function(res){
+    res.send('not-so-random movie');
+  }, 1000, res);
+});
+
 app.post('/movie', function(req, res){
   res.redirect('/movies/all/0');
 });
@@ -93,6 +103,17 @@ describe('request', function(){
         res.body.should.not.have.property('content-type');
         res.body.should.not.have.property('content-length');
         res.body.should.not.have.property('transfer-encoding');
+        done();
+      });
+    })
+
+    it('should preserve timeout across redirects', function(done){
+      request
+      .get('http://localhost:3003/movies/random')
+      .timeout(250)
+      .end(function(err, res){
+        assert(err instanceof Error, 'expected an error');
+        err.should.have.property('timeout', 250);
         done();
       });
     })
