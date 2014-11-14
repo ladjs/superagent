@@ -4,7 +4,8 @@ var EventEmitter = require('events').EventEmitter
   , express = require('express')
   , assert = require('assert')
   , app = express()
-  , should = require('should');
+  , should = require('should')
+  , fs = require('fs');
 
 app.get('/', function(req, res){
   res.redirect('/movies');
@@ -95,6 +96,19 @@ describe('request', function(){
         res.body.should.not.have.property('transfer-encoding');
         done();
       });
+    })
+
+    it('should pipe properly', function(done){
+      var stream = fs.createWriteStream('test/node/fixtures/tmp.html');
+      var req = request.get('http://localhost:3003/movies/all');
+
+      stream.on('close', function(){
+        fs.readFileSync('test/node/fixtures/tmp.html', 'utf8')
+          .should.equal('first movie page')
+        fs.unlink('test/node/fixtures/tmp.html');
+        done();
+      });
+      req.pipe(stream);
     })
 
     describe('when relative', function(){
