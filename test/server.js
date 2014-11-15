@@ -57,6 +57,10 @@ app.get('/no-content', function(req, res){
   res.send(204);
 });
 
+app.get('/delay/const', function (req, res) {
+  res.redirect('/delay/3000');
+});
+
 app.get('/delay/:ms', function(req, res){
   var ms = ~~req.params.ms;
   setTimeout(function(){
