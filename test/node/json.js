@@ -52,7 +52,55 @@ describe('req.send(Object) as "json"', function(){
       res.text.should.equal('[1,2,3]');
       done();
     });
-  })
+  });
+
+  it('should work with value null', function(done){
+    request
+    .post('http://localhost:3005/echo')
+    .type('json')
+    .send('null')
+    .end(function(res){
+      res.should.be.json
+      assert(res.body === null);
+      done();
+    });
+  });
+
+  it('should work with value false', function(done){
+    request
+    .post('http://localhost:3005/echo')
+    .type('json')
+    .send('false')
+    .end(function(res){
+      res.should.be.json
+      res.body.should.equal(false);
+      done();
+    });
+  });
+
+  it('should work with value 0', function(done){
+    request
+    .post('http://localhost:3005/echo')
+    .type('json')
+    .send('0')
+    .end(function(res){
+      res.should.be.json
+      res.body.should.equal(0);
+      done();
+    });
+  });
+
+  it('should work with empty string value', function(done){
+    request
+    .post('http://localhost:3005/echo')
+    .type('json')
+    .send('""')
+    .end(function(res){
+      res.should.be.json
+      res.body.should.equal("");
+      done();
+    });
+  });
 
   it('should work with GET', function(done){
     request
