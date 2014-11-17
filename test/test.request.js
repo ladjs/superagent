@@ -525,6 +525,19 @@ test('req.timeout(ms)', function(next){
   })
 })
 
+test('req.timeout(ms) with redirect', function(next) {
+  request
+  .get('/delay/const')
+  .timeout(1000)
+  .end(function(err, res) {
+    assert(err, 'error missing');
+    assert(1000 == err.timeout, 'err.timeout missing');
+    assert('timeout of 1000ms exceeded' == err.message, 'err.message incorrect');
+    assert(null == res);
+    next();
+  });
+});
+
 test('basic auth', function(next){
   request
   .post('/auth')
