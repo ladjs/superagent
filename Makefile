@@ -16,7 +16,7 @@ test-cov: lib-cov
 	SUPERAGENT_COV=1 $(MAKE) test REPORTER=html-cov > coverage.html
 
 test-browser-local:
-	./node_modules/.bin/zuul --local -- test/index.js
+	./node_modules/.bin/zuul --local 4000 -- test/index.js
 
 lib-cov:
 	jscoverage lib lib-cov

@@ -117,15 +117,17 @@ For superagent extensions such as couchdb and oauth visit the [wiki](https://git
 
 ## Running browser tests
 
- Install the test server deps (nodejs / express):
+ Install dependencies:
 
     $ npm install
 
- Start the test server:
+ Start the test runner:
 
-    $ make test-server
+    $ make test-browser-local
 
- Visit `localhost:4000/` in the browser.
+ Visit `http://localhost:4000/__zuul` in your browser.
+
+ Edit tests and refresh your browser. You do not have to restart the test runner.
 
 ## Browser build
 
