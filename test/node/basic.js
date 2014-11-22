@@ -241,8 +241,8 @@ describe('request', function(){
     it('should write the given data', function(done){
       var req = request.post('http://localhost:5000/echo');
       req.set('Content-Type', 'application/json');
-      req.write('{"name"').should.be.a('boolean');
-      req.write(':"tobi"}').should.be.a('boolean');
+      assert('boolean' == typeof req.write('{"name"'));
+      assert('boolean' == typeof req.write(':"tobi"}'));
       req.end(function(res){
         res.text.should.equal('{"name":"tobi"}');
         done();

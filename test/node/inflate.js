@@ -1,6 +1,7 @@
 
 var request = require('../../')
   , express = require('express')
+  , assert = require('assert')
   , zlib
 
 /**
@@ -37,7 +38,7 @@ if (zlib) {
       request
         .get('http://localhost:3080')
         .end(function(res){
-          res.should.have.status(200);
+          assert(200 == res.status);
           res.text.should.equal(subject);
           res.headers['content-length'].should.be.below(subject.length);
           done();
@@ -49,7 +50,7 @@ if (zlib) {
         request
           .get('http://localhost:3080/binary')
           .end(function(res){
-            res.should.have.status(200);
+            assert(200 == res.status);
             res.headers['content-length'].should.be.below(subject.length);
 
             res.on('data', function(chunk){

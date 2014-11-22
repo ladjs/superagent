@@ -1,6 +1,6 @@
 
 TESTS = test/node/*.js
-REPORTER = dot
+REPORTER = spec
 
 all: superagent.js
 

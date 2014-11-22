@@ -114,7 +114,7 @@ describe('Request', function(){
         req.attach('name3', 'baz');
 
         req.on('error', function(err){
-          err.message.should.include('ENOENT');
+          assert(~err.message.indexOf('ENOENT'));
           err.path.should.equal('foo');
           done();
         });
@@ -155,7 +155,7 @@ describe('Part', function(){
 
       req.end(function(res){
         var ct = res.header['content-type'];
-        ct.should.include('multipart/form-data; boundary=');
+        assert(~ct.indexOf('multipart/form-data; boundary='));
         res.body.should.eql({});
         res.files.image.name.should.equal('image.png');
         res.files.image.type.should.equal('image/png');
@@ -208,7 +208,7 @@ describe('Part', function(){
         .write('Tobi');
 
       req.end(function(res){
-        res.header['content-type'].should.include('boundary=');
+        assert(~res.header['content-type'].indexOf('boundary='));
         res.body.name.should.equal('Tobi');
         done();
       });

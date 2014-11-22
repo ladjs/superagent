@@ -21,7 +21,7 @@ describe('request', function(){
       request
       .get('http://localhost:3008/')
       .end(function(res){
-        res.should.have.status(200)
+        assert(200 == res.status);
         res.text.should.match(/^\d+$/);
         ts = +res.text;
         done();
@@ -33,7 +33,7 @@ describe('request', function(){
       .get('http://localhost:3008/')
       .set('If-Modified-Since', new Date(ts).toUTCString())
       .end(function(res){
-        res.should.have.status(304)
+        assert(304 == res.status);
         // res.text.should.be.empty
         done();
       });

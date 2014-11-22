@@ -49,9 +49,9 @@ describe('request', function() {
         .post('http://localhost:4000/signin')
         .end(function(err, res) {
           should.not.exist(err);
-          res.should.have.status(200);
+          assert(200 == res.status);
           should.not.exist(res.headers['set-cookie']);
-          res.text.should.include('dashboard');
+          assert(~res.text.indexOf('dashboard'));
           done();
         });
     });
@@ -61,7 +61,7 @@ describe('request', function() {
         .get('http://localhost:4000/dashboard')
         .end(function(err, res) {
           should.not.exist(err);
-          res.should.have.status(401);
+          assert(401 == res.status);
           should.exist(res.headers['set-cookie']);
           done();
         });
@@ -72,9 +72,9 @@ describe('request', function() {
         .post('http://localhost:4000/signin')
         .end(function(err, res) {
           should.not.exist(err);
-          res.should.have.status(200);
+          assert(200 == res.status);
           should.not.exist(res.headers['set-cookie']);
-          res.text.should.include('dashboard');
+          assert(~res.text.indexOf('dashboard'));
           done();
         });
     });
@@ -84,7 +84,7 @@ describe('request', function() {
         .get('http://localhost:4000/dashboard')
         .end(function(err, res) {
           should.not.exist(err);
-          res.should.have.status(200);
+          assert(200 == res.status);
           done();
         });
     });
@@ -94,7 +94,7 @@ describe('request', function() {
         .get('http://localhost:4000/dashboard')
         .end(function(err, res) {
           should.not.exist(err);
-          res.should.have.status(401);
+          assert(401 == res.status);
           done();
         });
     });
@@ -104,7 +104,7 @@ describe('request', function() {
         .get('http://localhost:4000/dashboard')
         .end(function(err, res) {
           should.not.exist(err);
-          res.should.have.status(200);
+          assert(200 == res.status);
           done();
         });
     });
@@ -114,8 +114,8 @@ describe('request', function() {
         .get('http://localhost:4000/')
         .end(function(err, res) {
           should.not.exist(err);
-          res.should.have.status(200);
-          res.text.should.include('dashboard');
+          assert(200 == res.status);
+          assert(~res.text.indexOf('dashboard'));
           done();
         });
     });
@@ -126,8 +126,8 @@ describe('request', function() {
         .send({ foo: 'bar', baz: 'blaaah' })
         .end(function(err, res) {
           should.not.exist(err);
-          res.should.have.status(200);
-          res.text.should.include('simple');
+          assert(200 == res.status);
+          assert(~res.text.indexOf('simple'));
           res.redirects.should.eql(['http://localhost:4000/simple']);
           done();
         });
@@ -139,7 +139,7 @@ describe('request', function() {
         .redirects(0)
         .end(function(err, res) {
           should.not.exist(err);
-          res.should.have.status(302);
+          assert(302 == res.status);
           res.redirects.should.eql([]);
           res.header.location.should.equal('/dashboard');
           done();
@@ -151,7 +151,7 @@ describe('request', function() {
         .post('http://localhost:4000/signout')
         .end(function(err, res) {
           should.not.exist(err);
-          res.should.have.status(200);
+          assert(200 == res.status);
           should.exist(res.headers['set-cookie']);
           done();
         });
@@ -162,7 +162,7 @@ describe('request', function() {
         .get('http://localhost:4000/dashboard')
         .end(function(err, res) {
           should.not.exist(err);
-          res.should.have.status(401);
+          assert(401 == res.status);
           should.not.exist(res.headers['set-cookie']);
           done();
         });
