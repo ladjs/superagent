@@ -548,3 +548,23 @@ test('basic auth', function(next){
     next();
   });
 });
+
+test('request event', function(next){
+  request
+  .get('/foo')
+  .on('request', function(req){
+    assert('/foo' == req.url);
+    next();
+  })
+  .end();
+});
+
+test('response event', function(next){
+  request
+  .get('/foo')
+  .on('response', function(res){
+    assert('bar' == res.body.foo);
+    next();
+  })
+  .end();
+});

@@ -420,6 +420,17 @@ describe('request', function(){
       });
       req.end();
     })
+
+    it('should emit response', function(done){
+      request
+      .post('http://localhost:5000/echo')
+      .send({ name: 'tobi' })
+      .on('response', function(res){
+        res.text.should.equal('{"name":"tobi"}');
+        done();
+      })
+      .end();
+    })
   })
 
   describe('.buffer()', function(){
