@@ -41,7 +41,8 @@
     "express-session": "^1.9.1",
     "mocha": "*",
     "should": "3.1.3",
-    "zuul": "~1.13.1"
+    "zuul": "~1.13.1",
+    "browserify": "~6.3.2"
   },
   "browser": {
     "./lib/node/index.js": "./lib/client.js",

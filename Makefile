@@ -21,13 +21,10 @@ test-browser-local:
 lib-cov:
 	jscoverage lib lib-cov
 
-superagent.js: components
-	@component build \
-	  --standalone superagent \
-	  --out . --name superagent
-
-components:
-	component install
+superagent.js: lib/node/*.js lib/node/parsers/*.js
+	@./node_modules/.bin/browserify \
+		--standalone superagent \
+		--outfile superagent.js .
 
 test-server:
 	@node test/server
