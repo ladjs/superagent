@@ -22,6 +22,7 @@ describe('.timeout(ms)', function(){
       .end(function(err, res){
         assert(err, 'expected an error');
         assert('number' == typeof err.timeout, 'expected an error with .timeout');
+        assert('ECONNABORTED' == err.code, 'expected abort error code')
         done();
       });
     })
