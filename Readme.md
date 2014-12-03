@@ -19,6 +19,18 @@ $ component install visionmedia/superagent
 ```
 
   with script tags use ./superagent.js
+  
+  for webpack add:
+````
+plugins.push(new webpack.DefinePlugin({ "global.GENTLY": false }));
+````
+and
+````
+node: {
+  __dirname: true
+}
+```
+to webpack's config
 
 ## Motivation
 
