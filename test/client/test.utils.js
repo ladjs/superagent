@@ -1,6 +1,6 @@
 
 var assert = require('assert');
-var request = require('../');
+var request = require('../../');
 
 function serialize(obj, res) {
   var val = request.serializeObject(obj);

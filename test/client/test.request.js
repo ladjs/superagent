@@ -1,6 +1,6 @@
 
 var assert = require('assert');
-var request = require('../');
+var request = require('../../');
 
 test('Request inheritance', function(){
   assert(request.get('/') instanceof request.Request);

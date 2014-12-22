@@ -1,5 +1,5 @@
 ui: mocha-tdd
-server: ./test/server.js
+server: ./test/client/server.js
 browsers:
   - name: chrome
     version: latest
