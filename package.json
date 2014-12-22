@@ -47,7 +47,8 @@
   "browser": {
     "./lib/node/index.js": "./lib/client.js",
     "emitter": "component-emitter",
-    "reduce": "reduce-component"
+    "reduce": "reduce-component",
+    "./test/support/server.js": "./test/support/blank.js"
   },
   "component": {
     "scripts": {

@@ -1,6 +1,5 @@
-
-var utils = require('../../lib/node/utils')
-  , assert = require('assert');
+var assert = require('assert');
+var utils = require('../../lib/node/utils');
 
 describe('utils.uid(len)', function(){
   it('should generate a unique id', function(){
