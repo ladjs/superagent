@@ -4,6 +4,11 @@ var cookieParser = require('cookie-parser');
 
 var app = express();
 
+app.use(function(req, res, next) {
+  res.set('Cache-Control', 'no-cache, no-store');
+  next();
+});
+
 app.all('/echo', function(req, res){
   res.writeHead(200, req.headers);
   req.pipe(res);
@@ -119,7 +124,7 @@ app.get('/querystring', function(req, res){
   res.send(req.query);
 });
 
-app.all('/echo-header/:field', function(req, res){
+app.get('/echo-header/:field', function(req, res){
   res.send(req.headers[req.params.field]);
 });
 

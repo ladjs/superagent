@@ -223,7 +223,7 @@ it('request .accept() with xml', function(next){
   .get('/echo-header/accept')
   .accept('xml')
   .end(function(res){
-    assert('application/xml' == res.text);
+    assert('application/xml' == res.text, res.text);
     next();
   });
 });
