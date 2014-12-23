@@ -18,7 +18,7 @@ describe('xdomain', function(){
 
   it('should handle x-domain failure', function(next){
     request
-    .get('//google.com')
+    .get('//tunne127.com')
     .end(function(err, res){
       assert(err, 'error missing');
       assert(err.crossDomain, 'not .crossDomain');
