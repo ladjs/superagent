@@ -10,7 +10,7 @@ describe('[node] request', function(){
     it('should format the url', function(done){
       request
       .get(url.parse('http://localhost:5000/login'))
-      .end(function(res){
+      .end(function(err, res){
         assert(res.ok);
         done();
       })
@@ -21,7 +21,7 @@ describe('[node] request', function(){
     it('should default to http', function(done){
       request
       .get('localhost:5000/login')
-      .end(function(res){
+      .end(function(err, res){
         assert(res.status == 200);
         done();
       })
@@ -33,7 +33,7 @@ describe('[node] request', function(){
       request
       .post(':5000/echo')
       .send({ foo: 'baz' })
-      .end(function(res){
+      .end(function(err, res){
         var obj = res.request.toJSON();
         assert('POST' == obj.method);
         assert(':5000/echo' == obj.url);
@@ -48,7 +48,7 @@ describe('[node] request', function(){
       request
       .post('http://localhost:5000/echo')
       .send({ foo: 'baz' })
-      .end(function(res){
+      .end(function(err, res){
         var obj = res.toJSON();
         assert('object' == typeof obj.header);
         assert('object' == typeof obj.req);
@@ -63,7 +63,7 @@ describe('[node] request', function(){
     it('should default to an empty object', function(done){
       request
       .get('http://localhost:5000/login')
-      .end(function(res){
+      .end(function(err, res){
         res.links.should.eql({});
         done();
       })
@@ -72,7 +72,7 @@ describe('[node] request', function(){
     it('should parse the Link header field', function(done){
       request
       .get('http://localhost:5000/links')
-      .end(function(res){
+      .end(function(err, res){
         res.links.next.should.equal('https://api.github.com/repos/visionmedia/mocha/issues?page=2');
         done();
       })
@@ -84,7 +84,7 @@ describe('[node] request', function(){
       request
       .post('http://localhost:5000/echo')
       .unset('User-Agent')
-      .end(function(res){
+      .end(function(err, res){
         assert(void 0 == res.header['user-agent']);
         done();
       })
@@ -97,7 +97,7 @@ describe('[node] request', function(){
       req.set('Content-Type', 'application/json');
       req.write('{"name"').should.be.a.boolean;
       req.write(':"tobi"}').should.be.a.boolean;
-      req.end(function(res){
+      req.end(function(err, res){
         res.text.should.equal('{"name":"tobi"}');
         done();
       });

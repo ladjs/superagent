@@ -11,7 +11,7 @@ it('request() simple GET without callback', function(next){
 });
 
 it('request() simple GET', function(next){
-  request('GET', '/ok').end(function(res){
+  request('GET', '/ok').end(function(err, res){
     assert(res instanceof request.Response, 'respond with Response');
     assert(res.ok, 'response should be ok');
     assert(res.text, 'res.text');
@@ -20,7 +20,7 @@ it('request() simple GET', function(next){
 });
 
 it('request() simple HEAD', function(next){
-  request.head('/ok').end(function(res){
+  request.head('/ok').end(function(err, res){
     assert(res instanceof request.Response, 'respond with Response');
     assert(res.ok, 'response should be ok');
     assert(!res.text, 'res.text');
@@ -29,7 +29,7 @@ it('request() simple HEAD', function(next){
 });
 
 it('request() error object', function(next) {
-  request('GET', '/error').end(function(res) {
+  request('GET', '/error').end(function(err, res) {
     assert(res.error, 'response should be an error');
     assert(res.error.message == 'cannot GET /error (500)');
     assert(res.error.status == 500);
@@ -40,7 +40,7 @@ it('request() error object', function(next) {
 });
 
 it('request() GET 5xx', function(next){
-  request('GET', '/error').end(function(res){
+  request('GET', '/error').end(function(err, res){
     assert(!res.ok, 'response should not be ok');
     assert(res.error, 'response should be an error');
     assert(!res.clientError, 'response should not be a client error');
@@ -50,7 +50,7 @@ it('request() GET 5xx', function(next){
 });
 
 it('request() GET 4xx', function(next){
-  request('GET', '/notfound').end(function(res){
+  request('GET', '/notfound').end(function(err, res){
     assert(!res.ok, 'response should not be ok');
     assert(res.error, 'response should be an error');
     assert(res.clientError, 'response should be a client error');
@@ -60,42 +60,42 @@ it('request() GET 4xx', function(next){
 });
 
 it('request() GET 404 Not Found', function(next){
-  request('GET', '/notfound').end(function(res){
+  request('GET', '/notfound').end(function(err, res){
     assert(res.notFound, 'response should be .notFound');
     next();
   });
 });
 
 it('request() GET 400 Bad Request', function(next){
-  request('GET', '/bad-request').end(function(res){
+  request('GET', '/bad-request').end(function(err, res){
     assert(res.badRequest, 'response should be .badRequest');
     next();
   });
 });
 
 it('request() GET 401 Bad Request', function(next){
-  request('GET', '/unauthorized').end(function(res){
+  request('GET', '/unauthorized').end(function(err, res){
     assert(res.unauthorized, 'response should be .unauthorized');
     next();
   });
 });
 
 it('request() GET 406 Not Acceptable', function(next){
-  request('GET', '/not-acceptable').end(function(res){
+  request('GET', '/not-acceptable').end(function(err, res){
     assert(res.notAcceptable, 'response should be .notAcceptable');
     next();
   });
 });
 
 it('request() GET 204 No Content', function(next){
-  request('GET', '/no-content').end(function(res){
+  request('GET', '/no-content').end(function(err, res){
     assert(res.noContent, 'response should be .noContent');
     next();
   });
 });
 
 it('request() header parsing', function(next){
-  request('GET', '/notfound').end(function(res){
+  request('GET', '/notfound').end(function(err, res){
     assert('text/html; charset=utf-8' == res.header['content-type']);
     assert('Express' == res.header['x-powered-by']);
     next();
@@ -103,7 +103,7 @@ it('request() header parsing', function(next){
 });
 
 it('request() .status', function(next){
-  request('GET', '/notfound').end(function(res){
+  request('GET', '/notfound').end(function(err, res){
     assert(404 == res.status, 'response .status');
     assert(4 == res.statusType, 'response .statusType');
     next();
@@ -111,7 +111,7 @@ it('request() .status', function(next){
 });
 
 it('get()', function(next){
-  request.get('/notfound').end(function(res){
+  request.get('/notfound').end(function(err, res){
     assert(404 == res.status, 'response .status');
     assert(4 == res.statusType, 'response .statusType');
     next();
@@ -119,28 +119,28 @@ it('get()', function(next){
 });
 
 it('patch()', function(next){
-  request.patch('/user/12').end(function(res){
+  request.patch('/user/12').end(function(err, res){
     assert('updated' == res.text);
     next();
   });
 });
 
 it('put()', function(next){
-  request.put('/user/12').end(function(res){
+  request.put('/user/12').end(function(err, res){
     assert('updated' == res.text, 'response text');
     next();
   });
 });
 
 it('post()', function(next){
-  request.post('/user').end(function(res){
+  request.post('/user').end(function(err, res){
     assert('created' == res.text, 'response text');
     next();
   });
 });
 
 it('del()', function(next){
-  request.del('/user/12').end(function(res){
+  request.del('/user/12').end(function(err, res){
     assert('deleted' == res.text, 'response text');
     next();
   });
@@ -150,7 +150,7 @@ it('post() data', function(next){
   request.post('/todo/item')
   .type('application/octet-stream')
   .send('tobi')
-  .end(function(res){
+  .end(function(err, res){
     assert('added "tobi"' == res.text, 'response text');
     next();
   });
@@ -161,7 +161,7 @@ it('request .type()', function(next){
   .post('/user/12/pet')
   .type('urlencoded')
   .send('pet=tobi')
-  .end(function(res){
+  .end(function(err, res){
     assert('added pet "tobi"' == res.text, 'response text');
     next();
   });
@@ -172,7 +172,7 @@ it('request .type() with alias', function(next){
   .post('/user/12/pet')
   .type('application/x-www-form-urlencoded')
   .send('pet=tobi')
-  .end(function(res){
+  .end(function(err, res){
     assert('added pet "tobi"' == res.text, 'response text');
     next();
   });
@@ -192,7 +192,7 @@ it('request .send() with callback only', function(next){
   request
   .get('/echo-header/accept')
   .set('Accept', 'foo/bar')
-  .end(function(res){
+  .end(function(err, res){
     assert('foo/bar' == res.text);
     next();
   });
@@ -202,7 +202,7 @@ it('request .accept() with json', function(next){
   request
   .get('/echo-header/accept')
   .accept('json')
-  .end(function(res){
+  .end(function(err, res){
     assert('application/json' == res.text);
     next();
   });
@@ -212,7 +212,7 @@ it('request .accept() with application/json', function(next){
   request
   .get('/echo-header/accept')
   .accept('application/json')
-  .end(function(res){
+  .end(function(err, res){
     assert('application/json' == res.text);
     next();
   });
@@ -222,7 +222,7 @@ it('request .accept() with xml', function(next){
   request
   .get('/echo-header/accept')
   .accept('xml')
-  .end(function(res){
+  .end(function(err, res){
     assert('application/xml' == res.text, res.text);
     next();
   });
@@ -232,7 +232,7 @@ it('request .accept() with application/xml', function(next){
   request
   .get('/echo-header/accept')
   .accept('application/xml')
-  .end(function(res){
+  .end(function(err, res){
     assert('application/xml' == res.text);
     next();
   });
@@ -245,7 +245,7 @@ it('request .end()', function(next){
   .get('/echo-header/content-type')
   .set('Content-Type', 'text/plain')
   .send('wahoo')
-  .end(function(res){
+  .end(function(err, res){
     assert('text/plain' == res.text);
     next();
   });
@@ -256,7 +256,7 @@ it('request .send()', function(next){
   .get('/echo-header/content-type')
   .set('Content-Type', 'text/plain')
   .send('wahoo')
-  .end(function(res){
+  .end(function(err, res){
     assert('text/plain' == res.text);
     next();
   });
@@ -267,7 +267,7 @@ it('request .set()', function(next){
   .get('/echo-header/content-type')
   .set('Content-Type', 'text/plain')
   .send('wahoo')
-  .end(function(res){
+  .end(function(err, res){
     assert('text/plain' == res.text);
     next();
   });
@@ -278,7 +278,7 @@ it('request .set(object)', function(next){
   .get('/echo-header/content-type')
   .set({ 'Content-Type': 'text/plain' })
   .send('wahoo')
-  .end(function(res){
+  .end(function(err, res){
     assert('text/plain' == res.text);
     next();
   });
@@ -289,7 +289,7 @@ it('POST urlencoded', function(next){
   .post('/pet')
   .type('urlencoded')
   .send({ name: 'Manny', species: 'cat' })
-  .end(function(res){
+  .end(function(err, res){
     assert('added Manny the cat' == res.text);
     next();
   });
@@ -300,7 +300,7 @@ it('POST json', function(next){
   .post('/pet')
   .type('json')
   .send({ name: 'Manny', species: 'cat' })
-  .end(function(res){
+  .end(function(err, res){
     assert('added Manny the cat' == res.text);
     next();
   });
@@ -310,7 +310,7 @@ it('POST json array', function(next){
   request
   .post('/echo')
   .send([1,2,3])
-  .end(function(res){
+  .end(function(err, res){
     assert('application/json' == res.header['content-type'].split(';')[0]);
     assert('[1,2,3]' == res.text);
     next();
@@ -321,7 +321,7 @@ it('POST json default', function(next){
   request
   .post('/pet')
   .send({ name: 'Manny', species: 'cat' })
-  .end(function(res){
+  .end(function(err, res){
     assert('added Manny the cat' == res.text);
     next();
   });
@@ -332,7 +332,7 @@ it('POST multiple .send() calls', function(next){
   .post('/pet')
   .send({ name: 'Manny' })
   .send({ species: 'cat' })
-  .end(function(res){
+  .end(function(err, res){
     assert('added Manny the cat' == res.text);
     next();
   });
@@ -343,7 +343,7 @@ it('POST multiple .send() strings', function(next){
   .post('/echo')
   .send('user[name]=tj')
   .send('user[email]=tj@vision-media.ca')
-  .end(function(res){
+  .end(function(err, res){
     assert('application/x-www-form-urlencoded' == res.header['content-type'].split(';')[0]);
     assert(res.text == 'user[name]=tj&user[email]=tj@vision-media.ca')
     next();
@@ -353,7 +353,7 @@ it('POST multiple .send() strings', function(next){
 it('GET .type', function(next){
   request
   .get('/pets')
-  .end(function(res){
+  .end(function(err, res){
     assert('application/json' == res.type);
     next();
   });
@@ -362,7 +362,7 @@ it('GET .type', function(next){
 it('GET Content-Type params', function(next){
   request
   .get('/text')
-  .end(function(res){
+  .end(function(err, res){
     assert('utf-8' == res.charset);
     next();
   });
@@ -371,7 +371,7 @@ it('GET Content-Type params', function(next){
 it('GET json', function(next){
   request
   .get('/pets')
-  .end(function(res){
+  .end(function(err, res){
     assert.deepEqual(res.body, ['tobi', 'loki', 'jane']);
     next();
   });
@@ -380,28 +380,28 @@ it('GET json', function(next){
 it('GET x-www-form-urlencoded', function(next){
   request
   .get('/foo')
-  .end(function(res){
+  .end(function(err, res){
     assert.deepEqual(res.body, { foo: 'bar' });
     next();
   });
 });
 
 it('GET shorthand', function(next){
-  request.get('/foo', function(res){
+  request.get('/foo', function(err, res){
     assert('foo=bar' == res.text);
     next();
   });
 });
 
 it('POST shorthand', function(next){
-  request.post('/user/0/pet', { pet: 'tobi' }, function(res){
+  request.post('/user/0/pet', { pet: 'tobi' }, function(err, res){
     assert('added pet "tobi"' == res.text);
     next();
   });
 });
 
 it('POST shorthand without callback', function(next){
-  request.post('/user/0/pet', { pet: 'tobi' }).end(function(res){
+  request.post('/user/0/pet', { pet: 'tobi' }).end(function(err, res){
     assert('added pet "tobi"' == res.text);
     next();
   });
@@ -411,7 +411,7 @@ it('GET querystring object', function(next){
   request
   .get('/querystring')
   .query({ search: 'Manny' })
-  .end(function(res){
+  .end(function(err, res){
     assert.deepEqual(res.body, { search: 'Manny' });
     next();
   });
@@ -421,7 +421,7 @@ it('GET querystring append original', function(next){
   request
   .get('/querystring?search=Manny')
   .query({ range: '1..5' })
-  .end(function(res){
+  .end(function(err, res){
     assert.deepEqual(res.body, { search: 'Manny', range: '1..5' });
     next();
   });
@@ -433,7 +433,7 @@ it('GET querystring multiple objects', function(next){
   .query({ search: 'Manny' })
   .query({ range: '1..5' })
   .query({ order: 'desc' })
-  .end(function(res){
+  .end(function(err, res){
     assert.deepEqual(res.body, { search: 'Manny', range: '1..5', order: 'desc' });
     next();
   });
@@ -443,7 +443,7 @@ it('GET querystring empty objects', function(next){
   var req = request
   .get('/querystring')
   .query({})
-  .end(function(res){
+  .end(function(err, res){
     assert.deepEqual(req._query, []);
     assert.deepEqual(res.body, {});
     next();
@@ -456,7 +456,7 @@ it('GET querystring with strings', function(next){
   .query('search=Manny')
   .query('range=1..5')
   .query('order=desc')
-  .end(function(res){
+  .end(function(err, res){
     assert.deepEqual(res.body, { search: 'Manny', range: '1..5', order: 'desc' });
     next();
   });
@@ -467,7 +467,7 @@ it('GET querystring with strings and objects', function(next){
   .get('/querystring')
   .query('search=Manny')
   .query({ order: 'desc', range: '1..5' })
-  .end(function(res){
+  .end(function(err, res){
     assert.deepEqual(res.body, { search: 'Manny', range: '1..5', order: 'desc' });
     next();
   });
@@ -476,7 +476,7 @@ it('GET querystring with strings and objects', function(next){
 it('GET querystring object .get(uri, obj)', function(next){
   request
   .get('/querystring', { search: 'Manny' })
-  .end(function(res){
+  .end(function(err, res){
     assert.deepEqual(res.body, { search: 'Manny' });
     next();
   });
@@ -484,28 +484,28 @@ it('GET querystring object .get(uri, obj)', function(next){
 
 it('GET querystring object .get(uri, obj, fn)', function(next){
   request
-  .get('/querystring', { search: 'Manny'}, function(res){
+  .get('/querystring', { search: 'Manny'}, function(err, res){
     assert.deepEqual(res.body, { search: 'Manny' });
     next();
   });
 });
 
 it('request(method, url)', function(next){
-  request('GET', '/foo').end(function(res){
+  request('GET', '/foo').end(function(err, res){
     assert('bar' == res.body.foo);
     next();
   });
 });
 
 it('request(url)', function(next){
-  request('/foo').end(function(res){
+  request('/foo').end(function(err, res){
     assert('bar' == res.body.foo);
     next();
   });
 });
 
 it('request(url, fn)', function(next){
-  request('/foo', function(res){
+  request('/foo', function(err, res){
     assert('bar' == res.body.foo);
     next();
   });
@@ -541,7 +541,7 @@ it('basic auth', function(next){
   request
   .post('/auth')
   .auth('foo', 'bar')
-  .end(function(res){
+  .end(function(err, res){
     assert('foo' == res.body.user);
     assert('bar' == res.body.pass);
     next();

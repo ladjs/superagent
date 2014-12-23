@@ -36,7 +36,7 @@ describe('req.send(Object) as "json"', function(){
     request
     .post('http://localhost:3005/echo')
     .send({ name: 'tobi' })
-    .end(function(res){
+    .end(function(err, res){
       res.should.be.json
       res.text.should.equal('{"name":"tobi"}');
       done();
@@ -47,7 +47,7 @@ describe('req.send(Object) as "json"', function(){
     request
     .post('http://localhost:3005/echo')
     .send([1,2,3])
-    .end(function(res){
+    .end(function(err, res){
       res.should.be.json
       res.text.should.equal('[1,2,3]');
       done();
@@ -59,7 +59,7 @@ describe('req.send(Object) as "json"', function(){
     .post('http://localhost:3005/echo')
     .type('json')
     .send('null')
-    .end(function(res){
+    .end(function(err, res){
       res.should.be.json
       assert(res.body === null);
       done();
@@ -71,7 +71,7 @@ describe('req.send(Object) as "json"', function(){
     .post('http://localhost:3005/echo')
     .type('json')
     .send('false')
-    .end(function(res){
+    .end(function(err, res){
       res.should.be.json
       res.body.should.equal(false);
       done();
@@ -83,7 +83,7 @@ describe('req.send(Object) as "json"', function(){
     .post('http://localhost:3005/echo')
     .type('json')
     .send('0')
-    .end(function(res){
+    .end(function(err, res){
       res.should.be.json
       res.body.should.equal(0);
       done();
@@ -95,7 +95,7 @@ describe('req.send(Object) as "json"', function(){
     .post('http://localhost:3005/echo')
     .type('json')
     .send('""')
-    .end(function(res){
+    .end(function(err, res){
       res.should.be.json
       res.body.should.equal("");
       done();
@@ -106,7 +106,7 @@ describe('req.send(Object) as "json"', function(){
     request
     .get('http://localhost:3005/echo')
     .send({ tobi: 'ferret' })
-    .end(function(res){
+    .end(function(err, res){
       res.should.be.json
       res.text.should.equal('{"tobi":"ferret"}');
       done();
@@ -119,7 +119,7 @@ describe('req.send(Object) as "json"', function(){
       .post('http://localhost:3005/echo')
       .send({ name: 'tobi' })
       .send({ age: 1 })
-      .end(function(res){
+      .end(function(err, res){
         res.should.be.json
         res.text.should.equal('{"name":"tobi","age":1}');
         done();
@@ -133,7 +133,7 @@ describe('res.body', function(){
     it('should parse the body', function(done){
       request
       .get('http://localhost:3005/json')
-      .end(function(res){
+      .end(function(err, res){
         res.text.should.equal('{"name":"manny"}');
         res.body.should.eql({ name: 'manny' });
         done();
