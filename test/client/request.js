@@ -120,7 +120,7 @@ it('get()', function(next){
 
 it('patch()', function(next){
   request.patch('/user/12').end(function(res){
-    assert('updated' == res.text, 'response text');
+    assert('updated' == res.text);
     next();
   });
 });

@@ -6,4 +6,4 @@ browsers:
   - name: firefox
     version: latest
   - name: ie
-    version: latest
+    version: 10..latest
