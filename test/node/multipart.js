@@ -1,13 +1,13 @@
 
-// var request = require('../../')
-//   , express = require('express')
-//   , assert = require('assert')
-//   , app = express()
-//   , fs = require('fs');
+var request = require('../../')
+  , express = require('express')
+  , assert = require('assert')
+  , app = express()
+  , fs = require('fs');
 
-// function read(file) {
-//   return fs.readFileSync(file, 'utf8');
-// }
+function read(file) {
+  return fs.readFileSync(file, 'utf8');
+}
 
 // app.post('/echo', function(req, res){
 //   res.writeHead(200, req.headers);
@@ -20,7 +20,7 @@
 //   return ct.match(/boundary="(.*)"/)[1];
 // }
 
-// describe('Request', function(){
+describe('Request', function(){
 //   describe('#part()', function(){
 //     it('should return a new Part', function(){
 //       var req = request.post('http://localhost:3005');
@@ -131,22 +131,22 @@
 //     })
 //   })
 
-//   describe('#attach(name, path, filename)', function(){
-//     it('should use the custom filename', function(done){
-//       request
-//       .post(':3005/echo')
-//       .attach('document', 'test/node/fixtures/user.html', 'doc.html')
-//       .end(function(err, res){
-//         if (err) return done(err);
-//         var html = res.files.document;
-//         html.name.should.equal('doc.html');
-//         html.type.should.equal('text/html');
-//         read(html.path).should.equal('<h1>name</h1>');
-//         done();
-//       })
-//     })
-//   })
-// })
+  describe('#attach(name, path, filename)', function(){
+    it('should use the custom filename', function(done){
+      request
+      .post(':3005/echo')
+      .attach('document', 'test/node/fixtures/user.html', 'doc.html')
+      .end(function(err, res){
+        if (err) return done(err);
+        var html = res.files.document;
+        html.name.should.equal('doc.html');
+        html.type.should.equal('text/html');
+        read(html.path).should.equal('<h1>name</h1>');
+        done();
+      })
+    })
+  })
+})
 
 // describe('Part', function(){
 //   describe('with a single part', function(){
