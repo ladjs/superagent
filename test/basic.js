@@ -21,7 +21,7 @@ describe('request', function(){
   describe('with a callback', function(){
     it('should invoke .end()', function(done){
       request
-      .get(uri + '/login', function(res){
+      .get(uri + '/login', function(err, res){
         assert(res.status == 200);
         done();
       })
@@ -32,7 +32,7 @@ describe('request', function(){
     it('should issue a request', function(done){
       request
       .get(uri + '/login')
-      .end(function(res){
+      .end(function(err, res){
         assert(res.status == 200);
         done();
       });
@@ -43,7 +43,7 @@ describe('request', function(){
     it('should should be an Error object', function(done){
       request
       .get(uri + '/error')
-      .end(function(res){
+      .end(function(err, res){
         if (NODE) {
           res.error.message.should.equal('cannot GET /error (500)');
         }
@@ -60,7 +60,7 @@ describe('request', function(){
     it('should be an object', function(done){
       request
       .get(uri + '/login')
-      .end(function(res){
+      .end(function(err, res){
         assert('Express' == res.header['x-powered-by']);
         done();
       });
@@ -71,7 +71,7 @@ describe('request', function(){
     it('should be set when present', function(done){
       request
       .get(uri + '/login')
-      .end(function(res){
+      .end(function(err, res){
         res.charset.should.equal('utf-8');
         done();
       });
@@ -82,7 +82,7 @@ describe('request', function(){
     it('should provide the first digit', function(done){
       request
       .get(uri + '/login')
-      .end(function(res){
+      .end(function(err, res){
         assert(200 == res.status);
         assert(2 == res.statusType);
         done();
@@ -94,7 +94,7 @@ describe('request', function(){
     it('should provide the mime-type void of params', function(done){
       request
       .get(uri + '/login')
-      .end(function(res){
+      .end(function(err, res){
         res.type.should.equal('text/html');
         res.charset.should.equal('utf-8');
         done();
@@ -108,7 +108,7 @@ describe('request', function(){
       .post(uri + '/echo')
       .set('X-Foo', 'bar')
       .set('X-Bar', 'baz')
-      .end(function(res){
+      .end(function(err, res){
         assert('bar' == res.header['x-foo']);
         assert('baz' == res.header['x-bar']);
         done();
@@ -121,7 +121,7 @@ describe('request', function(){
       request
       .post(uri + '/echo')
       .set({ 'X-Foo': 'bar', 'X-Bar': 'baz' })
-      .end(function(res){
+      .end(function(err, res){
         assert('bar' == res.header['x-foo']);
         assert('baz' == res.header['x-bar']);
         done();
@@ -134,7 +134,7 @@ describe('request', function(){
       request
       .post(uri + '/echo')
       .type('text/x-foo')
-      .end(function(res){
+      .end(function(err, res){
         res.header['content-type'].should.equal('text/x-foo');
         done();
       });
@@ -145,7 +145,7 @@ describe('request', function(){
       .post(uri + '/echo')
       .type('json')
       .send('{"a": 1}')
-      .end(function(res){
+      .end(function(err, res){
         res.should.be.json;
         done();
       });
@@ -155,7 +155,7 @@ describe('request', function(){
       request
       .post(uri + '/echo')
       .type('html')
-      .end(function(res){
+      .end(function(err, res){
         res.header['content-type'].should.equal('text/html');
         done();
       });
@@ -167,7 +167,7 @@ describe('request', function(){
       request
       .get(uri + '/echo')
       .accept('text/x-foo')
-      .end(function(res){
+      .end(function(err, res){
          res.header['accept'].should.equal('text/x-foo');
          done();
       });
@@ -177,7 +177,7 @@ describe('request', function(){
       request
       .get(uri + '/echo')
       .accept('json')
-      .end(function(res){
+      .end(function(err, res){
         res.header['accept'].should.equal('application/json');
         done();
       });
@@ -187,7 +187,7 @@ describe('request', function(){
       request
       .get(uri + '/echo')
       .accept('xml')
-      .end(function(res){
+      .end(function(err, res){
         res.header['accept'].should.equal('application/xml');
         done();
       });
@@ -197,7 +197,7 @@ describe('request', function(){
       request
       .get(uri + '/echo')
       .accept('html')
-      .end(function(res){
+      .end(function(err, res){
         res.header['accept'].should.equal('text/html');
         done();
       });
@@ -210,7 +210,7 @@ describe('request', function(){
       .post(uri + '/echo')
       .type('json')
       .send('{"name":"tobi"}')
-      .end(function(res){
+      .end(function(err, res){
         res.text.should.equal('{"name":"tobi"}');
         done();
       });
@@ -222,7 +222,7 @@ describe('request', function(){
       request
       .post(uri + '/echo')
       .send({ name: 'tobi' })
-      .end(function(res){
+      .end(function(err, res){
         res.should.be.json
         res.text.should.equal('{"name":"tobi"}');
         done();
@@ -235,7 +235,7 @@ describe('request', function(){
         .post(uri + '/echo')
         .send({ name: 'tobi' })
         .send({ age: 1 })
-        .end(function(res){
+        .end(function(err, res){
           res.should.be.json
           if (NODE) {
             res.buffered.should.be.true;

@@ -9,7 +9,7 @@ describe('xdomain', function(){
     request
     .get('//' + window.location.host + '/xdomain')
     .withCredentials()
-    .end(function(res){
+    .end(function(err, res){
       assert(200 == res.status);
       assert('tobi' == res.text);
       next();

@@ -21,7 +21,7 @@ describe('Basic auth', function(){
     it('should set Authorization', function(done){
       request
       .get('http://tobi:learnboost@localhost:3010')
-      .end(function(res){
+      .end(function(err, res){
         res.status.should.equal(200);
         done();
       });
@@ -33,7 +33,7 @@ describe('Basic auth', function(){
       request
       .get('http://localhost:3010')
       .auth('tobi', 'learnboost')
-      .end(function(res){
+      .end(function(err, res){
         res.status.should.equal(200);
         done();
       });
@@ -45,7 +45,7 @@ describe('Basic auth', function(){
       request
       .get('http://localhost:3010/again')
       .auth('tobi')
-      .end(function(res){
+      .end(function(err, res){
         res.status.should.eql(200);
         done();
       });

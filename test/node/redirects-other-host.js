@@ -17,7 +17,7 @@ describe('request', function(){
       var req = request
         .get('http://localhost:3210/test')
         .redirects(1)
-        .end(function(res){
+        .end(function(err, res){
           req.req._headers.host.should.eql('github.com');
           res.status.should.eql(200);
           done();

@@ -19,7 +19,7 @@ describe('req.query(String)', function(){
     request
     .del('http://localhost:3006/')
     .query('name=tobi')
-    .end(function(res){
+    .end(function(err, res){
       res.body.should.eql({ name: 'tobi' });
       done();
     });
@@ -29,7 +29,7 @@ describe('req.query(String)', function(){
     request
     .del('http://localhost:3006/?name=tobi')
     .query('age=2')
-    .end(function(res){
+    .end(function(err, res){
       res.body.should.eql({ name: 'tobi', age: '2' });
       done();
     });
@@ -39,7 +39,7 @@ describe('req.query(String)', function(){
     request
       .del('http://localhost:3006/')
       .query('name=tobi&age=2')
-      .end(function(res){
+      .end(function(err, res){
         res.body.should.eql({ name: 'tobi', age: '2' });
         done();
       });
@@ -50,7 +50,7 @@ describe('req.query(String)', function(){
     .del('http://localhost:3006/')
     .query('name=tobi')
     .query('age=2')
-    .end(function(res){
+    .end(function(err, res){
       res.body.should.eql({ name: 'tobi', age: '2' });
       done();
     });
@@ -61,7 +61,7 @@ describe('req.query(String)', function(){
     .del('http://localhost:3006/')
     .query('name=tobi')
     .query({ age: 2 })
-    .end(function(res){
+    .end(function(err, res){
       res.body.should.eql({ name: 'tobi', age: '2' });
       done();
     });
@@ -84,7 +84,7 @@ describe('req.query(String)', function(){
   //   request
   //   .del('http://localhost:3006/')
   //   .query('a=1&a=2&a=3')
-  //   .end(function(res){
+  //   .end(function(err, res){
   //     res.body.should.eql({ a: '3' });
   //     done();
   //   });
@@ -98,7 +98,7 @@ describe('req.query(Object)', function(){
     .query({ name: 'tobi' })
     .query({ order: 'asc' })
     .query({ limit: ['1', '2'] })
-    .end(function(res){
+    .end(function(err, res){
       res.body.should.eql({ name: 'tobi', order: 'asc', limit: ['1', '2'] });
       done();
     });
@@ -110,7 +110,7 @@ describe('req.query(Object)', function(){
     request
     .del('http://localhost:3006/')
     .query({ at: date })
-    .end(function(res){
+    .end(function(err, res){
       assert(date.toISOString() == res.body.at);
       done();
     });
@@ -124,7 +124,7 @@ describe('req.query(Object)', function(){
     .query({ name: 'tobi' })
     .query({ order: 'asc' })
     .query({ limit: ['1', '2'] })
-    .end(function(res){
+    .end(function(err, res){
       res.body.should.eql({ name: 'tobi', order: 'asc', limit: ['1', '2'] });
       done();
     });
@@ -134,7 +134,7 @@ describe('req.query(Object)', function(){
     request
     .del('http://localhost:3006/?name=tobi')
     .query({ order: 'asc' })
-    .end(function(res) {
+    .end(function(err, res) {
       res.body.should.eql({ name: 'tobi', order: 'asc' });
       done();
     });
@@ -143,7 +143,7 @@ describe('req.query(Object)', function(){
   it('should retain the original query-string', function(done){
     request
     .del('http://localhost:3006/?name=tobi')
-    .end(function(res) {
+    .end(function(err, res) {
       res.body.should.eql({ name: 'tobi' });
       done();
     });

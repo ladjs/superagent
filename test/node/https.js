@@ -29,7 +29,7 @@ describe('https', function(){
       request
       .get('https://localhost:8443/')
       .ca(cert)
-      .end(function(res){
+      .end(function(err, res){
         assert(res.ok);
         assert('Safe and secure!' === res.text);
         done();
@@ -42,12 +42,12 @@ describe('https', function(){
       var agent = request.agent({ca: cert});
       agent
       .get('https://localhost:8443/')
-      .end(function(res){
+      .end(function(err, res){
         assert(res.ok);
         assert('Safe and secure!' === res.text);
         agent
         .get(url.parse('https://localhost:8443/'))
-        .end(function(res){
+        .end(function(err, res){
           assert(res.ok);
           assert('Safe and secure!' === res.text);
           done();

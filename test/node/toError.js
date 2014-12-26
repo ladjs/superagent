@@ -15,7 +15,7 @@ describe('res.toError()', function(){
   it('should return an Error', function(done){
     request
     .get('http://localhost:8888/')
-    .end(function(res){
+    .end(function(err, res){
       var err = res.toError();
       assert(err.status == 400);
       assert(err.method == 'GET');

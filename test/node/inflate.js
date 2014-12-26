@@ -36,7 +36,7 @@ if (zlib) {
     it('should deflate the content', function(done){
       request
         .get('http://localhost:3080')
-        .end(function(res){
+        .end(function(err, res){
           res.should.have.status(200);
           res.text.should.equal(subject);
           res.headers['content-length'].should.be.below(subject.length);
@@ -48,7 +48,7 @@ if (zlib) {
       it('should emit buffers', function(done){
         request
           .get('http://localhost:3080/binary')
-          .end(function(res){
+          .end(function(err, res){
             res.should.have.status(200);
             res.headers['content-length'].should.be.below(subject.length);
 

@@ -25,7 +25,7 @@ describe('res.body', function(){
     it('should parse the body', function(done){
       request
       .get('http://localhost:3011/image')
-      .end(function(res){
+      .end(function(err, res){
         (res.body.length - img.length).should.equal(0);
         done();
       });

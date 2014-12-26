@@ -24,7 +24,7 @@ describe('req.parse(fn)', function(){
     request
     .get('http://localhost:3033/manny')
     .parse(request.parse['application/json'])
-    .end(function(res){
+    .end(function(err, res){
       assert(res.ok);
       assert('{"name":"manny"}' == res.text);
       assert('manny' == res.body.name);
@@ -38,7 +38,7 @@ describe('req.parse(fn)', function(){
     .parse(function(res, fn) {
       res.on('data', function() {});
     })
-    .end(function(res){
+    .end(function(err, res){
       assert(res.ok);
       assert(res.text === undefined);
       res.body.should.eql({});

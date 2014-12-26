@@ -23,7 +23,7 @@ describe('req.send(Object) as "form"', function(){
       .post('http://localhost:3002/echo')
       .type('form')
       .send({ name: 'tobi' })
-      .end(function(res){
+      .end(function(err, res){
         res.header['content-type'].should.equal('application/x-www-form-urlencoded');
         res.text.should.equal('name=tobi');
         done();
@@ -38,7 +38,7 @@ describe('req.send(Object) as "form"', function(){
       .type('form')
       .send({ name: { first: 'tobi', last: 'holowaychuk' } })
       .send({ age: '1' })
-      .end(function(res){
+      .end(function(err, res){
         res.header['content-type'].should.equal('application/x-www-form-urlencoded');
         res.text.should.equal('name%5Bfirst%5D=tobi&name%5Blast%5D=holowaychuk&age=1');
         done();
@@ -53,7 +53,7 @@ describe('req.send(String)', function(){
     .post('http://localhost:3002/echo')
     .send('user[name]=tj')
     .send('user[email]=tj@vision-media.ca')
-    .end(function(res){
+    .end(function(err, res){
       res.header['content-type'].should.equal('application/x-www-form-urlencoded');
       res.body.should.eql({ user: { name: 'tj', email: 'tj@vision-media.ca' } });
       done();
@@ -66,7 +66,7 @@ describe('res.body', function(){
     it('should parse the body', function(done){
       request
       .get('http://localhost:3002/form-data')
-      .end(function(res){
+      .end(function(err, res){
         res.text.should.equal('pet[name]=manny');
         res.body.should.eql({ pet: { name: 'manny' }});
         done();

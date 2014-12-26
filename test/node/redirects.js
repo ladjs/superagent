@@ -27,7 +27,7 @@ app.get('/movies/random', function(req, res){
 });
 
 app.get('/movie/4', function(req, res){
-  setTimeout(function(res){
+  setTimeout(function(err, res){
     res.send('not-so-random movie');
   }, 1000, res);
 });
@@ -69,7 +69,7 @@ describe('request', function(){
       .on('redirect', function(res){
         redirects.push(res.headers.location);
       })
-      .end(function(res){
+      .end(function(err, res){
         var arr = [];
         arr.push('/movies');
         arr.push('/movies/all');
@@ -84,7 +84,7 @@ describe('request', function(){
       request
       .get('http://localhost:3003/header')
       .set('X-Foo', 'bar')
-      .end(function(res){
+      .end(function(err, res){
         res.body.should.have.property('x-foo', 'bar');
         done();
       });
@@ -97,7 +97,7 @@ describe('request', function(){
       .set('X-Foo', 'bar')
       .set('X-Bar', 'baz')
       .send('hey')
-      .end(function(res){
+      .end(function(err, res){
         res.body.should.have.property('x-foo', 'bar');
         res.body.should.have.property('x-bar', 'baz');
         res.body.should.not.have.property('content-type');
@@ -127,7 +127,7 @@ describe('request', function(){
         .on('redirect', function(res){
           redirects.push(res.headers.location);
         })
-        .end(function(res){
+        .end(function(err, res){
           var arr = [];
           redirects.should.eql(['/tobi']);
           res.text.should.equal('tobi');
@@ -147,7 +147,7 @@ describe('request', function(){
       .on('redirect', function(res){
         redirects.push(res.headers.location);
       })
-      .end(function(res){
+      .end(function(err, res){
         var arr = [];
         assert(res.redirect, 'res.redirect');
         arr.push('/movies');
@@ -170,7 +170,7 @@ describe('request', function(){
       .on('redirect', function(res){
         redirects.push(res.headers.location);
       })
-      .end(function(res){
+      .end(function(err, res){
         var arr = [];
         arr.push('/movies/all/0');
         redirects.should.eql(arr);
