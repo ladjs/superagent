@@ -3,7 +3,7 @@
   "version": "0.21.0",
   "description": "elegant & feature rich browser / node HTTP with a fluent API",
   "scripts": {
-    "test": "make test test-browser"
+    "test": "make test"
   },
   "keywords": [
     "http",
