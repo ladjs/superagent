@@ -5,6 +5,9 @@ REPORTER = spec
 all: superagent.js
 
 test:
+	@if [ "x$(BROWSER)" = "x" ]; then make test-node; else make test-browser; fi
+
+test-node:
 	@NODE_ENV=test NODE_TLS_REJECT_UNAUTHORIZED=0 ./node_modules/.bin/mocha \
 		--require should \
 		--reporter $(REPORTER) \
