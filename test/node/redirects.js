@@ -7,18 +7,22 @@ var EventEmitter = require('events').EventEmitter
   , should = require('should');
 
 app.get('/', function(req, res){
+  res.set('QUERY', JSON.stringify(req.query));
   res.redirect('/movies');
 });
 
 app.get('/movies', function(req, res){
+  res.set('QUERY', JSON.stringify(req.query));
   res.redirect('/movies/all');
 });
 
 app.get('/movies/all', function(req, res){
+  res.set('QUERY', JSON.stringify(req.query));
   res.redirect('/movies/all/0');
 });
 
 app.get('/movies/all/0', function(req, res){
+  res.set('QUERY', JSON.stringify(req.query));
   res.send('first movie page');
 });
 
@@ -114,6 +118,30 @@ describe('request', function(){
       .end(function(err, res){
         assert(err instanceof Error, 'expected an error');
         err.should.have.property('timeout', 250);
+        done();
+      });
+    })
+
+    it('should not resend query parameters', function(done) {
+      var redirects = [];
+      var query = [];
+
+      request
+      .get('http://localhost:3003/?foo=bar')
+      .on('redirect', function(res){
+        query.push(res.headers.query);
+        redirects.push(res.headers.location);
+      })
+      .end(function(err, res){
+        var arr = [];
+        arr.push('/movies');
+        arr.push('/movies/all');
+        arr.push('/movies/all/0');
+        redirects.should.eql(arr);
+        res.text.should.equal('first movie page');
+
+        query.should.eql(['{"foo":"bar"}', '{}', '{}']);
+        res.headers.query.should.eql('{}');
         done();
       });
     })
