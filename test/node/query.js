@@ -149,3 +149,57 @@ describe('req.query(Object)', function(){
     });
   });
 })
+
+describe('req.queryRaw(String)', function(){
+  it('should work when called once', function(done){
+    request
+    .del('http://localhost:3006/')
+    .queryRaw('name=t%F6bi')
+    .end(function(res){
+      res.body.should.eql({ name: 't%F6bi' });
+      done();
+    });
+  })
+
+  it('should work with url query-string', function(done){
+    request
+    .del('http://localhost:3006/?name=tobi')
+    .queryRaw('age=2%20')
+    .end(function(res){
+      res.body.should.eql({ name: 'tobi', age: '2 ' });
+      done();
+    });
+  })
+
+  it('should work with compound elements', function(done){
+    request
+      .del('http://localhost:3006/')
+      .queryRaw('name=t%F6bi&age=2')
+      .end(function(res){
+        res.body.should.eql({ name: 't%F6bi', age: '2' });
+        done();
+      });
+  })
+
+  it('should work when called multiple times', function(done){
+    request
+    .del('http://localhost:3006/')
+    .queryRaw('name=t%F6bi')
+    .queryRaw('age=2%F6')
+    .end(function(res){
+      res.body.should.eql({ name: 't%F6bi', age: '2%F6' });
+      done();
+    });
+  })
+
+  it('should work with normal `query`', function(done){
+    request
+    .del('http://localhost:3006/')
+    .queryRaw('name=t%F6bi')
+    .query('age=2%20')
+    .end(function(res){
+      res.body.should.eql({ name: 't%F6bi', age: '2%20' });
+      done();
+    });
+  })
+})
