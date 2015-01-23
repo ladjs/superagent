@@ -350,6 +350,24 @@ it('POST multiple .send() strings', function(next){
   })
 });
 
+it('POST native FormData', function(next){
+  if (!window.FormData) {
+    // Skip test if FormData is not supported by browser
+    return next();
+  }
+
+  var data = new FormData();
+  data.append('foo', 'bar');
+
+  request
+    .post('/echo')
+    .send(data)
+    .end(function(err, res){
+      assert('multipart/form-data' == res.type);
+      next();
+    });
+});
+
 it('GET .type', function(next){
   request
   .get('/pets')
