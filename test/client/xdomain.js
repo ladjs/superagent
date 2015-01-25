@@ -16,6 +16,16 @@ describe('xdomain', function(){
     })
   })
 
+  if('should allow to disable progress', function(next){
+    request
+    .get('http://ip.jsontest.com/')
+    .withoutProgress()
+    .end(function(err, res){
+      assert(200 == res.status);
+      next();
+    });
+  });
+
   it('should handle x-domain failure', function(next){
     request
     .get('//tunne127.com')
