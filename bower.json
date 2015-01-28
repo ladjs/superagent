@@ -1,0 +1,21 @@
+{
+  "name": "superagent",
+  "version": "0.21.1",
+  "main": "lib/client.js",
+  "license": "MIT",
+  "homepage": "https://visionmedia.github.io/superagent/",
+  "ignore": [
+    "examples/",
+    "test/",
+    ".gitignore",
+    ".npmignore",
+    ".travis.yml",
+    ".zuul.yml",
+    "component.json",
+    "package.json"
+  ],
+  "dependencies": {
+    "component/emitter": "1.x",
+    "reduce": "1.x"
+  }
+}
