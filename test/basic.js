@@ -51,6 +51,8 @@ describe('request', function(){
           res.error.message.should.equal('cannot GET ' + uri + '/error (500)');
         }
         assert(res.error.status === 500);
+        assert(err, 'should have an error for 500');
+        assert.equal(err.message, 'Internal Server Error');
         done();
       });
     })
@@ -83,6 +85,7 @@ describe('request', function(){
       request
       .get(uri + '/login')
       .end(function(err, res){
+        assert(!err, 'should not have an error for success responses');
         assert(200 == res.status);
         assert(2 == res.statusType);
         done();

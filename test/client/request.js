@@ -30,6 +30,7 @@ it('request() simple HEAD', function(next){
 
 it('request() error object', function(next) {
   request('GET', '/error').end(function(err, res) {
+    assert(err);
     assert(res.error, 'response should be an error');
     assert(res.error.message == 'cannot GET /error (500)');
     assert(res.error.status == 500);
@@ -41,6 +42,8 @@ it('request() error object', function(next) {
 
 it('request() GET 5xx', function(next){
   request('GET', '/error').end(function(err, res){
+    assert(err);
+    assert(err.message == 'Internal Server Error');
     assert(!res.ok, 'response should not be ok');
     assert(res.error, 'response should be an error');
     assert(!res.clientError, 'response should not be a client error');
@@ -51,6 +54,8 @@ it('request() GET 5xx', function(next){
 
 it('request() GET 4xx', function(next){
   request('GET', '/notfound').end(function(err, res){
+    assert(err);
+    assert.equal(err.message, 'Not Found');
     assert(!res.ok, 'response should not be ok');
     assert(res.error, 'response should be an error');
     assert(res.clientError, 'response should be a client error');
@@ -61,6 +66,7 @@ it('request() GET 4xx', function(next){
 
 it('request() GET 404 Not Found', function(next){
   request('GET', '/notfound').end(function(err, res){
+    assert(err);
     assert(res.notFound, 'response should be .notFound');
     next();
   });
@@ -68,6 +74,7 @@ it('request() GET 404 Not Found', function(next){
 
 it('request() GET 400 Bad Request', function(next){
   request('GET', '/bad-request').end(function(err, res){
+    assert(err);
     assert(res.badRequest, 'response should be .badRequest');
     next();
   });
@@ -75,6 +82,7 @@ it('request() GET 400 Bad Request', function(next){
 
 it('request() GET 401 Bad Request', function(next){
   request('GET', '/unauthorized').end(function(err, res){
+    assert(err);
     assert(res.unauthorized, 'response should be .unauthorized');
     next();
   });
@@ -82,6 +90,7 @@ it('request() GET 401 Bad Request', function(next){
 
 it('request() GET 406 Not Acceptable', function(next){
   request('GET', '/not-acceptable').end(function(err, res){
+    assert(err);
     assert(res.notAcceptable, 'response should be .notAcceptable');
     next();
   });
@@ -96,6 +105,7 @@ it('request() GET 204 No Content', function(next){
 
 it('request() header parsing', function(next){
   request('GET', '/notfound').end(function(err, res){
+    assert(err);
     assert('text/html; charset=utf-8' == res.header['content-type']);
     assert('Express' == res.header['x-powered-by']);
     next();
@@ -104,6 +114,7 @@ it('request() header parsing', function(next){
 
 it('request() .status', function(next){
   request('GET', '/notfound').end(function(err, res){
+    assert(err);
     assert(404 == res.status, 'response .status');
     assert(4 == res.statusType, 'response .statusType');
     next();
@@ -112,6 +123,7 @@ it('request() .status', function(next){
 
 it('get()', function(next){
   request.get('/notfound').end(function(err, res){
+    assert(err);
     assert(404 == res.status, 'response .status');
     assert(4 == res.statusType, 'response .statusType');
     next();
