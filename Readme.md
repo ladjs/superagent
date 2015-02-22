@@ -72,14 +72,6 @@ request
   });
 ```
 
-Building on the existing API internally, we also provide something similar to `$.post()` for those times in life where your interactions are very basic:
-
-```js
-request.post('/api/pet', cat, function(error, res){
-
-});
-```
-
 # Plugins
 
 Usage:
