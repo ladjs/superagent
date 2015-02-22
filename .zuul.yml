@@ -12,4 +12,4 @@ browsers:
   - name: android
     version: latest
   - name: ie
-    version: 9..10
+    version: 10
