@@ -12,61 +12,11 @@ app.delete('/', function(req, res){
   res.status(200).send(req.query);
 });
 
-app.listen(3006);
+before(function(done) {
+  app.listen(3006, done);
+});
 
 describe('req.query(String)', function(){
-  it('should work when called once', function(done){
-    request
-    .del('http://localhost:3006/')
-    .query('name=tobi')
-    .end(function(err, res){
-      res.body.should.eql({ name: 'tobi' });
-      done();
-    });
-  })
-
-  it('should work with url query-string', function(done){
-    request
-    .del('http://localhost:3006/?name=tobi')
-    .query('age=2')
-    .end(function(err, res){
-      res.body.should.eql({ name: 'tobi', age: '2' });
-      done();
-    });
-  })
-
-  it('should work with compound elements', function(done){
-    request
-      .del('http://localhost:3006/')
-      .query('name=tobi&age=2')
-      .end(function(err, res){
-        res.body.should.eql({ name: 'tobi', age: '2' });
-        done();
-      });
-  })
-
-  it('should work when called multiple times', function(done){
-    request
-    .del('http://localhost:3006/')
-    .query('name=tobi')
-    .query('age=2')
-    .end(function(err, res){
-      res.body.should.eql({ name: 'tobi', age: '2' });
-      done();
-    });
-  })
-
-  it('should work when mixed with objects', function(done){
-    request
-    .del('http://localhost:3006/')
-    .query('name=tobi')
-    .query({ age: 2 })
-    .end(function(err, res){
-      res.body.should.eql({ name: 'tobi', age: '2' });
-      done();
-    });
-  })
-
   it('should supply uri malformed error to the callback', function(done){
     request
     .get('http://localhost:3006')
@@ -80,15 +30,57 @@ describe('req.query(String)', function(){
     });
   })
 
-  // it('should leave strange formatting as-is', function(done){
-  //   request
-  //   .del('http://localhost:3006/')
-  //   .query('a=1&a=2&a=3')
-  //   .end(function(err, res){
-  //     res.body.should.eql({ a: '3' });
-  //     done();
-  //   });
-  // })
+  it('should support passing in a string', function(done){
+    request
+    .del('http://localhost:3006')
+    .query('name=t%F6bi')
+    .end(function(err, res){
+      res.body.should.eql({ name: 't%F6bi' });
+      done();
+    });
+  })
+
+  it('should work with url query-string and string for query', function(done){
+    request
+    .del('http://localhost:3006/?name=tobi')
+    .query('age=2%20')
+    .end(function(err, res){
+      res.body.should.eql({ name: 'tobi', age: '2 ' });
+      done();
+    });
+  })
+
+  it('should support compound elements in a string', function(done){
+    request
+      .del('http://localhost:3006/')
+      .query('name=t%F6bi&age=2')
+      .end(function(err, res){
+        res.body.should.eql({ name: 't%F6bi', age: '2' });
+        done();
+      });
+  })
+
+  it('should work when called multiple times with a string', function(done){
+    request
+    .del('http://localhost:3006/')
+    .query('name=t%F6bi')
+    .query('age=2%F6')
+    .end(function(err, res){
+      res.body.should.eql({ name: 't%F6bi', age: '2%F6' });
+      done();
+    });
+  })
+
+  it('should work with normal `query` object and query string', function(done){
+    request
+    .del('http://localhost:3006/')
+    .query('name=t%F6bi')
+    .query({ age: '2' })
+    .end(function(err, res){
+      res.body.should.eql({ name: 't%F6bi', age: '2' });
+      done();
+    });
+  })
 })
 
 describe('req.query(Object)', function(){
