@@ -61,6 +61,10 @@ app.get('/header/2', function(req, res){
   res.send(req.headers);
 });
 
+app.get('/bad-redirect', function(req, res){
+  res.status(307).end();
+});
+
 app.listen(3003);
 
 describe('request', function(){
@@ -142,6 +146,15 @@ describe('request', function(){
 
         query.should.eql(['{"foo":"bar"}', '{}', '{}']);
         res.headers.query.should.eql('{}');
+        done();
+      });
+    })
+
+    it('should handle no location header', function(done){
+      request
+      .get('http://localhost:3003/bad-redirect')
+      .end(function(err, res){
+        err.message.should.equal('No location header for redirect');
         done();
       });
     })
