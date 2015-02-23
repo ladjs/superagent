@@ -13,16 +13,19 @@ describe('xdomain', function(){
       assert(200 == res.status);
       assert('tobi' == res.text);
       next();
-    })
-  })
-
-  it('should handle x-domain failure', function(next){
-    request
-    .get('//tunne127.com')
-    .end(function(err, res){
-      assert(err, 'error missing');
-      assert(err.crossDomain, 'not .crossDomain');
-      next();
     });
   });
+
+  // xdomain not supproted in old IE
+  if (window.atob) { // Drop IE9 and lower
+    it('should handle x-domain failure', function(next){
+      request
+      .get('//tunne127.com')
+      .end(function(err, res){
+        assert(err, 'error missing');
+        assert(err.crossDomain, 'not .crossDomain');
+        next();
+      });
+    });
+  }
 });

@@ -50,7 +50,7 @@ describe('request', function(){
         else {
           res.error.message.should.equal('cannot GET ' + uri + '/error (500)');
         }
-        res.error.status.should.equal(500);
+        assert(res.error.status === 500);
         done();
       });
     })
