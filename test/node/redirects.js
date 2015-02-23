@@ -31,9 +31,9 @@ app.get('/movies/random', function(req, res){
 });
 
 app.get('/movie/4', function(req, res){
-  setTimeout(function(err, res){
+  setTimeout(function(){
     res.send('not-so-random movie');
-  }, 1000, res);
+  }, 1000);
 });
 
 app.post('/movie', function(req, res){
