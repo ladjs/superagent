@@ -555,7 +555,10 @@ it('req.timeout(ms) with redirect', function(next) {
   });
 });
 
+window.btoa = window.btoa || null;
 it('basic auth', function(next){
+  window.btoa = window.btoa || require('Base64').btoa;
+
   request
   .post('/auth')
   .auth('foo', 'bar')
