@@ -279,4 +279,20 @@ describe('request', function(){
       .end();
     })
   })
+
+  describe('.abort()', function(){
+    it('should abort the request', function(done){
+      var req = request
+      .get(uri + '/delay/3000')
+      .end(function(err, res){
+        assert(false, 'should not complete the request');
+      });
+
+      req.on('abort', done);
+
+      setTimeout(function() {
+        req.abort();
+      }, 1000);
+    })
+  })
 })
