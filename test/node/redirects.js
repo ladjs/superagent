@@ -40,6 +40,19 @@ app.post('/movie', function(req, res){
   res.redirect('/movies/all/0');
 });
 
+app.put('/redirect-303', function(req, res){
+  res.redirect(303, '/reply-method');
+});
+
+app.put('/redirect-307', function(req, res){
+  res.redirect(307, '/reply-method');
+});
+
+
+app.all('/reply-method', function(req, res){
+  res.send('method=' + req.method.toLowerCase());
+});
+
 app.get('/tobi', function(req, res){
   res.send('tobi');
 });
@@ -218,6 +231,38 @@ describe('request', function(){
         res.text.should.equal('first movie page');
         done();
       });
+    })
+  })
+
+  describe('on 303', function(){
+    it('should redirect with same method', function(done){
+      request
+      .put('http://localhost:3003/redirect-303')
+      .send({msg: "hello"})
+      .redirects(1)
+      .on('redirect', function(res) {
+        res.headers.location.should.equal('/reply-method')
+      })
+      .end(function(res){
+        res.text.should.equal('method=get');
+        done();
+      })
+    })
+  })
+
+  describe('on 307', function(){
+    it('should redirect with same method', function(done){
+      request
+      .put('http://localhost:3003/redirect-307')
+      .send({msg: "hello"})
+      .redirects(1)
+      .on('redirect', function(res) {
+        res.headers.location.should.equal('/reply-method')
+      })
+      .end(function(res){
+        res.text.should.equal('method=put');
+        done();
+      })
     })
   })
 })
