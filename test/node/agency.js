@@ -18,6 +18,15 @@ app.post('/signin', function(req, res) {
   res.redirect('/dashboard');
 });
 
+app.post('/setcookie', function(req, res) {
+  res.cookie('cookie', 'jar');
+  res.sendStatus(200);
+});
+
+app.get('/getcookie', function(req, res) {
+  res.status(200).send(req.cookies.cookie);
+});
+
 app.get('/dashboard', function(req, res) {
   if (req.session.user) return res.status(200).send('dashboard');
   res.status(401).send('dashboard');
@@ -49,6 +58,7 @@ describe('request', function() {
     var agent1 = request.agent();
     var agent2 = request.agent();
     var agent3 = request.agent();
+    var agent4 = request.agent();
 
     it('should gain a session on POST', function(done) {
       agent3
@@ -92,6 +102,21 @@ describe('request', function() {
           should.not.exist(err);
           res.should.have.status(200);
           done();
+        });
+    });
+
+    it('should have the cookie set in the end callback', function(done) {
+      agent4
+        .post('http://localhost:4000/setcookie')
+        .end(function(err, res) {
+          agent4
+            .get('http://localhost:4000/getcookie')
+            .end(function(err, res) {
+              should.not.exist(err);
+              res.should.have.status(200);
+              assert(res.text === 'jar');
+              done();
+            });
         });
     });
 
