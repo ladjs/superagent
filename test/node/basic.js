@@ -43,6 +43,33 @@ describe('[node] request', function(){
     })
   })
 
+  describe('should allow the send shorthand', function() {
+    it('with callback in the method call', function(done) {
+      request
+      .get('http://localhost:5000/login', function(err, res) {
+          assert(res.status == 200);
+          done();
+      });
+    })
+
+    it('with data in the method call', function(done) {
+      request
+      .post('http://localhost:5000/echo', { foo: 'bar' })
+      .end(function(err, res) {
+        assert('{"foo":"bar"}' == res.text);
+        done();
+      });
+    })
+
+    it('with callback and data in the method call', function(done) {
+      request
+      .post('http://localhost:5000/echo', { foo: 'bar' }, function(err, res) {
+        assert('{"foo":"bar"}' == res.text);
+        done();
+      });
+    })
+  })
+
   describe('res.toJSON()', function(){
     it('should describe the response', function(done){
       request
