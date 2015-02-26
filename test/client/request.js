@@ -118,8 +118,10 @@ it('get()', function(next){
   });
 });
 
-// This test results in a weird Jetty error on IE9 saying PATCH is not a supported method. Looks like something's up with SauceLabs
-if (window.atob) { // Drop IE9 and lower.
+// This test results in a weird Jetty error on IE9 and IE11 saying PATCH is not a supported method. Looks like something's up with SauceLabs
+var isIE11 = !!navigator.userAgent.match(/Trident.*rv[ :]*11\./);
+var isIE9OrOlder = !window.atob;
+if (!isIE9OrOlder && !isIE11) { // Don't run on IE9 or older, or IE11
   it('patch()', function(next){
     request.patch('/user/12').end(function(err, res){
       assert('updated' == res.text);
