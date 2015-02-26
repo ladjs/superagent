@@ -243,7 +243,7 @@ describe('request', function(){
       .on('redirect', function(res) {
         res.headers.location.should.equal('/reply-method')
       })
-      .end(function(res){
+      .end(function(err, res){
         res.text.should.equal('method=get');
         done();
       })
@@ -259,7 +259,7 @@ describe('request', function(){
       .on('redirect', function(res) {
         res.headers.location.should.equal('/reply-method')
       })
-      .end(function(res){
+      .end(function(err, res){
         res.text.should.equal('method=put');
         done();
       })
