@@ -58,8 +58,11 @@ app.get('/tobi', function(req, res){
 });
 
 app.get('/relative', function(req, res){
-  res.set('Location', '/tobi');
-  res.status(302).end();
+  res.redirect('tobi');
+});
+
+app.get('/relative/sub', function(req, res){
+  res.redirect('../tobi');
 });
 
 app.get('/header', function(req, res){
@@ -173,7 +176,7 @@ describe('request', function(){
     })
 
     describe('when relative', function(){
-      it('should construct the FQDN', function(done){
+      it('should redirect to a sibling path', function(done){
         var redirects = [];
 
         request
@@ -183,7 +186,23 @@ describe('request', function(){
         })
         .end(function(err, res){
           var arr = [];
-          redirects.should.eql(['/tobi']);
+          redirects.should.eql(['tobi']);
+          res.text.should.equal('tobi');
+          done();
+        });
+      })
+
+      it('should redirect to a parent path', function(done){
+        var redirects = [];
+
+        request
+        .get('http://localhost:3003/relative/sub')
+        .on('redirect', function(res){
+          redirects.push(res.headers.location);
+        })
+        .end(function(err, res){
+          var arr = [];
+          redirects.should.eql(['../tobi']);
           res.text.should.equal('tobi');
           done();
         });
