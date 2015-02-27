@@ -72,6 +72,19 @@ request
   });
 ```
 
+## Supported browsers
+
+Tested browsers:
+
+- Latest Android
+- Latest Firefox
+- Latest Chrome
+- IE9 through latest
+- Latest iPhone
+- Latest Safari
+
+Even though IE9 is supported, a polyfill `window.btoa` is needed to use basic auth.
+
 # Plugins
 
 Usage:
