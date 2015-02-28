@@ -593,3 +593,20 @@ it('response event', function(next){
   })
   .end();
 });
+
+it('xhr2 download file', function(next) {
+  request.parse['application/vnd.superagent'] = function (obj) {
+    return obj;
+  };
+
+  request
+  .get('/arraybuffer')
+  .on('request', function () {
+    this.xhr.responseType = 'arraybuffer';
+  })
+  .on('response', function(res) {
+    assert(res.body instanceof ArrayBuffer);
+    next();
+  })
+  .end();
+});
