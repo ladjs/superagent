@@ -593,3 +593,25 @@ it('response event', function(next){
   })
   .end();
 });
+
+it('progress event listener on xhr object registered when some on the request', function(){
+  var req = request
+  .get('/foo')
+  .on('progress', function(data) {
+  })
+  .end();
+
+  if (req.xhr.upload) { // Only run assertion on capable browsers
+    assert(null !== req.xhr.upload.onprogress);
+  }
+});
+
+it('no progress event listener on xhr object when none registered on request', function(){
+  var req = request
+  .get('/foo')
+  .end();
+
+  if (req.xhr.upload) { // Only run assertion on capable browsers
+    assert(null === req.xhr.upload.onprogress);
+  }
+});
