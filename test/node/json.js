@@ -160,7 +160,7 @@ describe('res.body', function(){
       .get('http://localhost:3005/no-content')
       .end(function(err, res){
         assert(err === null);
-        assert(res.text === undefined);
+        assert(res.text === '');
         assert(Object.keys(res.body).length === 0);
         done();
       });
