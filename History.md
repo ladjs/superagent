@@ -1,3 +1,16 @@
+UNRELEASED
+==================
+
+ * keep timeouts intact across redirects (hopkinsth)
+ * handle falsy json values (themaarten)
+ * fire response events in browser version (Schoonology)
+ * getXHR exported in client version (KidsKilla)
+ * remove arity check on `.end()` callbacks (defunctzombie)
+ * avoid setting content-type for host objects (rexxars)
+ * don't index array strings in querystring (travisjeffery)
+ * fix pipe() with redirects (cyrilis)
+ * add xhr2 file download (vstirbu)
+ * set default response type to text/plain if not specified (warrenseine)
 
 0.21.0 / 2014-11-11
 ==================
