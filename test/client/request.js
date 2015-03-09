@@ -615,3 +615,20 @@ it('no progress event listener on xhr object when none registered on request', f
     assert(null === req.xhr.upload.onprogress);
   }
 });
+
+it('xhr2 download file', function(next) {
+  request.parse['application/vnd.superagent'] = function (obj) {
+    return obj;
+  };
+
+  request
+  .get('/arraybuffer')
+  .on('request', function () {
+    this.xhr.responseType = 'arraybuffer';
+  })
+  .on('response', function(res) {
+    assert(res.body instanceof ArrayBuffer);
+    next();
+  })
+  .end();
+});

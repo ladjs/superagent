@@ -170,4 +170,10 @@ app.get('/no-content', function(req, res){
   res.sendStatus(204);
 });
 
+app.get('/arraybuffer', function(req, res) {
+  var content = new ArrayBuffer(1000);
+  res.set('Content-Type', 'application/vnd.superagent');
+  res.send(content);
+});
+
 app.listen(process.env.ZUUL_PORT);
