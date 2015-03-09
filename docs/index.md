@@ -122,7 +122,7 @@
 
         });
 
-### HEAD requests
+## HEAD requests
 
 You can also use the `.query()` method for HEAD requests. The following will produce the path `/users?email=joe@smith.com`.
 
@@ -130,10 +130,10 @@ You can also use the `.query()` method for HEAD requests. The following will pro
         .head('/users')
         .query({ email: 'joe@smith.com' })
         .end(function(err, res){
-          
+
         });
 
-### POST / PUT requests
+## POST / PUT requests
 
   A typical JSON __POST__ request might look a little like the following, where we set the Content-Type header field appropriately, and "write" some data, in this case just a JSON string.
 
