@@ -193,6 +193,19 @@ You can also use the `.query()` method for HEAD requests. The following will pro
      request.post('/user')
        .type('png')
 
+## Setting Accept
+
+In a similar fashion to the `.type()` method it is also possible to set the Accept header via the short hand method `.accept()`. Which references `request.types` as well allowing you to specify either the full canonicalized MIME type name as type/subtype, or the extension suffix form as "xml", "json", "png", etc for convenience:
+
+     request.get('/user')
+       .accept('application/json')
+
+     request.get('/user')
+       .accept('json')
+
+     request.post('/user')
+       .accept('png')
+
 ## Query strings
 
   When issuing a __GET__ request the `res.send(obj)` method will invoke `res.query(obj)`, this is a method which may be used with other HTTP methods in order to build up a query-string. For example populating `?format=json&dest=/login` on a __POST__:
