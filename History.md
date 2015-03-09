@@ -1,4 +1,4 @@
-UNRELEASED
+1.0.0 / 2015-03-08
 ==================
 
  * keep timeouts intact across redirects (hopkinsth)
