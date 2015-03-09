@@ -8,7 +8,7 @@
        .send({ name: 'Manny', species: 'cat' })
        .set('X-API-Key', 'foobar')
        .set('Accept', 'application/json')
-       .end(function(res){
+       .end(function(err, res){
          if (res.ok) {
            alert('yay got ' + JSON.stringify(res.body));
          } else {
@@ -26,7 +26,7 @@
 
      request
        .get('/search')
-       .end(function(res){
+       .end(function(err, res){
 
        });
 
@@ -38,7 +38,7 @@
 
      request
        .get('http://example.com/search')
-       .end(function(res){
+       .end(function(err, res){
 
        });
 
@@ -46,7 +46,7 @@
 
     request
       .head('/favicon.ico')
-      .end(function(res){
+      .end(function(err, res){
 
       });
 
@@ -54,7 +54,7 @@
 
     request
       .del('/user/1')
-      .end(function(res){
+      .end(function(err, res){
 
       });
 
@@ -90,7 +90,7 @@
        .query({ query: 'Manny' })
        .query({ range: '1..5' })
        .query({ order: 'desc' })
-       .end(function(res){
+       .end(function(err, res){
 
        });
 
@@ -99,7 +99,7 @@
     request
       .get('/search')
       .query({ query: 'Manny', range: '1..5', order: 'desc' })
-      .end(function(res){
+      .end(function(err, res){
 
       });
 
@@ -108,7 +108,7 @@
       request
         .get('/querystring')
         .query('search=Manny&range=1..5')
-        .end(function(res){
+        .end(function(err, res){
 
         });
 
@@ -118,7 +118,7 @@
         .get('/querystring')
         .query('search=Manny')
         .query('range=1..5')
-        .end(function(res){
+        .end(function(err, res){
 
         });
 
@@ -389,7 +389,7 @@
     request
       .get('http://localhost:4001/')
       .withCredentials()
-      .end(function(res){
+      .end(function(err, res){
         assert(200 == res.status);
         assert('tobi' == res.text);
         next();
@@ -397,9 +397,7 @@
 
 ## Error handling
 
-  When an error occurs super agent will first check the arity of the callback
-  function given, if two parameters are present the error is passed, as shown
-  below:
+Your callback function will always be passed two arguments: error and response. If no error occurred, the first argument will be null:
 
     request
      .post('/upload')
@@ -408,14 +406,13 @@
 
      });
 
-  When a callback is omitted, or only a `res` parameter is present,
-  an "error" event is emitted:
+     An "error" event is also emitted, with you can listen for:
 
     request
       .post('/upload')
       .attach('image', 'path/to/tobi.png')
       .on('error', handle)
-      .end(function(res){
+      .end(function(err, res){
 
       });
 
