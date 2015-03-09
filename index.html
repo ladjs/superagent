@@ -27,7 +27,7 @@
    .send({ name: 'Manny', species: 'cat' })
    .set('X-API-Key', 'foobar')
    .set('Accept', 'application/json')
-   .end(function(res){
+   .end(function(err, res){
      if (res.ok) {
        alert('yay got ' + JSON.stringify(res.body));
      } else {
@@ -46,7 +46,7 @@
 
 <pre><code> request
    .get('/search')
-   .end(function(res){
+   .end(function(err, res){
 
    });
 </code></pre>
@@ -60,7 +60,7 @@
 
 <pre><code> request
    .get('http://example.com/search')
-   .end(function(res){
+   .end(function(err, res){
 
    });
 </code></pre>
@@ -69,7 +69,7 @@
 
 <pre><code>request
   .head('/favicon.ico')
-  .end(function(res){
+  .end(function(err, res){
 
   });
 </code></pre>
@@ -78,7 +78,7 @@
 
 <pre><code>request
   .del('/user/1')
-  .end(function(res){
+  .end(function(err, res){
 
   });
 </code></pre>
@@ -118,7 +118,7 @@
    .query({ query: 'Manny' })
    .query({ range: '1..5' })
    .query({ order: 'desc' })
-   .end(function(res){
+   .end(function(err, res){
 
    });
 </code></pre>
@@ -128,7 +128,7 @@
 <pre><code>request
   .get('/search')
   .query({ query: 'Manny', range: '1..5', order: 'desc' })
-  .end(function(res){
+  .end(function(err, res){
 
   });
 </code></pre>
@@ -138,7 +138,7 @@
 <pre><code>  request
     .get('/querystring')
     .query('search=Manny&amp;range=1..5')
-    .end(function(res){
+    .end(function(err, res){
 
     });
 </code></pre>
@@ -149,7 +149,7 @@
     .get('/querystring')
     .query('search=Manny')
     .query('range=1..5')
-    .end(function(res){
+    .end(function(err, res){
 
     });
 </code></pre>
@@ -161,7 +161,7 @@
 <pre><code> request
    .head('/users')
    .query({ email: 'joe@smith.com' })
-   .end(function(res){
+   .end(function(err, res){
 
    });
 </code></pre>
@@ -468,7 +468,7 @@ req.pipe(stream);
 <pre><code>request
   .get('http://localhost:4001/')
   .withCredentials()
-  .end(function(res){
+  .end(function(err, res){
     assert(200 == res.status);
     assert('tobi' == res.text);
     next();
@@ -477,9 +477,7 @@ req.pipe(stream);
 
 <h2>Error handling</h2>
 
-<p>When an error occurs super agent will first check the arity of the callback
-  function given, if two parameters are present the error is passed, as shown
-  below:</p>
+<p>Your callback function will always be passed two arguments: error and response. If no error occurred, the first argument will be null:</p>
 
 <pre><code>request
  .post('/upload')
@@ -489,14 +487,13 @@ req.pipe(stream);
  });
 </code></pre>
 
-<p>When a callback is omitted, or only a <code>res</code> parameter is present,
-  an "error" event is emitted:</p>
+<p>An "error" event is also emitted, with you can listen for:</p>
 
 <pre><code>request
   .post('/upload')
   .attach('image', 'path/to/tobi.png')
   .on('error', handle)
-  .end(function(res){
+  .end(function(err, res){
 
   });
 </code></pre>
