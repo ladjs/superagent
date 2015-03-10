@@ -628,19 +628,22 @@ it('no progress event listener on xhr object when none registered on request', f
   }
 });
 
-it('xhr2 download file', function(next) {
-  request.parse['application/vnd.superagent'] = function (obj) {
-    return obj;
-  };
+// Don't run on browsers without xhr2 support
+if ('FormData' in window) {
+  it('xhr2 download file', function(next) {
+    request.parse['application/vnd.superagent'] = function (obj) {
+      return obj;
+    };
 
-  request
-  .get('/arraybuffer')
-  .on('request', function () {
-    this.xhr.responseType = 'arraybuffer';
-  })
-  .on('response', function(res) {
-    assert(res.body instanceof ArrayBuffer);
-    next();
-  })
-  .end();
-});
+    request
+    .get('/arraybuffer')
+    .on('request', function () {
+      this.xhr.responseType = 'arraybuffer';
+    })
+    .on('response', function(res) {
+      assert(res.body instanceof ArrayBuffer);
+      next();
+    })
+    .end();
+  });
+}
