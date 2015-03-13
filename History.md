@@ -1,3 +1,8 @@
+# UNRELEASED
+
+ * errors have .status and .response fields if applicable
+ * fix end callback called before saving cookies (rase-)
+
 1.0.0 / 2015-03-08
 ==================
 
