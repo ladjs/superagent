@@ -1,6 +1,7 @@
 1.0.0 / 2015-03-08
 ==================
 
+ * Breaking Change: All non-200 responses are treated as errors now. (The callback is called with an error when the response has a status < 200 or >= 300 now. In previous versions this would not have raised an error and the client would have to check the `res` object. See [#283](https://github.com/visionmedia/superagent/issues/283).
  * keep timeouts intact across redirects (hopkinsth)
  * handle falsy json values (themaarten)
  * fire response events in browser version (Schoonology)
