@@ -1,4 +1,4 @@
-# UNRELEASED
+# 1.1.0 (2015-03-13)
 
  * Fix responeType checks without xhr2 and ie9 tests (rase-)
  * errors have .status and .response fields if applicable (defunctzombie)
