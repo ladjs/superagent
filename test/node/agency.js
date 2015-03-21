@@ -76,7 +76,7 @@ describe('request', function() {
       agent1
         .get('http://localhost:4000/dashboard')
         .end(function(err, res) {
-          should.exist(err);
+          should.not.exist(err);
           res.should.have.status(401);
           should.exist(res.headers['set-cookie']);
           done();
@@ -124,7 +124,7 @@ describe('request', function() {
       agent2
         .get('http://localhost:4000/dashboard')
         .end(function(err, res) {
-          should.exist(err);
+          should.not.exist(err);
           res.should.have.status(401);
           done();
         });
@@ -169,7 +169,7 @@ describe('request', function() {
         .get('http://localhost:4000/')
         .redirects(0)
         .end(function(err, res) {
-          should.exist(err);
+          should.not.exist(err);
           res.should.have.status(302);
           res.redirects.should.eql([]);
           res.header.location.should.equal('/dashboard');
@@ -192,7 +192,7 @@ describe('request', function() {
       agent1
         .get('http://localhost:4000/dashboard')
         .end(function(err, res) {
-          should.exist(err);
+          should.not.exist(err);
           res.should.have.status(401);
           should.not.exist(res.headers['set-cookie']);
           done();

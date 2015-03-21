@@ -38,7 +38,7 @@ describe('flags', function(){
       request
       .get('http://localhost:3004/notfound')
       .end(function(err, res){
-        assert(err);
+        assert(!err, 'should not have an error if a response is successfully received and processed');
         assert(!res.ok, 'response should not be ok');
         assert(res.error, 'response should be an error');
         assert(res.clientError, 'response should be a client error');
@@ -53,7 +53,7 @@ describe('flags', function(){
       request
       .get('http://localhost:3004/error')
       .end(function(err, res){
-        assert(err);
+        assert(!err, 'should not have an error if a response is successfully received and processed');
         assert(!res.ok, 'response should not be ok');
         assert(!res.notFound, 'response should not be notFound');
         assert(res.error, 'response should be an error');
@@ -69,7 +69,7 @@ describe('flags', function(){
       request
       .get('http://localhost:3004/notfound')
       .end(function(err, res){
-        assert(err);
+        assert(!err, 'should not have an error if a response is successfully received and processed');
         assert(res.notFound, 'response should be .notFound');
         done();
       });
@@ -81,7 +81,7 @@ describe('flags', function(){
       request
       .get('http://localhost:3004/bad-request')
       .end(function(err, res){
-        assert(err);
+        assert(!err, 'should not have an error if a response is successfully received and processed');
         assert(res.badRequest, 'response should be .badRequest');
         done();
       });
@@ -93,7 +93,7 @@ describe('flags', function(){
       request
       .get('http://localhost:3004/unauthorized')
       .end(function(err, res){
-        assert(err);
+        assert(!err, 'should not have an error if a response is successfully received and processed');
         assert(res.unauthorized, 'response should be .unauthorized');
         done();
       });
@@ -105,7 +105,7 @@ describe('flags', function(){
       request
       .get('http://localhost:3004/not-acceptable')
       .end(function(err, res){
-        assert(err);
+        assert(!err, 'should not have an error if a response is successfully received and processed');
         assert(res.notAcceptable, 'response should be .notAcceptable');
         done();
       });
@@ -117,7 +117,7 @@ describe('flags', function(){
       request
       .get('http://localhost:3004/no-content')
       .end(function(err, res){
-        assert(!err);
+        assert(!err, 'should not have an error if a response is successfully received and processed');
         assert(res.noContent, 'response should be .noContent');
         done();
       });
