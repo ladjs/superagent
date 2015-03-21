@@ -1,3 +1,7 @@
+2.0.0 / 2015-03-21
+==================
+* reverted API change from 1.0.0. See "All non-200 responses are treated as errors now"
+
 # 1.1.0 (2015-03-13)
 
  * Fix responeType checks without xhr2 and ie9 tests (rase-)
