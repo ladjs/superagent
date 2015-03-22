@@ -98,6 +98,15 @@ it('request() GET 406 Not Acceptable', function(next){
 
 it('request() GET 204 No Content', function(next){
   request('GET', '/no-content').end(function(err, res){
+    assert.ifError(err);
+    assert(res.noContent, 'response should be .noContent');
+    next();
+  });
+});
+
+it('request() DELETE 204 No Content', function(next){
+  request('DELETE', '/no-content').end(function(err, res){
+    assert.ifError(err);
     assert(res.noContent, 'response should be .noContent');
     next();
   });
