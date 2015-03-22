@@ -156,14 +156,14 @@
 
 <h2>HEAD requests</h2>
 
-<p>You can also use the <code>.query()</code> method for <strong>HEAD</strong> requests. The following will produce the path <code>/users?email=joe@smith.com</code>.</p>
+<p>You can also use the <code>.query()</code> method for HEAD requests. The following will produce the path <code>/users?email=joe@smith.com</code>.</p>
 
-<pre><code> request
-   .head('/users')
-   .query({ email: 'joe@smith.com' })
-   .end(function(err, res){
+<pre><code>  request
+    .head('/users')
+    .query({ email: 'joe@smith.com' })
+    .end(function(err, res){
 
-   });
+    });
 </code></pre>
 
 <h2>POST / PUT requests</h2>
@@ -235,11 +235,7 @@
 
 <h2>Setting Accept</h2>
 
-<p>In a similar fashion to the <code>.type()</code> method it is also possible to
-  set the Accept header via the short hand method <code>.accept()</code>. Which
-  references <code>request.types</code> as well allowing you to specify either the
-  full canonicalized MIME type name as type/subtype, or the extension suffix form as
-  "xml", "json", "png", etc for convenience:</p>
+<p>In a similar fashion to the <code>.type()</code> method it is also possible to set the Accept header via the short hand method <code>.accept()</code>. Which references <code>request.types</code> as well allowing you to specify either the full canonicalized MIME type name as type/subtype, or the extension suffix form as "xml", "json", "png", etc for convenience:</p>
 
 <pre><code> request.get('/user')
    .accept('application/json')
@@ -247,7 +243,7 @@
  request.get('/user')
    .accept('json')
 
- request.get('/user')
+ request.post('/user')
    .accept('png')
 </code></pre>
 
@@ -485,11 +481,10 @@ req.pipe(stream);
  .end(function(err, res){
 
  });
-</code></pre>
 
-<p>An "error" event is also emitted, with you can listen for:</p>
+ An "error" event is also emitted, with you can listen for:
 
-<pre><code>request
+request
   .post('/upload')
   .attach('image', 'path/to/tobi.png')
   .on('error', handle)
@@ -498,17 +493,19 @@ req.pipe(stream);
   });
 </code></pre>
 
-<p>Note that a 4xx or 5xx response with super agent is <em>not</em> considered an error
-  by default. For example if you get a 500 or 403 response, this status information
-  will be available via <code>res.error</code>, <code>res.status</code> and the others mentioned in "Response properties", however no <code>Error</code> object is passed for these responses. An error includes network failures, parsing errors, etcetera.</p>
+<p>Note that a 4xx or 5xx response with super agent <strong>are</strong> considered an error by default. For example if you get a 500 or 403 response, this status information will be available via <code>err.status</code>. Errors from such responses also contain an <code>err.response</code> field with all of the properties mentioned in "Response properties". The library behaves in this way to handle the common case of wanting success responses and treating HTTP error status codes as errors while still allowing for custom logic around specific error conditions.</p>
 
-<p>When an HTTP error occurs (4xx or 5xx response) the <code>res.error</code> property is an <code>Error</code> object,
+<p>Network failures, timeouts, and other errors that produce no response will contain no <code>err.status</code> or <code>err.response</code> fields.</p>
+
+<p>If you wish to handle 404 or other HTTP error responses, you can query the <code>err.status</code> property.
+  When an HTTP error occurs (4xx or 5xx response) the <code>res.error</code> property is an <code>Error</code> object,
   this allows you to perform checks such as:</p>
 
-<pre><code>if (res.error) {
-  alert('oh no ' + res.error.message);
-} else {
-  alert('got ' + res.status + ' response');
+<pre><code>if (err &amp;&amp; err.status === 404) {
+  alert('oh no ' + res.body.message);
+}
+else if (err) {
+  // all other error types we handle generically
 }
 </code></pre>
     </div>

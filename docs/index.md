@@ -439,16 +439,17 @@ Your callback function will always be passed two arguments: error and response. 
 
       });
 
-  Note that a 4xx or 5xx response with super agent is _not_ considered an error
-  by default. For example if you get a 500 or 403 response, this status information
-  will be available via `res.error`, `res.status` and the others mentioned in "Response properties", however no `Error` object is passed for these responses. An error includes network failures, parsing errors, etcetera.
+  Note that a 4xx or 5xx response with super agent **are** considered an error by default. For example if you get a 500 or 403 response, this status information will be available via `err.status`. Errors from such responses also contain an `err.response` field with all of the properties mentioned in "Response properties". The library behaves in this way to handle the common case of wanting success responses and treating HTTP error status codes as errors while still allowing for custom logic around specific error conditions.
 
+  Network failures, timeouts, and other errors that produce no response will contain no `err.status` or `err.response` fields.
+
+  If you wish to handle 404 or other HTTP error responses, you can query the `err.status` property.
   When an HTTP error occurs (4xx or 5xx response) the `res.error` property is an `Error` object,
   this allows you to perform checks such as:
 
-    if (res.error) {
-      alert('oh no ' + res.error.message);
-    } else {
-      alert('got ' + res.status + ' response');
+    if (err && err.status === 404) {
+      alert('oh no ' + res.body.message);
     }
-
+    else if (err) {
+      // all other error types we handle generically
+    }
