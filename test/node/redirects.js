@@ -48,6 +48,9 @@ app.put('/redirect-307', function(req, res){
   res.redirect(307, '/reply-method');
 });
 
+app.put('/redirect-308', function(req, res){
+  res.redirect(308, '/reply-method');
+});
 
 app.all('/reply-method', function(req, res){
   res.send('method=' + req.method.toLowerCase());
@@ -273,6 +276,22 @@ describe('request', function(){
     it('should redirect with same method', function(done){
       request
       .put('http://localhost:3003/redirect-307')
+      .send({msg: "hello"})
+      .redirects(1)
+      .on('redirect', function(res) {
+        res.headers.location.should.equal('/reply-method')
+      })
+      .end(function(err, res){
+        res.text.should.equal('method=put');
+        done();
+      })
+    })
+  })
+
+  describe('on 308', function(){
+    it('should redirect with same method', function(done){
+      request
+      .put('http://localhost:3003/redirect-308')
       .send({msg: "hello"})
       .redirects(1)
       .on('redirect', function(res) {
