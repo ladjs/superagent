@@ -288,6 +288,17 @@ it('request .send()', function(next){
   });
 });
 
+it('GET request .send querystring', function(next){
+  request
+  .get('/echo-querystring')
+  .send({foo: "bar"})
+  .end(function(err, res){
+    console.log(res.text);
+    assert('{"foo":"bar"}' == res.text);
+    next();
+  });
+})
+
 it('request .set()', function(next){
   request
   .get('/echo-header/content-type')
