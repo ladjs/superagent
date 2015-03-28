@@ -293,7 +293,16 @@ it('GET request .send querystring', function(next){
   .get('/echo-querystring')
   .send({foo: "bar"})
   .end(function(err, res){
-    console.log(res.text);
+    assert('{"foo":"bar"}' == res.text);
+    next();
+  });
+})
+
+it('GET request .query querystring', function(next){
+  request
+  .get('/echo-querystring')
+  .query({foo: "bar"})
+  .end(function(err, res){
     assert('{"foo":"bar"}' == res.text);
     next();
   });
