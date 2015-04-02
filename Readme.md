@@ -60,7 +60,7 @@ prefix(request); // Prefixes *all* requests
 request
 .get('/some-url')
 .use(nocache) // Prevents caching of *only* this request
-.end(function(res){
+.end(function(err, res){
     // Do something
 });
 ```
