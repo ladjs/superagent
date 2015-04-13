@@ -1,3 +1,12 @@
+# UNRELEASED
+
+ * add progress events to downlodas
+ * make usable in webworkers
+ * add support for 308 redirects
+ * update node-form-data dependency
+ * update to work in react native
+ * update node-mime dependency
+
 # 1.1.0 (2015-03-13)
 
  * Fix responseType checks without xhr2 and ie9 tests (rase-)
