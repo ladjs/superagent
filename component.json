@@ -2,7 +2,7 @@
   "name": "superagent",
   "repo": "visionmedia/superagent",
   "description": "awesome http requests",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "keywords": [
     "http",
     "ajax",
