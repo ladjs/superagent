@@ -1,4 +1,4 @@
-# UNRELEASED
+# 1.2.0 (2015-04-13)
 
  * add progress events to downlodas
  * make usable in webworkers
