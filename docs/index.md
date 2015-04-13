@@ -315,7 +315,7 @@ In a similar fashion to the `.type()` method it is also possible to set the Acce
 
     request
       .get('http://local')
-      .auth('tobo', 'learnboost')
+      .auth('tobi', 'learnboost')
       .end(callback);
 
 ## Following redirects
