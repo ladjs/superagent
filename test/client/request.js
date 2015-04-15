@@ -5,62 +5,6 @@ it('Request inheritance', function(){
   assert(request.get('/') instanceof request.Request);
 });
 
-// ----
-it('clone()', function(next) {
-  var clone = request('GET', '/ok').clone();
-  assert(clone.method === 'GET', 'includes method');
-  assert(clone.url === '/ok', 'includes url');
-  next();
-});
-
-it('clone() with querystring', function(next) {
-  request
-  .get('/querystring')
-  .query({ data: 123 })
-  .clone()
-  .end(function(err, res){
-    assert.deepEqual(res.body, { data: 123 });
-    next();
-  });
-});
-
-it('clone() with headers', function(next) {
-  request
-  .get('/echo-header/accept')
-  .set('Accept', 'json')
-  .clone()
-  .end(function(err, res){
-    assert('json' == res.text, 'includes headers');
-    next();
-  });
-});
-
-it('clone() with JSON body', function(next) {
-  request
-  .post('/pet')
-  .type('json')
-  .send({ name: 'Manny', species: 'cat' })
-  .clone()
-  .end(function(err, res){
-    assert('added Manny the cat' == res.text);
-    next();
-  });
-});
-
-it('clone() with urlencoded body', function(next){
-  request
-  .post('/pet')
-  .type('urlencoded')
-  .send({ name: 'Manny', species: 'cat' })
-  .clone()
-  .end(function(err, res){
-    assert('added Manny the cat' == res.text);
-    next();
-  });
-});
-
-// ----
-
 it('request() simple GET without callback', function(next){
   request('GET', 'test/test.request.js').end();
   next();

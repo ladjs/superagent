@@ -28,6 +28,84 @@ describe('request', function(){
     })
   })
 
+  describe('.clone()', function() {
+    it('', function(next) {
+      var clone = request('GET', uri + '/ok').clone();
+      assert(clone.method === 'GET', 'includes method');
+      assert(clone.url === uri + '/ok', 'includes url');
+      next();
+    });
+
+    it('with querystring', function(next) {
+      request
+      .get(uri + '/querystring')
+      .query({ data: 123 })
+      .clone()
+      .end(function(err, res){
+        assert.deepEqual(res.body, { data: 123 });
+        next();
+      });
+    });
+
+    it('with headers', function(next) {
+      request
+      .post(uri + '/echo')
+      .set('Accept', 'json')
+      .clone()
+      .end(function(err, res){
+        assert(res.header['accept'] == 'json', 'includes headers');
+        next();
+      });
+    });
+
+    it('with headers using type()', function(next) {
+      request
+      .post(uri + '/echo')
+      .type('json')
+      .clone()
+      .end(function(err, res){
+        assert(res.header['content-type'] == 'application/json', 'includes headers');
+        next();
+      });
+    });
+
+    it('with headers using accept()', function(next) {
+      request
+      .post(uri + '/echo')
+      .accept('json')
+      .clone()
+      .end(function(err, res){
+        assert(res.header['accept'] === 'application/json', 'includes headers');
+        next();
+      });
+    });
+
+    it('with JSON body', function(next) {
+      request
+      .post(uri + '/pet')
+      .type('json')
+      .send({ name: 'Manny', species: 'cat' })
+      .clone()
+      .end(function(err, res){
+        console.log('json', res.text);
+        assert('added Manny the cat' == res.text);
+        next();
+      });
+    });
+
+    it('with urlencoded body', function(next){
+      request
+      .post(uri + '/pet')
+      .type('urlencoded')
+      .send({ name: 'Manny', species: 'cat' })
+      .clone()
+      .end(function(err, res){
+        assert('added Manny the cat' == res.text);
+        next();
+      });
+    });
+  });
+
   describe('.end()', function(){
     it('should issue a request', function(done){
       request
