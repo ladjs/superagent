@@ -87,7 +87,6 @@ describe('request', function(){
       .send({ name: 'Manny', species: 'cat' })
       .clone()
       .end(function(err, res){
-        console.log('json', res.text);
         assert('added Manny the cat' == res.text);
         next();
       });
