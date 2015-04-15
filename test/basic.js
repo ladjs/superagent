@@ -36,7 +36,40 @@ describe('request', function(){
       next();
     });
 
-    it('with querystring', function(next) {
+    it('should end after original ended', function(next) {
+      var req = request
+                  .post(uri + '/pet')
+                  .type('json')
+                  .send({ name: 'Manny', species: 'cat' }),
+          clone = req.clone();
+
+      // console.log(req.request());
+      req.end(function(err, res){
+        assert(res.text == 'added Manny the cat', 'with correct result for original');
+        clone.end(function(err2, res2) {
+          assert(res2.text == 'added Manny the cat', 'with correct result for clone');
+          next();
+        });
+      });
+    });
+
+    it('should end afer clone ended', function(next) {
+      var req = request
+                  .post(uri + '/pet')
+                  .type('json')
+                  .send({ name: 'Manny', species: 'cat' }),
+          clone = req.clone();
+
+      clone.end(function(err, res) {
+        assert(res.text == 'added Manny the cat', 'with correct result for original');
+        req.end(function(err2, res2) {
+          assert(res2.text == 'added Manny the cat', 'with correct result for clone');
+          next();
+        });
+      });
+    });
+
+    it('should transfer querystring', function(next) {
       request
       .get(uri + '/querystring')
       .query({ data: 123 })
@@ -47,7 +80,7 @@ describe('request', function(){
       });
     });
 
-    it('with headers', function(next) {
+    it('should transfer headers', function(next) {
       request
       .post(uri + '/echo')
       .set('Accept', 'json')
@@ -58,7 +91,7 @@ describe('request', function(){
       });
     });
 
-    it('with headers using type()', function(next) {
+    it('should transfer headers using type()', function(next) {
       request
       .post(uri + '/echo')
       .type('json')
@@ -69,7 +102,7 @@ describe('request', function(){
       });
     });
 
-    it('with headers using accept()', function(next) {
+    it('should transfer headers using accept()', function(next) {
       request
       .post(uri + '/echo')
       .accept('json')
@@ -80,7 +113,7 @@ describe('request', function(){
       });
     });
 
-    it('with JSON body', function(next) {
+    it('should transfer JSON body', function(next) {
       request
       .post(uri + '/pet')
       .type('json')
@@ -92,7 +125,7 @@ describe('request', function(){
       });
     });
 
-    it('with urlencoded body', function(next){
+    it('should transfer urlencoded body', function(next){
       request
       .post(uri + '/pet')
       .type('urlencoded')
