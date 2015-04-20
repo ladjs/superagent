@@ -1,5 +1,7 @@
 var EventEmitter = require('events').EventEmitter;
 var assert = require('better-assert');
+var fs = require('fs');
+var StringDecoder = require('string_decoder').StringDecoder;
 var url = require('url');
 
 var request = require('../../');
@@ -238,6 +240,40 @@ describe('[node] request', function(){
           buf.should.equal('hello this is dog');
           done();
         });
+      });
+    })
+  })
+
+  describe('content-length', function() {
+    it('should be set to the byte length of a non-buffer object', function (done) {
+      var decoder = new StringDecoder('utf8');
+      var img = fs.readFileSync(__dirname + '/fixtures/test.png');
+      img = decoder.write(img);
+      request
+      .post('http://localhost:5000/echo')
+      .type('application/x-image')
+      .send(img)
+      .buffer(false)
+      .end(function(err, res){
+        assert(null == err);
+        assert(!res.buffered);
+        assert(res.header['content-length'] == Buffer.byteLength(img));
+        done();
+      });
+    })
+
+    it('should be set to the length of a buffer object', function(done){
+      var img = fs.readFileSync(__dirname + '/fixtures/test.png');
+      request
+      .post('http://localhost:5000/echo')
+      .type('application/x-image')
+      .send(img)
+      .buffer(true)
+      .end(function(err, res){
+        assert(null == err);
+        assert(res.buffered);
+        assert(res.header['content-length'] == img.length);
+        done();
       });
     })
   })
