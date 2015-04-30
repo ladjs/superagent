@@ -28,8 +28,9 @@ describe('request.serializeObject()', function(){
     serialize({ foo: undefined }, '');
     serialize({ foo: 'undefined' }, 'foo=undefined');
     serialize({ name: 'tj', age: 24 }, 'name=tj&age=24');
-      serialize({ name: '&tj&' }, 'name=%26tj%26');
-      serialize({ '&name&': 'tj' }, '%26name%26=tj');
+    serialize({ name: '&tj&' }, 'name=%26tj%26');
+    serialize({ '&name&': 'tj' }, '%26name%26=tj');
+    serialize({ names: ['joe', 'mark'] }, "names[]=joe&names[]=mark");
   });
 });
 
@@ -40,5 +41,6 @@ describe('request.parseString()', function(){
     parse('redirect=/&ok', { redirect: '/', ok: 'undefined' });
     parse('%26name=tj', { '&name': 'tj' });
     parse('name=tj%26', { name: 'tj&' });
+    parse('names[]=joe&names[]=mark', { names: ['joe', 'mark'] });
   });
 });
