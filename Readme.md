@@ -55,10 +55,9 @@ var nocache = require('no-cache');
 var request = require('superagent');
 var prefix = require('superagent-prefix')('/static');
 
-prefix(request); // Prefixes *all* requests
-
 request
 .get('/some-url')
+.use(prefix) // Prefixes *only* this request
 .use(nocache) // Prevents caching of *only* this request
 .end(function(err, res){
     // Do something
