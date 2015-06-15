@@ -51,7 +51,7 @@ Even though IE9 is supported, a polyfill `window.btoa` is needed to use basic au
 Superagent is easily extended via plugins.
 
 ```js
-var nocache = require('no-cache');
+var nocache = require('superagent-no-cache');
 var request = require('superagent');
 var prefix = require('superagent-prefix')('/static');
 
