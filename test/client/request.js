@@ -343,6 +343,18 @@ it('POST json array', function(next){
   });
 });
 
+it('PATCH json-patch', function(next){
+  request
+  .patch('/echo')
+  .type('application/json-patch+json')
+  .send({name: 'tobi'})
+  .end(function(err, res){
+    assert('application/json-patch+json' == res.header['content-type'].split(';')[0]);
+    assert('{"name":"tobi"}' == res.text);
+    next();
+  });
+});
+
 it('POST json default', function(next){
   request
   .post('/pet')
