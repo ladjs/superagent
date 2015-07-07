@@ -451,6 +451,16 @@ it('POST shorthand without callback', function(next){
   });
 });
 
+it('GET querystring object with array', function(next){
+  request
+  .get('/querystring')
+  .query({ val: ['a', 'b', 'c'] })
+  .end(function(err, res){
+    assert.deepEqual(res.body, { val: ['a', 'b', 'c'] });
+    next();
+  });
+});
+
 it('GET querystring object', function(next){
   request
   .get('/querystring')
