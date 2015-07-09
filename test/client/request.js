@@ -461,6 +461,26 @@ it('GET querystring object with array', function(next){
   });
 });
 
+it('GET querystring object with array and primitives', function(next){
+  request
+  .get('/querystring')
+  .query({ array: ['a', 'b', 'c'], string: 'foo', number: 10 })
+  .end(function(err, res){
+    assert.deepEqual(res.body, { array: ['a', 'b', 'c'], string: 'foo', number: 10 });
+    next();
+  });
+});
+
+it('GET querystring object with two arrays', function(next){
+  request
+  .get('/querystring')
+  .query({ array1: ['a', 'b', 'c'], array2: [1, 2, 3]})
+  .end(function(err, res){
+    assert.deepEqual(res.body, { array1: ['a', 'b', 'c'], array2: [1, 2, 3]});
+    next();
+  });
+});
+
 it('GET querystring object', function(next){
   request
   .get('/querystring')
