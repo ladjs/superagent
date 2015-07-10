@@ -350,24 +350,7 @@ In a similar fashion to the `.type()` method it is also possible to set the Acce
 
 ## Multipart requests
 
-  Super Agent is also great for _building_ multipart requests, providing a both low-level and high-level APIs.
-
-  The low-level API uses `Part`s to represent a file or field. The `.part()` method returns a new `Part`, which provides an API similar to the request itself.
-
-     var req = request.post('/upload');
-
-     req.part()
-       .set('Content-Type', 'image/png')
-       .set('Content-Disposition', 'attachment; filename="myimage.png"')
-       .write('some image data')
-       .write('some more image data');
-
-     req.part()
-       .set('Content-Disposition', 'form-data; name="name"')
-       .set('Content-Type', 'text/plain')
-       .write('tobi');
-
-     req.end(callback);
+  Super Agent is also great for _building_ multipart requests for which it provides methods `.attach()` and `.field()`.
 
 ### Attaching files
 
