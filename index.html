@@ -85,7 +85,7 @@
 
 <p>The HTTP method defaults to <strong>GET</strong>, so if you wish, the following is valid:</p>
 
-<pre><code> request('/search', function(res){
+<pre><code> request('/search', function(err, res){
 
  });
 </code></pre>
@@ -360,7 +360,7 @@ Tobi
 
 <pre><code>request
   .get('http://local')
-  .auth('tobo', 'learnboost')
+  .auth('tobi', 'learnboost')
   .end(callback);
 </code></pre>
 
@@ -399,25 +399,7 @@ req.pipe(stream);
 
 <h2>Multipart requests</h2>
 
-<p>Super Agent is also great for <em>building</em> multipart requests, providing a both low-level and high-level APIs.</p>
-
-<p>The low-level API uses <code>Part</code>s to represent a file or field. The <code>.part()</code> method returns a new <code>Part</code>, which provides an API similar to the request itself.</p>
-
-<pre><code> var req = request.post('/upload');
-
- req.part()
-   .set('Content-Type', 'image/png')
-   .set('Content-Disposition', 'attachment; filename="myimage.png"')
-   .write('some image data')
-   .write('some more image data');
-
- req.part()
-   .set('Content-Disposition', 'form-data; name="name"')
-   .set('Content-Type', 'text/plain')
-   .write('tobi');
-
- req.end(callback);
-</code></pre>
+<p>Super Agent is also great for <em>building</em> multipart requests for which it provides methods <code>.attach()</code> and <code>.field()</code>.</p>
 
 <h3>Attaching files</h3>
 
