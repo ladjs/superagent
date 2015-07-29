@@ -36,7 +36,9 @@ describe('req.set("Content-Type", contentType)', function(){
     request.del('http://localhost:3005/nonexistant')
     .end(function(err, res) {
       assert(err)
-      res.request.req._headers['content-length'].should.equal(0)
+      res.request.req._headers['content-length'].should.equal(0);
+      //client sent data with error
+      res.headers['content-length'].should.not.equal(0);
       return done();
     })
   })
