@@ -32,4 +32,12 @@ describe('req.set("Content-Type", contentType)', function(){
     });
   });
 
+  it('should delete with a content-length of 0', function(done){
+    request.del('http://localhost:3005/nonexistant')
+    .end(function(err, res) {
+      assert(err)
+      res.request.req._headers['content-length'].should.equal(0)
+      return done();
+    })
+  })
 });
