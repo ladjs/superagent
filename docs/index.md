@@ -60,7 +60,7 @@
 
   The HTTP method defaults to __GET__, so if you wish, the following is valid:
 
-     request('/search', function(res){
+     request('/search', function(err, res){
 
      });
 
