@@ -436,3 +436,14 @@ Your callback function will always be passed two arguments: error and response. 
     else if (err) {
       // all other error types we handle generically
     }
+
+## Generator support
+
+Superagent now supports easier control flow using generators. By using a generator control flow
+like [co](https://github.com/tj/co) or a web framework like [koa](https://github.com/koajs/koa),
+you can `yield` on any superagent method:
+
+    var res = yield request
+      .get('http://local')
+      .auth('tobi', 'learnboost')
+
