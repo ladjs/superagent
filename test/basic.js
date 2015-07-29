@@ -28,6 +28,116 @@ describe('request', function(){
     })
   })
 
+  describe('.clone()', function() {
+    it('', function(next) {
+      var clone = request('GET', uri + '/ok').clone();
+      assert(clone.method === 'GET', 'includes method');
+      assert(clone.url === uri + '/ok', 'includes url');
+      next();
+    });
+
+    it('should end after original ended', function(next) {
+      var req = request
+                  .post(uri + '/pet')
+                  .type('json')
+                  .send({ name: 'Manny', species: 'cat' }),
+          clone = req.clone();
+
+      // console.log(req.request());
+      req.end(function(err, res){
+        assert(res.text == 'added Manny the cat', 'with correct result for original');
+        clone.end(function(err2, res2) {
+          assert(res2.text == 'added Manny the cat', 'with correct result for clone');
+          next();
+        });
+      });
+    });
+
+    it('should end afer clone ended', function(next) {
+      var req = request
+                  .post(uri + '/pet')
+                  .type('json')
+                  .send({ name: 'Manny', species: 'cat' }),
+          clone = req.clone();
+
+      clone.end(function(err, res) {
+        assert(res.text == 'added Manny the cat', 'with correct result for original');
+        req.end(function(err2, res2) {
+          assert(res2.text == 'added Manny the cat', 'with correct result for clone');
+          next();
+        });
+      });
+    });
+
+    it('should transfer querystring', function(next) {
+      request
+      .get(uri + '/querystring')
+      .query({ data: 123 })
+      .clone()
+      .end(function(err, res){
+        assert.deepEqual(res.body, { data: 123 });
+        next();
+      });
+    });
+
+    it('should transfer headers', function(next) {
+      request
+      .post(uri + '/echo')
+      .set('Accept', 'json')
+      .clone()
+      .end(function(err, res){
+        assert(res.header['accept'] == 'json', 'includes headers');
+        next();
+      });
+    });
+
+    it('should transfer headers using type()', function(next) {
+      request
+      .post(uri + '/echo')
+      .type('json')
+      .clone()
+      .end(function(err, res){
+        assert(res.header['content-type'] == 'application/json', 'includes headers');
+        next();
+      });
+    });
+
+    it('should transfer headers using accept()', function(next) {
+      request
+      .post(uri + '/echo')
+      .accept('json')
+      .clone()
+      .end(function(err, res){
+        assert(res.header['accept'] === 'application/json', 'includes headers');
+        next();
+      });
+    });
+
+    it('should transfer JSON body', function(next) {
+      request
+      .post(uri + '/pet')
+      .type('json')
+      .send({ name: 'Manny', species: 'cat' })
+      .clone()
+      .end(function(err, res){
+        assert('added Manny the cat' == res.text);
+        next();
+      });
+    });
+
+    it('should transfer urlencoded body', function(next){
+      request
+      .post(uri + '/pet')
+      .type('urlencoded')
+      .send({ name: 'Manny', species: 'cat' })
+      .clone()
+      .end(function(err, res){
+        assert('added Manny the cat' == res.text);
+        next();
+      });
+    });
+  });
+
   describe('.end()', function(){
     it('should issue a request', function(done){
       request
