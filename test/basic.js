@@ -283,6 +283,28 @@ describe('request', function(){
     })
   })
 
+  describe('.then(fulfill, reject)', function() {
+    it('should support successful fulfills with .then(fulfill)', function(done) {
+      request
+      .post(uri + '/echo')
+      .send({ name: 'tobi' })
+      .then(function(res) {
+        res.text.should.equal('{"name":"tobi"}');
+        done();
+      })
+    })
+
+    it('should reject an error with .then(null, reject)', function(done) {
+      request
+      .get(uri + '/error')
+      .then(null, function(err) {
+        assert(err.status == 500);
+        assert(err.response.text == 'boom');
+        done();
+      })
+    })
+  })
+
   describe('.abort()', function(){
     it('should abort the request', function(done){
       var req = request
