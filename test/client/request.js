@@ -432,6 +432,16 @@ it('GET json', function(next){
   });
 });
 
+it('GET invalid json', function(next) {
+  request
+  .get('/invalid-json')
+  .end(function(err, res) {
+    assert(err.parse);
+    assert.deepEqual(err.rawResponse, ")]}', {'header':{'code':200,'text':'OK','version':'1.0'},'data':'some data'}");
+    next();
+  });
+});
+
 it('GET x-www-form-urlencoded', function(next){
   request
   .get('/foo')

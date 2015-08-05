@@ -136,6 +136,12 @@ app.get('/pets', function(req, res){
   res.send(['tobi', 'loki', 'jane']);
 });
 
+app.get('/invalid-json', function(req, res) {
+  res.set('content-type', 'application/json');
+  // sample invalid json taken from https://github.com/swagger-api/swagger-ui/issues/1354
+  res.send(")]}', {'header':{'code':200,'text':'OK','version':'1.0'},'data':'some data'}");
+});
+
 app.get('/text', function(req, res){
   res.send("just some text");
 });
