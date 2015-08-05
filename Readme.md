@@ -69,6 +69,7 @@ Existing plugins:
  * [superagent-prefix](https://github.com/johntron/superagent-prefix) - prefixes absolute URLs (useful in test environment)
  * [superagent-mock](https://github.com/M6Web/superagent-mock) - simulate HTTP calls by returning data fixtures based on the requested URL
  * [superagent-mocker](https://github.com/rambler-digital-solutions/superagent-mocker) — simulate REST API
+ * [superagent-cache](https://github.com/jpodwys/superagent-cache) - superagent with built-in, flexible caching
 
 Please prefix your plugin with `superagent-*` so that it can easily be found by others.
 
