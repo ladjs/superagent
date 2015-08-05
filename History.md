@@ -1,4 +1,4 @@
-# UNRELEASED
+# 1.3.0 (2015-08-05)
 
  * fix incorrect content-length of data set to buffer
  * serialize request data takes into account charsets
