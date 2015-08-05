@@ -17,6 +17,7 @@ else {
 }
 
 describe('request', function(){
+  this.timeout(10000);
 
   describe('with a callback', function(){
     it('should invoke .end()', function(done){

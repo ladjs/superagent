@@ -28,8 +28,8 @@ describe('request.serializeObject()', function(){
     serialize({ foo: undefined }, '');
     serialize({ foo: 'undefined' }, 'foo=undefined');
     serialize({ name: 'tj', age: 24 }, 'name=tj&age=24');
-      serialize({ name: '&tj&' }, 'name=%26tj%26');
-      serialize({ '&name&': 'tj' }, '%26name%26=tj');
+    serialize({ name: '&tj&' }, 'name=%26tj%26');
+    serialize({ '&name&': 'tj' }, '%26name%26=tj');
   });
 });
 

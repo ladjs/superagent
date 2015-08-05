@@ -1,6 +1,9 @@
 var assert = require('assert');
 var request = require('../../');
 
+describe('request', function() {
+  this.timeout(10000);
+
 it('Request inheritance', function(){
   assert(request.get('/') instanceof request.Request);
 });
@@ -667,3 +670,5 @@ if ('FormData' in window) {
     .end();
   });
 }
+
+});

@@ -2,6 +2,7 @@ var assert = require('assert');
 var request = require('../../');
 
 describe('xdomain', function(){
+  this.timeout(10000);
 
   // TODO (defunctzombie) I am not certain this actually forces xdomain request
   // use localtunnel.me and tunnel127.com alias instead
