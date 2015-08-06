@@ -1,6 +1,6 @@
 var assert = require('assert');
 
-var request = require('../../');
+var request = require('../../lib/client.js');
 
 function serialize(obj, res) {
   var val = request.serializeObject(obj);
@@ -30,6 +30,8 @@ describe('request.serializeObject()', function(){
     serialize({ name: 'tj', age: 24 }, 'name=tj&age=24');
     serialize({ name: '&tj&' }, 'name=%26tj%26');
     serialize({ '&name&': 'tj' }, '%26name%26=tj');
+    serialize({ name: ['123', '222'], age: 24 }, 'name=123&name=222&age=24');
+    serialize({ name: [], age: 24 }, 'age=24');
   });
 });
 
