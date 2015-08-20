@@ -68,8 +68,9 @@ Existing plugins:
  * [superagent-no-cache](https://github.com/johntron/superagent-no-cache) - prevents caching by including Cache-Control header
  * [superagent-prefix](https://github.com/johntron/superagent-prefix) - prefixes absolute URLs (useful in test environment)
  * [superagent-mock](https://github.com/M6Web/superagent-mock) - simulate HTTP calls by returning data fixtures based on the requested URL
- * [superagent-mocker](https://github.com/rambler-digital-solutions/superagent-mocker) — simulate REST API
+ * [superagent-mocker](https://github.com/rambler-digital-solutions/superagent-mocker) - simulate REST API
  * [superagent-cache](https://github.com/jpodwys/superagent-cache) - superagent with built-in, flexible caching
+ * [superagent-jsonapify](https://github.com/alex94puchades/superagent-jsonapify) - A lightweight [json-api](http://jsonapi.org/format/) client addon for superagent
 
 Please prefix your plugin with `superagent-*` so that it can easily be found by others.
 
