@@ -33,7 +33,7 @@ superagent.js: lib/node/*.js lib/node/parsers/*.js
 		--outfile superagent.js .
 
 test-server:
-	@node test/server
+	@node test/support/server
 
 docs: test-docs
 

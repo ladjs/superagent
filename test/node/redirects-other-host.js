@@ -36,8 +36,9 @@ describe('request.get', function(){
     it('should follow Location with a GET request', function(done){
       var req = request
         .get('http://localhost:3210/test-301')
-        .redirects(1)
-        .end(function(err, res){
+        .redirects(1);
+
+      req.end(function(err, res){
           req.req._headers.host.should.eql('localhost:3211');
           res.status.should.eql(200);
           res.text.should.eql('GET');
@@ -49,8 +50,9 @@ describe('request.get', function(){
     it('should follow Location with a GET request', function(done){
       var req = request
         .get('http://localhost:3210/test-302')
-        .redirects(1)
-        .end(function(err, res){
+        .redirects(1);
+
+      req.end(function(err, res){
           req.req._headers.host.should.eql('localhost:3211');
           res.status.should.eql(200);
           res.text.should.eql('GET');
@@ -62,8 +64,9 @@ describe('request.get', function(){
     it('should follow Location with a GET request', function(done){
       var req = request
         .get('http://localhost:3210/test-303')
-        .redirects(1)
-        .end(function(err, res){
+        .redirects(1);
+
+      req.end(function(err, res){
           req.req._headers.host.should.eql('localhost:3211');
           res.status.should.eql(200);
           res.text.should.eql('GET');
@@ -75,8 +78,9 @@ describe('request.get', function(){
     it('should follow Location with a GET request', function(done){
       var req = request
         .get('http://localhost:3210/test-307')
-        .redirects(1)
-        .end(function(err, res){
+        .redirects(1);
+
+      req.end(function(err, res){
           req.req._headers.host.should.eql('localhost:3211');
           res.status.should.eql(200);
           res.text.should.eql('GET');
@@ -88,8 +92,8 @@ describe('request.get', function(){
     it('should follow Location with a GET request', function(done){
       var req = request
         .get('http://localhost:3210/test-308')
-        .redirects(1)
-        .end(function(err, res){
+        .redirects(1);
+      req.end(function(err, res){
           req.req._headers.host.should.eql('localhost:3211');
           res.status.should.eql(200);
           res.text.should.eql('GET');
@@ -104,8 +108,9 @@ describe('request.post', function(){
     it('should follow Location with a GET request', function(done){
       var req = request
         .post('http://localhost:3210/test-301')
-        .redirects(1)
-        .end(function(err, res){
+        .redirects(1);
+
+      req.end(function(err, res){
           req.req._headers.host.should.eql('localhost:3211');
           res.status.should.eql(200);
           res.text.should.eql('GET');
@@ -117,8 +122,9 @@ describe('request.post', function(){
     it('should follow Location with a GET request', function(done){
       var req = request
         .post('http://localhost:3210/test-302')
-        .redirects(1)
-        .end(function(err, res){
+        .redirects(1);
+
+      req.end(function(err, res){
           req.req._headers.host.should.eql('localhost:3211');
           res.status.should.eql(200);
           res.text.should.eql('GET');
@@ -130,8 +136,9 @@ describe('request.post', function(){
     it('should follow Location with a GET request', function(done){
       var req = request
         .post('http://localhost:3210/test-303')
-        .redirects(1)
-        .end(function(err, res){
+        .redirects(1);
+
+      req.end(function(err, res){
           req.req._headers.host.should.eql('localhost:3211');
           res.status.should.eql(200);
           res.text.should.eql('GET');
@@ -143,8 +150,9 @@ describe('request.post', function(){
     it('should follow Location with a POST request', function(done){
       var req = request
         .post('http://localhost:3210/test-307')
-        .redirects(1)
-        .end(function(err, res){
+        .redirects(1);
+
+      req.end(function(err, res){
           req.req._headers.host.should.eql('localhost:3211');
           res.status.should.eql(200);
           res.text.should.eql('POST');
@@ -156,8 +164,9 @@ describe('request.post', function(){
     it('should follow Location with a POST request', function(done){
       var req = request
         .post('http://localhost:3210/test-308')
-        .redirects(1)
-        .end(function(err, res){
+        .redirects(1);
+
+        req.end(function(err, res){
           req.req._headers.host.should.eql('localhost:3211');
           res.status.should.eql(200);
           res.text.should.eql('POST');
