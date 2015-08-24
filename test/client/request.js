@@ -500,8 +500,9 @@ it('GET querystring multiple objects', function(next){
 it('GET querystring empty objects', function(next){
   var req = request
   .get('/querystring')
-  .query({})
-  .end(function(err, res){
+  .query({});
+
+  req.end(function(err, res){
     assert.deepEqual(req._query, []);
     assert.deepEqual(res.body, {});
     next();
@@ -633,8 +634,9 @@ it('progress event listener on xhr object registered when some on the request', 
   var req = request
   .get('/foo')
   .on('progress', function(data) {
-  })
-  .end();
+  });
+
+  req.end();
 
   if (req.xhr.upload) { // Only run assertion on capable browsers
     assert(null !== req.xhr.upload.onprogress);
@@ -643,8 +645,9 @@ it('progress event listener on xhr object registered when some on the request', 
 
 it('no progress event listener on xhr object when none registered on request', function(){
   var req = request
-  .get('/foo')
-  .end();
+  .get('/foo');
+
+  req.end();
 
   if (req.xhr.upload) { // Only run assertion on capable browsers
     assert(null === req.xhr.upload.onprogress);
