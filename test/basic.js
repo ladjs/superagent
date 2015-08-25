@@ -20,6 +20,16 @@ describe('request', function(){
   this.timeout(10000);
 
   describe('with a callback', function(){
+    before(function(){
+      request.plugins.push(function(req) {
+        req.globalPluginCalled = true;
+      });
+    });
+    
+    after(function(){
+      request.plugins.pop();
+    });
+    
     it('should invoke .end()', function(done){
       request
       .get(uri + '/login', function(err, res){
@@ -27,6 +37,15 @@ describe('request', function(){
         done();
       })
     })
+    
+    it('should use global plugins', function(done){
+      request
+      .get(uri + '/login', function(err, res){
+        if (err) return done(err);
+        assert(res.request.globalPluginCalled);
+        done();
+      });
+    });
   })
 
   describe('.end()', function(){
