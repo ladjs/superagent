@@ -42,11 +42,7 @@ describe('request', function(){
       request
       .get(uri + '/login', function(err, res){
         if (err) return done(err);
-        // Issue #690:
-        //   - Node: res.request is Request, res.req is request to be sent
-        //   - Browser: res.req is Request, res.request does not exist
-        var request = NODE ? res.request : res.req;
-        assert(request.globalPluginCalled);
+        assert(res.request.globalPluginCalled);
         done();
       });
     });
