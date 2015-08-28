@@ -629,6 +629,14 @@ it('response event', function(next){
   .end();
 });
 
+it('response should set statusCode', function(next){
+  request
+    .get('/ok', function(err, res){
+      assert(res.statusCode === 200);
+      next();
+    })
+});
+
 it('progress event listener on xhr object registered when some on the request', function(){
   var req = request
   .get('/foo')
