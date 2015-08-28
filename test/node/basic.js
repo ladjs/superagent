@@ -8,6 +8,16 @@ var request = require('../../');
 
 describe('[node] request', function(){
 
+  describe('res.statusCode', function(){
+    it('should set statusCode', function(done){
+      request
+      .get('http://localhost:5000/login', function(err, res){
+        assert(res.statusCode === 200);
+        done();
+      })
+    })
+  })
+
   describe('with an object', function(){
     it('should format the url', function(done){
       request
