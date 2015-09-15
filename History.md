@@ -1,3 +1,7 @@
+# UNRELEASED
+
+ * revert Request#parse since it was actually Response#parse
+
 # 1.4.0 (2015-09-14)
 
  * add Request#parse method to client library
