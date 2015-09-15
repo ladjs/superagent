@@ -1,4 +1,4 @@
-# UNRELEASED
+# 1.4.0 (2015-09-14)
 
  * add Request#parse method to client library
  * add missing statusCode in client response
