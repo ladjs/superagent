@@ -1,3 +1,10 @@
+# UNRELEASED
+
+ * add Request#parse method to client library
+ * add missing statusCode in client response
+ * don't apply JSON heuristics if a valid parser is found
+ * fix detection of root object for webworkers
+
 # 1.3.0 (2015-08-05)
 
  * fix incorrect content-length of data set to buffer
