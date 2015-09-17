@@ -175,6 +175,13 @@ it('del()', function(next){
   });
 });
 
+it('delete()', function(next){
+  request.delete('/user/12').end(function(err, res){
+    assert('deleted' == res.text, 'response text');
+    next();
+  });
+});
+
 it('post() data', function(next){
   request.post('/todo/item')
   .type('application/octet-stream')
