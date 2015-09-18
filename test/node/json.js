@@ -66,6 +66,44 @@ describe('req.send(Object) as "json"', function(){
     });
   });
 
+  it('should work with type json-patch', function(done){
+    request
+    .patch('http://localhost:3005/echo')
+    .type('application/json-patch+json')
+    .send([{ "op": "remove", "path": "/foo"}])
+    .end(function(err, res){
+      res.headers['content-type'].should.equal('application/json-patch+json');
+      res.text.should.equal('[{"op":"remove","path":"/foo"}]');
+      done();
+    });
+  });
+
+  it('should throw error with invalid type', function(done){
+    try {
+      request
+      .patch('http://localhost:3005/echo')
+      .type('application/json-patch')
+      .send([{ "op": "remove", "path": "/foo"}])
+      .end();
+    } catch(e) {
+      assert(e);
+      assert(e.name === 'TypeError');
+      done();
+    }
+  });
+
+  it('should work with type jsonapi', function(done){
+    request
+    .patch('http://localhost:3005/echo')
+    .type('application/vnd.api+json')
+    .send({ name: 'tobi' })
+    .end(function(err, res){
+      res.headers['content-type'].should.equal('application/vnd.api+json');
+      res.text.should.equal('{"name":"tobi"}');
+      done();
+    });
+  });
+
   it('should work with value false', function(done){
     request
     .post('http://localhost:3005/echo')
