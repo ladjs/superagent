@@ -659,6 +659,26 @@ it('no progress event listener on xhr object when none registered on request', f
   }
 });
 
+it('Request#parse overrides body parser no matter Content-Type', function(done){
+  var runParser = false;
+  
+  function testParser(data){
+    runParser = true;
+    return JSON.stringify(data);
+  }
+  
+  var req = request
+  .post('/user')
+  .parse(testParser)
+  .type('json')
+  .send({ foo: 123 })
+  .end(function(err) {
+    if (err) return done(err);
+    assert(runParser);
+    done();
+  });
+});
+
 // Don't run on browsers without xhr2 support
 if ('FormData' in window) {
   it('xhr2 download file', function(next) {
