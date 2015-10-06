@@ -367,6 +367,17 @@ it('POST json contentType charset', function(next){
   });
 });
 
+it('POST json contentType vendor', function(next){
+  request
+  .post('/echo')
+  .set('Content-Type', 'application/vnd.example+json')
+  .send({ data: ['data1', 'data2'] })
+  .end(function(err, res){
+    assert('{"data":["data1","data2"]}' == res.text);
+    next();
+  });
+});
+
 it('POST multiple .send() calls', function(next){
   request
   .post('/pet')
@@ -661,12 +672,12 @@ it('no progress event listener on xhr object when none registered on request', f
 
 it('Request#parse overrides body parser no matter Content-Type', function(done){
   var runParser = false;
-  
+
   function testParser(data){
     runParser = true;
     return JSON.stringify(data);
   }
-  
+
   var req = request
   .post('/user')
   .parse(testParser)
