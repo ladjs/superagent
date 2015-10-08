@@ -2,6 +2,7 @@
 var request = require('../..')
   , express = require('express')
   , assert = require('better-assert')
+  , fs = require('fs')
   , app = express();
 
 app.get('/', function(req, res){
@@ -9,6 +10,10 @@ app.get('/', function(req, res){
 });
 
 app.delete('/', function(req, res){
+  res.status(200).send(req.query);
+});
+
+app.put('/', function(req, res){
   res.status(200).send(req.query);
 });
 
@@ -139,5 +144,17 @@ describe('req.query(Object)', function(){
       res.body.should.eql({ name: 'tobi' });
       done();
     });
+  });
+
+  it('query-string should be sent on pipe', function(done){
+    var req = request.put('http://localhost:3006/?name=tobi');
+    var stream = fs.createReadStream('test/node/fixtures/user.json');
+
+    req.on('response', function(res){
+      res.body.should.eql({ name: 'tobi' });
+      done();
+    });
+
+    stream.pipe(req);
   });
 })
