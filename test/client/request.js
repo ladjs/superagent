@@ -335,6 +335,54 @@ it('POST json', function(next){
   });
 });
 
+it('POST jsonApi', function(next){
+  request
+  .post('/photos')
+  .set('Content-Type', 'application/vnd.api+json; charset=UTF-8')
+  .send({
+    data: {
+      type: "photos",
+      attributes: {
+        title: "Ember Hamster",
+        src: "http://example.com/images/productivity.png"
+      },
+      relationships: {
+        photographer: {
+          data: { type: "people", id: "9" }
+        }
+      }
+    }
+  })
+  .end(function(err, res){
+    assert('added photos with title: Ember Hamster' == res.text);
+    next();
+  });
+});
+
+it('PATCH jsonApi', function(next){
+  request
+  .patch('/photos')
+  .set('Content-Type', 'application/vnd.api+json; charset=UTF-8')
+  .send({
+    data: {
+      type: "photos",
+      attributes: {
+        title: "Ember Hamster",
+        src: "http://example.com/images/productivity.png"
+      },
+      relationships: {
+        photographer: {
+          data: { type: "people", id: "9" }
+        }
+      }
+    }
+  })
+  .end(function(err, res){
+    assert('Hipsterest Hamster' == res.body.data.attributes.title);
+    next();
+  });
+});
+
 it('POST json array', function(next){
   request
   .post('/echo')
@@ -360,6 +408,17 @@ it('POST json contentType charset', function(next){
   request
   .post('/echo')
   .set('Content-Type', 'application/json; charset=UTF-8')
+  .send({ data: ['data1', 'data2'] })
+  .end(function(err, res){
+    assert('{"data":["data1","data2"]}' == res.text);
+    next();
+  });
+});
+
+it('POST jsonApi contentType charset', function(next){
+  request
+  .post('/echo')
+  .set('Content-Type', 'application/vnd.api+json; charset=UTF-8')
   .send({ data: ['data1', 'data2'] })
   .end(function(err, res){
     assert('{"data":["data1","data2"]}' == res.text);
@@ -413,6 +472,16 @@ it('GET .type', function(next){
   .get('/pets')
   .end(function(err, res){
     assert('application/json' == res.type);
+    next();
+  });
+});
+
+it('GET .type', function(next){
+  request
+  .get('/pets')
+  .set('Content-Type', 'application/vnd.api+json; charset=UTF-8')
+  .end(function(err, res){
+    assert('application/vnd.api+json' == res.type);
     next();
   });
 });
@@ -661,12 +730,12 @@ it('no progress event listener on xhr object when none registered on request', f
 
 it('Request#parse overrides body parser no matter Content-Type', function(done){
   var runParser = false;
-  
+
   function testParser(data){
     runParser = true;
     return JSON.stringify(data);
   }
-  
+
   var req = request
   .post('/user')
   .parse(testParser)

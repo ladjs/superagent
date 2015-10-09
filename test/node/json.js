@@ -29,6 +29,16 @@ app.get('/collection-json', function(req, res){
   res.send({ name: 'chewbacca' });
 });
 
+app.get('/jsonApi', function(req, res){
+  res.set('content-type', 'application/vnd.api+json');
+  res.send({ name: 'ember hamster' });
+});
+
+app.patch('/jsonApi', function(req, res){
+  res.set('content-type', 'application/vnd.api+json');
+  res.send({ name: 'ember hamster' });
+});
+
 app.listen(3005);
 
 describe('req.send(Object) as "json"', function(){
@@ -38,6 +48,17 @@ describe('req.send(Object) as "json"', function(){
     .send({ name: 'tobi' })
     .end(function(err, res){
       res.should.be.json
+      res.text.should.equal('{"name":"tobi"}');
+      done();
+    });
+  })
+
+  it('should work with jsonApi', function(done){
+    request
+    .post('http://localhost:3005/echo')
+    .set('Content-Type', 'application/vnd.api+json; charset=UTF-8')
+    .send({ name: 'tobi' })
+    .end(function(err, res){
       res.text.should.equal('{"name":"tobi"}');
       done();
     });
@@ -136,6 +157,30 @@ describe('res.body', function(){
       .end(function(err, res){
         res.text.should.equal('{"name":"manny"}');
         res.body.should.eql({ name: 'manny' });
+        done();
+      });
+    })
+  })
+
+  describe('application/vnd.api+json', function(){
+    it('should parse the body', function(done){
+      request
+      .get('http://localhost:3005/jsonApi')
+      .set('Content-Type', 'application/vnd.api+json; charset=UTF-8')
+      .end(function(err, res){
+        res.text.should.equal('{"name":"ember hamster"}');
+        res.body.should.eql({ name: 'ember hamster' });
+        done();
+      });
+    })
+
+    it('should parse the body with PATCH request', function(done){
+      request
+      .patch('http://localhost:3005/jsonApi')
+      .set('Content-Type', 'application/vnd.api+json; charset=UTF-8')
+      .end(function(err, res){
+        res.text.should.equal('{"name":"ember hamster"}');
+        res.body.should.eql({ name: 'ember hamster' });
         done();
       });
     })
