@@ -17,6 +17,24 @@ app.get('/image', function(req, res){
   res.end(img, 'binary');
 });
 
+app.get('/chunked-json', function(req, res){
+  res.set('content-type', 'application/json');
+  res.set('Transfer-Encoding', 'chunked');
+  res.flushHeaders();
+
+  var chunk = 0;
+  var interval = setInterval(function(){
+    chunk++;
+    if(chunk === 1) res.write('{ "name_' + chunk + '": "');
+    if(chunk > 1) res.write('value_' + chunk + '", "name_' + chunk + '": "');
+    if(chunk === 10) {
+      clearInterval(interval);
+      res.write('value_' + chunk + '"}');
+      res.end();
+    }
+  },10);
+});
+
 app.listen(3033);
 
 describe('req.parse(fn)', function(){
@@ -71,4 +89,25 @@ describe('req.parse(fn)', function(){
     })
     .end()
   })
+
+  it('should not emit error on chunked json', function(done){
+    request
+    .get('http://localhost:3033/chunked-json')
+    .end(function(err){
+      assert(!err);
+      done();
+    });
+  })
+
+  it('should not emit error on aborted chunked json', function(done){
+    var req = request
+    .get('http://localhost:3033/chunked-json')
+    .end(function(err){
+      assert(!err);
+      done();
+    });
+
+    setTimeout(function(){req.abort()},50);
+  })
+
 })
