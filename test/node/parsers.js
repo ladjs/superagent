@@ -20,7 +20,6 @@ app.get('/image', function(req, res){
 app.get('/chunked-json', function(req, res){
   res.set('content-type', 'application/json');
   res.set('Transfer-Encoding', 'chunked');
-  res.flushHeaders();
 
   var chunk = 0;
   var interval = setInterval(function(){
