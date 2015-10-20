@@ -145,6 +145,27 @@ describe('Request', function(){
         done();
       })
     })
+    it('should fire progress event', function(done){
+      var loaded = 0;
+      var total = 0;
+      request
+      .post(':3005/echo')
+      .attach('document', 'test/node/fixtures/user.html')
+      .on('progress', function (event) {
+        total = event.total;
+        loaded = event.loaded;
+      })
+      .end(function(err, res){
+        if (err) return done(err);
+        var html = res.files.document;
+        html.name.should.equal('user.html');
+        html.type.should.equal('text/html');
+        read(html.path).should.equal('<h1>name</h1>');
+        total.should.equal(221);
+        loaded.should.equal(221);
+        done();
+      })
+    })
   })
 })
 
