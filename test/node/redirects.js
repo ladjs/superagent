@@ -229,7 +229,7 @@ describe('request', function(){
         arr.push('/movies');
         arr.push('/movies/all');
         redirects.should.eql(arr);
-        res.text.should.match(/Moved Temporarily/);
+        res.text.should.match(/Moved Temporarily|Found/);
         done();
       });
     })
