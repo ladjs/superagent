@@ -1,5 +1,6 @@
 
 var request = require('../../')
+  , assert = require('assert')
   , express = require('express')
   , zlib
 
@@ -23,6 +24,10 @@ if (zlib) {
       res.send(buf);
     });
   });
+  app.get('/corrupt', function(req, res){
+    res.set('Content-Encoding', 'gzip');
+    res.send(buf);
+  });
 
   app.get('/', function (req, res, next){
     zlib.deflate(subject, function (err, buf){
@@ -40,6 +45,16 @@ if (zlib) {
           res.should.have.status(200);
           res.text.should.equal(subject);
           res.headers['content-length'].should.be.below(subject.length);
+          done();
+        });
+    });
+
+    it('should handle corrupted responses', function(done){
+      request
+        .get('http://localhost:3080/corrupt')
+        .end(function(err, res){
+          assert(err, 'missing error');
+          assert(!res, 'response should not be defined');
           done();
         });
     });
