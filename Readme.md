@@ -2,7 +2,7 @@
 
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/shtylman-superagent.svg)](https://saucelabs.com/u/shtylman-superagent)
 
-SuperAgent is a small progressive __client-side__ HTTP request library, and __Node.js__ module with the same API, sporting many high-level HTTP client features. View the [docs](http://visionmedia.github.com/superagent/).
+SuperAgent is a small progressive __client-side__ HTTP request library, and __Node.js__ module with the same API, sporting many high-level HTTP client features. View the [docs](http://visionmedia.github.io/superagent/).
 
 ![super agent](http://f.cl.ly/items/3d282n3A0h0Z0K2w0q2a/Screenshot.png)
 
@@ -68,7 +68,7 @@ Existing plugins:
  * [superagent-no-cache](https://github.com/johntron/superagent-no-cache) - prevents caching by including Cache-Control header
  * [superagent-prefix](https://github.com/johntron/superagent-prefix) - prefixes absolute URLs (useful in test environment)
  * [superagent-mock](https://github.com/M6Web/superagent-mock) - simulate HTTP calls by returning data fixtures based on the requested URL
- * [superagent-mocker](https://github.com/rambler-digital-solutions/superagent-mocker) - simulate REST API
+ * [superagent-mocker](https://github.com/shuvalov-anton/superagent-mocker) — simulate REST API
  * [superagent-cache](https://github.com/jpodwys/superagent-cache) - superagent with built-in, flexible caching
  * [superagent-jsonapify](https://github.com/alex94puchades/superagent-jsonapify) - A lightweight [json-api](http://jsonapi.org/format/) client addon for superagent
 
