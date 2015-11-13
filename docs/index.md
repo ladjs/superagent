@@ -9,10 +9,10 @@
        .set('X-API-Key', 'foobar')
        .set('Accept', 'application/json')
        .end(function(err, res){
-         if (res.ok) {
-           alert('yay got ' + JSON.stringify(res.body));
+         if (err || !res.ok) {
+           alert('Oh no! error');
          } else {
-           alert('Oh no! error ' + res.text);
+           alert('yay got ' + JSON.stringify(res.body));
          }
        });
 
