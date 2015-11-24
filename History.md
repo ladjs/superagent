@@ -1,5 +1,10 @@
 # UNRELEASED
 
+ * encode arrays into query strings better on client (davis)
+ * don't strip json before parsing (jbellenger)
+ * fix error-triggering on corrupted compressed streams (jbellenger)
+ * Update tests for recent iojs/node versions (John-Steidley)
+ * Allow custom parser in Request (alex94puchades)
  * revert Request#parse since it was actually Response#parse
 
 # 1.4.0 (2015-09-14)
@@ -490,4 +495,3 @@
 ==================
 
   * Initial commit
-
