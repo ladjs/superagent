@@ -9,12 +9,12 @@ app.get('/', function(req, res){
   res.status(400).send('invalid json');
 });
 
-app.listen(8888);
+app.listen(65197);
 
 describe('res.toError()', function(){
   it('should return an Error', function(done){
     request
-    .get('http://localhost:8888/')
+    .get('http://localhost:65197/')
     .end(function(err, res){
       var err = res.toError();
       assert(err.status == 400);
