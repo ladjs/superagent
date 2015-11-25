@@ -155,6 +155,16 @@ describe('request', function(){
       });
     })
 
+    it('should map "jsonApi"', function(done){
+      request
+      .post(uri + '/echo')
+      .set('Content-Type', 'application/vnd.api+json')
+      .send('{"a": 1}')
+      .end(function(err, res){
+        done();
+      });
+    })
+
     it('should map "html"', function(done){
       request
       .post(uri + '/echo')
@@ -183,6 +193,16 @@ describe('request', function(){
       .accept('json')
       .end(function(err, res){
         res.header['accept'].should.equal('application/json');
+        done();
+      });
+    })
+
+    it('should map "jsonApi"', function(done){
+      request
+      .get(uri + '/echo')
+      .accept('application/vnd.api+json')
+      .end(function(err, res){
+        res.header['accept'].should.equal('application/vnd.api+json');
         done();
       });
     })

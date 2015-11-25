@@ -181,4 +181,14 @@ app.get('/arraybuffer', function(req, res) {
   res.send(content);
 });
 
+app.post('/photos', function(req, res){
+  res.send('added ' + req.body.data.type + ' with title: ' + req.body.data.attributes.title);
+});
+
+app.patch('/photos', function(req, res){
+  var photo = req.body.data;
+  photo.attributes.title = 'Hipsterest Hamster';
+  res.send({ data: photo });
+});
+
 app.listen(process.env.ZUUL_PORT);
