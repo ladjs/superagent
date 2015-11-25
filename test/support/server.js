@@ -181,4 +181,13 @@ app.get('/arraybuffer', function(req, res) {
   res.send(content);
 });
 
+app.post('/empty-body', bodyParser.text(), function(req, res) {
+  if (typeof req.body === 'object' && Object.keys(req.body).length === 0) {
+    res.sendStatus(204);
+  }
+  else {
+    res.sendStatus(400);
+  }
+});
+
 app.listen(process.env.ZUUL_PORT);

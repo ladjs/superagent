@@ -408,6 +408,16 @@ it('POST native FormData', function(next){
     });
 });
 
+it('POST with no data', function(next){
+  request
+    .post('/empty-body')
+    .send().end(function(err, res){
+      assert.ifError(err);
+      assert(res.noContent, 'response should be .noContent');
+      next();
+    });
+});
+
 it('GET .type', function(next){
   request
   .get('/pets')
