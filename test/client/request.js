@@ -192,6 +192,15 @@ it('post() data', function(next){
   });
 });
 
+it('post() with no data', function(next){
+  request.post('/echo')
+  .send()
+  .end(function(err, res){
+    assert('' == res.text, 'response text');
+    next();
+  });
+});
+
 it('request .type()', function(next){
   request
   .post('/user/12/pet')
