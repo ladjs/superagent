@@ -1,5 +1,10 @@
 # UNRELEASED
 
+ * encode array values as `key=1&key=2&key=3` etc... (aalpern, Davis Kim)
+ * avoid the error which is omitted from 'socket hang up'
+ * faster JSON parsing, handling of zlib errors (jbellenger)
+ * fix IE11 sends 'undefined' string if data was undefined (Vadim Goncharov)
+ * alias `del()` method as `delete()` (Aaron Krause)
  * revert Request#parse since it was actually Response#parse
 
 # 1.4.0 (2015-09-14)
