@@ -1,4 +1,4 @@
-# UNRELEASED
+# 1.5.0 (2015-11-30)
 
  * encode array values as `key=1&key=2&key=3` etc... (aalpern, Davis Kim)
  * avoid the error which is omitted from 'socket hang up'
