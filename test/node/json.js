@@ -113,6 +113,17 @@ describe('req.send(Object) as "json"', function(){
     });
   });
 
+  it('should work with vendor MIME type', function(done){
+    request
+    .post('http://localhost:3005/echo')
+    .set('Content-Type', 'application/vnd.example+json')
+    .send({ name: 'vendor' })
+    .end(function(err, res){
+      res.text.should.equal('{"name":"vendor"}');
+      done();
+    });
+  });
+
   describe('when called several times', function(){
     it('should merge the objects', function(done){
       request
