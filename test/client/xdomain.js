@@ -26,7 +26,8 @@ describe('xdomain', function(){
       .get('//tunne127.com')
       .end(function(err, res){
         assert(err, 'error missing');
-        assert(err.crossDomain, 'not .crossDomain');
+        assert(err.info, 'missing info on xhr status 0');
+        assert(err.outBound, 'not .outBound');
         next();
       });
     });
