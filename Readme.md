@@ -71,7 +71,8 @@ Existing plugins:
  * [superagent-mocker](https://github.com/shuvalov-anton/superagent-mocker) — simulate REST API
  * [superagent-cache](https://github.com/jpodwys/superagent-cache) - superagent with built-in, flexible caching
  * [superagent-jsonapify](https://github.com/alex94puchades/superagent-jsonapify) - A lightweight [json-api](http://jsonapi.org/format/) client addon for superagent
-
+ * [superagent-serializer](https://github.com/zzarcon/superagent-serializer) - Converts server payload into different cases
+ 
 Please prefix your plugin with `superagent-*` so that it can easily be found by others.
 
 For superagent extensions such as couchdb and oauth visit the [wiki](https://github.com/visionmedia/superagent/wiki).
