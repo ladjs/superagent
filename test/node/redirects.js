@@ -134,6 +134,16 @@ describe('request', function(){
       });
     })
 
+    it('should retain cookies', function(done){
+      request
+      .get('http://localhost:3003/header')
+      .set('Cookie', 'foo=bar;')
+      .end(function(err, res){
+        res.body.should.have.property('cookie', 'foo=bar;');
+        done();
+      });
+    })
+
     it('should preserve timeout across redirects', function(done){
       request
       .get('http://localhost:3003/movies/random')
