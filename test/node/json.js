@@ -29,6 +29,12 @@ app.get('/collection-json', function(req, res){
   res.send({ name: 'chewbacca' });
 });
 
+app.get('/invalid-json', function(req, res) {
+  res.set('content-type', 'application/json');
+  // sample invalid json taken from https://github.com/swagger-api/swagger-ui/issues/1354
+  res.send(")]}', {'header':{'code':200,'text':'OK','version':'1.0'},'data':'some data'}");
+});
+
 app.listen(3005);
 
 describe('req.send(Object) as "json"', function(){
@@ -160,6 +166,17 @@ describe('res.body', function(){
         assert(err === null);
         assert(res.text === undefined)
         assert(Object.keys(res.body).length === 0)
+        done();
+      });
+    });
+  });
+
+  describe('Invalid JSON response', function(){
+    it('should return the raw response', function(done){
+      request
+      .get('http://localhost:3005/invalid-json')
+      .end(function(err, res){
+        assert.deepEqual(err.rawResponse, ")]}', {'header':{'code':200,'text':'OK','version':'1.0'},'data':'some data'}");
         done();
       });
     });
