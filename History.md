@@ -1,3 +1,14 @@
+# 1.6.0 (2015-12-09)
+
+ * avoid misleading CORS error message
+ * added 'progress' event on file/form upload in Node (Olivier Lalonde)
+ * return raw response if the response parsing fails (Rei Colina)
+ * parse content-types ending with `+json` as JSON (Eiryyy)
+ * fix to avoid throwing errors on aborted requests (gjurgens)
+ * retain cookies on redirect when hosts match (Tom Conroy)
+ * added Bower manifest (Johnny Freeman)
+ * upgrade to latest cookiejar (Andy Burke)
+
 # 1.5.0 (2015-11-30)
 
  * encode array values as `key=1&key=2&key=3` etc... (aalpern, Davis Kim)
