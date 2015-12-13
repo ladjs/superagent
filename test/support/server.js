@@ -124,6 +124,10 @@ app.get('/querystring', function(req, res){
   res.send(req.query);
 });
 
+app.get('/echo-querystring', function(req, res) {
+  res.send(req.query);
+});
+
 app.get('/echo-header/:field', function(req, res){
   res.send(req.headers[req.params.field]);
 });
