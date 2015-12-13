@@ -83,8 +83,17 @@ it('request() GET 400 Bad Request', function(next){
   });
 });
 
+it('results in bad request if 400 not specifically allowed', function(next) {
+  request('GET', '/bad-request').end(function(err, res){
+    assert(err);
+    assert(res.badRequest, 'response should be .badRequest');
+    next();
+  });
+
+});
+
 it('request() GET 401 Bad Request', function(next){
-  request('GET', '/unauthorized').end(function(err, res){
+  request('GET', '/unauthorized').acceptedStatus([200]).end(function(err, res){
     assert(err);
     assert(res.unauthorized, 'response should be .unauthorized');
     next();
@@ -95,6 +104,22 @@ it('request() GET 406 Not Acceptable', function(next){
   request('GET', '/not-acceptable').end(function(err, res){
     assert(err);
     assert(res.notAcceptable, 'response should be .notAcceptable');
+    next();
+  });
+});
+
+it('should let 406 through if 4xx allowed', function(next) {
+  request('GET', '/not-acceptable').acceptedStatus(['4xx']).end(function(err, res){
+    assert(!err);
+    assert(res.status == 406);
+    next();
+  });
+});
+
+it('should let 406 through if 406 allowed', function(next) {
+  request('GET', '/not-acceptable').acceptedStatus(function(status) { return status == 406; }).end(function(err, res){
+    assert(!err);
+    assert(res.status == 406);
     next();
   });
 });
