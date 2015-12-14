@@ -1,130 +1,113 @@
+# SuperAgent [![Build Status](https://travis-ci.org/visionmedia/superagent.svg?branch=master)](https://travis-ci.org/visionmedia/superagent)
 
-# SuperAgent
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/shtylman-superagent.svg)](https://saucelabs.com/u/shtylman-superagent)
 
-  SuperAgent is an elegant, small (~1.7kb compressed), progressive client-side HTTP request library.
+SuperAgent is a small progressive __client-side__ HTTP request library, and __Node.js__ module with the same API, sporting many high-level HTTP client features. View the [docs](http://visionmedia.github.io/superagent/).
 
 ![super agent](http://f.cl.ly/items/3d282n3A0h0Z0K2w0q2a/Screenshot.png)
 
-## Links
+## Installation
 
-  - API [docs](http://visionmedia.github.com/superagent/)
+node:
 
-## About
-
-  This library spawned from my frustration with jQuery's weak /inconsistent Ajax support. jQuery's API while having recently added some promise-like support, is largely static, forcing you to build up big objects containing all the header fields and options, not to mention most of the options are awkwardly named "type" instead of "method", etc. Onto examples!
-
-  Before we get started, superagent is namespaced to `superagent`, however I personally like to just call this `request`:
-
-```js
-request = superagent;
+```
+$ npm install superagent
 ```
 
-  The following is what you might typically do for a simple __GET__ with jQuery:
+component:
 
-```js
-$.get('/user/1', function(data, textStatus, xhr){
-  
-});
+```
+$ component install visionmedia/superagent
 ```
 
-great, it's ok, but it's kinda lame having 3 arguments just to access something on the `xhr`. Our equivalent would be:
-
-```js
-request.get('/user/1', function(res){
-  
-});
-```
-
-the response object is an instanceof `request.Response`, encapsulating all of this information instead of throwing a bunch of arguments at you. For example we can check `res.status`, `res.header` for header fields, `res.text`, `res.body` etc.
-
-An example of a JSON POST with jQuery typically might use `$.post()`, however once you need to start defining header fields you have to then re-write it using `$.ajax()`... so that might look like:
-
-```js
-$.ajax({
-  url: '/api/pet',
-  type: 'POST',
-  data: { name: 'Manny', species: 'cat' },
-  headers: { 'X-API-Key': 'foobar' }
-}).success(function(res){
-  
-}).error(function(){
-  
-});
-```
-
- Not only is it ugly, it's opinionated, jQuery likes to treat {4,5}xx responses specifically, for example you cannot (easily at least) receive a parsed JSON response for say "400 Bad Request". This same request would look like this:
+Works with [browserify](https://github.com/substack/node-browserify) and should work with [webpack](https://github.com/visionmedia/superagent/wiki/Superagent-for-Webpack)
 
 ```js
 request
   .post('/api/pet')
-  .data({ name: 'Manny', species: 'cat' })
+  .send({ name: 'Manny', species: 'cat' })
   .set('X-API-Key', 'foobar')
   .set('Accept', 'application/json')
-  .end(function(res){
-    
+  .end(function(err, res){
+    // Calling the end function will send the request
   });
 ```
 
-or we can pass data to `.send()` which combines `.data()` and `.end()`, which is really ugly unless you are passing a variable:
+## Supported browsers
+
+Tested browsers:
+
+- Latest Android
+- Latest Firefox
+- Latest Chrome
+- IE9 through latest
+- Latest iPhone
+- Latest Safari
+
+Even though IE9 is supported, a polyfill `window.btoa` is needed to use basic auth.
+
+# Plugins
+
+Superagent is easily extended via plugins.
 
 ```js
+var nocache = require('superagent-no-cache');
+var request = require('superagent');
+var prefix = require('superagent-prefix')('/static');
+
 request
-  .post('/api/pet')
-  .set('X-API-Key', 'foobar')
-  .send(cat, function(res){
-    
-  });
-```
-
-building on the existing API internally we also provide something similar to `$.post()` for those times in life where your interactions are very basic:
-
-```js
-request.post('/api/pet', cat, function(res){
-  
+.get('/some-url')
+.use(prefix) // Prefixes *only* this request
+.use(nocache) // Prevents caching of *only* this request
+.end(function(err, res){
+    // Do something
 });
 ```
 
-## Running tests
+Existing plugins:
+ * [superagent-no-cache](https://github.com/johntron/superagent-no-cache) - prevents caching by including Cache-Control header
+ * [superagent-prefix](https://github.com/johntron/superagent-prefix) - prefixes absolute URLs (useful in test environment)
+ * [superagent-mock](https://github.com/M6Web/superagent-mock) - simulate HTTP calls by returning data fixtures based on the requested URL
+ * [superagent-mocker](https://github.com/shuvalov-anton/superagent-mocker) — simulate REST API
+ * [superagent-cache](https://github.com/jpodwys/superagent-cache) - superagent with built-in, flexible caching
+ * [superagent-jsonapify](https://github.com/alex94puchades/superagent-jsonapify) - A lightweight [json-api](http://jsonapi.org/format/) client addon for superagent
+ * [superagent-serializer](https://github.com/zzarcon/superagent-serializer) - Converts server payload into different cases
+ 
+Please prefix your plugin with `superagent-*` so that it can easily be found by others.
 
- Install the test server deps (nodejs / express):
+For superagent extensions such as couchdb and oauth visit the [wiki](https://github.com/visionmedia/superagent/wiki).
 
-    $ npm install -d
+## Running node tests
 
- Start the test server:
+Install dependencies:
 
-    $ make test
+```shell
+$ npm install
+```
+Run em!
 
- Visit `localhost:3000/` in the browser.
+```shell
+$ make test
+```
 
-## Browser support
+## Running browser tests
 
-  Actively tested with:
-  
-    - Firefox 5.x
-    - Safari 5.x
-    - Chrome 13.x
+Install dependencies:
 
-## License 
+```shell
+$ npm install
+```
 
-(The MIT License)
+Start the test runner:
 
-Copyright (c) 2011 TJ Holowaychuk &lt;tj@vision-media.ca&gt;
+```shell
+$ make test-browser-local
+```
 
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-'Software'), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
+Visit `http://localhost:4000/__zuul` in your browser.
 
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
+Edit tests and refresh your browser. You do not have to restart the test runner.
 
-THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+## License
+
+MIT
