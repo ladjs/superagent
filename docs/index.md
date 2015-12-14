@@ -208,7 +208,7 @@ In a similar fashion to the `.type()` method it is also possible to set the Acce
 
 ## Query strings
 
-  When issuing a __GET__ request the `res.send(obj)` method will invoke `res.query(obj)`, this is a method which may be used with other HTTP methods in order to build up a query-string. For example populating `?format=json&dest=/login` on a __POST__:
+  `res.query(obj)` is a method which may be used to build up a query-string. For example populating `?format=json&dest=/login` on a __POST__:
 
     request
       .post('/')
@@ -446,4 +446,3 @@ you can `yield` on any superagent method:
     var res = yield request
       .get('http://local')
       .auth('tobi', 'learnboost')
-
