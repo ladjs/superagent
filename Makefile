@@ -35,12 +35,20 @@ superagent.js: lib/node/*.js lib/node/parsers/*.js
 test-server:
 	@node test/server
 
-docs: test-docs
+docs: index.html test-docs
+
+index.html: docs/index.md
+	marked < $< \
+		| cat docs/head.html - docs/tail.html \
+		> $@
+
+docclean:
+	rm -f index.html test.html
 
 test-docs:
 	make test REPORTER=doc \
 		| cat docs/head.html - docs/tail.html \
-		> docs/test.html
+		> test.html
 
 clean:
 	rm -fr superagent.js components
