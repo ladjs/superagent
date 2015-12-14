@@ -172,7 +172,7 @@
  request.post(&#39;/user&#39;)
    .accept(&#39;png&#39;)
 </code></pre><h2 id="query-strings">Query strings</h2>
-<p>  When issuing a <strong>GET</strong> request the <code>res.send(obj)</code> method will invoke <code>res.query(obj)</code>, this is a method which may be used with other HTTP methods in order to build up a query-string. For example populating <code>?format=json&amp;dest=/login</code> on a <strong>POST</strong>:</p>
+<p>  <code>res.query(obj)</code> is a method which may be used to build up a query-string. For example populating <code>?format=json&amp;dest=/login</code> on a <strong>POST</strong>:</p>
 <pre><code>request
   .post(&#39;/&#39;)
   .query({ format: &#39;json&#39; })
