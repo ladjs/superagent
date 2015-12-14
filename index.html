@@ -2,11 +2,11 @@
 <html>
   <head>
     <title>SuperAgent - Ajax with less suck</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="jquery.js"></script>
-    <script src="jquery-ui.min.js"></script>
-    <script src="highlight.js"></script>
-    <script src="jquery.tocify.min.js"></script>
+    <link rel="stylesheet" href="docs/style.css">
+    <script src="docs/jquery.js"></script>
+    <script src="docs/jquery-ui.min.js"></script>
+    <script src="docs/highlight.js"></script>
+    <script src="docs/jquery.tocify.min.js"></script>
     <script>
       $(function(){
         $('#menu').tocify({
@@ -18,303 +18,201 @@
   </head>
   <body>
     <ul id="menu"></ul>
-    <div id="content"><h1>SuperAgent</h1>
-
-<p>Super Agent is light-weight progressive ajax API crafted for flexibility, readability, and a low learning curve after being frustrated with many of the existing request APIs. It also works with Node.js!</p>
-
+    <div id="content">
+<h1 id="superagent">SuperAgent</h1>
+<p> Super Agent is light-weight progressive ajax API crafted for flexibility, readability, and a low learning curve after being frustrated with many of the existing request APIs. It also works with Node.js!</p>
 <pre><code> request
-   .post('/api/pet')
-   .send({ name: 'Manny', species: 'cat' })
-   .set('X-API-Key', 'foobar')
-   .set('Accept', 'application/json')
+   .post(&#39;/api/pet&#39;)
+   .send({ name: &#39;Manny&#39;, species: &#39;cat&#39; })
+   .set(&#39;X-API-Key&#39;, &#39;foobar&#39;)
+   .set(&#39;Accept&#39;, &#39;application/json&#39;)
    .end(function(err, res){
-     if (res.ok) {
-       alert('yay got ' + JSON.stringify(res.body));
+     if (err || !res.ok) {
+       alert(&#39;Oh no! error&#39;);
      } else {
-       alert('Oh no! error ' + res.text);
+       alert(&#39;yay got &#39; + JSON.stringify(res.body));
      }
    });
-</code></pre>
-
-<h2>Test documentation</h2>
-
-<p>The following <a href="docs/test.html">test documentation</a> was generated with <a href="http://visionmedia.github.com/mocha">Mocha's</a> "doc" reporter, and directly reflects the test suite. This provides an additional source of documentation.</p>
-
-<h2>Request basics</h2>
-
-<p>A request can be initiated by invoking the appropriate method on the <code>request</code> object, then calling <code>.end()</code> to send the request. For example a simple GET request:</p>
-
+</code></pre><h2 id="test-documentation">Test documentation</h2>
+<p>  The following <a href="docs/test.html">test documentation</a> was generated with <a href="http://visionmedia.github.com/mocha">Mocha&#39;s</a> &quot;doc&quot; reporter, and directly reflects the test suite. This provides an additional source of documentation.</p>
+<h2 id="request-basics">Request basics</h2>
+<p> A request can be initiated by invoking the appropriate method on the <code>request</code> object, then calling <code>.end()</code> to send the request. For example a simple GET request:</p>
 <pre><code> request
-   .get('/search')
+   .get(&#39;/search&#39;)
    .end(function(err, res){
 
    });
-</code></pre>
-
-<p>A method string may also be passed:</p>
-
-<pre><code>request('GET', '/search').end(callback);
-</code></pre>
-
-<p>The <strong>node</strong> client may also provide absolute urls:</p>
-
+</code></pre><p>  A method string may also be passed:</p>
+<pre><code>request(&#39;GET&#39;, &#39;/search&#39;).end(callback);
+</code></pre><p> The <strong>node</strong> client may also provide absolute urls:</p>
 <pre><code> request
-   .get('http://example.com/search')
+   .get(&#39;http://example.com/search&#39;)
    .end(function(err, res){
 
    });
-</code></pre>
-
-<p><strong>DELETE</strong>, <strong>HEAD</strong>, <strong>POST</strong>, <strong>PUT</strong> and other <strong>HTTP</strong> verbs may also be used, simply change the method name:</p>
-
+</code></pre><p>  <strong>DELETE</strong>, <strong>HEAD</strong>, <strong>POST</strong>, <strong>PUT</strong> and other <strong>HTTP</strong> verbs may also be used, simply change the method name:</p>
 <pre><code>request
-  .head('/favicon.ico')
+  .head(&#39;/favicon.ico&#39;)
   .end(function(err, res){
 
   });
-</code></pre>
-
-<p><strong>DELETE</strong> is a special-case, as it's a reserved word, so the method is named <code>.del()</code>:</p>
-
+</code></pre><p>  <strong>DELETE</strong> is a special-case, as it&#39;s a reserved word, so the method is named <code>.del()</code>:</p>
 <pre><code>request
-  .del('/user/1')
+  .del(&#39;/user/1&#39;)
   .end(function(err, res){
 
   });
-</code></pre>
-
-<p>The HTTP method defaults to <strong>GET</strong>, so if you wish, the following is valid:</p>
-
-<pre><code> request('/search', function(err, res){
+</code></pre><p>  The HTTP method defaults to <strong>GET</strong>, so if you wish, the following is valid:</p>
+<pre><code> request(&#39;/search&#39;, function(err, res){
 
  });
-</code></pre>
-
-<h2>Setting header fields</h2>
-
-<p>Setting header fields is simple, invoke <code>.set()</code> with a field name and value:</p>
-
+</code></pre><h2 id="setting-header-fields">Setting header fields</h2>
+<p>  Setting header fields is simple, invoke <code>.set()</code> with a field name and value:</p>
 <pre><code> request
-   .get('/search')
-   .set('API-Key', 'foobar')
-   .set('Accept', 'application/json')
+   .get(&#39;/search&#39;)
+   .set(&#39;API-Key&#39;, &#39;foobar&#39;)
+   .set(&#39;Accept&#39;, &#39;application/json&#39;)
    .end(callback);
-</code></pre>
-
-<p>You may also pass an object to set several fields in a single call:</p>
-
+</code></pre><p>  You may also pass an object to set several fields in a single call:</p>
 <pre><code> request
-   .get('/search')
-   .set({ 'API-Key': 'foobar', Accept: 'application/json' })
+   .get(&#39;/search&#39;)
+   .set({ &#39;API-Key&#39;: &#39;foobar&#39;, Accept: &#39;application/json&#39; })
    .end(callback);
-</code></pre>
-
-<h2>GET requests</h2>
-
-<p>The <code>.query()</code> method accepts objects, which when used with the <strong>GET</strong> method will form a query-string. The following will produce the path <code>/search?query=Manny&amp;range=1..5&amp;order=desc</code>.</p>
-
+</code></pre><h2 id="get-requests">GET requests</h2>
+<p> The <code>.query()</code> method accepts objects, which when used with the <strong>GET</strong> method will form a query-string. The following will produce the path <code>/search?query=Manny&amp;range=1..5&amp;order=desc</code>.</p>
 <pre><code> request
-   .get('/search')
-   .query({ query: 'Manny' })
-   .query({ range: '1..5' })
-   .query({ order: 'desc' })
+   .get(&#39;/search&#39;)
+   .query({ query: &#39;Manny&#39; })
+   .query({ range: &#39;1..5&#39; })
+   .query({ order: &#39;desc&#39; })
    .end(function(err, res){
 
    });
-</code></pre>
-
-<p>Or as a single object:</p>
-
+</code></pre><p>  Or as a single object:</p>
 <pre><code>request
-  .get('/search')
-  .query({ query: 'Manny', range: '1..5', order: 'desc' })
+  .get(&#39;/search&#39;)
+  .query({ query: &#39;Manny&#39;, range: &#39;1..5&#39;, order: &#39;desc&#39; })
   .end(function(err, res){
 
   });
-</code></pre>
-
-<p>The <code>.query()</code> method accepts strings as well:</p>
-
+</code></pre><p>  The <code>.query()</code> method accepts strings as well:</p>
 <pre><code>  request
-    .get('/querystring')
-    .query('search=Manny&amp;range=1..5')
+    .get(&#39;/querystring&#39;)
+    .query(&#39;search=Manny&amp;range=1..5&#39;)
     .end(function(err, res){
 
     });
-</code></pre>
-
-<p>Or joined:</p>
-
+</code></pre><p>  Or joined:</p>
 <pre><code>  request
-    .get('/querystring')
-    .query('search=Manny')
-    .query('range=1..5')
+    .get(&#39;/querystring&#39;)
+    .query(&#39;search=Manny&#39;)
+    .query(&#39;range=1..5&#39;)
     .end(function(err, res){
 
     });
-</code></pre>
-
-<h2>HEAD requests</h2>
-
+</code></pre><h2 id="head-requests">HEAD requests</h2>
 <p>You can also use the <code>.query()</code> method for HEAD requests. The following will produce the path <code>/users?email=joe@smith.com</code>.</p>
-
 <pre><code>  request
-    .head('/users')
-    .query({ email: 'joe@smith.com' })
+    .head(&#39;/users&#39;)
+    .query({ email: &#39;joe@smith.com&#39; })
     .end(function(err, res){
 
     });
-</code></pre>
-
-<h2>POST / PUT requests</h2>
-
-<p>A typical JSON <strong>POST</strong> request might look a little like the following, where we set the Content-Type header field appropriately, and "write" some data, in this case just a JSON string.</p>
-
-<pre><code>  request.post('/user')
-    .set('Content-Type', 'application/json')
-    .send('{"name":"tj","pet":"tobi"}')
+</code></pre><h2 id="post-put-requests">POST / PUT requests</h2>
+<p>  A typical JSON <strong>POST</strong> request might look a little like the following, where we set the Content-Type header field appropriately, and &quot;write&quot; some data, in this case just a JSON string.</p>
+<pre><code>  request.post(&#39;/user&#39;)
+    .set(&#39;Content-Type&#39;, &#39;application/json&#39;)
+    .send(&#39;{&quot;name&quot;:&quot;tj&quot;,&quot;pet&quot;:&quot;tobi&quot;}&#39;)
     .end(callback)
-</code></pre>
-
-<p>Since JSON is undoubtably the most common, it's the <em>default</em>! The following example is equivalent to the previous.</p>
-
-<pre><code>  request.post('/user')
-    .send({ name: 'tj', pet: 'tobi' })
+</code></pre><p>  Since JSON is undoubtably the most common, it&#39;s the <em>default</em>! The following example is equivalent to the previous.</p>
+<pre><code>  request.post(&#39;/user&#39;)
+    .send({ name: &#39;tj&#39;, pet: &#39;tobi&#39; })
     .end(callback)
-</code></pre>
-
-<p>Or using multiple <code>.send()</code> calls:</p>
-
-<pre><code>  request.post('/user')
-    .send({ name: 'tj' })
-    .send({ pet: 'tobi' })
+</code></pre><p>  Or using multiple <code>.send()</code> calls:</p>
+<pre><code>  request.post(&#39;/user&#39;)
+    .send({ name: &#39;tj&#39; })
+    .send({ pet: &#39;tobi&#39; })
     .end(callback)
-</code></pre>
-
-<p>By default sending strings will set the Content-Type to <code>application/x-www-form-urlencoded</code>,
+</code></pre><p>  By default sending strings will set the Content-Type to <code>application/x-www-form-urlencoded</code>,
   multiple calls will be concatenated with <code>&amp;</code>, here resulting in <code>name=tj&amp;pet=tobi</code>:</p>
-
-<pre><code>  request.post('/user')
-    .send('name=tj')
-    .send('pet=tobi')
+<pre><code>  request.post(&#39;/user&#39;)
+    .send(&#39;name=tj&#39;)
+    .send(&#39;pet=tobi&#39;)
     .end(callback);
-</code></pre>
-
-<p>SuperAgent formats are extensible, however by default "json" and "form" are supported. To send the data as <code>application/x-www-form-urlencoded</code> simply invoke <code>.type()</code> with "form", where the default is "json". This request will POST the body "name=tj&amp;pet=tobi".</p>
-
-<pre><code>  request.post('/user')
-    .type('form')
-    .send({ name: 'tj' })
-    .send({ pet: 'tobi' })
+</code></pre><p>  SuperAgent formats are extensible, however by default &quot;json&quot; and &quot;form&quot; are supported. To send the data as <code>application/x-www-form-urlencoded</code> simply invoke <code>.type()</code> with &quot;form&quot;, where the default is &quot;json&quot;. This request will POST the body &quot;name=tj&amp;pet=tobi&quot;.</p>
+<pre><code>  request.post(&#39;/user&#39;)
+    .type(&#39;form&#39;)
+    .send({ name: &#39;tj&#39; })
+    .send({ pet: &#39;tobi&#39; })
     .end(callback)
-</code></pre>
-
-<p>Note: "form" is aliased as "form-data" and "urlencoded" for backwards compat.</p>
-
-<h2>Setting the Content-Type</h2>
-
-<p>The obvious solution is to use the <code>.set()</code> method:</p>
-
-<pre><code> request.post('/user')
-   .set('Content-Type', 'application/json')
-</code></pre>
-
-<p>As a short-hand the <code>.type()</code> method is also available, accepting
+</code></pre><p> Note: &quot;form&quot; is aliased as &quot;form-data&quot; and &quot;urlencoded&quot; for backwards compat.</p>
+<h2 id="setting-the-content-type">Setting the Content-Type</h2>
+<p>  The obvious solution is to use the <code>.set()</code> method:</p>
+<pre><code> request.post(&#39;/user&#39;)
+   .set(&#39;Content-Type&#39;, &#39;application/json&#39;)
+</code></pre><p>  As a short-hand the <code>.type()</code> method is also available, accepting
   the canonicalized MIME type name complete with type/subtype, or
-  simply the extension name such as "xml", "json", "png", etc:</p>
+  simply the extension name such as &quot;xml&quot;, &quot;json&quot;, &quot;png&quot;, etc:</p>
+<pre><code> request.post(&#39;/user&#39;)
+   .type(&#39;application/json&#39;)
 
-<pre><code> request.post('/user')
-   .type('application/json')
+ request.post(&#39;/user&#39;)
+   .type(&#39;json&#39;)
 
- request.post('/user')
-   .type('json')
+ request.post(&#39;/user&#39;)
+   .type(&#39;png&#39;)
+</code></pre><h2 id="setting-accept">Setting Accept</h2>
+<p>In a similar fashion to the <code>.type()</code> method it is also possible to set the Accept header via the short hand method <code>.accept()</code>. Which references <code>request.types</code> as well allowing you to specify either the full canonicalized MIME type name as type/subtype, or the extension suffix form as &quot;xml&quot;, &quot;json&quot;, &quot;png&quot;, etc for convenience:</p>
+<pre><code> request.get(&#39;/user&#39;)
+   .accept(&#39;application/json&#39;)
 
- request.post('/user')
-   .type('png')
-</code></pre>
+ request.get(&#39;/user&#39;)
+   .accept(&#39;json&#39;)
 
-<h2>Setting Accept</h2>
-
-<p>In a similar fashion to the <code>.type()</code> method it is also possible to set the Accept header via the short hand method <code>.accept()</code>. Which references <code>request.types</code> as well allowing you to specify either the full canonicalized MIME type name as type/subtype, or the extension suffix form as "xml", "json", "png", etc for convenience:</p>
-
-<pre><code> request.get('/user')
-   .accept('application/json')
-
- request.get('/user')
-   .accept('json')
-
- request.post('/user')
-   .accept('png')
-</code></pre>
-
-<h2>Query strings</h2>
-
-<p>When issuing a <strong>GET</strong> request the <code>res.send(obj)</code> method will invoke <code>res.query(obj)</code>, this is a method which may be used with other HTTP methods in order to build up a query-string. For example populating <code>?format=json&amp;dest=/login</code> on a <strong>POST</strong>:</p>
-
+ request.post(&#39;/user&#39;)
+   .accept(&#39;png&#39;)
+</code></pre><h2 id="query-strings">Query strings</h2>
+<p>  When issuing a <strong>GET</strong> request the <code>res.send(obj)</code> method will invoke <code>res.query(obj)</code>, this is a method which may be used with other HTTP methods in order to build up a query-string. For example populating <code>?format=json&amp;dest=/login</code> on a <strong>POST</strong>:</p>
 <pre><code>request
-  .post('/')
-  .query({ format: 'json' })
-  .query({ dest: '/login' })
-  .send({ post: 'data', here: 'wahoo' })
+  .post(&#39;/&#39;)
+  .query({ format: &#39;json&#39; })
+  .query({ dest: &#39;/login&#39; })
+  .send({ post: &#39;data&#39;, here: &#39;wahoo&#39; })
   .end(callback);
-</code></pre>
-
-<h2>Parsing response bodies</h2>
-
-<p>Super Agent will parse known response-body data for you, currently supporting <em>application/x-www-form-urlencoded</em>, <em>application/json</em>, and <em>multipart/form-data</em>.</p>
-
-<h3>JSON / Urlencoded</h3>
-
-<p>The property <code>res.body</code> is the parsed object, for example if a request responded with the JSON string '{"user":{"name":"tobi"}}', <code>res.body.user.name</code> would be "tobi". Likewise the x-www-form-urlencoded value of "user[name]=tobi" would yield the same result.</p>
-
-<h3>Multipart</h3>
-
-<p>The Node client supports <em>multipart/form-data</em> via the <a href="https://github.com/felixge/node-formidable">Formidable</a> module. When parsing multipart responses, the object <code>res.files</code> is also available to you. Suppose for example a request responds with the following multipart body:</p>
-
+</code></pre><h2 id="parsing-response-bodies">Parsing response bodies</h2>
+<p>  Super Agent will parse known response-body data for you, currently supporting <em>application/x-www-form-urlencoded</em>, <em>application/json</em>, and <em>multipart/form-data</em>.</p>
+<h3 id="json-urlencoded">JSON / Urlencoded</h3>
+<p>  The property <code>res.body</code> is the parsed object, for example if a request responded with the JSON string &#39;{&quot;user&quot;:{&quot;name&quot;:&quot;tobi&quot;}}&#39;, <code>res.body.user.name</code> would be &quot;tobi&quot;. Likewise the x-www-form-urlencoded value of &quot;user[name]=tobi&quot; would yield the same result.</p>
+<h3 id="multipart">Multipart</h3>
+<p>  The Node client supports <em>multipart/form-data</em> via the <a href="https://github.com/felixge/node-formidable">Formidable</a> module. When parsing multipart responses, the object <code>res.files</code> is also available to you. Suppose for example a request responds with the following multipart body:</p>
 <pre><code>--whoop
-Content-Disposition: attachment; name="image"; filename="tobi.png"
+Content-Disposition: attachment; name=&quot;image&quot;; filename=&quot;tobi.png&quot;
 Content-Type: image/png
 
 ... data here ...
 --whoop
-Content-Disposition: form-data; name="name"
+Content-Disposition: form-data; name=&quot;name&quot;
 Content-Type: text/plain
 
 Tobi
 --whoop--
-</code></pre>
-
-<p>You would have the values <code>res.body.name</code> provided as "Tobi", and <code>res.files.image</code> as a <code>File</code> object containing the path on disk, filename, and other properties.</p>
-
-<h2>Response properties</h2>
-
-<p>Many helpful flags and properties are set on the <code>Response</code> object, ranging from the response text, parsed response body, header fields, status flags and more.</p>
-
-<h3>Response text</h3>
-
-<p>The <code>res.text</code> property contains the unparsed response body string. This
+</code></pre><p>  You would have the values <code>res.body.name</code> provided as &quot;Tobi&quot;, and <code>res.files.image</code> as a <code>File</code> object containing the path on disk, filename, and other properties.</p>
+<h2 id="response-properties">Response properties</h2>
+<p>  Many helpful flags and properties are set on the <code>Response</code> object, ranging from the response text, parsed response body, header fields, status flags and more.</p>
+<h3 id="response-text">Response text</h3>
+<p>  The <code>res.text</code> property contains the unparsed response body string. This
   property is always present for the client API, and only when the mime type
-  matches "text/<em>", "</em>/json", or "x-www-form-urlencoding" by default for node. The
+  matches &quot;text/<em>&quot;, &quot;</em>/json&quot;, or &quot;x-www-form-urlencoding&quot; by default for node. The
   reasoning is to conserve memory, as buffering text of large bodies such as multipart files or images is extremely inefficient.</p>
-
-<p>To force buffering see the "Buffering responses" section.</p>
-
-<h3>Response body</h3>
-
-<p>Much like SuperAgent can auto-serialize request data, it can also automatically parse it. When a parser is defined for the Content-Type, it is parsed, which by default includes "application/json" and "application/x-www-form-urlencoded". The parsed object is then available via <code>res.body</code>.</p>
-
-<h3>Response header fields</h3>
-
-<p>The <code>res.header</code> contains an object of parsed header fields, lowercasing field names much like node does. For example <code>res.header['content-length']</code>.</p>
-
-<h3>Response Content-Type</h3>
-
-<p>The Content-Type response header is special-cased, providing <code>res.type</code>, which is void of the charset (if any). For example the Content-Type of "text/html; charset=utf8" will provide "text/html" as <code>res.type</code>, and the <code>res.charset</code> property would then contain "utf8".</p>
-
-<h3>Response status</h3>
-
-<p>The response status flags help determine if the request was a success, among other useful information, making SuperAgent ideal for interacting with RESTful web services. These flags are currently defined as:</p>
-
+<p>  To force buffering see the &quot;Buffering responses&quot; section.</p>
+<h3 id="response-body">Response body</h3>
+<p>  Much like SuperAgent can auto-serialize request data, it can also automatically parse it. When a parser is defined for the Content-Type, it is parsed, which by default includes &quot;application/json&quot; and &quot;application/x-www-form-urlencoded&quot;. The parsed object is then available via <code>res.body</code>.</p>
+<h3 id="response-header-fields">Response header fields</h3>
+<p>  The <code>res.header</code> contains an object of parsed header fields, lowercasing field names much like node does. For example <code>res.header[&#39;content-length&#39;]</code>.</p>
+<h3 id="response-content-type">Response Content-Type</h3>
+<p>  The Content-Type response header is special-cased, providing <code>res.type</code>, which is void of the charset (if any). For example the Content-Type of &quot;text/html; charset=utf8&quot; will provide &quot;text/html&quot; as <code>res.type</code>, and the <code>res.charset</code> property would then contain &quot;utf8&quot;.</p>
+<h3 id="response-status">Response status</h3>
+<p>  The response status flags help determine if the request was a success, among other useful information, making SuperAgent ideal for interacting with RESTful web services. These flags are currently defined as:</p>
 <pre><code> var type = status / 100 | 0;
 
  // status / class
@@ -336,159 +234,116 @@ Tobi
  res.notAcceptable = 406 == status;
  res.notFound = 404 == status;
  res.forbidden = 403 == status;
-</code></pre>
-
-<h2>Aborting requests</h2>
-
-<p>To abort requests simply invoke the <code>req.abort()</code> method.</p>
-
-<h2>Request timeouts</h2>
-
-<p>A timeout can be applied by invoking <code>req.timeout(ms)</code>, after which an error
+</code></pre><h2 id="aborting-requests">Aborting requests</h2>
+<p>  To abort requests simply invoke the <code>req.abort()</code> method.</p>
+<h2 id="request-timeouts">Request timeouts</h2>
+<p>  A timeout can be applied by invoking <code>req.timeout(ms)</code>, after which an error
   will be triggered. To differentiate between other errors the <code>err.timeout</code> property
   is set to the <code>ms</code> value. <strong>NOTE</strong> that this is a timeout applied to the request
   and all subsequent redirects, not per request.</p>
-
-<h2>Basic authentication</h2>
-
-<p>Basic auth is currently provided by the <em>node</em> client in two forms, first via the URL as "user:pass":</p>
-
-<pre><code>request.get('http://tobi:learnboost@local').end(callback);
-</code></pre>
-
-<p>As well as via the <code>.auth()</code> method:</p>
-
+<h2 id="basic-authentication">Basic authentication</h2>
+<p>  Basic auth is currently provided by the <em>node</em> client in two forms, first via the URL as &quot;user:pass&quot;:</p>
+<pre><code>request.get(&#39;http://tobi:learnboost@local&#39;).end(callback);
+</code></pre><p>  As well as via the <code>.auth()</code> method:</p>
 <pre><code>request
-  .get('http://local')
-  .auth('tobi', 'learnboost')
+  .get(&#39;http://local&#39;)
+  .auth(&#39;tobi&#39;, &#39;learnboost&#39;)
   .end(callback);
-</code></pre>
-
-<h2>Following redirects</h2>
-
-<p>By default up to 5 redirects will be followed, however you may specify this with the <code>res.redirects(n)</code> method:</p>
-
+</code></pre><h2 id="following-redirects">Following redirects</h2>
+<p>  By default up to 5 redirects will be followed, however you may specify this with the <code>res.redirects(n)</code> method:</p>
 <pre><code>request
-  .get('/some.png')
+  .get(&#39;/some.png&#39;)
   .redirects(2)
   .end(callback);
-</code></pre>
+</code></pre><h2 id="piping-data">Piping data</h2>
+<p>  The Node client allows you to pipe data to and from the request. For example piping a file&#39;s contents as the request:</p>
+<pre><code>var request = require(&#39;superagent&#39;)
+  , fs = require(&#39;fs&#39;);
 
-<h2>Piping data</h2>
-
-<p>The Node client allows you to pipe data to and from the request. For example piping a file's contents as the request:</p>
-
-<pre><code>var request = require('superagent')
-  , fs = require('fs');
-
-var stream = fs.createReadStream('path/to/my.json');
-var req = request.post('/somewhere');
-req.type('json');
+var stream = fs.createReadStream(&#39;path/to/my.json&#39;);
+var req = request.post(&#39;/somewhere&#39;);
+req.type(&#39;json&#39;);
 stream.pipe(req);
-</code></pre>
+</code></pre><p>  Or piping the response to a file:</p>
+<pre><code>var request = require(&#39;superagent&#39;)
+  , fs = require(&#39;fs&#39;);
 
-<p>Or piping the response to a file:</p>
-
-<pre><code>var request = require('superagent')
-  , fs = require('fs');
-
-var stream = fs.createWriteStream('path/to/my.json');
-var req = request.get('/some.json');
+var stream = fs.createWriteStream(&#39;path/to/my.json&#39;);
+var req = request.get(&#39;/some.json&#39;);
 req.pipe(stream);
-</code></pre>
-
-<h2>Multipart requests</h2>
-
-<p>Super Agent is also great for <em>building</em> multipart requests for which it provides methods <code>.attach()</code> and <code>.field()</code>.</p>
-
-<h3>Attaching files</h3>
-
-<p>As mentioned a higher-level API is also provided, in the form of <code>.attach(name, [path], [filename])</code> and <code>.field(name, value)</code>. Attaching several files is simple, you can also provide a custom filename for the attachment, otherwise the basename of the attached file is used.</p>
-
+</code></pre><h2 id="multipart-requests">Multipart requests</h2>
+<p>  Super Agent is also great for <em>building</em> multipart requests for which it provides methods <code>.attach()</code> and <code>.field()</code>.</p>
+<h3 id="attaching-files">Attaching files</h3>
+<p>  As mentioned a higher-level API is also provided, in the form of <code>.attach(name, [path], [filename])</code> and <code>.field(name, value)</code>. Attaching several files is simple, you can also provide a custom filename for the attachment, otherwise the basename of the attached file is used.</p>
 <pre><code>request
-  .post('/upload')
-  .attach('avatar', 'path/to/tobi.png', 'user.png')
-  .attach('image', 'path/to/loki.png')
-  .attach('file', 'path/to/jane.png')
+  .post(&#39;/upload&#39;)
+  .attach(&#39;avatar&#39;, &#39;path/to/tobi.png&#39;, &#39;user.png&#39;)
+  .attach(&#39;image&#39;, &#39;path/to/loki.png&#39;)
+  .attach(&#39;file&#39;, &#39;path/to/jane.png&#39;)
   .end(callback);
-</code></pre>
-
-<h3>Field values</h3>
-
-<p>Much like form fields in HTML, you can set field values with the <code>.field(name, value)</code> method. Suppose you want to upload a few images with your name and email, your request might look something like this:</p>
-
+</code></pre><h3 id="field-values">Field values</h3>
+<p>  Much like form fields in HTML, you can set field values with the <code>.field(name, value)</code> method. Suppose you want to upload a few images with your name and email, your request might look something like this:</p>
 <pre><code> request
-   .post('/upload')
-   .field('user[name]', 'Tobi')
-   .field('user[email]', 'tobi@learnboost.com')
-   .attach('image', 'path/to/tobi.png')
+   .post(&#39;/upload&#39;)
+   .field(&#39;user[name]&#39;, &#39;Tobi&#39;)
+   .field(&#39;user[email]&#39;, &#39;tobi@learnboost.com&#39;)
+   .attach(&#39;image&#39;, &#39;path/to/tobi.png&#39;)
    .end(callback);
-</code></pre>
-
-<h2>Compression</h2>
-
-<p>The node client supports compressed responses, best of all, you don't have to do anything! It just works.</p>
-
-<h2>Buffering responses</h2>
-
-<p>To force buffering of response bodies as <code>res.text</code> you may invoke <code>req.buffer()</code>. To undo the default of buffering for text responses such
-  as "text/plain", "text/html" etc you may invoke <code>req.buffer(false)</code>.</p>
-
-<p>When buffered the <code>res.buffered</code> flag is provided, you may use this to
+</code></pre><h2 id="compression">Compression</h2>
+<p>  The node client supports compressed responses, best of all, you don&#39;t have to do anything! It just works.</p>
+<h2 id="buffering-responses">Buffering responses</h2>
+<p>  To force buffering of response bodies as <code>res.text</code> you may invoke <code>req.buffer()</code>. To undo the default of buffering for text responses such
+  as &quot;text/plain&quot;, &quot;text/html&quot; etc you may invoke <code>req.buffer(false)</code>.</p>
+<p>  When buffered the <code>res.buffered</code> flag is provided, you may use this to
   handle both buffered and unbuffered responses in the same callback.</p>
-
-<h2>CORS</h2>
-
-<p>The <code>.withCredentials()</code> method enables the ability to send cookies
-  from the origin, however only when "Access-Control-Allow-Origin" is
-  <em>not</em> a wildcard ("*"), and "Access-Control-Allow-Credentials" is "true".</p>
-
+<h2 id="cors">CORS</h2>
+<p>  The <code>.withCredentials()</code> method enables the ability to send cookies
+  from the origin, however only when &quot;Access-Control-Allow-Origin&quot; is
+  <em>not</em> a wildcard (&quot;*&quot;), and &quot;Access-Control-Allow-Credentials&quot; is &quot;true&quot;.</p>
 <pre><code>request
-  .get('http://localhost:4001/')
+  .get(&#39;http://localhost:4001/&#39;)
   .withCredentials()
   .end(function(err, res){
     assert(200 == res.status);
-    assert('tobi' == res.text);
+    assert(&#39;tobi&#39; == res.text);
     next();
   })
-</code></pre>
-
-<h2>Error handling</h2>
-
+</code></pre><h2 id="error-handling">Error handling</h2>
 <p>Your callback function will always be passed two arguments: error and response. If no error occurred, the first argument will be null:</p>
-
 <pre><code>request
- .post('/upload')
- .attach('image', 'path/to/tobi.png')
+ .post(&#39;/upload&#39;)
+ .attach(&#39;image&#39;, &#39;path/to/tobi.png&#39;)
  .end(function(err, res){
 
  });
 
- An "error" event is also emitted, with you can listen for:
+ An &quot;error&quot; event is also emitted, with you can listen for:
 
 request
-  .post('/upload')
-  .attach('image', 'path/to/tobi.png')
-  .on('error', handle)
+  .post(&#39;/upload&#39;)
+  .attach(&#39;image&#39;, &#39;path/to/tobi.png&#39;)
+  .on(&#39;error&#39;, handle)
   .end(function(err, res){
 
   });
-</code></pre>
-
-<p>Note that a 4xx or 5xx response with super agent <strong>are</strong> considered an error by default. For example if you get a 500 or 403 response, this status information will be available via <code>err.status</code>. Errors from such responses also contain an <code>err.response</code> field with all of the properties mentioned in "Response properties". The library behaves in this way to handle the common case of wanting success responses and treating HTTP error status codes as errors while still allowing for custom logic around specific error conditions.</p>
-
-<p>Network failures, timeouts, and other errors that produce no response will contain no <code>err.status</code> or <code>err.response</code> fields.</p>
-
-<p>If you wish to handle 404 or other HTTP error responses, you can query the <code>err.status</code> property.
+</code></pre><p>  Note that a 4xx or 5xx response with super agent <strong>are</strong> considered an error by default. For example if you get a 500 or 403 response, this status information will be available via <code>err.status</code>. Errors from such responses also contain an <code>err.response</code> field with all of the properties mentioned in &quot;Response properties&quot;. The library behaves in this way to handle the common case of wanting success responses and treating HTTP error status codes as errors while still allowing for custom logic around specific error conditions.</p>
+<p>  Network failures, timeouts, and other errors that produce no response will contain no <code>err.status</code> or <code>err.response</code> fields.</p>
+<p>  If you wish to handle 404 or other HTTP error responses, you can query the <code>err.status</code> property.
   When an HTTP error occurs (4xx or 5xx response) the <code>res.error</code> property is an <code>Error</code> object,
   this allows you to perform checks such as:</p>
-
 <pre><code>if (err &amp;&amp; err.status === 404) {
-  alert('oh no ' + res.body.message);
+  alert(&#39;oh no &#39; + res.body.message);
 }
 else if (err) {
   // all other error types we handle generically
 }
+</code></pre><h2 id="generator-support">Generator support</h2>
+<p>Superagent now supports easier control flow using generators. By using a generator control flow
+like <a href="https://github.com/tj/co">co</a> or a web framework like <a href="https://github.com/koajs/koa">koa</a>,
+you can <code>yield</code> on any superagent method:</p>
+<pre><code>var res = yield request
+  .get(&#39;http://local&#39;)
+  .auth(&#39;tobi&#39;, &#39;learnboost&#39;)
 </code></pre>
     </div>
     <a href="http://github.com/visionmedia/superagent"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub"></a>
