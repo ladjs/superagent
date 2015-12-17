@@ -1,20 +1,9 @@
-var should = require('should');
+var setup = require('./support/setup');
+var NODE = setup.NODE;
+var uri = setup.uri;
+
 var assert = require('assert');
-var url = require('url');
-
 var request = require('../');
-
-var NODE = true;
-var uri = 'http://localhost:5000';
-if (typeof window !== 'undefined') {
-  NODE = false;
-  uri = '//' + window.location.host;
-}
-else {
-  process.env.ZUUL_PORT = 5000;
-  require('./support/server');
-  uri = 'http://localhost:5000';
-}
 
 describe('request', function(){
   this.timeout(10000);
