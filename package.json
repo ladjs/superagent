@@ -35,17 +35,18 @@
     "readable-stream": "1.0.27-1"
   },
   "devDependencies": {
+    "Base64": "~0.3.0",
     "basic-auth-connect": "~1.0.0",
     "better-assert": "~1.0.1",
     "body-parser": "~1.9.2",
+    "browserify": "~6.3.2",
     "cookie-parser": "~1.3.3",
     "express": "~4.9.8",
     "express-session": "~1.9.1",
+    "marked": "0.3.5",
     "mocha": "~2.0.1",
     "should": "~3.1.3",
-    "zuul": "~1.19.0",
-    "browserify": "~6.3.2",
-    "Base64": "~0.3.0"
+    "zuul": "~1.19.0"
   },
   "browser": {
     "./lib/node/index.js": "./lib/client.js",
