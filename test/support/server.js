@@ -40,6 +40,11 @@ app.get('/json', function(req, res){
   res.status(200).json({ name: 'manny' });
 });
 
+app.get('/json-hal', function(req, res){
+  res.set('content-type', 'application/hal+json');
+  res.send({ name: 'hal 5000' });
+});
+
 app.get('/ok', function(req, res){
   res.send('ok');
 });
@@ -194,6 +199,18 @@ app.post('/empty-body', bodyParser.text(), function(req, res) {
   else {
     res.sendStatus(400);
   }
+});
+
+
+app.get('/collection-json', function(req, res){
+  res.set('content-type', 'application/vnd.collection+json');
+  res.send({ name: 'chewbacca' });
+});
+
+app.get('/invalid-json', function(req, res) {
+  res.set('content-type', 'application/json');
+  // sample invalid json taken from https://github.com/swagger-api/swagger-ui/issues/1354
+  res.send(")]}', {'header':{'code':200,'text':'OK','version':'1.0'},'data':'some data'}");
 });
 
 app.listen(process.env.ZUUL_PORT);

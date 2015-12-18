@@ -9,12 +9,12 @@ function read(file) {
   return fs.readFileSync(file, 'utf8');
 }
 
-// app.post('/echo', function(req, res){
-//   res.writeHead(200, req.headers);
-//   req.pipe(res);
-// });
+app.post('/echo', function(req, res){
+  res.writeHead(200, req.headers);
+  req.pipe(res);
+});
 
-// app.listen(3005);
+app.listen(3005);
 
 // function boundary(ct) {
 //   return ct.match(/boundary="(.*)"/)[1];
