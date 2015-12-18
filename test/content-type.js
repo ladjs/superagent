@@ -1,18 +1,14 @@
-var request = require('../../')
-  , express = require('express')
-  , assert = require('better-assert')
-  , app = express();
+var setup = require('./support/setup');
+var uri = setup.uri;
 
-app.all('/echo', function(req, res){
-  res.writeHead(200, req.headers);
-  req.pipe(res);
-});
+var assert = require('assert');
+var request = require('../');
 
 describe('req.set("Content-Type", contentType)', function(){
 
   it('should work with just the contentType component', function(done){
     request
-    .post('http://localhost:3005/echo')
+    .post(uri + '/echo')
     .set('Content-Type', 'application/json')
     .send({ name: 'tobi' })
     .end(function(err, res){
@@ -23,7 +19,7 @@ describe('req.set("Content-Type", contentType)', function(){
 
   it('should work with the charset component', function(done){
     request
-    .post('http://localhost:3005/echo')
+    .post(uri + '/echo')
     .set('Content-Type', 'application/json; charset=utf-8')
     .send({ name: 'tobi' })
     .end(function(err, res){
