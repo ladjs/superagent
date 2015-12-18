@@ -8,16 +8,6 @@ var request = require('../../');
 
 describe('[node] request', function(){
 
-  describe('res.statusCode', function(){
-    it('should set statusCode', function(done){
-      request
-      .get('http://localhost:5000/login', function(err, res){
-        assert(res.statusCode === 200);
-        done();
-      })
-    })
-  })
-
   describe('with an object', function(){
     it('should format the url', function(done){
       request
@@ -50,33 +40,6 @@ describe('[node] request', function(){
         assert('POST' == obj.method);
         assert(':5000/echo' == obj.url);
         assert('baz' == obj.data.foo);
-        done();
-      });
-    })
-  })
-
-  describe('should allow the send shorthand', function() {
-    it('with callback in the method call', function(done) {
-      request
-      .get('http://localhost:5000/login', function(err, res) {
-          assert(res.status == 200);
-          done();
-      });
-    })
-
-    it('with data in the method call', function(done) {
-      request
-      .post('http://localhost:5000/echo', { foo: 'bar' })
-      .end(function(err, res) {
-        assert('{"foo":"bar"}' == res.text);
-        done();
-      });
-    })
-
-    it('with callback and data in the method call', function(done) {
-      request
-      .post('http://localhost:5000/echo', { foo: 'bar' }, function(err, res) {
-        assert('{"foo":"bar"}' == res.text);
         done();
       });
     })
