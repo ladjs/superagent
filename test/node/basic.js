@@ -165,6 +165,18 @@ describe('[node] request', function(){
     })
   })
 
+  describe('.withCredentials()', function(){
+    it('should not throw an error when using the client-side "withCredentials" method', function(done){
+      request
+      .get('http://localhost:5000/custom')
+      .withCredentials()
+      .end(function(err, res){
+        assert(null == err);
+        done();
+      });
+    })
+  })
+
   describe('.agent()', function(){
     it('should return the defaut agent', function(done){
       var req = request.post('http://localhost:5000/echo');
