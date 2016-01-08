@@ -148,14 +148,16 @@ describe('Request', function(){
     it('should fire progress event', function(done){
       var loaded = 0;
       var total = 0;
-      var direction = '';
+      var uploadEventWasFired = false;
       request
       .post(':3005/echo')
       .attach('document', 'test/node/fixtures/user.html')
       .on('progress', function (event) {
         total = event.total;
         loaded = event.loaded;
-        direction = event.direction;
+        if (event.direction === 'upload') {
+          uploadEventWasFired = true;
+        }
       })
       .end(function(err, res){
         if (err) return done(err);
@@ -165,7 +167,7 @@ describe('Request', function(){
         read(html.path).should.equal('<h1>name</h1>');
         total.should.equal(221);
         loaded.should.equal(221);
-        direction.should.equal('upload');
+        uploadEventWasFired.should.equal(true);
         done();
       })
     })
