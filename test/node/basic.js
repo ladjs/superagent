@@ -8,6 +8,17 @@ var request = require('../../');
 
 describe('[node] request', function(){
 
+  describe('with an url', function(){
+    it('should preserve the encoding of the url', function(done){
+      request
+      .get('http://localhost:5000/url?a=(b%29')
+      .end(function(err, res){
+        assert('/url?a=(b%29' == res.text);
+        done();
+      })
+    })
+  })
+
   describe('with an object', function(){
     it('should format the url', function(done){
       request
@@ -161,6 +172,18 @@ describe('[node] request', function(){
           buf.should.equal('hello this is dog');
           done();
         });
+      });
+    })
+  })
+
+  describe('.withCredentials()', function(){
+    it('should not throw an error when using the client-side "withCredentials" method', function(done){
+      request
+      .get('http://localhost:5000/custom')
+      .withCredentials()
+      .end(function(err, res){
+        assert(null == err);
+        done();
       });
     })
   })
