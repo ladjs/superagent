@@ -35,6 +35,17 @@ describe('https', function(){
         done();
       });
     });
+
+    it('should give a good response without strict SSL', function(done){
+      request
+      .get('https://localhost:8443/')
+      .disableStrictSSL()
+      .end(function(err, res){
+        assert(res.ok);
+        assert('Safe and secure!' === res.text);
+        done();
+      });
+    });
   });
 
   describe('.agent', function () {
