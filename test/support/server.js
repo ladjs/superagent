@@ -9,6 +9,10 @@ app.use(function(req, res, next) {
   next();
 });
 
+app.all('/url', function(req, res){
+  res.send(req.url);
+});
+
 app.all('/echo', function(req, res){
   res.writeHead(200, req.headers);
   req.pipe(res);
