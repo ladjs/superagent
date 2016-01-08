@@ -14,7 +14,7 @@ app.post('/echo', function(req, res){
   req.pipe(res);
 });
 
-app.listen(3005);
+var server = app.listen();
 
 // function boundary(ct) {
 //   return ct.match(/boundary="(.*)"/)[1];
@@ -23,7 +23,7 @@ app.listen(3005);
 describe('Request', function(){
 //   describe('#part()', function(){
 //     it('should return a new Part', function(){
-//       var req = request.post('http://localhost:3005');
+//       var req = request.post('http://localhost:' + server.address().port + '');
 //       req.part().constructor.name.should.equal('Part');
 //       req.part().constructor.name.should.equal('Part');
 //       req.part().should.not.equal(req.part());
@@ -31,7 +31,7 @@ describe('Request', function(){
 //   })
 
 //   it('should default res.files to {}', function(done){
-//     var req = request.post('http://localhost:3005/echo');
+//     var req = request.post('http://localhost:' + server.address().port + '/echo');
 
 //     req.end(function(err, res){
 //       if (err) return done(err);
@@ -43,7 +43,7 @@ describe('Request', function(){
 
 //   describe('#field(name, value)', function(){
 //     it('should set a multipart field value', function(done){
-//       var req = request.post('http://localhost:3005/echo');
+//       var req = request.post('http://localhost:' + server.address().port + '/echo');
 
 //       req.field('user[name]', 'tobi');
 //       req.field('user[age]', '2');
@@ -59,7 +59,7 @@ describe('Request', function(){
 //     })
 
 //     it('should work with file attachments', function(done){
-//       var req = request.post('http://localhost:3005/echo');
+//       var req = request.post('http://localhost:' + server.address().port + '/echo');
 
 //       req.field('name', 'Tobi');
 //       req.attach('document', 'test/node/fixtures/user.html');
@@ -81,7 +81,7 @@ describe('Request', function(){
 
 //   describe('#attach(name, path)', function(){
 //     it('should attach a file', function(done){
-//       var req = request.post('http://localhost:3005/echo');
+//       var req = request.post('http://localhost:' + server.address().port + '/echo');
 
 //       req.attach('one', 'test/node/fixtures/user.html');
 //       req.attach('two', 'test/node/fixtures/user.json');
@@ -111,7 +111,7 @@ describe('Request', function(){
 
 //     describe('when a file does not exist', function(){
 //       it('should emit an error', function(done){
-//         var req = request.post('http://localhost:3005/echo');
+//         var req = request.post('http://localhost:' + server.address().port + '/echo');
 
 //         req.attach('name', 'foo');
 //         req.attach('name2', 'bar');
@@ -134,7 +134,7 @@ describe('Request', function(){
   describe('#attach(name, path, filename)', function(){
     it('should use the custom filename', function(done){
       request
-      .post(':3005/echo')
+      .post('http://localhost:' + server.address().port + '/echo')
       .attach('document', 'test/node/fixtures/user.html', 'doc.html')
       .end(function(err, res){
         if (err) return done(err);
@@ -149,7 +149,7 @@ describe('Request', function(){
       var loaded = 0;
       var total = 0;
       request
-      .post(':3005/echo')
+      .post('http://localhost:' + server.address().port + '/echo')
       .attach('document', 'test/node/fixtures/user.html')
       .on('progress', function (event) {
         total = event.total;
@@ -172,7 +172,7 @@ describe('Request', function(){
 // describe('Part', function(){
 //   describe('with a single part', function(){
 //     it('should construct a multipart request', function(done){
-//       var req = request.post('http://localhost:3005/echo');
+//       var req = request.post('http://localhost:' + server.address().port + '/echo');
 
 //       req
 //         .part()
@@ -195,7 +195,7 @@ describe('Request', function(){
 //   describe('with several parts', function(){
 //     it('should construct a multipart request', function(done){
 
-//       var req = request.post('http://localhost:3005/echo');
+//       var req = request.post('http://localhost:' + server.address().port + '/echo');
 
 //       req.part()
 //         .set('Content-Type', 'image/png')
@@ -227,7 +227,7 @@ describe('Request', function(){
 //   describe('with a Content-Type specified', function(){
 //     it('should append the boundary', function(done){
 //       var req = request
-//         .post('http://localhost:3005/echo')
+//         .post('http://localhost:' + server.address().port + '/echo')
 //         .type('multipart/form-data');
 
 //       req
@@ -248,7 +248,7 @@ describe('Request', function(){
 //   describe('#name(str)', function(){
 //     it('should set Content-Disposition to form-data and name param', function(done){
 //       var req = request
-//         .post('http://localhost:3005/echo');
+//         .post('http://localhost:' + server.address().port + '/echo');
 
 //       req
 //         .part()
@@ -266,7 +266,7 @@ describe('Request', function(){
 //   describe('#attachment(name, path)', function(){
 //     it('should set Content-Disposition and Content-Type', function(done){
 //       var req = request
-//         .post('http://localhost:3005/echo')
+//         .post('http://localhost:' + server.address().port + '/echo')
 //         .type('multipart/form-data');
 
 //       req
