@@ -46,6 +46,24 @@ it('POST native FormData', function(next){
     });
 });
 
+it('defaults attached files to original file names', function(next){
+  if (!window.FormData) {
+    // Skip test if FormData is not supported by browser
+    return next();
+  }
+
+  var file = new File([""], "image.jpg", { type: "image/jpeg" });
+
+  request
+    .post('/echo')
+    .attach('image', file)
+    .end(function(err, res){
+      var regx = new RegExp('filename="' + file.name + '"');
+      assert(res.text.match(regx) !== null);
+      next();
+    });
+});
+
 it('GET invalid json', function(next) {
   request
   .get('/invalid-json')
