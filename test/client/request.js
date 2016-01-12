@@ -143,14 +143,14 @@ it('Request#parse overrides body parser no matter Content-Type', function(done){
 
 it('response with dataFilter applied', function(next){
   request
-      .get(uri + '/foo')
+      .get('/querystring', { search: 'Manny' })
       .dataFilter(function() {
         return JSON.stringify({
-          foo: 'not bar'
+          search: 'Billy'
         });
       })
       .on('response', function(res){
-        assert('not bar' == res.body.foo);
+        assert.deepEqual(res.body, { search: 'Billy' });
         next();
       })
       .end();
