@@ -141,6 +141,21 @@ it('Request#parse overrides body parser no matter Content-Type', function(done){
   });
 });
 
+it('response with dataFilter applied', function(next){
+  request
+      .get(uri + '/foo')
+      .dataFilter(function() {
+        return JSON.stringify({
+          foo: 'not bar'
+        });
+      })
+      .on('response', function(res){
+        assert('not bar' == res.body.foo);
+        next();
+      })
+      .end();
+});
+
 // Don't run on browsers without xhr2 support
 if ('FormData' in window) {
   it('xhr2 download file', function(next) {

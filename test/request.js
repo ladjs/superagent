@@ -618,19 +618,4 @@ it('response should set statusCode', function(next){
     })
 });
 
-it('response with dataFilter applied', function(next){
-  request
-      .get(uri + '/foo')
-      .dataFilter(function() {
-        return JSON.stringify({
-          foo: 'not bar'
-        });
-      })
-      .on('response', function(res){
-        assert('not bar' == res.body.foo);
-        next();
-      })
-      .end();
-});
-
 });
