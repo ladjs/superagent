@@ -265,6 +265,28 @@ describe('request', function(){
       });
     })
   })
+  
+  describe('on POST using multipart/form-data', function(){
+    it('should redirect as GET', function(done){
+      var redirects = [];
+
+      request
+      .post('http://localhost:3003/movie')
+      .type('form')
+      .field('name', 'Tobi')
+      .redirects(2)
+      .on('redirect', function(res){
+        redirects.push(res.headers.location);
+      })
+      .end(function(err, res){
+        var arr = [];
+        arr.push('/movies/all/0');
+        redirects.should.eql(arr);
+        res.text.should.equal('first movie page');
+        done();
+      });
+    })
+  })
 
   describe('on 303', function(){
     it('should redirect with same method', function(done){
