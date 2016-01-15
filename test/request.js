@@ -542,6 +542,17 @@ it('GET querystring with strings and objects', function(next){
   });
 });
 
+it('sort querystring', function(next){
+  request
+  .get(uri + '/url')
+  .query('search=Manny')
+  .query('order=desc')
+  .end(function(err, res){
+    assert.equal(res.text, '/url?order=desc&search=Manny')
+    next();
+  });
+});
+
 it('request(method, url)', function(next){
   request('GET', uri + '/foo').end(function(err, res){
     assert('bar' == res.body.foo);
