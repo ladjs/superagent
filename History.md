@@ -1,4 +1,17 @@
-# 1.6.0 (2015-12-09)
+# 1.7.0 (2016-01-18)
+
+ * When attaching files, read default filename from the `File` object (JD Isaacks)
+ * Add `direction` property to `progress` events (Joseph Dykstra)
+ * Update component-emitter & formidable (Kornel Lesiński)
+ * Don't re-encode query string needlessly (Ruben Verborgh)
+ * ensure querystring is appended when doing `stream.pipe(request)` (Keith Grennan)
+ * change set header function, not call `this.request()` until call `this.end()` (vicanso)
+ * Add no-op `withCredentials` to Node API (markdalgleish)
+ * fix `delete` breaking on ie8 (kenjiokabe)
+ * Don't let request error override responses (Clay Reimann)
+ * Increased number of tests shared between node and client (Kornel Lesiński)
+
+# 1.6.0/1.6.1 (2015-12-09)
 
  * avoid misleading CORS error message
  * added 'progress' event on file/form upload in Node (Olivier Lalonde)
