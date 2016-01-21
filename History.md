@@ -1,3 +1,8 @@
+# 1.7.1 (2016-01-21)
+
+ * Fixed a conflict with express when using npm 3.x (Glenn)
+ * Fixed redirects after a multipart/form-data POST request (cyclist2)
+
 # 1.7.0 (2016-01-18)
 
  * When attaching files, read default filename from the `File` object (JD Isaacks)
