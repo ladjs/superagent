@@ -104,6 +104,21 @@ describe('[node] request', function(){
     })
   })
 
+  describe('case-insensitive', function(){
+    it('should set/get header fields case-insensitively', function(){
+      var r = request.post('http://localhost:5000/echo');
+      r.set('MiXeD', 'helloes');
+      assert(r.get('mixed') === 'helloes');
+    });
+
+    it('should unset header fields case-insensitively', function () {
+      var r = request.post('http://localhost:5000/echo');
+      r.set('MiXeD', 'helloes');
+      r.unset('MIXED');
+      assert(r.get('mixed') === undefined);
+    });
+  });
+
   describe('req.write(str)', function(){
     it('should write the given data', function(done){
       var req = request.post('http://localhost:5000/echo');
