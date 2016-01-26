@@ -1,3 +1,8 @@
+# 1.7.2 (2016-01-26)
+
+ * Fix case-sensitivity of header fields introduced by a4ddd6a. (Edward J. Jinotti)
+ * bump extend dependency, as former version did not contain any license information (Lukas Eipert)
+
 # 1.7.1 (2016-01-21)
 
  * Fixed a conflict with express when using npm 3.x (Glenn)

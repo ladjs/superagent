@@ -1,6 +1,6 @@
 {
   "name": "superagent",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "description": "elegant & feature rich browser / node HTTP with a fluent API",
   "scripts": {
     "prepublish": "make all",
