@@ -11,13 +11,19 @@ app.get('/:ms', function(req, res){
   }, ms);
 });
 
-app.listen(3009);
-
+var base = 'http://localhost'
+var server;
+before(function listen(done) {
+  server = app.listen(0, function listening() {
+    base += ':' + server.address().port;
+    done();
+  });
+});
 describe('.timeout(ms)', function(){
   describe('when timeout is exceeded', function(done){
     it('should error', function(done){
       request
-      .get('http://localhost:3009/500')
+      .get(base + '/500')
       .timeout(150)
       .end(function(err, res){
         assert(err, 'expected an error');

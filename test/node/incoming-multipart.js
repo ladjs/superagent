@@ -24,12 +24,19 @@
 //   }, 1000);
 // });
 
-// app.listen(3007);
+// var base = 'http://localhost'
+// var server;
+// before(function listen(done) {
+//   server = app.listen(0, function listening() {
+//     base += ':' + server.address().port;
+//     done();
+//   });
+// });
 
 // describe('request multipart/form-data', function(){
 //   describe('req.body', function(){
 //     it('should be populated with fields', function(done){
-//       request.get('http://localhost:3007/', function(err, res){
+//       request.get(base, function(err, res){
 //         if (err) return done(err);
 //         res.status.should.equal(200);
 //         res.body.should.eql({ name: 'tobi' });

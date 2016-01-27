@@ -20,14 +20,22 @@ server = https.createServer({
   cert: cert
 }, app);
 
-server.listen(8443);
+// WARNING: this .listen() boilerplate is slightly different from most tests
+// due to HTTPS. Do not copy/paste without examination.
+var base = 'https://localhost'
+before(function listen(done) {
+  server.listen(0, function listening() {
+    base += ':' + server.address().port;
+    done();
+  });
+});
 
 describe('https', function(){
 
   describe('request', function(){
     it('should give a good response', function(done){
       request
-      .get('https://localhost:8443/')
+      .get(base)
       .ca(cert)
       .end(function(err, res){
         assert(res.ok);
@@ -41,12 +49,12 @@ describe('https', function(){
     it('should be able to make multiple requests without redefining the certificate', function(done){
       var agent = request.agent({ca: cert});
       agent
-      .get('https://localhost:8443/')
+      .get(base)
       .end(function(err, res){
         assert(res.ok);
         assert('Safe and secure!' === res.text);
         agent
-        .get(url.parse('https://localhost:8443/'))
+        .get(url.parse(base))
         .end(function(err, res){
           assert(res.ok);
           assert('Safe and secure!' === res.text);

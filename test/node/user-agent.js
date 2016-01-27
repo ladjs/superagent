@@ -10,12 +10,19 @@ app.all('/ua', function(req, res){
   req.pipe(res);
 });
 
-app.listen(3345);
+var base = 'http://localhost'
+var server;
+before(function listen(done) {
+  server = app.listen(0, function listening() {
+    base += ':' + server.address().port;
+    done();
+  });
+});
 
 describe('req.get()', function(){
   it('should set a default user-agent', function(done){
     request
-    .get('http://localhost:3345/ua')
+    .get(base + '/ua')
     .end(function(err, res){
       assert(res.headers);
       assert(res.headers['user-agent']);
@@ -26,7 +33,7 @@ describe('req.get()', function(){
 
   it('should be able to override user-agent', function(done){
     request
-    .get('http://localhost:3345/ua')
+    .get(base + '/ua')
     .set('User-Agent', 'foo/bar')
     .end(function(err, res){
       assert(res.headers);
@@ -37,7 +44,7 @@ describe('req.get()', function(){
 
   it('should be able to wipe user-agent', function(done){
     request
-    .get('http://localhost:3345/ua')
+    .get(base + '/ua')
     .unset('User-Agent')
     .end(function(err, res){
       assert(res.headers);

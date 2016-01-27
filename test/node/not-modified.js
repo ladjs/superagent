@@ -12,14 +12,21 @@ app.get('/', function(req, res){
   }
 });
 
-app.listen(3008);
+var base = 'http://localhost'
+var server;
+before(function listen(done) {
+  server = app.listen(0, function listening() {
+    base += ':' + server.address().port;
+    done();
+  });
+});
 
 describe('request', function(){
   describe('not modified', function(){
     var ts;
     it('should start with 200', function(done){
       request
-      .get('http://localhost:3008/')
+      .get(base)
       .end(function(err, res){
         res.should.have.status(200)
         res.text.should.match(/^\d+$/);
@@ -30,7 +37,7 @@ describe('request', function(){
 
     it('should then be 304', function(done){
       request
-      .get('http://localhost:3008/')
+      .get(base)
       .set('If-Modified-Since', new Date(ts).toUTCString())
       .end(function(err, res){
         res.should.have.status(304)

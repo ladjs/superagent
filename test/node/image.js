@@ -19,12 +19,19 @@ describe('res.body', function(){
     res.end(img, 'binary');
   });
 
-  app.listen(3011);
+var base = 'http://localhost'
+var server;
+before(function listen(done) {
+  server = app.listen(0, function listening() {
+    base += ':' + server.address().port;
+    done();
+  });
+});
 
   describe('image/png', function(){
     it('should parse the body', function(done){
       request
-      .get('http://localhost:3011/image')
+      .get(base + '/image')
       .end(function(err, res){
         (res.body.length - img.length).should.equal(0);
         done();

@@ -21,7 +21,14 @@ app.get('/movies/all/0', function (req, res) {
   res.send('first movie page');
 });
 
-app.listen(3012);
+var base = 'http://localhost'
+var server;
+before(function listen(done) {
+  server = app.listen(0, function listening() {
+    base += ':' + server.address().port;
+    done();
+  });
+});
 
 describe('pipe on redirect', function () {
   afterEach(removeTmpfile);
@@ -29,7 +36,7 @@ describe('pipe on redirect', function () {
     var stream = fs.createWriteStream('test/node/fixtures/pipe.txt');
     var redirects = [];
     var req = request
-      .get('http://localhost:3012/')
+      .get(base)
       .on('redirect', function (res) {
         redirects.push(res.headers.location);
       })

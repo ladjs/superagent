@@ -8,12 +8,19 @@ app.get('/', function(req, res){
   fs.createReadStream('test/node/fixtures/user.json').pipe(res);
 });
 
-app.listen(3025);
+var base = 'http://localhost'
+var server;
+before(function listen(done) {
+  server = app.listen(0, function listening() {
+    base += ':' + server.address().port;
+    done();
+  });
+});
 
 describe('response', function(){
     it('should act as a readable stream', function(done){
       var req = request
-        .get('http://localhost:3025')
+        .get(base)
         .buffer(false);
 
       req.end(function(err,res){
