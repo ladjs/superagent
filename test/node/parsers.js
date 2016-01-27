@@ -34,12 +34,19 @@ app.get('/chunked-json', function(req, res){
   },10);
 });
 
-app.listen(3033);
+var base = 'http://localhost'
+var server;
+before(function listen(done) {
+  server = app.listen(0, function listening() {
+    base += ':' + server.address().port;
+    done();
+  });
+});
 
 describe('req.parse(fn)', function(){
   it('should take precedence over default parsers', function(done){
     request
-    .get('http://localhost:3033/manny')
+    .get(base + '/manny')
     .parse(request.parse['application/json'])
     .end(function(err, res){
       assert(res.ok);
@@ -51,7 +58,7 @@ describe('req.parse(fn)', function(){
 
   it('should be the only parser', function(done){
     request
-    .get('http://localhost:3033/image')
+    .get(base + '/image')
     .parse(function(res, fn) {
       res.on('data', function() {});
     })
@@ -65,7 +72,7 @@ describe('req.parse(fn)', function(){
 
   it('should emit error if parser throws', function(done){
     request
-    .get('http://localhost:3033/manny')
+    .get(base + '/manny')
     .parse(function() {
       throw new Error('I am broken');
     })
@@ -78,7 +85,7 @@ describe('req.parse(fn)', function(){
 
   it('should emit error if parser returns an error', function(done){
     request
-    .get('http://localhost:3033/manny')
+    .get(base + '/manny')
     .parse(function(res, fn) {
       fn(new Error('I am broken'));
     })
@@ -91,7 +98,7 @@ describe('req.parse(fn)', function(){
 
   it('should not emit error on chunked json', function(done){
     request
-    .get('http://localhost:3033/chunked-json')
+    .get(base + '/chunked-json')
     .end(function(err){
       assert(!err);
       done();
@@ -100,7 +107,7 @@ describe('req.parse(fn)', function(){
 
   it('should not emit error on aborted chunked json', function(done){
     var req = request
-    .get('http://localhost:3033/chunked-json')
+    .get(base + '/chunked-json')
     .end(function(err){
       assert(!err);
       done();

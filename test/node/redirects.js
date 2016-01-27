@@ -84,7 +84,14 @@ app.get('/bad-redirect', function(req, res){
   res.status(307).end();
 });
 
-app.listen(3003);
+var base = 'http://localhost'
+var server;
+before(function listen(done) {
+  server = app.listen(0, function listening() {
+    base += ':' + server.address().port;
+    done();
+  });
+});
 
 describe('request', function(){
   describe('on redirect', function(){
@@ -92,7 +99,7 @@ describe('request', function(){
       var redirects = [];
 
       request
-      .get('http://localhost:3003/')
+      .get(base)
       .on('redirect', function(res){
         redirects.push(res.headers.location);
       })
@@ -109,7 +116,7 @@ describe('request', function(){
 
     it('should retain header fields', function(done){
       request
-      .get('http://localhost:3003/header')
+      .get(base + '/header')
       .set('X-Foo', 'bar')
       .end(function(err, res){
         res.body.should.have.property('x-foo', 'bar');
@@ -119,7 +126,7 @@ describe('request', function(){
 
     it('should remove Content-* fields', function(done){
       request
-      .post('http://localhost:3003/header')
+      .post(base + '/header')
       .type('txt')
       .set('X-Foo', 'bar')
       .set('X-Bar', 'baz')
@@ -136,7 +143,7 @@ describe('request', function(){
 
     it('should retain cookies', function(done){
       request
-      .get('http://localhost:3003/header')
+      .get(base + '/header')
       .set('Cookie', 'foo=bar;')
       .end(function(err, res){
         res.body.should.have.property('cookie', 'foo=bar;');
@@ -146,7 +153,7 @@ describe('request', function(){
 
     it('should preserve timeout across redirects', function(done){
       request
-      .get('http://localhost:3003/movies/random')
+      .get(base + '/movies/random')
       .timeout(250)
       .end(function(err, res){
         assert(err instanceof Error, 'expected an error');
@@ -160,7 +167,7 @@ describe('request', function(){
       var query = [];
 
       request
-      .get('http://localhost:3003/?foo=bar')
+      .get(base + '/?foo=bar')
       .on('redirect', function(res){
         query.push(res.headers.query);
         redirects.push(res.headers.location);
@@ -181,7 +188,7 @@ describe('request', function(){
 
     it('should handle no location header', function(done){
       request
-      .get('http://localhost:3003/bad-redirect')
+      .get(base + '/bad-redirect')
       .end(function(err, res){
         err.message.should.equal('No location header for redirect');
         done();
@@ -193,7 +200,7 @@ describe('request', function(){
         var redirects = [];
 
         request
-        .get('http://localhost:3003/relative')
+        .get(base + '/relative')
         .on('redirect', function(res){
           redirects.push(res.headers.location);
         })
@@ -209,7 +216,7 @@ describe('request', function(){
         var redirects = [];
 
         request
-        .get('http://localhost:3003/relative/sub')
+        .get(base + '/relative/sub')
         .on('redirect', function(res){
           redirects.push(res.headers.location);
         })
@@ -228,7 +235,7 @@ describe('request', function(){
       var redirects = [];
 
       request
-      .get('http://localhost:3003/')
+      .get(base)
       .redirects(2)
       .on('redirect', function(res){
         redirects.push(res.headers.location);
@@ -250,7 +257,7 @@ describe('request', function(){
       var redirects = [];
 
       request
-      .post('http://localhost:3003/movie')
+      .post(base + '/movie')
       .send({ name: 'Tobi' })
       .redirects(2)
       .on('redirect', function(res){
@@ -265,13 +272,13 @@ describe('request', function(){
       });
     })
   })
-  
+
   describe('on POST using multipart/form-data', function(){
     it('should redirect as GET', function(done){
       var redirects = [];
 
       request
-      .post('http://localhost:3003/movie')
+      .post(base + '/movie')
       .type('form')
       .field('name', 'Tobi')
       .redirects(2)
@@ -291,7 +298,7 @@ describe('request', function(){
   describe('on 303', function(){
     it('should redirect with same method', function(done){
       request
-      .put('http://localhost:3003/redirect-303')
+      .put(base + '/redirect-303')
       .send({msg: "hello"})
       .redirects(1)
       .on('redirect', function(res) {
@@ -307,7 +314,7 @@ describe('request', function(){
   describe('on 307', function(){
     it('should redirect with same method', function(done){
       request
-      .put('http://localhost:3003/redirect-307')
+      .put(base + '/redirect-307')
       .send({msg: "hello"})
       .redirects(1)
       .on('redirect', function(res) {
@@ -323,7 +330,7 @@ describe('request', function(){
   describe('on 308', function(){
     it('should redirect with same method', function(done){
       request
-      .put('http://localhost:3003/redirect-308')
+      .put(base + '/redirect-308')
       .send({msg: "hello"})
       .redirects(1)
       .on('redirect', function(res) {
