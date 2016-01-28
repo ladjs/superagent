@@ -140,11 +140,11 @@ describe('res.body', function(){
   });
 
   describe('Invalid JSON response', function(){
-    it('should return the raw response', function(done){
+    it('should return the raw response in the request body', function(done){
       request
       .get(uri + '/invalid-json')
       .end(function(err, res){
-        assert.deepEqual(err.rawResponse, ")]}', {'header':{'code':200,'text':'OK','version':'1.0'},'data':'some data'}");
+        assert.deepEqual(res.body, ")]}', {'header':{'code':200,'text':'OK','version':'1.0'},'data':'some data'}");
         done();
       });
     });
