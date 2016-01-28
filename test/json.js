@@ -144,6 +144,7 @@ describe('res.body', function(){
       request
       .get(uri + '/invalid-json')
       .end(function(err, res){
+        assert(res);
         assert.deepEqual(res.body, ")]}', {'header':{'code':200,'text':'OK','version':'1.0'},'data':'some data'}");
         done();
       });
