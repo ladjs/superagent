@@ -2,7 +2,7 @@ var assert = require('assert');
 var request = require('../../');
 
 describe('request', function() {
-  this.timeout(10000);
+  this.timeout(15000);
 
 it('request() error object', function(next) {
   request('GET', '/error').end(function(err, res) {
@@ -73,8 +73,8 @@ it('GET invalid json', function(next) {
   request
   .get('/invalid-json')
   .end(function(err, res) {
-    assert(err.parse);
-    assert.deepEqual(err.rawResponse, ")]}', {'header':{'code':200,'text':'OK','version':'1.0'},'data':'some data'}");
+    assert(res);
+    assert.deepEqual(res.body, ")]}', {'header':{'code':200,'text':'OK','version':'1.0'},'data':'some data'}");
     next();
   });
 });
