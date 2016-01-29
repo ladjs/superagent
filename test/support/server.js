@@ -151,6 +151,11 @@ app.get('/invalid-json', function(req, res) {
   res.send(")]}', {'header':{'code':200,'text':'OK','version':'1.0'},'data':'some data'}");
 });
 
+app.get('/invalid-json-forbidden', function(req, res) {
+  res.set('content-type', 'application/json');
+  res.status(403).send("Forbidden");
+});
+
 app.get('/text', function(req, res){
   res.send("just some text");
 });

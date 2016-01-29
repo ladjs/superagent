@@ -148,6 +148,15 @@ describe('res.body', function(){
         done();
       });
     });
+
+    it('should return the http status code', function(done){
+      request
+      .get(uri + '/invalid-json-forbidden')
+      .end(function(err, res){
+        assert.equal(err.statusCode, 403);
+        done();
+      });
+    });
   });
 
   if (doesntWorkInBrowserYet) describe('No content', function(){

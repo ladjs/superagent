@@ -90,7 +90,6 @@ it('GET querystring empty objects', function(next){
   });
 });
 
-
 it('GET querystring object .get(uri, obj)', function(next){
   request
   .get('/querystring', { search: 'Manny' })
