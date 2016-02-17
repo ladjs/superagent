@@ -1,6 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
+var basicAuth = require('basic-auth-connect');
 
 var app = express();
 
@@ -160,7 +161,7 @@ app.get('/text', function(req, res){
   res.send("just some text");
 });
 
-app.post('/auth', function(req, res) {
+app.post('/auth', basicAuth('foo', 'bar'), function(req, res) {
   var auth = req.headers.authorization,
       parts = auth.split(' '),
       credentials = new Buffer(parts[1], 'base64').toString().split(':'),
