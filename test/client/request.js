@@ -107,6 +107,16 @@ it('GET querystring object .get(uri, obj, fn)', function(next){
   });
 });
 
+it('GET blob object', function(next){
+  request
+    .get('/blob', { foo: 'bar'})
+    .responseType('blob')
+    .end(function(err, res){
+      assert.deepEqual(res.xhr.response instanceof Blob, true);
+      next();
+    });
+});
+
 window.btoa = window.btoa || null;
 it('basic auth', function(next){
   window.btoa = window.btoa || require('Base64').btoa;
