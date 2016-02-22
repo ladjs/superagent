@@ -121,6 +121,32 @@ it('basic auth', function(next){
   });
 });
 
+it('auth type "basic"', function(next){
+  window.btoa = window.btoa || require('Base64').btoa;
+
+  request
+  .post('/auth')
+  .auth('foo', 'bar', {type: 'basic'})
+  .end(function(err, res){
+    assert('foo' == res.body.user);
+    assert('bar' == res.body.pass);
+    next();
+  });
+});
+
+it('auth type "auto"', function(next){
+  window.btoa = window.btoa || require('Base64').btoa;
+
+  request
+  .post('/auth')
+  .auth('foo', 'bar', {type: 'auto'})
+  .end(function(err, res){
+    assert('foo' == res.body.user);
+    assert('bar' == res.body.pass);
+    next();
+  });
+});
+
 it('progress event listener on xhr object registered when some on the request', function(){
   var req = request
   .get('/foo')
