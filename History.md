@@ -1,3 +1,15 @@
+# 1.8.0-beta.1 (2016-02-25)
+
+To try betas via npm, set ">=1.8.0-beta.1 <2" as the required version.
+
+ * Extracted common code into request-base class (Peter Lyons)
+   * It does not affect the public API, but please let us know if you notice any plugins/subclasses breaking!
+ * Added option `{type:'auto'}` to `auth` method, which enables browser-native auth types (Jungle, Askar Yusupov)
+ * Added `responseType()` to set XHR `responseType` (chris)
+ * Switched to form-data for browserify-compatible `FormData` (Peter Lyons)
+ * Added `statusCode` to error response when JSON response is malformed (mattdell)
+ * Prevented TCP port conflicts in all tests (Peter Lyons)
+
 # 1.7.2 (2016-01-26)
 
  * Fix case-sensitivity of header fields introduced by a4ddd6a. (Edward J. Jinotti)
