@@ -26,7 +26,7 @@ describe('req.get()', function(){
     .end(function(err, res){
       assert(res.headers);
       assert(res.headers['user-agent']);
-      assert(/^node-superagent\/\d+\.\d+\.\d+$/.test(res.headers['user-agent']));
+      assert(/^node-superagent\/\d+\.\d+\.\d+(?:-[a-z]+\.\d+|$)/.test(res.headers['user-agent']));
       done();
     });
   });
