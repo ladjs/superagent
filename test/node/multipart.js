@@ -171,8 +171,8 @@ describe('Request', function(){
         html.name.should.equal('user.html');
         html.type.should.equal('text/html');
         read(html.path).should.equal('<h1>name</h1>');
-        total.should.equal(221);
-        loaded.should.equal(221);
+        total.should.equal(223);
+        loaded.should.equal(223);
         uploadEventWasFired.should.equal(true);
         done();
       })
