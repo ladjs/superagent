@@ -1,6 +1,6 @@
-# 1.8.0-beta.1 (2016-02-25)
+# 1.8.0-beta.2 (2016-02-27)
 
-To try betas via npm, set ">=1.8.0-beta.1 <2" as the required version.
+To try betas via npm, set ">=1.8.0-beta.2 <2" as the required version.
 
  * Extracted common code into request-base class (Peter Lyons)
    * It does not affect the public API, but please let us know if you notice any plugins/subclasses breaking!
@@ -9,6 +9,7 @@ To try betas via npm, set ">=1.8.0-beta.1 <2" as the required version.
  * Switched to form-data for browserify-compatible `FormData` (Peter Lyons)
  * Added `statusCode` to error response when JSON response is malformed (mattdell)
  * Prevented TCP port conflicts in all tests (Peter Lyons)
+ * Updated form-data dependency
 
 # 1.7.2 (2016-01-26)
 
