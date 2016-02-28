@@ -346,5 +346,20 @@ describe('request', function(){
         req.abort();
       }, 1000);
     })
+
+    it('should allow chaining .abort() several times', function(done){
+      var req = request
+      .get(uri + '/delay/3000')
+      .end(function(err, res){
+        assert(false, 'should not complete the request');
+      });
+
+      // This also verifies only a single 'done' event is emitted
+      req.on('abort', done);
+
+      setTimeout(function() {
+        req.abort().abort().abort();
+      }, 1000);
+    })
   })
 })
