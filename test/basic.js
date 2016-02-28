@@ -362,4 +362,19 @@ describe('request', function(){
       }, 1000);
     })
   })
+
+  describe('req.toJSON()', function(){
+    it('should describe the request', function(done){
+      var req = request
+      .post(uri + '/echo')
+      .send({ foo: 'baz' })
+      .end(function(err, res){
+        var json = req.toJSON();
+        assert('POST' == json.method);
+        assert(/\/echo$/.test(json.url));
+        assert('baz' == json.data.foo);
+        done();
+      });
+    })
+  })
 })
