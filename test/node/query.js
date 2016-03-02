@@ -27,18 +27,8 @@ before(function listen(done) {
 });
 
 describe('req.query(String)', function(){
-  it('should supply uri malformed error to the callback', function(done){
-    request
-    .get(base)
-    .query('name=toby')
-    .query('a=\uD800')
-    .query({ b: '\uD800' })
-    .end(function(err, res){
-      assert(err instanceof Error);
-      assert('URIError' == err.name);
-      done();
-    });
-  })
+  // This is no longer true as of qs v3.0.0 (https://github.com/ljharb/qs/commit/0c6f2a6318c94f6226d3cf7fe36094e9685042b6)
+  // it('should supply uri malformed error to the callback')
 
   it('should support passing in a string', function(done){
     request
