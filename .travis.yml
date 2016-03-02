@@ -7,6 +7,9 @@ node_js:
   - "0.10"
   - "iojs"
 
+before_script: "npm ls"
+after_failure: "npm ls"
+
 env:
   global:
     - SAUCE_USERNAME='shtylman-superagent'
