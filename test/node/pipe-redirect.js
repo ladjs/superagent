@@ -31,11 +31,16 @@ before(function listen(done) {
 });
 
 describe('pipe on redirect', function () {
-  afterEach(removeTmpfile);
+  var destPath = 'test/node/fixtures/pipe.txt';
+
+  afterEach(function removeTmpfile(done) {
+    fs.unlink(destPath, done);
+  });
+
   it('should follow Location', function (done) {
-    var stream = fs.createWriteStream('test/node/fixtures/pipe.txt');
+    var stream = fs.createWriteStream(destPath);
     var redirects = [];
-    var req = request
+    request
       .get(base)
       .on('redirect', function (res) {
         redirects.push(res.headers.location);
@@ -46,15 +51,16 @@ describe('pipe on redirect', function () {
         arr.push('/movies/all');
         arr.push('/movies/all/0');
         redirects.should.eql(arr);
-        fs.readFileSync('test/node/fixtures/pipe.txt', 'utf8').should.eql('first movie page');
-        done();
-      });
-      req.pipe(stream);
+        // TODO this assertion is flaky on Travis CI.
+        // Sometimes we get '' out of the file instead of the expected content
+        // A re-run of the build usually resolves it.
+        // Would love a PR to make this pass consistently.
+        // Trying a lame delay to see if it's filesystem sync latency
+        setTimeout(function () {
+          fs.readFileSync(destPath, 'utf8').should.eql('first movie page');
+          done();
+        }, 200);
+      })
+      .pipe(stream);
   });
 });
-
-function removeTmpfile(done) {
-  fs.unlink('test/node/fixtures/pipe.txt', function (err) {
-    done();
-  });
-}
