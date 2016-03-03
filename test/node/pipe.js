@@ -1,4 +1,3 @@
-
 var request = require('../../')
   , express = require('express')
   , app = express()
@@ -25,7 +24,11 @@ before(function listen(done) {
 });
 
 describe('request pipe', function(){
-  afterEach(removeTmpfile);
+  var destPath = 'test/node/fixtures/tmp.json';
+
+  after(function removeTmpfile(done){
+    fs.unlink(destPath, done);
+  });
 
   it('should act as a writable stream', function(done){
     var req = request.post(base);
@@ -42,21 +45,15 @@ describe('request pipe', function(){
   })
 
   it('should act as a readable stream', function(done){
-    var stream = fs.createWriteStream('test/node/fixtures/tmp.json');
+    var stream = fs.createWriteStream(destPath);
 
     var req = request.get(base);
     req.type('json');
 
-    req.on('end', function(){
-      JSON.parse(fs.readFileSync('test/node/fixtures/tmp.json', 'utf8')).should.eql({ name: 'tobi' });
+    stream.on('finish', function(){
+      JSON.parse(fs.readFileSync(destPath, 'utf8')).should.eql({ name: 'tobi' });
       done();
     });
     req.pipe(stream);
   })
 });
-
-function removeTmpfile(done){
-  fs.unlink('test/node/fixtures/tmp.json', function(err){
-    done();
-  });
-}
