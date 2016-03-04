@@ -377,4 +377,34 @@ describe('request', function(){
       });
     })
   })
+
+  describe('req.querySort()', function(){
+    it('should sort the request querystring', function(done){
+
+      request
+      .get(uri + '/url')
+      .query('search=Manny')
+      .query('order=desc')
+      .querySort()
+      .end(function(err, res){
+        assert.equal(res.text, '/url?order=desc&search=Manny')
+        done();
+      });
+    })
+
+    it('should sort the request querystring using customized function', function(done) {
+      request
+      .get(uri + '/url')
+      .query('name=Nick')
+      .query('search=Manny')
+      .query('order=desc')
+      .querySort(function(a, b){
+        return a.length - b.length;
+      })
+      .end(function(err, res){
+        assert.equal(res.text, '/url?name=Nick&order=desc&search=Manny')
+        done();
+      });
+    });
+  })
 })
