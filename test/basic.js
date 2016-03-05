@@ -378,14 +378,14 @@ describe('request', function(){
     })
   })
 
-  describe('req.querySort()', function(){
+  describe('req.sortQuery()', function(){
     it('should sort the request querystring', function(done){
 
       request
       .get(uri + '/url')
       .query('search=Manny')
       .query('order=desc')
-      .querySort()
+      .sortQuery()
       .end(function(err, res){
         assert.equal(res.text, '/url?order=desc&search=Manny')
         done();
@@ -398,7 +398,7 @@ describe('request', function(){
       .query('name=Nick')
       .query('search=Manny')
       .query('order=desc')
-      .querySort(function(a, b){
+      .sortQuery(function(a, b){
         return a.length - b.length;
       })
       .end(function(err, res){
