@@ -64,6 +64,36 @@ describe('request', function(){
         done();
       });
     })
+
+    it('is optional with a promise', function() {
+      if ('undefined' === typeof Promise) {
+        return;
+      }
+
+      return request.get(uri + '/login')
+      .then(function(res) {
+          return res.status;
+      })
+      .then()
+      .then(function(status) {
+          assert.equal(200, status, "Real promises pass results through");
+      });
+    });
+
+    it('called only once with a promise', function() {
+      if ('undefined' === typeof Promise) {
+        return;
+      }
+
+      var req = request.get(uri + '/unique');
+
+      return Promise.all([req, req, req])
+      .then(function(results){
+        results.forEach(function(item){
+          assert.equal(item.body, results[0].body, "It should keep returning the same result after being called once");
+        });
+      });
+    });
   })
 
   describe('res.error', function(){
@@ -81,6 +111,20 @@ describe('request', function(){
         assert(err, 'should have an error for 500');
         assert.equal(err.message, 'Internal Server Error');
         done();
+      });
+    })
+
+    it('with .then() promise', function(){
+      if ('undefined' === typeof Promise) {
+        return;
+      }
+
+      return request
+      .get(uri + '/error')
+      .then(function(){
+        assert.fail();
+      }, function(err){
+        assert.equal(err.message, 'Internal Server Error');
       });
     })
   })
@@ -312,6 +356,10 @@ describe('request', function(){
 
   describe('.then(fulfill, reject)', function() {
     it('should support successful fulfills with .then(fulfill)', function(done) {
+      if ('undefined' === typeof Promise) {
+        return done();
+      }
+
       request
       .post(uri + '/echo')
       .send({ name: 'tobi' })
@@ -322,6 +370,10 @@ describe('request', function(){
     })
 
     it('should reject an error with .then(null, reject)', function(done) {
+      if ('undefined' === typeof Promise) {
+        return done();
+      }
+
       request
       .get(uri + '/error')
       .then(null, function(err) {
