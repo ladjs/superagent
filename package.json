@@ -1,6 +1,6 @@
 {
   "name": "superagent",
-  "version": "1.8.1",
+  "version": "1.9.0",
   "description": "elegant & feature rich browser / node HTTP with a fluent API",
   "scripts": {
     "prepublish": "make all",
@@ -15,6 +15,8 @@
   "license": "MIT",
   "author": "TJ Holowaychuk <tj@vision-media.ca>",
   "contributors": [
+    "Kornel Lesiński <kornel@geekhood.net>",
+    "Peter Lyons <pete@peterlyons.com>",
     "Hunter Loftis <hunter@hunterloftis.com>"
   ],
   "repository": {
