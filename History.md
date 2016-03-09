@@ -1,6 +1,4 @@
-# 1.8.0-beta.2 (2016-02-27)
-
-To try betas via npm, set ">=1.8.0-beta.2 <2" as the required version.
+# 1.8.0 (2016-03-09)
 
  * Extracted common code into request-base class (Peter Lyons)
    * It does not affect the public API, but please let us know if you notice any plugins/subclasses breaking!
