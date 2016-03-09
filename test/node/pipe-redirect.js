@@ -31,30 +31,25 @@ before(function listen(done) {
 });
 
 describe('pipe on redirect', function () {
-  afterEach(removeTmpfile);
+  var destPath = 'test/node/fixtures/pipe.txt';
+
+  after(function removeTmpfile(done) {
+    fs.unlink(destPath, done);
+  });
+
   it('should follow Location', function (done) {
-    var stream = fs.createWriteStream('test/node/fixtures/pipe.txt');
+    var stream = fs.createWriteStream(destPath);
     var redirects = [];
     var req = request
       .get(base)
       .on('redirect', function (res) {
         redirects.push(res.headers.location);
       })
-      .on('end', function () {
-        var arr = [];
-        arr.push('/movies');
-        arr.push('/movies/all');
-        arr.push('/movies/all/0');
-        redirects.should.eql(arr);
-        fs.readFileSync('test/node/fixtures/pipe.txt', 'utf8').should.eql('first movie page');
-        done();
-      });
-      req.pipe(stream);
+    stream.on('finish', function () {
+      redirects.should.eql(['/movies', '/movies/all', '/movies/all/0']);
+      fs.readFileSync(destPath, 'utf8').should.eql('first movie page');
+      done();
+    });
+    req.pipe(stream);
   });
 });
-
-function removeTmpfile(done) {
-  fs.unlink('test/node/fixtures/pipe.txt', function (err) {
-    done();
-  });
-}

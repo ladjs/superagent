@@ -346,5 +346,35 @@ describe('request', function(){
         req.abort();
       }, 1000);
     })
+
+    it('should allow chaining .abort() several times', function(done){
+      var req = request
+      .get(uri + '/delay/3000')
+      .end(function(err, res){
+        assert(false, 'should not complete the request');
+      });
+
+      // This also verifies only a single 'done' event is emitted
+      req.on('abort', done);
+
+      setTimeout(function() {
+        req.abort().abort().abort();
+      }, 1000);
+    })
+  })
+
+  describe('req.toJSON()', function(){
+    it('should describe the request', function(done){
+      var req = request
+      .post(uri + '/echo')
+      .send({ foo: 'baz' })
+      .end(function(err, res){
+        var json = req.toJSON();
+        assert('POST' == json.method);
+        assert(/\/echo$/.test(json.url));
+        assert('baz' == json.data.foo);
+        done();
+      });
+    })
   })
 })
