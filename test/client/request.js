@@ -108,6 +108,9 @@ it('GET querystring object .get(uri, obj, fn)', function(next){
 });
 
 it('GET blob object', function(next){
+  if ('undefined' === typeof Blob) {
+    return next();
+  }
   request
     .get('/blob', { foo: 'bar'})
     .responseType('blob')
