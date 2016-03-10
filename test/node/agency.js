@@ -1,3 +1,5 @@
+require('should-http');
+
 var express = require('express')
   , app = express()
   , request = require('../../')
@@ -74,7 +76,7 @@ describe('request', function() {
           should.not.exist(err);
           res.should.have.status(200);
           should.not.exist(res.headers['set-cookie']);
-          res.text.should.include('dashboard');
+          res.text.should.containEql('dashboard');
           done();
         });
     });
@@ -97,7 +99,7 @@ describe('request', function() {
           should.not.exist(err);
           res.should.have.status(200);
           should.not.exist(res.headers['set-cookie']);
-          res.text.should.include('dashboard');
+          res.text.should.containEql('dashboard');
           done();
         });
     });
@@ -153,7 +155,7 @@ describe('request', function() {
         .end(function(err, res) {
           should.not.exist(err);
           res.should.have.status(200);
-          res.text.should.include('dashboard');
+          res.text.should.containEql('dashboard');
           done();
         });
     });
@@ -165,7 +167,7 @@ describe('request', function() {
         .end(function(err, res) {
           should.not.exist(err);
           res.should.have.status(200);
-          res.text.should.include('simple');
+          res.text.should.containEql('simple');
           res.redirects.should.eql([base + '/simple']);
           done();
         });

@@ -1,3 +1,5 @@
+require('should');
+require('should-http');
 
 var request = require('../../')
   , assert = require('assert')
