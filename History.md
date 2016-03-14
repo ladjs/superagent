@@ -1,3 +1,7 @@
+# 1.8.1 (2016-03-14)
+
+  * Fixed form-data incompatibility with IE9
+
 # 1.8.0 (2016-03-09)
 
  * Extracted common code into request-base class (Peter Lyons)
