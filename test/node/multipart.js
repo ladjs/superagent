@@ -178,13 +178,12 @@ describe('Request', function(){
       })
     })
     it('filesystem errors should be caught', function(done){
-      var timestamp = Date.now()
       request
           .post(base + '/echo')
-          .attach('filedata', 'test/node/fixtures/lorem-' + timestamp + '.ext')
+          .attach('filedata', 'test/node/fixtures/non-existent-file.ext')
           .on('error', function(err) {
             err.code.should.equal('ENOENT')
-            err.path.should.equal('test/node/fixtures/lorem-' + timestamp + '.ext')
+            err.path.should.equal('test/node/fixtures/non-existent-file.ext')
             done()
           })
           .end(function (err, res) {
