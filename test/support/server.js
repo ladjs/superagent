@@ -223,4 +223,9 @@ app.get('/invalid-json', function(req, res) {
   res.send(")]}', {'header':{'code':200,'text':'OK','version':'1.0'},'data':'some data'}");
 });
 
+
+app.options('/options/echo/body', bodyParser.json(), function (req, res) {
+  res.send(req.body);
+});
+
 app.listen(process.env.ZUUL_PORT);

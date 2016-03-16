@@ -377,4 +377,16 @@ describe('request', function(){
       });
     })
   })
+
+  describe('req.options()', function(){
+    it('should allow request body', function(done){
+      request.options(uri + '/options/echo/body')
+      .send({ foo: 'baz' })
+      .end(function(err, res){
+        assert(err == null);
+        assert(res.body.foo === 'baz');
+        done();
+      });
+    });
+  });
 })
