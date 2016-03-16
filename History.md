@@ -1,3 +1,21 @@
+# 2.0.0
+
+## Breaking changes
+
+  * Browser: The `.parse()` method has been renamed to `.serialize()` for consistency with NodeJS version.
+  * Browser: Query string keys without a value used to be parsed as `'undefined'`, now their value is `''` (empty string) (shura, Kornel Lesiński).
+  * NodeJS: The `redirect` event is called after new query string and headers are set and is allowed to override request URL (Kornel Lesiński)
+  * Upgraded all dependencies (Peter Lyons)
+  * Renamed properties documented as `@api private` to have `_prefixed` names (Kornel Lesiński)
+
+## Probably not breaking changes:
+
+  * Extracted common functions to request-base (Peter Lyons)
+  * Fixed race condition in pipe tests (Peter Lyons)
+  * Handle `FormData` error events (scriptype)
+  * Fixed wrong jsdoc of Request#attach (George Chung)
+  * Updated and improved tests (Peter Lyons)
+
 # 1.8.1 (2016-03-14)
 
   * Fixed form-data incompatibility with IE9
