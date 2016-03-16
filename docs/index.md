@@ -193,6 +193,10 @@ You can also use the `.query()` method for HEAD requests. The following will pro
      request.post('/user')
        .type('png')
 
+## Serializing request body
+
+Superagent will automatically serialize JSON and forms. If you want to send the payload in a custom format, you can replace the built-in serialization with `.serialize()` method.
+
 ## Setting Accept
 
 In a similar fashion to the `.type()` method it is also possible to set the Accept header via the short hand method `.accept()`. Which references `request.types` as well allowing you to specify either the full canonicalized MIME type name as type/subtype, or the extension suffix form as "xml", "json", "png", etc for convenience:
@@ -219,7 +223,7 @@ In a similar fashion to the `.type()` method it is also possible to set the Acce
 
 ## Parsing response bodies
 
-  Super Agent will parse known response-body data for you, currently supporting _application/x-www-form-urlencoded_, _application/json_, and _multipart/form-data_.
+  Super Agent will parse known response-body data for you, currently supporting `application/x-www-form-urlencoded`, `application/json`, and `multipart/form-data`. You can set a custom parser (that takes precedence over built-in parsers) with the `.parse(fn)` method.
 
 ### JSON / Urlencoded
 
@@ -251,7 +255,7 @@ In a similar fashion to the `.type()` method it is also possible to set the Acce
 
   The `res.text` property contains the unparsed response body string. This
   property is always present for the client API, and only when the mime type
-  matches "text/*", "*/json", or "x-www-form-urlencoding" by default for node. The
+  matches "text/*", "*/json", or "x-www-form-urlencoded" by default for node. The
   reasoning is to conserve memory, as buffering text of large bodies such as multipart files or images is extremely inefficient.
 
   To force buffering see the "Buffering responses" section.
