@@ -188,7 +188,6 @@ describe('Request', function(){
             done()
           })
           .end(function (err, res) {
-            console.log('END')
             done(new Error("Request should have been aborted earlier!"))
           })
     })

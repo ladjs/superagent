@@ -618,4 +618,14 @@ it('response should set statusCode', function(next){
     })
 });
 
+it('request field()', function(next){
+  request
+    .post(uri + '/upload')
+    .field('foo', 'bar')
+    .end(function(err, res){
+      console.log('FIELD', err, res)
+      next();
+    })
+});
+
 });
