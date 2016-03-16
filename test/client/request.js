@@ -192,7 +192,7 @@ it('Request#parse overrides body parser no matter Content-Type', function(done){
 
   var req = request
   .post('/user')
-  .parse(testParser)
+  .serialize(testParser)
   .type('json')
   .send({ foo: 123 })
   .end(function(err) {
