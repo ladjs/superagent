@@ -177,6 +177,21 @@ describe('Request', function(){
         done();
       })
     })
+    it('filesystem errors should be caught', function(done){
+      var timestamp = Date.now()
+      request
+          .post(base + '/echo')
+          .attach('filedata', 'test/node/fixtures/lorem-' + timestamp + '.ext')
+          .on('error', function(err) {
+            err.code.should.equal('ENOENT')
+            err.path.should.equal('test/node/fixtures/lorem-' + timestamp + '.ext')
+            done()
+          })
+          .end(function (err, res) {
+            console.log('END')
+            done(new Error("Request should have been aborted earlier!"))
+          })
+    })
   })
 })
 
