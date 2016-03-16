@@ -1,3 +1,5 @@
+require('should');
+require('should-http');
 
 var request = require('../../')
   , express = require('express')

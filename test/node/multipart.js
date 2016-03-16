@@ -124,7 +124,7 @@ describe('Request', function(){
 //         req.attach('name3', 'baz');
 
 //         req.on('error', function(err){
-//           err.message.should.include('ENOENT');
+//           err.message.should.containEql('ENOENT');
 //           err.path.should.equal('foo');
 //           done();
 //         });
@@ -207,7 +207,7 @@ describe('Request', function(){
 //       req.end(function(err, res){
 //         if (err) return done(err);
 //         var ct = res.header['content-type'];
-//         ct.should.include('multipart/form-data; boundary=');
+//         ct.should.containEql('multipart/form-data; boundary=');
 //         res.body.should.eql({});
 //         res.files.image.name.should.equal('image.png');
 //         res.files.image.type.should.equal('image/png');
@@ -262,7 +262,7 @@ describe('Request', function(){
 
 //       req.end(function(err, res){
 //         if (err) return done(err);
-//         res.header['content-type'].should.include('boundary=');
+//         res.header['content-type'].should.containEql('boundary=');
 //         res.body.name.should.equal('Tobi');
 //         done();
 //       });
