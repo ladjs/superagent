@@ -37,7 +37,7 @@ describe('request.parseString()', function(){
   it('should parse', function() {
     parse('name=tj', { name: 'tj' });
     parse('name=Manny&species=cat', { name: 'Manny', species: 'cat' });
-    parse('redirect=/&ok', { redirect: '/', ok: undefined });
+    parse('redirect=/&ok', { redirect: '/', ok: '' });
     parse('%26name=tj', { '&name': 'tj' });
     parse('name=tj%26', { name: 'tj&' });
   });
