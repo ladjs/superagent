@@ -37,6 +37,13 @@ if (zlib) {
     res.send(buf);
   });
 
+  app.get('/nocontent', function (req, res, next){
+    res.statusCode = 204;
+    res.set('Content-Type', 'text/plain');
+    res.set('Content-Encoding', 'gzip');
+    res.send('');
+  });
+
   app.get('/', function (req, res, next){
     zlib.deflate(subject, function (err, buf){
       res.set('Content-Type', 'text/plain');
@@ -63,6 +70,19 @@ if (zlib) {
         .end(function(err, res){
           assert(err, 'missing error');
           assert(!res, 'response should not be defined');
+          done();
+        });
+    });
+
+    it('should handle no content with gzip header', function(done){
+      request
+        .get(base + '/nocontent')
+        .end(function(err, res){
+          assert.ifError(err);
+          assert(res);
+          res.should.have.status(204);
+          res.text.should.equal('');
+          res.headers.should.not.have.property('content-length');
           done();
         });
     });
