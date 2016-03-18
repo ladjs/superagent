@@ -76,6 +76,8 @@ if (zlib) {
       request
         .get(base + '/nocontent')
         .end(function(err, res){
+          assert.ifError(err);
+          assert(res);
           res.should.have.status(204);
           res.text.should.equal('');
           res.headers.should.not.have.property('content-length');
