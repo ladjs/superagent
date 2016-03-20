@@ -1,4 +1,5 @@
 require('should');
+require('should-http');
 
 var NODE = true;
 var uri = 'http://localhost:5000';
