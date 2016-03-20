@@ -83,6 +83,7 @@ describe('req.send(Object) as "json"', function(){
     .end(function(err, res){
       res.should.be.json
       res.text.should.equal('{"tobi":"ferret"}');
+      ({"tobi":"ferret"}).should.eql(res.body);
       done();
     });
   });
@@ -94,6 +95,7 @@ describe('req.send(Object) as "json"', function(){
     .send({ name: 'vendor' })
     .end(function(err, res){
       res.text.should.equal('{"name":"vendor"}');
+      ({"name":"vendor"}).should.eql(res.body);
       done();
     });
   });
@@ -107,6 +109,7 @@ describe('req.send(Object) as "json"', function(){
       .end(function(err, res){
         res.should.be.json
         res.text.should.equal('{"name":"tobi","age":1}');
+        ({"name":"tobi","age":1}).should.eql(res.body);
         done();
       });
     })
