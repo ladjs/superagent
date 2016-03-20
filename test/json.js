@@ -11,7 +11,7 @@ describe('req.send(Object) as "json"', function(){
     .post(uri + '/echo')
     .send({ name: 'tobi' })
     .end(function(err, res){
-      res.should.be.json
+      res.should.be.json();
       res.text.should.equal('{"name":"tobi"}');
       done();
     });
@@ -22,7 +22,7 @@ describe('req.send(Object) as "json"', function(){
     .post(uri + '/echo')
     .send([1,2,3])
     .end(function(err, res){
-      res.should.be.json
+      res.should.be.json();
       res.text.should.equal('[1,2,3]');
       done();
     });
@@ -34,7 +34,7 @@ describe('req.send(Object) as "json"', function(){
     .type('json')
     .send('null')
     .end(function(err, res){
-      res.should.be.json
+      res.should.be.json();
       assert(res.body === null);
       done();
     });
@@ -46,7 +46,7 @@ describe('req.send(Object) as "json"', function(){
     .type('json')
     .send('false')
     .end(function(err, res){
-      res.should.be.json
+      res.should.be.json();
       res.body.should.equal(false);
       done();
     });
@@ -58,7 +58,7 @@ describe('req.send(Object) as "json"', function(){
     .type('json')
     .send('0')
     .end(function(err, res){
-      res.should.be.json
+      res.should.be.json();
       res.body.should.equal(0);
       done();
     });
@@ -70,7 +70,7 @@ describe('req.send(Object) as "json"', function(){
     .type('json')
     .send('""')
     .end(function(err, res){
-      res.should.be.json
+      res.should.be.json();
       res.body.should.equal("");
       done();
     });
@@ -81,7 +81,7 @@ describe('req.send(Object) as "json"', function(){
     .get(uri + '/echo')
     .send({ tobi: 'ferret' })
     .end(function(err, res){
-      res.should.be.json
+      res.should.be.json();
       res.text.should.equal('{"tobi":"ferret"}');
       done();
     });
@@ -105,7 +105,7 @@ describe('req.send(Object) as "json"', function(){
       .send({ name: 'tobi' })
       .send({ age: 1 })
       .end(function(err, res){
-        res.should.be.json
+        res.should.be.json();
         res.text.should.equal('{"name":"tobi","age":1}');
         done();
       });
