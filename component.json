@@ -1,7 +1,7 @@
 {
   "name": "superagent",
   "repo": "visionmedia/superagent",
-  "version": "1.9.0",
+  "version": "1.8.2",
   "description": "elegant & feature rich browser / node HTTP with a fluent API",
   "keywords": [
     "http",

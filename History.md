@@ -1,3 +1,10 @@
+# 1.8.2 (2016-03-20)
+
+  * Fixed handling of HTTP status 204 with content-encoding: gzip (Andrew Shelton)
+  * Handling of FormData error events (scriptype)
+  * Fixed parsing of `vnd+json` MIME types (Kornel Lesiński)
+  * Aliased browser implementation of `.parse()` as `.serialize()` for forward compatibility
+
 # 1.8.1 (2016-03-14)
 
   * Fixed form-data incompatibility with IE9
