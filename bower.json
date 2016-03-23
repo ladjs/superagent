@@ -1,4 +1,4 @@
 {
   "name": "superagent",
-  "main": "lib/client.js",
+  "main": "lib/client.js"
 }
