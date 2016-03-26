@@ -1,10 +1,18 @@
 # 2.0.0
 
+To try alpha versions:
+
+    npm install superagent@next
+
 ## Breaking changes
+
+Breaking changes are in rarely used functionality, so we hope upgrade will be smooth for most users.
 
   * Browser: The `.parse()` method has been renamed to `.serialize()` for consistency with NodeJS version.
   * Browser: Query string keys without a value used to be parsed as `'undefined'`, now their value is `''` (empty string) (shura, Kornel Lesiński).
-  * NodeJS: The `redirect` event is called after new query string and headers are set and is allowed to override request URL (Kornel Lesiński)
+  * NodeJS: The `redirect` event is called after new query string and headers have been set and is allowed to override the request URL (Kornel Lesiński)
+  * `.then()` returns a real `Promise`. Note that use of superagent with promises now requires a global `Promise` object.
+    If you target Internet Explorer or Node 0.10, you'll need `require('es6-promise').polyfill()` or similar.
   * Upgraded all dependencies (Peter Lyons)
   * Renamed properties documented as `@api private` to have `_prefixed` names (Kornel Lesiński)
 
