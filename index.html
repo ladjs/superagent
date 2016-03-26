@@ -1,20 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>SuperAgent - Ajax with less suck</title>
+    <meta charset="utf8">
+    <title>SuperAgent — elegant API for AJAX in Node and browsers</title>
     <link rel="stylesheet" href="docs/style.css">
-    <script src="docs/jquery.js"></script>
-    <script src="docs/jquery-ui.min.js"></script>
-    <script src="docs/highlight.js"></script>
-    <script src="docs/jquery.tocify.min.js"></script>
-    <script>
-      $(function(){
-        $('#menu').tocify({
-          selectors: 'h2',
-          hashGenerator: 'pretty'
-        });
-      });
-    </script>
   </head>
   <body>
     <ul id="menu"></ul>
@@ -161,7 +150,9 @@
 
  request.post(&#39;/user&#39;)
    .type(&#39;png&#39;)
-</code></pre><h2 id="setting-accept">Setting Accept</h2>
+</code></pre><h2 id="serializing-request-body">Serializing request body</h2>
+<p>Superagent will automatically serialize JSON and forms. If you want to send the payload in a custom format, you can replace the built-in serialization with <code>.serialize()</code> method.</p>
+<h2 id="setting-accept">Setting Accept</h2>
 <p>In a similar fashion to the <code>.type()</code> method it is also possible to set the Accept header via the short hand method <code>.accept()</code>. Which references <code>request.types</code> as well allowing you to specify either the full canonicalized MIME type name as type/subtype, or the extension suffix form as &quot;xml&quot;, &quot;json&quot;, &quot;png&quot;, etc for convenience:</p>
 <pre><code> request.get(&#39;/user&#39;)
    .accept(&#39;application/json&#39;)
@@ -180,7 +171,7 @@
   .send({ post: &#39;data&#39;, here: &#39;wahoo&#39; })
   .end(callback);
 </code></pre><h2 id="parsing-response-bodies">Parsing response bodies</h2>
-<p>  Super Agent will parse known response-body data for you, currently supporting <em>application/x-www-form-urlencoded</em>, <em>application/json</em>, and <em>multipart/form-data</em>.</p>
+<p>  Super Agent will parse known response-body data for you, currently supporting <code>application/x-www-form-urlencoded</code>, <code>application/json</code>, and <code>multipart/form-data</code>. You can set a custom parser (that takes precedence over built-in parsers) with the <code>.parse(fn)</code> method.</p>
 <h3 id="json-urlencoded">JSON / Urlencoded</h3>
 <p>  The property <code>res.body</code> is the parsed object, for example if a request responded with the JSON string &#39;{&quot;user&quot;:{&quot;name&quot;:&quot;tobi&quot;}}&#39;, <code>res.body.user.name</code> would be &quot;tobi&quot;. Likewise the x-www-form-urlencoded value of &quot;user[name]=tobi&quot; would yield the same result.</p>
 <h3 id="multipart">Multipart</h3>
@@ -202,7 +193,7 @@ Tobi
 <h3 id="response-text">Response text</h3>
 <p>  The <code>res.text</code> property contains the unparsed response body string. This
   property is always present for the client API, and only when the mime type
-  matches &quot;text/<em>&quot;, &quot;</em>/json&quot;, or &quot;x-www-form-urlencoding&quot; by default for node. The
+  matches &quot;text/<em>&quot;, &quot;</em>/json&quot;, or &quot;x-www-form-urlencoded&quot; by default for node. The
   reasoning is to conserve memory, as buffering text of large bodies such as multipart files or images is extremely inefficient.</p>
 <p>  To force buffering see the &quot;Buffering responses&quot; section.</p>
 <h3 id="response-body">Response body</h3>
@@ -347,5 +338,15 @@ you can <code>yield</code> on any superagent method:</p>
 </code></pre>
     </div>
     <a href="http://github.com/visionmedia/superagent"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub"></a>
+    <script src="docs/jquery.js"></script>
+    <script src="docs/jquery-ui.min.js"></script>
+    <script src="docs/highlight.js"></script>
+    <script src="docs/jquery.tocify.min.js"></script>
+    <script>
+	  $('#menu').tocify({
+	    selectors: 'h2',
+	    hashGenerator: 'pretty'
+	  });
+    </script>
   </body>
 </html>
