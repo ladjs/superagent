@@ -112,6 +112,19 @@ Visit `http://localhost:4000/__zuul` in your browser.
 
 Edit tests and refresh your browser. You do not have to restart the test runner.
 
+
+## Packaging Notes for Developers
+
+**npm (for node)** is configured via the `package.json` file and the `.npmignore` file. Key metadata in the `package.json` file is the `version` field which should be changed according to semantic versioning and have a 1-1 correspondence with git tags. So for example, if you were to `git show v1.5.0:package.json | grep version`, you should see `"version": "1.5.0",` and this should hold true for every release. This can be handled via the `npm version` command. Be aware that when publishing, npm will presume the version being published should also be tagged in npm as `latest`, which is OK for normal incremental releases. For betas and minor/patch releases to older versions, be sure to include `--tag` appropriately to avoid an older release getting tagged as `latest`.
+
+**npm (for browser standalone)** When we publish versions to npm, we run `make superagent.js` which generates the standalone `superagent.js` file via `browserify`, and this file is included in the package published to npm (but this file is never checked into the git repository). If users want to install via npm but serve a single `.js` file directly to the browser, the `node_modules/superagent/superagent.js` is a standalone browserified file ready to go for that purpose. It is not minified.
+
+**npm (for browserify)** is handled via the `package.json` `browser` field which allows users to install superagent via npm, reference it from their browser code with `require('superagent')`, and then build their own application bundle via `browserify`, which will use `lib/client.js` as the superagent entrypoint.
+
+**bower** is configured via the `bower.json` file. Bower installs files directly from git/github without any transformation.
+
+**component** is configured via the `component.json` file.
+
 ## License
 
 MIT
