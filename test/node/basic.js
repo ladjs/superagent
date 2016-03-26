@@ -8,11 +8,12 @@ var request = require('../../');
 
 describe('[node] request', function(){
 
-  describe('res.statusCode', function(){
-    it('should set statusCode', function(done){
+  describe('with an url', function(){
+    it('should preserve the encoding of the url', function(done){
       request
-      .get('http://localhost:5000/login', function(err, res){
-        assert(res.statusCode === 200);
+      .get('http://localhost:5000/url?a=(b%29')
+      .end(function(err, res){
+        assert('/url?a=(b%29' == res.text);
         done();
       })
     })
@@ -50,33 +51,6 @@ describe('[node] request', function(){
         assert('POST' == obj.method);
         assert(':5000/echo' == obj.url);
         assert('baz' == obj.data.foo);
-        done();
-      });
-    })
-  })
-
-  describe('should allow the send shorthand', function() {
-    it('with callback in the method call', function(done) {
-      request
-      .get('http://localhost:5000/login', function(err, res) {
-          assert(res.status == 200);
-          done();
-      });
-    })
-
-    it('with data in the method call', function(done) {
-      request
-      .post('http://localhost:5000/echo', { foo: 'bar' })
-      .end(function(err, res) {
-        assert('{"foo":"bar"}' == res.text);
-        done();
-      });
-    })
-
-    it('with callback and data in the method call', function(done) {
-      request
-      .post('http://localhost:5000/echo', { foo: 'bar' }, function(err, res) {
-        assert('{"foo":"bar"}' == res.text);
         done();
       });
     })
@@ -129,6 +103,21 @@ describe('[node] request', function(){
       })
     })
   })
+
+  describe('case-insensitive', function(){
+    it('should set/get header fields case-insensitively', function(){
+      var r = request.post('http://localhost:5000/echo');
+      r.set('MiXeD', 'helloes');
+      assert(r.get('mixed') === 'helloes');
+    });
+
+    it('should unset header fields case-insensitively', function () {
+      var r = request.post('http://localhost:5000/echo');
+      r.set('MiXeD', 'helloes');
+      r.unset('MIXED');
+      assert(r.get('mixed') === undefined);
+    });
+  });
 
   describe('req.write(str)', function(){
     it('should write the given data', function(done){
@@ -198,6 +187,18 @@ describe('[node] request', function(){
           buf.should.equal('hello this is dog');
           done();
         });
+      });
+    })
+  })
+
+  describe('.withCredentials()', function(){
+    it('should not throw an error when using the client-side "withCredentials" method', function(done){
+      request
+      .get('http://localhost:5000/custom')
+      .withCredentials()
+      .end(function(err, res){
+        assert(null == err);
+        done();
       });
     })
   })

@@ -1,23 +1,49 @@
-var should = require('should');
+var setup = require('./support/setup');
+var NODE = setup.NODE;
+var uri = setup.uri;
+
 var assert = require('assert');
-var url = require('url');
-
 var request = require('../');
-
-var NODE = true;
-var uri = 'http://localhost:5000';
-if (typeof window !== 'undefined') {
-  NODE = false;
-  uri = '//' + window.location.host;
-}
-else {
-  process.env.ZUUL_PORT = 5000;
-  require('./support/server');
-  uri = 'http://localhost:5000';
-}
 
 describe('request', function(){
   this.timeout(10000);
+
+  describe('res.statusCode', function(){
+    it('should set statusCode', function(done){
+      request
+      .get(uri + '/login', function(err, res){
+        assert(res.statusCode === 200);
+        done();
+      })
+    })
+  })
+
+  describe('should allow the send shorthand', function() {
+    it('with callback in the method call', function(done) {
+      request
+      .get(uri + '/login', function(err, res) {
+          assert(res.status == 200);
+          done();
+      });
+    })
+
+    it('with data in the method call', function(done) {
+      request
+      .post(uri + '/echo', { foo: 'bar' })
+      .end(function(err, res) {
+        assert('{"foo":"bar"}' == res.text);
+        done();
+      });
+    })
+
+    it('with callback and data in the method call', function(done) {
+      request
+      .post(uri + '/echo', { foo: 'bar' }, function(err, res) {
+        assert('{"foo":"bar"}' == res.text);
+        done();
+      });
+    })
+  })
 
   describe('with a callback', function(){
     it('should invoke .end()', function(done){

@@ -16,8 +16,14 @@ if (zlib) {
   var app = express()
     , subject = 'some long long long long string';
 
-  app.listen(3080);
-
+  var base = 'http://localhost'
+  var server;
+  before(function listen(done) {
+    server = app.listen(0, function listening() {
+      base += ':' + server.address().port;
+      done();
+    });
+  });
   app.get('/binary', function(req, res){
     zlib.deflate(subject, function (err, buf){
       res.set('Content-Encoding', 'gzip');
@@ -27,6 +33,13 @@ if (zlib) {
   app.get('/corrupt', function(req, res){
     res.set('Content-Encoding', 'gzip');
     res.send(buf);
+  });
+
+  app.get('/nocontent', function (req, res, next){
+    res.statusCode = 204;
+    res.set('Content-Type', 'text/plain');
+    res.set('Content-Encoding', 'gzip');
+    res.send('');
   });
 
   app.get('/', function (req, res, next){
@@ -40,7 +53,7 @@ if (zlib) {
   describe('zlib', function(){
     it('should deflate the content', function(done){
       request
-        .get('http://localhost:3080')
+        .get(base)
         .end(function(err, res){
           res.should.have.status(200);
           res.text.should.equal(subject);
@@ -51,7 +64,7 @@ if (zlib) {
 
     it('should handle corrupted responses', function(done){
       request
-        .get('http://localhost:3080/corrupt')
+        .get(base + '/corrupt')
         .end(function(err, res){
           assert(err, 'missing error');
           assert(!res, 'response should not be defined');
@@ -59,10 +72,23 @@ if (zlib) {
         });
     });
 
+    it('should handle no content with gzip header', function(done){
+      request
+        .get(base + '/nocontent')
+        .end(function(err, res){
+          assert.ifError(err);
+          assert(res);
+          res.should.have.status(204);
+          res.text.should.equal('');
+          res.headers.should.not.have.property('content-length');
+          done();
+        });
+    });
+
     describe('without encoding set', function(){
       it('should emit buffers', function(done){
         request
-          .get('http://localhost:3080/binary')
+          .get(base + '/binary')
           .end(function(err, res){
             res.should.have.status(200);
             res.headers['content-length'].should.be.below(subject.length);

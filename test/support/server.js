@@ -1,12 +1,17 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
+var basicAuth = require('basic-auth-connect');
 
 var app = express();
 
 app.use(function(req, res, next) {
   res.set('Cache-Control', 'no-cache, no-store');
   next();
+});
+
+app.all('/url', function(req, res){
+  res.send(req.url);
 });
 
 app.all('/echo', function(req, res){
@@ -38,6 +43,11 @@ app.get('/login', function(req, res){
 
 app.get('/json', function(req, res){
   res.status(200).json({ name: 'manny' });
+});
+
+app.get('/json-hal', function(req, res){
+  res.set('content-type', 'application/hal+json');
+  res.send({ name: 'hal 5000' });
 });
 
 app.get('/ok', function(req, res){
@@ -142,11 +152,16 @@ app.get('/invalid-json', function(req, res) {
   res.send(")]}', {'header':{'code':200,'text':'OK','version':'1.0'},'data':'some data'}");
 });
 
+app.get('/invalid-json-forbidden', function(req, res) {
+  res.set('content-type', 'application/json');
+  res.status(403).send("Forbidden");
+});
+
 app.get('/text', function(req, res){
   res.send("just some text");
 });
 
-app.post('/auth', function(req, res) {
+app.post('/auth', basicAuth('foo', 'bar'), function(req, res) {
   var auth = req.headers.authorization,
       parts = auth.split(' '),
       credentials = new Buffer(parts[1], 'base64').toString().split(':'),
@@ -194,6 +209,18 @@ app.post('/empty-body', bodyParser.text(), function(req, res) {
   else {
     res.sendStatus(400);
   }
+});
+
+
+app.get('/collection-json', function(req, res){
+  res.set('content-type', 'application/vnd.collection+json');
+  res.send({ name: 'chewbacca' });
+});
+
+app.get('/invalid-json', function(req, res) {
+  res.set('content-type', 'application/json');
+  // sample invalid json taken from https://github.com/swagger-api/swagger-ui/issues/1354
+  res.send(")]}', {'header':{'code':200,'text':'OK','version':'1.0'},'data':'some data'}");
 });
 
 app.listen(process.env.ZUUL_PORT);

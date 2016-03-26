@@ -67,12 +67,15 @@ request
 Existing plugins:
  * [superagent-no-cache](https://github.com/johntron/superagent-no-cache) - prevents caching by including Cache-Control header
  * [superagent-prefix](https://github.com/johntron/superagent-prefix) - prefixes absolute URLs (useful in test environment)
+ * [superagent-suffix](https://github.com/timneutkens1/superagent-suffix) - suffix URLs with a given path
  * [superagent-mock](https://github.com/M6Web/superagent-mock) - simulate HTTP calls by returning data fixtures based on the requested URL
  * [superagent-mocker](https://github.com/shuvalov-anton/superagent-mocker) — simulate REST API
  * [superagent-cache](https://github.com/jpodwys/superagent-cache) - superagent with built-in, flexible caching
  * [superagent-jsonapify](https://github.com/alex94puchades/superagent-jsonapify) - A lightweight [json-api](http://jsonapi.org/format/) client addon for superagent
  * [superagent-serializer](https://github.com/zzarcon/superagent-serializer) - Converts server payload into different cases
- 
+ * [superagent-promise-plugin](https://github.com/jomaxx/superagent-promise-plugin) - Shims req.end to return a promise when executed with no callback.
+ * [superagent-use](https://github.com/koenpunt/superagent-use) - A client addon to apply plugins to all requests.
+
 Please prefix your plugin with `superagent-*` so that it can easily be found by others.
 
 For superagent extensions such as couchdb and oauth visit the [wiki](https://github.com/visionmedia/superagent/wiki).

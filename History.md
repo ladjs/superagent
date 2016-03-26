@@ -1,4 +1,49 @@
-# 1.6.0 (2015-12-09)
+# 1.8.2 (2016-03-20)
+
+  * Fixed handling of HTTP status 204 with content-encoding: gzip (Andrew Shelton)
+  * Handling of FormData error events (scriptype)
+  * Fixed parsing of `vnd+json` MIME types (Kornel Lesiński)
+  * Aliased browser implementation of `.parse()` as `.serialize()` for forward compatibility
+
+# 1.8.1 (2016-03-14)
+
+  * Fixed form-data incompatibility with IE9
+
+# 1.8.0 (2016-03-09)
+
+ * Extracted common code into request-base class (Peter Lyons)
+   * It does not affect the public API, but please let us know if you notice any plugins/subclasses breaking!
+ * Added option `{type:'auto'}` to `auth` method, which enables browser-native auth types (Jungle, Askar Yusupov)
+ * Added `responseType()` to set XHR `responseType` (chris)
+ * Switched to form-data for browserify-compatible `FormData` (Peter Lyons)
+ * Added `statusCode` to error response when JSON response is malformed (mattdell)
+ * Prevented TCP port conflicts in all tests (Peter Lyons)
+ * Updated form-data dependency
+
+# 1.7.2 (2016-01-26)
+
+ * Fix case-sensitivity of header fields introduced by a4ddd6a. (Edward J. Jinotti)
+ * bump extend dependency, as former version did not contain any license information (Lukas Eipert)
+
+# 1.7.1 (2016-01-21)
+
+ * Fixed a conflict with express when using npm 3.x (Glenn)
+ * Fixed redirects after a multipart/form-data POST request (cyclist2)
+
+# 1.7.0 (2016-01-18)
+
+ * When attaching files, read default filename from the `File` object (JD Isaacks)
+ * Add `direction` property to `progress` events (Joseph Dykstra)
+ * Update component-emitter & formidable (Kornel Lesiński)
+ * Don't re-encode query string needlessly (Ruben Verborgh)
+ * ensure querystring is appended when doing `stream.pipe(request)` (Keith Grennan)
+ * change set header function, not call `this.request()` until call `this.end()` (vicanso)
+ * Add no-op `withCredentials` to Node API (markdalgleish)
+ * fix `delete` breaking on ie8 (kenjiokabe)
+ * Don't let request error override responses (Clay Reimann)
+ * Increased number of tests shared between node and client (Kornel Lesiński)
+
+# 1.6.0/1.6.1 (2015-12-09)
 
  * avoid misleading CORS error message
  * added 'progress' event on file/form upload in Node (Olivier Lalonde)
