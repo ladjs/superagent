@@ -34,6 +34,10 @@
 
     request('GET', '/search').end(callback);
 
+ES6 promises are supported. Instead of `.end()` you can call `.then()`:
+
+    request('GET', '/search').then(success, failure);
+
  The __node__ client may also provide absolute urls:
 
      request
@@ -441,12 +445,14 @@ Your callback function will always be passed two arguments: error and response. 
       // all other error types we handle generically
     }
 
-## Generator support
+## Promise and Generator support
 
-Superagent now supports easier control flow using generators. By using a generator control flow
-like [co](https://github.com/tj/co) or a web framework like [koa](https://github.com/koajs/koa),
-you can `yield` on any superagent method:
+Superagent's request is a "thenable" object that's compatible with JavaScript promises.
+
+Libraries like [co](https://github.com/tj/co) or a web framework like [koa](https://github.com/koajs/koa) can `yield` on any superagent method:
 
     var res = yield request
       .get('http://local')
       .auth('tobi', 'learnboost')
+
+Note that superagent expects the global `Promise` object to be present. You'll need a polyfill to use promises in Internet Explorer or Node.js 0.10.

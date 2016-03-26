@@ -19,6 +19,11 @@ app.all('/echo', function(req, res){
   req.pipe(res);
 });
 
+var uniq = 0;
+app.all('/unique', function(req, res){
+  res.send('never the same ' + (uniq++));
+});
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
