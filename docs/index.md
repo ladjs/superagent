@@ -18,7 +18,7 @@
 
 ## Test documentation
 
-  The following [test documentation](docs/test.html) was generated with [Mocha's](http://visionmedia.github.com/mocha) "doc" reporter, and directly reflects the test suite. This provides an additional source of documentation.
+  The following [test documentation](docs/test.html) was generated with [Mocha's](http://mochajs.org/) "doc" reporter, and directly reflects the test suite. This provides an additional source of documentation.
 
 ## Request basics
 
