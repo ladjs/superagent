@@ -48,9 +48,10 @@ ES6 promises are supported. Instead of `.end()` you can call `.then()`:
  
  The __node__ client supports making requests to [Unix Domain Sockets](http://en.wikipedia.org/wiki/Unix_domain_socket):
 
-     // pattern: http://unix:/SOCKET_PATH:/REQUEST_PATH
+     // pattern: https?+unix://SOCKET_PATH/REQUEST_PATH
+     //          Use `%2F` as `/` in SOCKET_PATH
      request
-       .get('http://unix:/absolute/path/to/unix.sock:/search')
+       .get('http+unix://%2Fabsolute%2Fpath%2Fto%2Funix.sock/search')
        .end(function(err, res){
 
        });
