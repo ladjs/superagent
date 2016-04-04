@@ -45,6 +45,15 @@ ES6 promises are supported. Instead of `.end()` you can call `.then()`:
        .end(function(err, res){
 
        });
+ 
+ The __node__ client supports making requests to [Unix Domain Sockets](http://en.wikipedia.org/wiki/Unix_domain_socket):
+
+     // pattern: http://unix:/SOCKET_PATH:/REQUEST_PATH
+     request
+       .get('http://unix:/absolute/path/to/unix.sock:/search')
+       .end(function(err, res){
+
+       });
 
   __DELETE__, __HEAD__, __POST__, __PUT__ and other __HTTP__ verbs may also be used, simply change the method name:
 
