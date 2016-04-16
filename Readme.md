@@ -76,6 +76,7 @@ Existing plugins:
  * [superagent-promise-plugin](https://github.com/jomaxx/superagent-promise-plugin) - Shims req.end to return a promise when executed with no callback.
  * [superagent-use](https://github.com/koenpunt/superagent-use) - A client addon to apply plugins to all requests.
  * [superagent-httpbackend](https://www.npmjs.com/package/superagent-httpbackend) - stub out requests using AngularJS' $httpBackend syntax
+ * [superagent-throttle](https://github.com/leviwheatcroft/superagent-throttle) - queues and intelligently throttles requests
 
 Please prefix your plugin with `superagent-*` so that it can easily be found by others.
 
