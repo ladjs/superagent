@@ -6,6 +6,8 @@ var assert = require('assert');
 var request = require('../');
 
 describe('req.send(Object) as "json"', function(){
+  this.timeout(10000);
+
   it('should default to json', function(done){
     request
     .post(uri + '/echo')
@@ -117,6 +119,8 @@ describe('req.send(Object) as "json"', function(){
 })
 
 describe('res.body', function(){
+  this.timeout(10000);
+
   describe('application/json', function(){
     it('should parse the body', function(done){
       request
