@@ -220,7 +220,7 @@ describe('request', function(){
       .type('json')
       .send('{"a": 1}')
       .end(function(err, res){
-        res.should.be.json;
+        res.should.be.json();
         done();
       });
     })
@@ -297,7 +297,7 @@ describe('request', function(){
       .post(uri + '/echo')
       .send({ name: 'tobi' })
       .end(function(err, res){
-        res.should.be.json
+        res.should.be.json();
         res.text.should.equal('{"name":"tobi"}');
         done();
       });
@@ -310,7 +310,7 @@ describe('request', function(){
         .send({ name: 'tobi' })
         .send({ age: 1 })
         .end(function(err, res){
-          res.should.be.json
+          res.should.be.json();
           if (NODE) {
             res.buffered.should.be.true;
           }
