@@ -40,11 +40,11 @@ Tested browsers:
 - Latest Android
 - Latest Firefox
 - Latest Chrome
-- IE9 through latest
+- IE10 through latest. IE9 with polyfills.
 - Latest iPhone
 - Latest Safari
 
-Even though IE9 is supported, a polyfill `window.btoa` is needed to use basic auth.
+Even though IE9 is supported, a polyfill for `window.FormData` is required for `.field()`, and `window.btoa` is needed to use basic auth.
 
 # Plugins
 
