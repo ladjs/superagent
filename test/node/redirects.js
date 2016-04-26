@@ -1,97 +1,8 @@
+var setup = require('../support/setup');
+var base = setup.uri;
 
-var EventEmitter = require('events').EventEmitter
-  , request = require('../../')
-  , express = require('express')
-  , assert = require('assert')
-  , app = express()
-  , should = require('should');
-
-app.get('/', function(req, res){
-  res.set('QUERY', JSON.stringify(req.query));
-  res.redirect('/movies');
-});
-
-app.get('/movies', function(req, res){
-  res.set('QUERY', JSON.stringify(req.query));
-  res.redirect('/movies/all');
-});
-
-app.get('/movies/all', function(req, res){
-  res.set('QUERY', JSON.stringify(req.query));
-  res.redirect('/movies/all/0');
-});
-
-app.get('/movies/all/0', function(req, res){
-  res.set('QUERY', JSON.stringify(req.query));
-  res.send('first movie page');
-});
-
-app.get('/movies/random', function(req, res){
-  res.redirect('/movie/4');
-});
-
-app.get('/movie/4', function(req, res){
-  setTimeout(function(){
-    res.send('not-so-random movie');
-  }, 1000);
-});
-
-app.post('/movie', function(req, res){
-  res.redirect('/movies/all/0');
-});
-
-app.put('/redirect-303', function(req, res){
-  res.redirect(303, '/reply-method');
-});
-
-app.put('/redirect-307', function(req, res){
-  res.redirect(307, '/reply-method');
-});
-
-app.put('/redirect-308', function(req, res){
-  res.redirect(308, '/reply-method');
-});
-
-app.all('/reply-method', function(req, res){
-  res.send('method=' + req.method.toLowerCase());
-});
-
-app.get('/tobi', function(req, res){
-  res.send('tobi');
-});
-
-app.get('/relative', function(req, res){
-  res.redirect('tobi');
-});
-
-app.get('/relative/sub', function(req, res){
-  res.redirect('../tobi');
-});
-
-app.get('/header', function(req, res){
-  res.redirect('/header/2');
-});
-
-app.post('/header', function(req, res){
-  res.redirect('/header/2');
-});
-
-app.get('/header/2', function(req, res){
-  res.send(req.headers);
-});
-
-app.get('/bad-redirect', function(req, res){
-  res.status(307).end();
-});
-
-var base = 'http://localhost'
-var server;
-before(function listen(done) {
-  server = app.listen(0, function listening() {
-    base += ':' + server.address().port;
-    done();
-  });
-});
+var assert = require('assert');
+var request = require('../../');
 
 describe('request', function(){
   describe('on redirect', function(){
@@ -118,43 +29,6 @@ describe('request', function(){
       });
     })
 
-    it('should retain header fields', function(done){
-      request
-      .get(base + '/header')
-      .set('X-Foo', 'bar')
-      .end(function(err, res){
-        try {
-          assert(res.body);
-          res.body.should.have.property('x-foo', 'bar');
-          done();
-        } catch(err) {
-          done(err);
-        }
-      });
-    })
-
-    it('should remove Content-* fields', function(done){
-      request
-      .post(base + '/header')
-      .type('txt')
-      .set('X-Foo', 'bar')
-      .set('X-Bar', 'baz')
-      .send('hey')
-      .end(function(err, res){
-        try {
-          assert(res.body);
-          res.body.should.have.property('x-foo', 'bar');
-          res.body.should.have.property('x-bar', 'baz');
-          res.body.should.not.have.property('content-type');
-          res.body.should.not.have.property('content-length');
-          res.body.should.not.have.property('transfer-encoding');
-          done();
-        } catch(err) {
-          done(err);
-        }
-      });
-    })
-
     it('should retain cookies', function(done){
       request
       .get(base + '/header')
@@ -163,21 +37,6 @@ describe('request', function(){
         try {
           assert(res.body);
           res.body.should.have.property('cookie', 'foo=bar;');
-          done();
-        } catch(err) {
-          done(err);
-        }
-      });
-    })
-
-    it('should preserve timeout across redirects', function(done){
-      request
-      .get(base + '/movies/random')
-      .timeout(250)
-      .end(function(err, res){
-        try {
-          assert(err instanceof Error, 'expected an error');
-          err.should.have.property('timeout', 250);
           done();
         } catch(err) {
           done(err);
@@ -344,51 +203,4 @@ describe('request', function(){
     })
   })
 
-  describe('on 303', function(){
-    it('should redirect with same method', function(done){
-      request
-      .put(base + '/redirect-303')
-      .send({msg: "hello"})
-      .redirects(1)
-      .on('redirect', function(res) {
-        res.headers.location.should.equal('/reply-method')
-      })
-      .end(function(err, res){
-        res.text.should.equal('method=get');
-        done();
-      })
-    })
-  })
-
-  describe('on 307', function(){
-    it('should redirect with same method', function(done){
-      request
-      .put(base + '/redirect-307')
-      .send({msg: "hello"})
-      .redirects(1)
-      .on('redirect', function(res) {
-        res.headers.location.should.equal('/reply-method')
-      })
-      .end(function(err, res){
-        res.text.should.equal('method=put');
-        done();
-      })
-    })
-  })
-
-  describe('on 308', function(){
-    it('should redirect with same method', function(done){
-      request
-      .put(base + '/redirect-308')
-      .send({msg: "hello"})
-      .redirects(1)
-      .on('redirect', function(res) {
-        res.headers.location.should.equal('/reply-method')
-      })
-      .end(function(err, res){
-        res.text.should.equal('method=put');
-        done();
-      })
-    })
-  })
 })
