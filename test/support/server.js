@@ -65,6 +65,11 @@ app.get('/foo', function(req, res){
     .send('foo=bar');
 });
 
+app.get('/form-data', function(req, res){
+  res.header('Content-Type', 'application/x-www-form-urlencoded');
+  res.send('pet[name]=manny');
+});
+
 app.get('/', function(req, res){
   res.redirect('/movies');
 });
