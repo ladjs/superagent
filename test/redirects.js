@@ -22,28 +22,6 @@ describe('request', function(){
       });
     })
 
-    it('should remove Content-* fields', function(done){
-      request
-      .post(base + '/header')
-      .type('txt')
-      .set('X-Foo', 'bar')
-      .set('X-Bar', 'baz')
-      .send('hey')
-      .end(function(err, res){
-        try {
-          assert(res.body);
-          res.body.should.have.property('x-foo', 'bar');
-          res.body.should.have.property('x-bar', 'baz');
-          res.body.should.not.have.property('content-type');
-          res.body.should.not.have.property('content-length');
-          res.body.should.not.have.property('transfer-encoding');
-          done();
-        } catch(err) {
-          done(err);
-        }
-      });
-    })
-
     it('should preserve timeout across redirects', function(done){
       request
       .get(base + '/movies/random')
