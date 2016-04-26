@@ -10,7 +10,6 @@ if (typeof window !== 'undefined') {
 else {
   process.env.ZUUL_PORT = 5000;
   require('./server');
-  uri = 'http://localhost:5000';
 }
 
 exports.NODE = NODE;
