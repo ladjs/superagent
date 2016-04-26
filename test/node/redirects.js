@@ -104,13 +104,17 @@ describe('request', function(){
         redirects.push(res.headers.location);
       })
       .end(function(err, res){
-        var arr = [];
-        arr.push('/movies');
-        arr.push('/movies/all');
-        arr.push('/movies/all/0');
-        redirects.should.eql(arr);
-        res.text.should.equal('first movie page');
-        done();
+        try {
+          var arr = [];
+          arr.push('/movies');
+          arr.push('/movies/all');
+          arr.push('/movies/all/0');
+          redirects.should.eql(arr);
+          res.text.should.equal('first movie page');
+          done();
+        } catch(err) {
+          done(err);
+        }
       });
     })
 
@@ -119,8 +123,13 @@ describe('request', function(){
       .get(base + '/header')
       .set('X-Foo', 'bar')
       .end(function(err, res){
-        res.body.should.have.property('x-foo', 'bar');
-        done();
+        try {
+          assert(res.body);
+          res.body.should.have.property('x-foo', 'bar');
+          done();
+        } catch(err) {
+          done(err);
+        }
       });
     })
 
@@ -132,12 +141,17 @@ describe('request', function(){
       .set('X-Bar', 'baz')
       .send('hey')
       .end(function(err, res){
-        res.body.should.have.property('x-foo', 'bar');
-        res.body.should.have.property('x-bar', 'baz');
-        res.body.should.not.have.property('content-type');
-        res.body.should.not.have.property('content-length');
-        res.body.should.not.have.property('transfer-encoding');
-        done();
+        try {
+          assert(res.body);
+          res.body.should.have.property('x-foo', 'bar');
+          res.body.should.have.property('x-bar', 'baz');
+          res.body.should.not.have.property('content-type');
+          res.body.should.not.have.property('content-length');
+          res.body.should.not.have.property('transfer-encoding');
+          done();
+        } catch(err) {
+          done(err);
+        }
       });
     })
 
@@ -146,8 +160,13 @@ describe('request', function(){
       .get(base + '/header')
       .set('Cookie', 'foo=bar;')
       .end(function(err, res){
-        res.body.should.have.property('cookie', 'foo=bar;');
-        done();
+        try {
+          assert(res.body);
+          res.body.should.have.property('cookie', 'foo=bar;');
+          done();
+        } catch(err) {
+          done(err);
+        }
       });
     })
 
@@ -156,9 +175,13 @@ describe('request', function(){
       .get(base + '/movies/random')
       .timeout(250)
       .end(function(err, res){
-        assert(err instanceof Error, 'expected an error');
-        err.should.have.property('timeout', 250);
-        done();
+        try {
+          assert(err instanceof Error, 'expected an error');
+          err.should.have.property('timeout', 250);
+          done();
+        } catch(err) {
+          done(err);
+        }
       });
     })
 
@@ -173,16 +196,20 @@ describe('request', function(){
         redirects.push(res.headers.location);
       })
       .end(function(err, res){
-        var arr = [];
-        arr.push('/movies');
-        arr.push('/movies/all');
-        arr.push('/movies/all/0');
-        redirects.should.eql(arr);
-        res.text.should.equal('first movie page');
+        try {
+          var arr = [];
+          arr.push('/movies');
+          arr.push('/movies/all');
+          arr.push('/movies/all/0');
+          redirects.should.eql(arr);
+          res.text.should.equal('first movie page');
 
-        query.should.eql(['{"foo":"bar"}', '{}', '{}']);
-        res.headers.query.should.eql('{}');
-        done();
+          query.should.eql(['{"foo":"bar"}', '{}', '{}']);
+          res.headers.query.should.eql('{}');
+          done();
+        } catch(err) {
+          done(err);
+        }
       });
     })
 
@@ -190,8 +217,12 @@ describe('request', function(){
       request
       .get(base + '/bad-redirect')
       .end(function(err, res){
-        err.message.should.equal('No location header for redirect');
-        done();
+        try {
+          err.message.should.equal('No location header for redirect');
+          done();
+        } catch(err) {
+          done(err);
+        }
       });
     })
 
@@ -205,10 +236,13 @@ describe('request', function(){
           redirects.push(res.headers.location);
         })
         .end(function(err, res){
-          var arr = [];
-          redirects.should.eql(['tobi']);
-          res.text.should.equal('tobi');
-          done();
+          try {
+            redirects.should.eql(['tobi']);
+            res.text.should.equal('tobi');
+            done();
+          } catch(err) {
+            done(err);
+          }
         });
       })
 
@@ -221,10 +255,13 @@ describe('request', function(){
           redirects.push(res.headers.location);
         })
         .end(function(err, res){
-          var arr = [];
-          redirects.should.eql(['../tobi']);
-          res.text.should.equal('tobi');
-          done();
+          try {
+            redirects.should.eql(['../tobi']);
+            res.text.should.equal('tobi');
+            done();
+          } catch(err) {
+            done(err);
+          }
         });
       })
     })
@@ -241,13 +278,17 @@ describe('request', function(){
         redirects.push(res.headers.location);
       })
       .end(function(err, res){
-        var arr = [];
-        assert(res.redirect, 'res.redirect');
-        arr.push('/movies');
-        arr.push('/movies/all');
-        redirects.should.eql(arr);
-        res.text.should.match(/Moved Temporarily|Found/);
-        done();
+        try {
+          var arr = [];
+          assert(res.redirect, 'res.redirect');
+          arr.push('/movies');
+          arr.push('/movies/all');
+          redirects.should.eql(arr);
+          res.text.should.match(/Moved Temporarily|Found/);
+          done();
+        } catch(err) {
+          done(err);
+        }
       });
     })
   })
@@ -264,11 +305,15 @@ describe('request', function(){
         redirects.push(res.headers.location);
       })
       .end(function(err, res){
-        var arr = [];
-        arr.push('/movies/all/0');
-        redirects.should.eql(arr);
-        res.text.should.equal('first movie page');
-        done();
+        try {
+          var arr = [];
+          arr.push('/movies/all/0');
+          redirects.should.eql(arr);
+          res.text.should.equal('first movie page');
+          done();
+        } catch(err) {
+          done(err);
+        }
       });
     })
   })
@@ -286,11 +331,15 @@ describe('request', function(){
         redirects.push(res.headers.location);
       })
       .end(function(err, res){
-        var arr = [];
-        arr.push('/movies/all/0');
-        redirects.should.eql(arr);
-        res.text.should.equal('first movie page');
-        done();
+        try {
+          var arr = [];
+          arr.push('/movies/all/0');
+          redirects.should.eql(arr);
+          res.text.should.equal('first movie page');
+          done();
+        } catch(err) {
+          done(err);
+        }
       });
     })
   })
