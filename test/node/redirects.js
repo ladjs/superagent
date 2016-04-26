@@ -29,6 +29,47 @@ describe('request', function(){
       });
     })
 
+    it('should not follow on HEAD by default', function(done){
+      var redirects = [];
+
+      request.head(base)
+      .on('redirect', function(res){
+        redirects.push(res.headers.location);
+      })
+      .end(function(err, res){
+        try {
+          redirects.should.eql([]);
+          res.status.should.equal(302);
+          done();
+        } catch(err) {
+          done(err);
+        }
+      });
+    })
+
+    it('should follow on HEAD when redirects are set', function(done){
+      var redirects = [];
+
+      request.head(base)
+      .redirects(10)
+      .on('redirect', function(res){
+        redirects.push(res.headers.location);
+      })
+      .end(function(err, res){
+        try {
+          var arr = [];
+          arr.push('/movies');
+          arr.push('/movies/all');
+          arr.push('/movies/all/0');
+          redirects.should.eql(arr);
+          assert(!res.text);
+          done();
+        } catch(err) {
+          done(err);
+        }
+      });
+    });
+
     it('should retain cookies', function(done){
       request
       .get(base + '/header')
