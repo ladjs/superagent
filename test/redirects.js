@@ -1,5 +1,6 @@
 var setup = require('./support/setup');
 var base = setup.uri;
+var isMSIE = !setup.NODE && /Trident\//.test(navigator.userAgent);
 
 var assert = require('assert');
 var request = require('../');
@@ -56,6 +57,8 @@ describe('request', function(){
 
   describe('on 307', function(){
     it('should redirect with same method', function(done){
+      if (isMSIE) return done(); // IE9 broken
+
       request
       .put(base + '/redirect-307')
       .send({msg: "hello"})
@@ -72,6 +75,8 @@ describe('request', function(){
 
   describe('on 308', function(){
     it('should redirect with same method', function(done){
+      if (isMSIE) return done(); // IE9 broken
+
       request
       .put(base + '/redirect-308')
       .send({msg: "hello"})
