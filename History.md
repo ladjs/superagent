@@ -23,6 +23,7 @@ Breaking changes are in rarely used functionality, so we hope upgrade will be sm
   * Handle `FormData` error events (scriptype)
   * Fixed wrong jsdoc of Request#attach (George Chung)
   * Updated and improved tests (Peter Lyons)
+  * `request.head()` supports `.redirects(5)` call (Kornel Lesiński)
 
 # 1.8.2 (2016-03-20)
 
