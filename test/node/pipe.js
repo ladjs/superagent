@@ -47,11 +47,17 @@ describe('request pipe', function(){
   it('should act as a readable stream', function(done){
     var stream = fs.createWriteStream(destPath);
 
+    var responseCalled = false;
     var req = request.get(base);
     req.type('json');
 
+    req.on('response', function(res){
+      res.should.have.status(200);
+      responseCalled = true;
+    });
     stream.on('finish', function(){
       JSON.parse(fs.readFileSync(destPath, 'utf8')).should.eql({ name: 'tobi' });
+      responseCalled.should.be.true();
       done();
     });
     req.pipe(stream);
