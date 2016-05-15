@@ -456,3 +456,8 @@ Libraries like [co](https://github.com/tj/co) or a web framework like [koa](http
       .auth('tobi', 'learnboost')
 
 Note that superagent expects the global `Promise` object to be present. You'll need a polyfill to use promises in Internet Explorer or Node.js 0.10.
+
+
+## Using browser version in electron
+
+[Electron](http://electron.atom.io/) developers report if you would prefer to use the browser version of superagent instead of the node version, you can `require('superagent/superagent')`. Your requests will now show up in the chrome developer tools network tab. Note this environment is not covered by automated test suite and not officially supported.
