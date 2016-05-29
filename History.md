@@ -1,9 +1,5 @@
 # 2.0.0
 
-To try alpha versions:
-
-    npm install superagent@next
-
 ## Breaking changes
 
 Breaking changes are in rarely used functionality, so we hope upgrade will be smooth for most users.
@@ -24,6 +20,7 @@ Breaking changes are in rarely used functionality, so we hope upgrade will be sm
   * Fixed wrong jsdoc of Request#attach (George Chung)
   * Updated and improved tests (Peter Lyons)
   * `request.head()` supports `.redirects(5)` call (Kornel Lesiński)
+  * `response` event is also emitted when using `.pipe()`
 
 # 1.8.2 (2016-03-20)
 
