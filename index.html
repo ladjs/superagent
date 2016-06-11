@@ -23,7 +23,7 @@
      }
    });
 </code></pre><h2 id="test-documentation">Test documentation</h2>
-<p>  The following <a href="docs/test.html">test documentation</a> was generated with <a href="http://visionmedia.github.com/mocha">Mocha&#39;s</a> &quot;doc&quot; reporter, and directly reflects the test suite. This provides an additional source of documentation.</p>
+<p>  The following <a href="docs/test.html">test documentation</a> was generated with <a href="http://mochajs.org/">Mocha&#39;s</a> &quot;doc&quot; reporter, and directly reflects the test suite. This provides an additional source of documentation.</p>
 <h2 id="request-basics">Request basics</h2>
 <p> A request can be initiated by invoking the appropriate method on the <code>request</code> object, then calling <code>.end()</code> to send the request. For example a simple GET request:</p>
 <pre><code> request
@@ -33,6 +33,8 @@
    });
 </code></pre><p>  A method string may also be passed:</p>
 <pre><code>request(&#39;GET&#39;, &#39;/search&#39;).end(callback);
+</code></pre><p>ES6 promises are supported. Instead of <code>.end()</code> you can call <code>.then()</code>:</p>
+<pre><code>request(&#39;GET&#39;, &#39;/search&#39;).then(success, failure);
 </code></pre><p> The <strong>node</strong> client may also provide absolute urls:</p>
 <pre><code> request
    .get(&#39;http://example.com/search&#39;)
@@ -171,7 +173,8 @@
   .send({ post: &#39;data&#39;, here: &#39;wahoo&#39; })
   .end(callback);
 </code></pre><h2 id="parsing-response-bodies">Parsing response bodies</h2>
-<p>  Super Agent will parse known response-body data for you, currently supporting <code>application/x-www-form-urlencoded</code>, <code>application/json</code>, and <code>multipart/form-data</code>. You can set a custom parser (that takes precedence over built-in parsers) with the <code>.parse(fn)</code> method.</p>
+<p>  Super Agent will parse known response-body data for you, currently supporting <code>application/x-www-form-urlencoded</code>, <code>application/json</code>, and <code>multipart/form-data</code>.</p>
+<p>  You can set a custom parser (that takes precedence over built-in parsers) with the <code>.buffer(true).parse(fn)</code> method. If response buffering is not enabled (<code>.buffer(false)</code>) then the <code>response</code> event will be emitted without waiting for the body parser to finish, so <code>response.body</code> won&#39;t be available.</p>
 <h3 id="json-urlencoded">JSON / Urlencoded</h3>
 <p>  The property <code>res.body</code> is the parsed object, for example if a request responded with the JSON string &#39;{&quot;user&quot;:{&quot;name&quot;:&quot;tobi&quot;}}&#39;, <code>res.body.user.name</code> would be &quot;tobi&quot;. Likewise the x-www-form-urlencoded value of &quot;user[name]=tobi&quot; would yield the same result.</p>
 <h3 id="multipart">Multipart</h3>
@@ -328,14 +331,16 @@ request
 else if (err) {
   // all other error types we handle generically
 }
-</code></pre><h2 id="generator-support">Generator support</h2>
-<p>Superagent now supports easier control flow using generators. By using a generator control flow
-like <a href="https://github.com/tj/co">co</a> or a web framework like <a href="https://github.com/koajs/koa">koa</a>,
-you can <code>yield</code> on any superagent method:</p>
+</code></pre><h2 id="promise-and-generator-support">Promise and Generator support</h2>
+<p>Superagent&#39;s request is a &quot;thenable&quot; object that&#39;s compatible with JavaScript promises and <code>async</code>/<code>await</code> syntax.</p>
+<p>Libraries like <a href="https://github.com/tj/co">co</a> or a web framework like <a href="https://github.com/koajs/koa">koa</a> can <code>yield</code> on any superagent method:</p>
 <pre><code>var res = yield request
   .get(&#39;http://local&#39;)
   .auth(&#39;tobi&#39;, &#39;learnboost&#39;)
-</code></pre>
+</code></pre><p>Note that superagent expects the global <code>Promise</code> object to be present. You&#39;ll need a polyfill to use promises in Internet Explorer or Node.js 0.10.</p>
+<h2 id="using-browser-version-in-electron">Using browser version in electron</h2>
+<p><a href="http://electron.atom.io/">Electron</a> developers report if you would prefer to use the browser version of superagent instead of the node version, you can <code>require(&#39;superagent/superagent&#39;)</code>. Your requests will now show up in the chrome developer tools network tab. Note this environment is not covered by automated test suite and not officially supported.</p>
+
     </div>
     <a href="http://github.com/visionmedia/superagent"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub"></a>
     <script src="docs/jquery.js"></script>

@@ -449,7 +449,7 @@ Your callback function will always be passed two arguments: error and response. 
 
 ## Promise and Generator support
 
-Superagent's request is a "thenable" object that's compatible with JavaScript promises.
+Superagent's request is a "thenable" object that's compatible with JavaScript promises and `async`/`await` syntax.
 
 Libraries like [co](https://github.com/tj/co) or a web framework like [koa](https://github.com/koajs/koa) can `yield` on any superagent method:
 
