@@ -1,3 +1,10 @@
+# 2.1.0-beta
+
+ * Wait for async parsers to avoid double callback (Kornel Lesiński)
+ * DRY parser selection and response creation code (Kornel Lesiński)
+ * Treat multipart like other parsers (Kornel Lesiński)
+ * Errors thrown in `.end()` callback don't cause the callback to be called twice (Kornel Lesiński)
+
 # 2.0.0
 
 ## Breaking changes
