@@ -19,6 +19,11 @@ app.all('/echo', function(req, res){
   req.pipe(res);
 });
 
+var uniq = 0;
+app.all('/unique', function(req, res){
+  res.send('never the same ' + (uniq++));
+});
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -60,20 +65,43 @@ app.get('/foo', function(req, res){
     .send('foo=bar');
 });
 
+app.get('/form-data', function(req, res){
+  res.header('Content-Type', 'application/x-www-form-urlencoded');
+  res.send('pet[name]=manny');
+});
+
+app.post('/movie', function(req, res){
+  res.redirect('/movies/all/0');
+});
+
 app.get('/', function(req, res){
+  res.set('QUERY', JSON.stringify(req.query));
   res.redirect('/movies');
 });
 
 app.get('/movies', function(req, res){
+  res.set('QUERY', JSON.stringify(req.query));
   res.redirect('/movies/all');
 });
 
 app.get('/movies/all', function(req, res){
+  res.set('QUERY', JSON.stringify(req.query));
   res.redirect('/movies/all/0');
 });
 
 app.get('/movies/all/0', function(req, res){
+  res.set('QUERY', JSON.stringify(req.query));
   res.status(200).send('first movie page');
+});
+
+app.get('/movies/random', function(req, res){
+  res.redirect('/movie/4');
+});
+
+app.get('/movie/4', function(req, res){
+  setTimeout(function(){
+    res.send('not-so-random movie');
+  }, 1000);
 });
 
 app.get('/links', function(req, res){
@@ -221,6 +249,54 @@ app.get('/invalid-json', function(req, res) {
   res.set('content-type', 'application/json');
   // sample invalid json taken from https://github.com/swagger-api/swagger-ui/issues/1354
   res.send(")]}', {'header':{'code':200,'text':'OK','version':'1.0'},'data':'some data'}");
+});
+
+app.options('/options/echo/body', bodyParser.json(), function (req, res) {
+  res.send(req.body);
+});
+
+app.put('/redirect-303', function(req, res){
+  res.redirect(303, '/reply-method');
+});
+
+app.put('/redirect-307', function(req, res){
+  res.redirect(307, '/reply-method');
+});
+
+app.put('/redirect-308', function(req, res){
+  res.redirect(308, '/reply-method');
+});
+
+app.all('/reply-method', function(req, res){
+  res.send('method=' + req.method.toLowerCase());
+});
+
+app.get('/tobi', function(req, res){
+  res.send('tobi');
+});
+
+app.get('/relative', function(req, res){
+  res.redirect('tobi');
+});
+
+app.get('/relative/sub', function(req, res){
+  res.redirect('../tobi');
+});
+
+app.get('/header', function(req, res){
+  res.redirect('/header/2');
+});
+
+app.post('/header', function(req, res){
+  res.redirect('/header/2');
+});
+
+app.get('/header/2', function(req, res){
+  res.send(req.headers);
+});
+
+app.get('/bad-redirect', function(req, res){
+  res.status(307).end();
 });
 
 app.listen(process.env.ZUUL_PORT);

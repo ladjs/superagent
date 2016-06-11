@@ -18,7 +18,7 @@
 
 ## Test documentation
 
-  The following [test documentation](docs/test.html) was generated with [Mocha's](http://visionmedia.github.com/mocha) "doc" reporter, and directly reflects the test suite. This provides an additional source of documentation.
+  The following [test documentation](docs/test.html) was generated with [Mocha's](http://mochajs.org/) "doc" reporter, and directly reflects the test suite. This provides an additional source of documentation.
 
 ## Request basics
 
@@ -33,6 +33,10 @@
   A method string may also be passed:
 
     request('GET', '/search').end(callback);
+
+ES6 promises are supported. Instead of `.end()` you can call `.then()`:
+
+    request('GET', '/search').then(success, failure);
 
  The __node__ client may also provide absolute urls:
 
@@ -193,6 +197,10 @@ You can also use the `.query()` method for HEAD requests. The following will pro
      request.post('/user')
        .type('png')
 
+## Serializing request body
+
+Superagent will automatically serialize JSON and forms. If you want to send the payload in a custom format, you can replace the built-in serialization with `.serialize()` method.
+
 ## Setting Accept
 
 In a similar fashion to the `.type()` method it is also possible to set the Accept header via the short hand method `.accept()`. Which references `request.types` as well allowing you to specify either the full canonicalized MIME type name as type/subtype, or the extension suffix form as "xml", "json", "png", etc for convenience:
@@ -219,7 +227,9 @@ In a similar fashion to the `.type()` method it is also possible to set the Acce
 
 ## Parsing response bodies
 
-  Super Agent will parse known response-body data for you, currently supporting _application/x-www-form-urlencoded_, _application/json_, and _multipart/form-data_.
+  Super Agent will parse known response-body data for you, currently supporting `application/x-www-form-urlencoded`, `application/json`, and `multipart/form-data`.
+
+  You can set a custom parser (that takes precedence over built-in parsers) with the `.buffer(true).parse(fn)` method. If response buffering is not enabled (`.buffer(false)`) then the `response` event will be emitted without waiting for the body parser to finish, so `response.body` won't be available.
 
 ### JSON / Urlencoded
 
@@ -251,7 +261,7 @@ In a similar fashion to the `.type()` method it is also possible to set the Acce
 
   The `res.text` property contains the unparsed response body string. This
   property is always present for the client API, and only when the mime type
-  matches "text/*", "*/json", or "x-www-form-urlencoding" by default for node. The
+  matches "text/*", "*/json", or "x-www-form-urlencoded" by default for node. The
   reasoning is to conserve memory, as buffering text of large bodies such as multipart files or images is extremely inefficient.
 
   To force buffering see the "Buffering responses" section.
@@ -437,12 +447,19 @@ Your callback function will always be passed two arguments: error and response. 
       // all other error types we handle generically
     }
 
-## Generator support
+## Promise and Generator support
 
-Superagent now supports easier control flow using generators. By using a generator control flow
-like [co](https://github.com/tj/co) or a web framework like [koa](https://github.com/koajs/koa),
-you can `yield` on any superagent method:
+Superagent's request is a "thenable" object that's compatible with JavaScript promises.
+
+Libraries like [co](https://github.com/tj/co) or a web framework like [koa](https://github.com/koajs/koa) can `yield` on any superagent method:
 
     var res = yield request
       .get('http://local')
       .auth('tobi', 'learnboost')
+
+Note that superagent expects the global `Promise` object to be present. You'll need a polyfill to use promises in Internet Explorer or Node.js 0.10.
+
+
+## Using browser version in electron
+
+[Electron](http://electron.atom.io/) developers report if you would prefer to use the browser version of superagent instead of the node version, you can `require('superagent/superagent')`. Your requests will now show up in the chrome developer tools network tab. Note this environment is not covered by automated test suite and not officially supported.

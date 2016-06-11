@@ -64,6 +64,36 @@ describe('request', function(){
         done();
       });
     })
+
+    it('is optional with a promise', function() {
+      if ('undefined' === typeof Promise) {
+        return;
+      }
+
+      return request.get(uri + '/login')
+      .then(function(res) {
+          return res.status;
+      })
+      .then()
+      .then(function(status) {
+          assert.equal(200, status, "Real promises pass results through");
+      });
+    });
+
+    it('called only once with a promise', function() {
+      if ('undefined' === typeof Promise) {
+        return;
+      }
+
+      var req = request.get(uri + '/unique');
+
+      return Promise.all([req, req, req])
+      .then(function(results){
+        results.forEach(function(item){
+          assert.equal(item.body, results[0].body, "It should keep returning the same result after being called once");
+        });
+      });
+    });
   })
 
   describe('res.error', function(){
@@ -81,6 +111,20 @@ describe('request', function(){
         assert(err, 'should have an error for 500');
         assert.equal(err.message, 'Internal Server Error');
         done();
+      });
+    })
+
+    it('with .then() promise', function(){
+      if ('undefined' === typeof Promise) {
+        return;
+      }
+
+      return request
+      .get(uri + '/error')
+      .then(function(){
+        assert.fail();
+      }, function(err){
+        assert.equal(err.message, 'Internal Server Error');
       });
     })
   })
@@ -176,7 +220,7 @@ describe('request', function(){
       .type('json')
       .send('{"a": 1}')
       .end(function(err, res){
-        res.should.be.json;
+        res.should.be.json();
         done();
       });
     })
@@ -253,7 +297,7 @@ describe('request', function(){
       .post(uri + '/echo')
       .send({ name: 'tobi' })
       .end(function(err, res){
-        res.should.be.json
+        res.should.be.json();
         res.text.should.equal('{"name":"tobi"}');
         done();
       });
@@ -266,7 +310,7 @@ describe('request', function(){
         .send({ name: 'tobi' })
         .send({ age: 1 })
         .end(function(err, res){
-          res.should.be.json
+          res.should.be.json();
           if (NODE) {
             res.buffered.should.be.true;
           }
@@ -312,6 +356,10 @@ describe('request', function(){
 
   describe('.then(fulfill, reject)', function() {
     it('should support successful fulfills with .then(fulfill)', function(done) {
+      if ('undefined' === typeof Promise) {
+        return done();
+      }
+
       request
       .post(uri + '/echo')
       .send({ name: 'tobi' })
@@ -322,6 +370,10 @@ describe('request', function(){
     })
 
     it('should reject an error with .then(null, reject)', function(done) {
+      if ('undefined' === typeof Promise) {
+        return done();
+      }
+
       request
       .get(uri + '/error')
       .then(null, function(err) {
@@ -346,5 +398,47 @@ describe('request', function(){
         req.abort();
       }, 1000);
     })
+
+    it('should allow chaining .abort() several times', function(done){
+      var req = request
+      .get(uri + '/delay/3000')
+      .end(function(err, res){
+        assert(false, 'should not complete the request');
+      });
+
+      // This also verifies only a single 'done' event is emitted
+      req.on('abort', done);
+
+      setTimeout(function() {
+        req.abort().abort().abort();
+      }, 1000);
+    })
   })
+
+  describe('req.toJSON()', function(){
+    it('should describe the request', function(done){
+      var req = request
+      .post(uri + '/echo')
+      .send({ foo: 'baz' })
+      .end(function(err, res){
+        var json = req.toJSON();
+        assert('POST' == json.method);
+        assert(/\/echo$/.test(json.url));
+        assert('baz' == json.data.foo);
+        done();
+      });
+    })
+  })
+
+  describe('req.options()', function(){
+    it('should allow request body', function(done){
+      request.options(uri + '/options/echo/body')
+      .send({ foo: 'baz' })
+      .end(function(err, res){
+        assert(err == null);
+        assert(res.body.foo === 'baz');
+        done();
+      });
+    });
+  });
 })

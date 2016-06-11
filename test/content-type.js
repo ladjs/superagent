@@ -5,6 +5,7 @@ var assert = require('assert');
 var request = require('../');
 
 describe('req.set("Content-Type", contentType)', function(){
+  this.timeout(10000);
 
   it('should work with just the contentType component', function(done){
     request

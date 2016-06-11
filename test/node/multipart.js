@@ -124,7 +124,7 @@ describe('Request', function(){
 //         req.attach('name3', 'baz');
 
 //         req.on('error', function(err){
-//           err.message.should.include('ENOENT');
+//           err.message.should.containEql('ENOENT');
 //           err.path.should.equal('foo');
 //           done();
 //         });
@@ -178,17 +178,15 @@ describe('Request', function(){
       })
     })
     it('filesystem errors should be caught', function(done){
-      var timestamp = Date.now()
       request
           .post(base + '/echo')
-          .attach('filedata', 'test/node/fixtures/lorem-' + timestamp + '.ext')
+          .attach('filedata', 'test/node/fixtures/non-existent-file.ext')
           .on('error', function(err) {
             err.code.should.equal('ENOENT')
-            err.path.should.equal('test/node/fixtures/lorem-' + timestamp + '.ext')
+            err.path.should.equal('test/node/fixtures/non-existent-file.ext')
             done()
           })
           .end(function (err, res) {
-            console.log('END')
             done(new Error("Request should have been aborted earlier!"))
           })
     })
@@ -209,7 +207,7 @@ describe('Request', function(){
 //       req.end(function(err, res){
 //         if (err) return done(err);
 //         var ct = res.header['content-type'];
-//         ct.should.include('multipart/form-data; boundary=');
+//         ct.should.containEql('multipart/form-data; boundary=');
 //         res.body.should.eql({});
 //         res.files.image.name.should.equal('image.png');
 //         res.files.image.type.should.equal('image/png');
@@ -264,7 +262,7 @@ describe('Request', function(){
 
 //       req.end(function(err, res){
 //         if (err) return done(err);
-//         res.header['content-type'].should.include('boundary=');
+//         res.header['content-type'].should.containEql('boundary=');
 //         res.body.name.should.equal('Tobi');
 //         done();
 //       });

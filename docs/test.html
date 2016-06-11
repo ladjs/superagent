@@ -338,7 +338,7 @@ setTimeout(function() {
     should.not.exist(err);
     res.should.have.status(200);
     should.not.exist(res.headers['set-cookie']);
-    res.text.should.include('dashboard');
+    res.text.should.containEql('dashboard');
     done();
   });</code></pre></dd>
             <dt>should start with empty session (set cookies)</dt>
@@ -357,7 +357,7 @@ setTimeout(function() {
     should.not.exist(err);
     res.should.have.status(200);
     should.not.exist(res.headers['set-cookie']);
-    res.text.should.include('dashboard');
+    res.text.should.containEql('dashboard');
     done();
   });</code></pre></dd>
             <dt>should persist cookies across requests</dt>
@@ -403,7 +403,7 @@ setTimeout(function() {
   .end(function(err, res) {
     should.not.exist(err);
     res.should.have.status(200);
-    res.text.should.include('dashboard');
+    res.text.should.containEql('dashboard');
     done();
   });</code></pre></dd>
             <dt>should be able to post redirects</dt>
@@ -413,7 +413,7 @@ setTimeout(function() {
   .end(function(err, res) {
     should.not.exist(err);
     res.should.have.status(200);
-    res.text.should.include('simple');
+    res.text.should.containEql('simple');
     res.redirects.should.eql(['http://localhost:4000/simple']);
     done();
   });</code></pre></dd>

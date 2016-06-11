@@ -36,9 +36,9 @@ superagent.js: lib/node/*.js lib/node/parsers/*.js
 test-server:
 	@node test/server
 
-docs: index.html test-docs
+docs: index.html test-docs docs/index.md
 
-index.html: docs/index.md
+index.html: docs/index.md docs/head.html docs/tail.html
 	marked < $< \
 		| cat docs/head.html - docs/tail.html \
 		> $@
@@ -46,7 +46,7 @@ index.html: docs/index.md
 docclean:
 	rm -f index.html test.html
 
-test-docs:
+test-docs: docs/head.html docs/tail.html
 	make test REPORTER=doc \
 		| cat docs/head.html - docs/tail.html \
 		> test.html

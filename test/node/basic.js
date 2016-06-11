@@ -41,21 +41,6 @@ describe('[node] request', function(){
     })
   })
 
-  describe('req.toJSON()', function(){
-    it('should describe the request', function(done){
-      request
-      .post(':5000/echo')
-      .send({ foo: 'baz' })
-      .end(function(err, res){
-        var obj = res.request.toJSON();
-        assert('POST' == obj.method);
-        assert(':5000/echo' == obj.url);
-        assert('baz' == obj.data.foo);
-        done();
-      });
-    })
-  })
-
   describe('res.toJSON()', function(){
     it('should describe the response', function(done){
       request

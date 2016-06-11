@@ -1,3 +1,34 @@
+# 2.1.0-beta
+
+ * Wait for async parsers to avoid double callback (Kornel Lesiński)
+ * DRY parser selection and response creation code (Kornel Lesiński)
+ * Treat multipart like other parsers (Kornel Lesiński)
+ * Errors thrown in `.end()` callback don't cause the callback to be called twice (Kornel Lesiński)
+
+# 2.0.0
+
+## Breaking changes
+
+Breaking changes are in rarely used functionality, so we hope upgrade will be smooth for most users.
+
+  * Browser: The `.parse()` method has been renamed to `.serialize()` for consistency with NodeJS version.
+  * Browser: Query string keys without a value used to be parsed as `'undefined'`, now their value is `''` (empty string) (shura, Kornel Lesiński).
+  * NodeJS: The `redirect` event is called after new query string and headers have been set and is allowed to override the request URL (Kornel Lesiński)
+  * `.then()` returns a real `Promise`. Note that use of superagent with promises now requires a global `Promise` object.
+    If you target Internet Explorer or Node 0.10, you'll need `require('es6-promise').polyfill()` or similar.
+  * Upgraded all dependencies (Peter Lyons)
+  * Renamed properties documented as `@api private` to have `_prefixed` names (Kornel Lesiński)
+
+## Probably not breaking changes:
+
+  * Extracted common functions to request-base (Peter Lyons)
+  * Fixed race condition in pipe tests (Peter Lyons)
+  * Handle `FormData` error events (scriptype)
+  * Fixed wrong jsdoc of Request#attach (George Chung)
+  * Updated and improved tests (Peter Lyons)
+  * `request.head()` supports `.redirects(5)` call (Kornel Lesiński)
+  * `response` event is also emitted when using `.pipe()`
+
 # 1.8.2 (2016-03-20)
 
   * Fixed handling of HTTP status 204 with content-encoding: gzip (Andrew Shelton)
