@@ -227,7 +227,9 @@ In a similar fashion to the `.type()` method it is also possible to set the Acce
 
 ## Parsing response bodies
 
-  Super Agent will parse known response-body data for you, currently supporting `application/x-www-form-urlencoded`, `application/json`, and `multipart/form-data`. You can set a custom parser (that takes precedence over built-in parsers) with the `.parse(fn)` method.
+  Super Agent will parse known response-body data for you, currently supporting `application/x-www-form-urlencoded`, `application/json`, and `multipart/form-data`.
+
+  You can set a custom parser (that takes precedence over built-in parsers) with the `.buffer(true).parse(fn)` method. If response buffering is not enabled (`.buffer(false)`) then the `response` event will be emitted without waiting for the body parser to finish, so `response.body` won't be available.
 
 ### JSON / Urlencoded
 
