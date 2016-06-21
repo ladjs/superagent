@@ -191,6 +191,35 @@ describe('Request', function(){
           })
     })
   })
+
+  describe('#field(name, val)', function() {
+    it('should set a multipart field value', function(done) {
+      request.post(base + '/echo')
+      .field('first-name', 'foo')
+      .field('last-name', 'bar')
+      .end(function(err, res) {
+        if(err) done(err);
+        res.should.be.ok;
+        res.body['first-name'].should.equal('foo');
+        res.body['last-name'].should.equal('bar');
+        done();
+      });
+    });
+  });
+
+  describe('#field(object)', function() {
+    it('should set multiple multipart fields', function(done) {
+      request.post(base + '/echo')
+      .field({ 'first-name': 'foo', 'last-name': 'bar' })
+      .end(function(err, res) {
+        if(err) done(err);
+        res.should.be.ok;
+        res.body['first-name'].should.equal('foo');
+        res.body['last-name'].should.equal('bar');
+        done();
+      });
+    });
+  });
 })
 
 // describe('Part', function(){
