@@ -31,7 +31,6 @@
     "methods": "^1.1.1",
     "cookiejar": "^2.0.6",
     "debug": "^2.2.0",
-    "reduce-component": "^1.0.1",
     "extend": "^3.0.0",
     "form-data": "1.0.0-rc4",
     "readable-stream": "^2.0.5"
@@ -54,7 +53,6 @@
   "browser": {
     "./lib/node/index.js": "./lib/client.js",
     "emitter": "component-emitter",
-    "reduce": "reduce-component",
     "./test/support/server.js": "./test/support/blank.js"
   },
   "component": {
