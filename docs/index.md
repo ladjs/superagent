@@ -462,7 +462,7 @@ Note that superagent expects the global `Promise` object to be present. You'll n
 
 ## Browser and node versions
 
-Superagent has two implementations: one for web browsers (using XHR) and one for Node.JS (using request module). By default Browserify and WebPack will pick the browser version.
+Superagent has two implementations: one for web browsers (using XHR) and one for Node.JS (using core http module). By default Browserify and WebPack will pick the browser version.
 
 If want to use WebPack to compile code for Node.JS, you *must* specify [node target](webpack.github.io/docs/configuration.html#target) in its configuration.
 
