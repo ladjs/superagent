@@ -315,18 +315,23 @@ In a similar fashion to the `.type()` method it is also possible to set the Acce
   is set to the `ms` value. __NOTE__ that this is a timeout applied to the request
   and all subsequent redirects, not per request.
 
-## Basic authentication
+## Authentication
 
-  Basic auth is currently provided by the _node_ client in two forms, first via the URL as "user:pass":
-
-    request.get('http://tobi:learnboost@local').end(callback);
-
-  As well as via the `.auth()` method:
+  In both Node and browsers auth available via the `.auth()` method:
 
     request
       .get('http://local')
       .auth('tobi', 'learnboost')
       .end(callback);
+
+
+  In the _Node_ client Basic auth can be in the URL as "user:pass":
+
+    request.get('http://tobi:learnboost@local').end(callback);
+
+  By default only `Basic` auth is used. In browser you can add `{type:'auto'}` to enable all methods built-in in the browser (Digest, NTLM, etc.):
+
+    request.auth('digest', 'secret', {type:'auto'})
 
 ## Following redirects
 

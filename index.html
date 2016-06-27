@@ -235,14 +235,16 @@ Tobi
   will be triggered. To differentiate between other errors the <code>err.timeout</code> property
   is set to the <code>ms</code> value. <strong>NOTE</strong> that this is a timeout applied to the request
   and all subsequent redirects, not per request.</p>
-<h2 id="basic-authentication">Basic authentication</h2>
-<p>  Basic auth is currently provided by the <em>node</em> client in two forms, first via the URL as &quot;user:pass&quot;:</p>
-<pre><code>request.get(&#39;http://tobi:learnboost@local&#39;).end(callback);
-</code></pre><p>  As well as via the <code>.auth()</code> method:</p>
+<h2 id="authentication">Authentication</h2>
+<p>  In both Node and browsers auth available via the <code>.auth()</code> method:</p>
 <pre><code>request
   .get(&#39;http://local&#39;)
   .auth(&#39;tobi&#39;, &#39;learnboost&#39;)
   .end(callback);
+</code></pre><p>  In the <em>Node</em> client Basic auth can be in the URL as &quot;user:pass&quot;:</p>
+<pre><code>request.get(&#39;http://tobi:learnboost@local&#39;).end(callback);
+</code></pre><p>  By default only <code>Basic</code> auth is used. In browser you can add <code>{type:&#39;auto&#39;}</code> to enable all methods built-in in the browser (Digest, NTLM, etc.):</p>
+<pre><code>request.auth(&#39;digest&#39;, &#39;secret&#39;, {type:&#39;auto&#39;})
 </code></pre><h2 id="following-redirects">Following redirects</h2>
 <p>  By default up to 5 redirects will be followed, however you may specify this with the <code>res.redirects(n)</code> method:</p>
 <pre><code>request
