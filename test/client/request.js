@@ -129,6 +129,15 @@ it('GET blob object', function(next){
     });
 });
 
+it('Reject node-only function', function(){
+  assert.throws(function(){
+    request.get().write();
+  });
+  assert.throws(function(){
+    request.get().pipe();
+  });
+});
+
 window.btoa = window.btoa || null;
 it('basic auth', function(next){
   window.btoa = window.btoa || require('Base64').btoa;
