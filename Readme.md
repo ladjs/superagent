@@ -75,6 +75,7 @@ Existing plugins:
  * [superagent-use](https://github.com/koenpunt/superagent-use) - A client addon to apply plugins to all requests.
  * [superagent-httpbackend](https://www.npmjs.com/package/superagent-httpbackend) - stub out requests using AngularJS' $httpBackend syntax
  * [superagent-throttle](https://github.com/leviwheatcroft/superagent-throttle) - queues and intelligently throttles requests
+ * [superagent-charset](https://github.com/magicdawn/superagent-charset) - add charset support for node's superagent
 
 Please prefix your plugin with `superagent-*` so that it can easily be found by others.
 
