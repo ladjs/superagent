@@ -622,7 +622,7 @@ it('req.toJSON()', function(next){
   request
   .get(uri + '/ok')
   .end(function(err, res){
-    var j = res.request.toJSON();
+    var j = (res.request || res.req).toJSON();
     ['url', 'method', 'data', 'headers'].forEach(function(prop){
       assert(j.hasOwnProperty(prop));
     });
