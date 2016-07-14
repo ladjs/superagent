@@ -1,9 +1,8 @@
-# 2.1.0-beta
+# 2.1.0
 
- * Wait for async parsers to avoid double callback (Kornel Lesiński)
- * DRY parser selection and response creation code (Kornel Lesiński)
- * Treat multipart like other parsers (Kornel Lesiński)
+ * Refactored async parsers. Now the `end` callback waits for async parsers to finish (Kornel Lesiński)
  * Errors thrown in `.end()` callback don't cause the callback to be called twice (Kornel Lesiński)
+ * Added `headers` to `toJSON()` (Tao)
 
 # 2.0.0
 
