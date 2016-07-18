@@ -107,6 +107,15 @@ it('GET querystring object .get(uri, obj, fn)', function(next){
   });
 });
 
+it('GET querystring object with null value', function(next){
+  request
+  .get('/url', { nil: null })
+  .end(function(err, res){
+    assert.equal(res.text, '/url?nil');
+    next();
+  });
+});
+
 it('GET blob object', function(next){
   if ('undefined' === typeof Blob) {
     return next();

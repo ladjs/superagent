@@ -23,7 +23,7 @@ describe('request.serializeObject()', function(){
     serialize('test', 'test');
     serialize('foo=bar', 'foo=bar');
     serialize({ foo: 'bar' }, 'foo=bar');
-    serialize({ foo: null }, '');
+    serialize({ foo: null }, 'foo');
     serialize({ foo: 'null' }, 'foo=null');
     serialize({ foo: undefined }, '');
     serialize({ foo: 'undefined' }, 'foo=undefined');
