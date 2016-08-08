@@ -1,5 +1,5 @@
 {
-  "name": "@yr/superagent",
+  "name": "superagent",
   "version": "2.1.0",
   "description": "elegant & feature rich browser / node HTTP with a fluent API",
   "scripts": {
@@ -21,7 +21,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/YR/superagent.git"
+    "url": "git://github.com/visionmedia/superagent.git"
   },
   "dependencies": {
     "qs": "^6.1.0",
