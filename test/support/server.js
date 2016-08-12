@@ -230,6 +230,11 @@ app.get('/arraybuffer', function(req, res) {
   res.send(content);
 });
 
+app.get('/arraybuffer-unauthorized', function(req, res) {
+  res.set('Content-Type', 'application/json');
+  res.status(401).send('{"message":"Authorization has been denied for this request."}');
+});
+
 app.post('/empty-body', bodyParser.text(), function(req, res) {
   if (typeof req.body === 'object' && Object.keys(req.body).length === 0) {
     res.sendStatus(204);
