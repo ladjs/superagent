@@ -1,3 +1,8 @@
+# 2.2.0
+
+ * Added `timedout` property to node Request instance (Alexander Pope)
+ * Unified `null` querystring values in node and browser environments. (George Chung)
+
 # 2.1.0
 
  * Refactored async parsers. Now the `end` callback waits for async parsers to finish (Kornel Lesiński)
