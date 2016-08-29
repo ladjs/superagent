@@ -68,7 +68,7 @@ Existing plugins:
  * [superagent-suffix](https://github.com/timneutkens1/superagent-suffix) - suffix URLs with a given path
  * [superagent-mock](https://github.com/M6Web/superagent-mock) - simulate HTTP calls by returning data fixtures based on the requested URL
  * [superagent-mocker](https://github.com/shuvalov-anton/superagent-mocker) — simulate REST API
- * [superagent-cache](https://github.com/jpodwys/superagent-cache) - superagent with built-in, flexible caching
+ * [superagent-cache](https://github.com/jpodwys/superagent-cache) - superagent with built-in, flexible caching (compatible with superagent `1.x`)
  * [superagent-jsonapify](https://github.com/alex94puchades/superagent-jsonapify) - A lightweight [json-api](http://jsonapi.org/format/) client addon for superagent
  * [superagent-serializer](https://github.com/zzarcon/superagent-serializer) - Converts server payload into different cases
  * [superagent-promise-plugin](https://github.com/jomaxx/superagent-promise-plugin) - Shims req.end to return a promise when executed with no callback.
