@@ -114,7 +114,7 @@ describe('https', function(){
 
     describe('.agent', function () {
       it('should be able to make multiple requests without redefining the certificates', function(done){
-        var agent = request.agent({ca, key, cert});
+        var agent = request.agent({ca: ca, key: key, cert: cert});
         agent
         .get(testEndpoint)
         .end(function(err, res){
