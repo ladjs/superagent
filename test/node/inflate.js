@@ -26,7 +26,7 @@ app.get('/binary', function(req, res) {
 });
 app.get('/corrupt', function(req, res) {
   res.set('Content-Encoding', 'gzip');
-  res.send(buf);
+  res.send("blah");
 });
 
 app.get('/nocontent', function(req, res, next) {
