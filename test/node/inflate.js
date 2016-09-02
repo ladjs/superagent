@@ -53,6 +53,14 @@ app.get('/junk', function(req, res) {
   });
 });
 
+app.get('/chopped', function(req, res) {
+  zlib.deflate(subject + '123456', function(err, buf) {
+    res.set('Content-Type', 'text/plain');
+    res.set('Content-Encoding', 'gzip');
+    res.send(buf.slice(0,-1));
+  });
+});
+
 describe('zlib', function() {
   it('should deflate the content', function(done) {
     request
@@ -71,6 +79,17 @@ describe('zlib', function() {
       .end(function(err, res) {
         res.should.have.status(200);
         res.text.should.equal(subject);
+        done();
+      });
+  });
+
+  it('should ignore missing data', function(done) {
+    request
+      .get(base + '/chopped')
+      .end(function(err, res) {
+        assert.equal(undefined, err);
+        res.should.have.status(200);
+        res.text.should.startWith(subject);
         done();
       });
   });
