@@ -1,20 +1,11 @@
 require('should');
 require('should-http');
 
-var request = require('../../')
-  , assert = require('assert')
-  , express = require('express')
-  , zlib
-
-/**
- * Only require zlib for Node 0.6+.
- */
-
-try {
+var request = require('../../'),
+  assert = require('assert'),
+  express = require('express'),
   zlib = require('zlib');
-} catch (e) { }
 
-if (zlib) {
   var app = express()
     , subject = 'some long long long long string';
 
@@ -104,4 +95,3 @@ if (zlib) {
       })
     })
   });
-}
