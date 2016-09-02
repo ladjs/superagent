@@ -44,6 +44,15 @@ app.get('/', function(req, res, next) {
   });
 });
 
+app.get('/junk', function(req, res) {
+  zlib.deflate(subject, function(err, buf) {
+    res.set('Content-Type', 'text/plain');
+    res.set('Content-Encoding', 'gzip');
+    res.write(buf);
+    res.end(" 0 junk");
+  });
+});
+
 describe('zlib', function() {
   it('should deflate the content', function(done) {
     request
@@ -52,6 +61,16 @@ describe('zlib', function() {
         res.should.have.status(200);
         res.text.should.equal(subject);
         res.headers['content-length'].should.be.below(subject.length);
+        done();
+      });
+  });
+
+  it('should ignore trailing junk', function(done) {
+    request
+      .get(base + '/junk')
+      .end(function(err, res) {
+        res.should.have.status(200);
+        res.text.should.equal(subject);
         done();
       });
   });
