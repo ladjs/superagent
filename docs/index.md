@@ -1,7 +1,7 @@
 
 # SuperAgent
 
- Super Agent is light-weight progressive ajax API crafted for flexibility, readability, and a low learning curve after being frustrated with many of the existing request APIs. It also works with Node.js!
+ SuperAgent is light-weight progressive ajax API crafted for flexibility, readability, and a low learning curve after being frustrated with many of the existing request APIs. It also works with Node.js!
 
      request
        .post('/api/pet')
@@ -199,7 +199,7 @@ You can also use the `.query()` method for HEAD requests. The following will pro
 
 ## Serializing request body
 
-Superagent will automatically serialize JSON and forms. If you want to send the payload in a custom format, you can replace the built-in serialization with `.serialize()` method.
+SuperAgent will automatically serialize JSON and forms. If you want to send the payload in a custom format, you can replace the built-in serialization with `.serialize()` method.
 
 ## Setting Accept
 
@@ -227,7 +227,7 @@ In a similar fashion to the `.type()` method it is also possible to set the Acce
 
 ## Parsing response bodies
 
-  Super Agent will parse known response-body data for you, currently supporting `application/x-www-form-urlencoded`, `application/json`, and `multipart/form-data`.
+  SuperAgent will parse known response-body data for you, currently supporting `application/x-www-form-urlencoded`, `application/json`, and `multipart/form-data`.
 
   You can set a custom parser (that takes precedence over built-in parsers) with the `.buffer(true).parse(fn)` method. If response buffering is not enabled (`.buffer(false)`) then the `response` event will be emitted without waiting for the body parser to finish, so `response.body` won't be available.
 
@@ -365,7 +365,7 @@ In a similar fashion to the `.type()` method it is also possible to set the Acce
 
 ## Multipart requests
 
-  Super Agent is also great for _building_ multipart requests for which it provides methods `.attach()` and `.field()`.
+  SuperAgent is also great for _building_ multipart requests for which it provides methods `.attach()` and `.field()`.
 
 ### Attaching files
 
@@ -454,23 +454,23 @@ Your callback function will always be passed two arguments: error and response. 
 
 ## Promise and Generator support
 
-Superagent's request is a "thenable" object that's compatible with JavaScript promises and `async`/`await` syntax.
+SuperAgent's request is a "thenable" object that's compatible with JavaScript promises and `async`/`await` syntax.
 
-Libraries like [co](https://github.com/tj/co) or a web framework like [koa](https://github.com/koajs/koa) can `yield` on any superagent method:
+Libraries like [co](https://github.com/tj/co) or a web framework like [koa](https://github.com/koajs/koa) can `yield` on any SuperAgent method:
 
     var res = yield request
       .get('http://local')
       .auth('tobi', 'learnboost')
 
-Note that superagent expects the global `Promise` object to be present. You'll need a polyfill to use promises in Internet Explorer or Node.js 0.10.
+Note that SuperAgent expects the global `Promise` object to be present. You'll need a polyfill to use promises in Internet Explorer or Node.js 0.10.
 
 
 ## Browser and node versions
 
-Superagent has two implementations: one for web browsers (using XHR) and one for Node.JS (using core http module). By default Browserify and WebPack will pick the browser version.
+SuperAgent has two implementations: one for web browsers (using XHR) and one for Node.JS (using core http module). By default Browserify and WebPack will pick the browser version.
 
 If want to use WebPack to compile code for Node.JS, you *must* specify [node target](webpack.github.io/docs/configuration.html#target) in its configuration.
 
 ### Using browser version in electron
 
-[Electron](http://electron.atom.io/) developers report if you would prefer to use the browser version of superagent instead of the Node version, you can `require('superagent/superagent')`. Your requests will now show up in the Chrome developer tools Network tab. Note this environment is not covered by automated test suite and not officially supported.
+[Electron](http://electron.atom.io/) developers report if you would prefer to use the browser version of SuperAgent instead of the Node version, you can `require('superagent/superagent')`. Your requests will now show up in the Chrome developer tools Network tab. Note this environment is not covered by automated test suite and not officially supported.

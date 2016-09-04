@@ -18,7 +18,7 @@ component:
 $ component install visionmedia/superagent
 ```
 
-Works with [browserify](https://github.com/substack/node-browserify) and should work with [webpack](https://github.com/visionmedia/superagent/wiki/Superagent-for-Webpack)
+Works with [browserify](https://github.com/substack/node-browserify) and should work with [webpack](https://github.com/visionmedia/superagent/wiki/SuperAgent-for-Webpack)
 
 ```js
 request
@@ -46,7 +46,7 @@ Even though IE9 is supported, a polyfill for `window.FormData` is required for `
 
 # Plugins
 
-Superagent is easily extended via plugins.
+SuperAgent is easily extended via plugins.
 
 ```js
 var nocache = require('superagent-no-cache');
@@ -68,17 +68,17 @@ Existing plugins:
  * [superagent-suffix](https://github.com/timneutkens1/superagent-suffix) - suffix URLs with a given path
  * [superagent-mock](https://github.com/M6Web/superagent-mock) - simulate HTTP calls by returning data fixtures based on the requested URL
  * [superagent-mocker](https://github.com/shuvalov-anton/superagent-mocker) — simulate REST API
- * [superagent-cache](https://github.com/jpodwys/superagent-cache) - superagent with built-in, flexible caching (compatible with superagent `1.x`)
+ * [superagent-cache](https://github.com/jpodwys/superagent-cache) - SuperAgent with built-in, flexible caching (compatible with SuperAgent `1.x`)
  * [superagent-jsonapify](https://github.com/alex94puchades/superagent-jsonapify) - A lightweight [json-api](http://jsonapi.org/format/) client addon for superagent
  * [superagent-serializer](https://github.com/zzarcon/superagent-serializer) - Converts server payload into different cases
  * [superagent-use](https://github.com/koenpunt/superagent-use) - A client addon to apply plugins to all requests.
  * [superagent-httpbackend](https://www.npmjs.com/package/superagent-httpbackend) - stub out requests using AngularJS' $httpBackend syntax
  * [superagent-throttle](https://github.com/leviwheatcroft/superagent-throttle) - queues and intelligently throttles requests
- * [superagent-charset](https://github.com/magicdawn/superagent-charset) - add charset support for node's superagent
+ * [superagent-charset](https://github.com/magicdawn/superagent-charset) - add charset support for node's SuperAgent
 
 Please prefix your plugin with `superagent-*` so that it can easily be found by others.
 
-For superagent extensions such as couchdb and oauth visit the [wiki](https://github.com/visionmedia/superagent/wiki).
+For SuperAgent extensions such as couchdb and oauth visit the [wiki](https://github.com/visionmedia/superagent/wiki).
 
 ## Running node tests
 
@@ -118,7 +118,7 @@ Edit tests and refresh your browser. You do not have to restart the test runner.
 
 **npm (for browser standalone)** When we publish versions to npm, we run `make superagent.js` which generates the standalone `superagent.js` file via `browserify`, and this file is included in the package published to npm (but this file is never checked into the git repository). If users want to install via npm but serve a single `.js` file directly to the browser, the `node_modules/superagent/superagent.js` is a standalone browserified file ready to go for that purpose. It is not minified.
 
-**npm (for browserify)** is handled via the `package.json` `browser` field which allows users to install superagent via npm, reference it from their browser code with `require('superagent')`, and then build their own application bundle via `browserify`, which will use `lib/client.js` as the superagent entrypoint.
+**npm (for browserify)** is handled via the `package.json` `browser` field which allows users to install SuperAgent via npm, reference it from their browser code with `require('superagent')`, and then build their own application bundle via `browserify`, which will use `lib/client.js` as the SuperAgent entrypoint.
 
 **bower** is configured via the `bower.json` file. Bower installs files directly from git/github without any transformation.
 
