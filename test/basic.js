@@ -384,6 +384,22 @@ describe('request', function(){
     })
   })
 
+  describe('.catch(reject)', function() {
+    it('should reject an error with .catch(reject)', function(done) {
+      if ('undefined' === typeof Promise) {
+        return done();
+      }
+
+      request
+      .get(uri + '/error')
+      .catch(function(err) {
+        assert(err.status == 500);
+        assert(err.response.text == 'boom');
+        done();
+      })
+    })
+  })
+
   describe('.abort()', function(){
     it('should abort the request', function(done){
       var req = request

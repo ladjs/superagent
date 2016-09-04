@@ -1,9 +1,13 @@
-# 2.1.0-beta
+# 2.2.0
 
- * Wait for async parsers to avoid double callback (Kornel Lesiński)
- * DRY parser selection and response creation code (Kornel Lesiński)
- * Treat multipart like other parsers (Kornel Lesiński)
+ * Added `timedout` property to node Request instance (Alexander Pope)
+ * Unified `null` querystring values in node and browser environments. (George Chung)
+
+# 2.1.0
+
+ * Refactored async parsers. Now the `end` callback waits for async parsers to finish (Kornel Lesiński)
  * Errors thrown in `.end()` callback don't cause the callback to be called twice (Kornel Lesiński)
+ * Added `headers` to `toJSON()` (Tao)
 
 # 2.0.0
 

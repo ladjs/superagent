@@ -374,6 +374,22 @@ request
           </dl>
         </section>
         <section class="suite">
+          <h1>.catch(reject)</h1>
+          <dl>
+            <dt>should reject an error with .catch(reject)</dt>
+            <dd><pre><code>if ('undefined' === typeof Promise) {
+  return done();
+}
+request
+.get(uri + '/error')
+.catch(function(err) {
+  assert(err.status == 500);
+  assert(err.response.text == 'boom');
+  done();
+})</code></pre></dd>
+          </dl>
+        </section>
+        <section class="suite">
           <h1>.abort()</h1>
           <dl>
             <dt>should abort the request</dt>
@@ -1205,7 +1221,7 @@ next();</code></pre></dd>
   next();
 });</code></pre></dd>
         <dt>req.timeout(ms)</dt>
-        <dd><pre><code>request
+        <dd><pre><code>var req = request
 .get(uri + '/delay/3000')
 .timeout(1000)
 .end(function(err, res){
@@ -1213,10 +1229,11 @@ next();</code></pre></dd>
   assert(1000 == err.timeout, 'err.timeout missing');
   assert('timeout of 1000ms exceeded' == err.message, 'err.message incorrect');
   assert(null == res);
+  assert(req.timedout, true);
   next();
 })</code></pre></dd>
         <dt>req.timeout(ms) with redirect</dt>
-        <dd><pre><code>request
+        <dd><pre><code>var req = request
 .get(uri + '/delay/const')
 .timeout(1000)
 .end(function(err, res) {
@@ -1224,6 +1241,7 @@ next();</code></pre></dd>
   assert(1000 == err.timeout, 'err.timeout missing');
   assert('timeout of 1000ms exceeded' == err.message, 'err.message incorrect');
   assert(null == res);
+  assert(req.timedout, true);
   next();
 });</code></pre></dd>
         <dt>request event</dt>
@@ -1891,37 +1909,83 @@ request
       <h1>https</h1>
       <dl>
         <section class="suite">
-          <h1>request</h1>
+          <h1>certificate authority</h1>
           <dl>
-            <dt>should give a good response</dt>
-            <dd><pre><code>request
-.get(base)
-.ca(cert)
+            <section class="suite">
+              <h1>request</h1>
+              <dl>
+                <dt>should give a good response</dt>
+                <dd><pre><code>request
+.get(testEndpoint)
+.ca(ca)
 .end(function(err, res){
   assert(res.ok);
   assert('Safe and secure!' === res.text);
   done();
-});</code></pre></dd>
-          </dl>
-        </section>
-        <section class="suite">
-          <h1>.agent</h1>
-          <dl>
-            <dt>should be able to make multiple requests without redefining the certificate</dt>
-            <dd><pre><code>var agent = request.agent({ca: cert});
+})</code></pre></dd>
+              </dl>
+            </section>
+            <section class="suite">
+              <h1>.agent</h1>
+              <dl>
+                <dt>should be able to make multiple requests without redefining the certificate</dt>
+                <dd><pre><code>var agent = request.agent({ca: ca});
 agent
-.get(base)
+.get(testEndpoint)
 .end(function(err, res){
   assert(res.ok);
   assert('Safe and secure!' === res.text);
   agent
-  .get(url.parse(base))
+  .get(url.parse(testEndpoint))
   .end(function(err, res){
     assert(res.ok);
     assert('Safe and secure!' === res.text);
     done();
-  });
-});</code></pre></dd>
+  })
+})</code></pre></dd>
+              </dl>
+            </section>
+          </dl>
+        </section>
+        <section class="suite">
+          <h1>client certificates</h1>
+          <dl>
+            <section class="suite">
+              <h1>request</h1>
+              <dl>
+                <dt>should give a good response with client certificates and CA</dt>
+                <dd><pre><code>request
+.get(testEndpoint)
+.ca(ca)
+.key(key)
+.cert(cert)
+.end(function(err, res){
+  assert(res.ok);
+  assert('Safe and secure!' === res.text);
+  done();
+})</code></pre></dd>
+              </dl>
+            </section>
+            <section class="suite">
+              <h1>.agent</h1>
+              <dl>
+                <dt>should be able to make multiple requests without redefining the certificates</dt>
+                <dd><pre><code>var agent = request.agent({ca: ca, key: key, cert: cert});
+agent
+.get(testEndpoint)
+.end(function(err, res){
+  assert(res.ok);
+  assert('Safe and secure!' === res.text);
+  agent
+  .get(url.parse(testEndpoint))
+  .end(function(err, res){
+    assert(res.ok);
+    assert('Safe and secure!' === res.text);
+    done();
+  })
+})</code></pre></dd>
+              </dl>
+            </section>
           </dl>
         </section>
       </dl>
@@ -1949,16 +2013,33 @@ agent
         <dt>should deflate the content</dt>
         <dd><pre><code>request
   .get(base)
-  .end(function(err, res){
+  .end(function(err, res) {
     res.should.have.status(200);
     res.text.should.equal(subject);
     res.headers['content-length'].should.be.below(subject.length);
     done();
   });</code></pre></dd>
+        <dt>should ignore trailing junk</dt>
+        <dd><pre><code>request
+  .get(base + '/junk')
+  .end(function(err, res) {
+    res.should.have.status(200);
+    res.text.should.equal(subject);
+    done();
+  });</code></pre></dd>
+        <dt>should ignore missing data</dt>
+        <dd><pre><code>request
+  .get(base + '/chopped')
+  .end(function(err, res) {
+    assert.equal(undefined, err);
+    res.should.have.status(200);
+    res.text.should.startWith(subject);
+    done();
+  });</code></pre></dd>
         <dt>should handle corrupted responses</dt>
         <dd><pre><code>request
   .get(base + '/corrupt')
-  .end(function(err, res){
+  .end(function(err, res) {
     assert(err, 'missing error');
     assert(!res, 'response should not be defined');
     done();
@@ -1966,7 +2047,7 @@ agent
         <dt>should handle no content with gzip header</dt>
         <dd><pre><code>request
   .get(base + '/nocontent')
-  .end(function(err, res){
+  .end(function(err, res) {
     assert.ifError(err);
     assert(res);
     res.should.have.status(204);
@@ -1980,10 +2061,10 @@ agent
             <dt>should emit buffers</dt>
             <dd><pre><code>request
   .get(base + '/binary')
-  .end(function(err, res){
+  .end(function(err, res) {
     res.should.have.status(200);
     res.headers['content-length'].should.be.below(subject.length);
-    res.on('data', function(chunk){
+    res.on('data', function(chunk) {
       chunk.should.have.length(subject.length);
     });
     res.on('end', done);
@@ -2297,6 +2378,14 @@ request
 .del(base + '/?name=tobi')
 .end(function(err, res) {
   res.body.should.eql({ name: 'tobi' });
+  done();
+});</code></pre></dd>
+        <dt>should keep only keys with null querystring values</dt>
+        <dd><pre><code>request
+.del(base + '/url')
+.query({ nil: null })
+.end(function(err, res) {
+  res.text.should.equal('/url?nil');
   done();
 });</code></pre></dd>
         <dt>query-string should be sent on pipe</dt>

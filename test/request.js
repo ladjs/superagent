@@ -564,7 +564,7 @@ it('request(url, fn)', function(next){
 });
 
 it('req.timeout(ms)', function(next){
-  request
+  var req = request
   .get(uri + '/delay/3000')
   .timeout(1000)
   .end(function(err, res){
@@ -572,12 +572,13 @@ it('req.timeout(ms)', function(next){
     assert(1000 == err.timeout, 'err.timeout missing');
     assert('timeout of 1000ms exceeded' == err.message, 'err.message incorrect');
     assert(null == res);
+    assert(req.timedout, true);
     next();
   })
 })
 
 it('req.timeout(ms) with redirect', function(next) {
-  request
+  var req = request
   .get(uri + '/delay/const')
   .timeout(1000)
   .end(function(err, res) {
@@ -585,6 +586,7 @@ it('req.timeout(ms) with redirect', function(next) {
     assert(1000 == err.timeout, 'err.timeout missing');
     assert('timeout of 1000ms exceeded' == err.message, 'err.message incorrect');
     assert(null == res);
+    assert(req.timedout, true);
     next();
   });
 });

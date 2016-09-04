@@ -9,6 +9,10 @@ app.get('/', function(req, res){
   res.status(200).send(req.query);
 });
 
+app.delete('/url', function(req, res){
+  res.status(200).send(req.url)
+})
+
 app.delete('/', function(req, res){
   res.status(200).send(req.query);
 });
@@ -137,6 +141,16 @@ describe('req.query(Object)', function(){
     .del(base + '/?name=tobi')
     .end(function(err, res) {
       res.body.should.eql({ name: 'tobi' });
+      done();
+    });
+  });
+
+  it('should keep only keys with null querystring values', function(done){
+    request
+    .del(base + '/url')
+    .query({ nil: null })
+    .end(function(err, res) {
+      res.text.should.equal('/url?nil');
       done();
     });
   });

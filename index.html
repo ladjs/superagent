@@ -9,7 +9,7 @@
     <ul id="menu"></ul>
     <div id="content">
 <h1 id="superagent">SuperAgent</h1>
-<p> Super Agent is light-weight progressive ajax API crafted for flexibility, readability, and a low learning curve after being frustrated with many of the existing request APIs. It also works with Node.js!</p>
+<p> SuperAgent is light-weight progressive ajax API crafted for flexibility, readability, and a low learning curve after being frustrated with many of the existing request APIs. It also works with Node.js!</p>
 <pre><code> request
    .post(&#39;/api/pet&#39;)
    .send({ name: &#39;Manny&#39;, species: &#39;cat&#39; })
@@ -153,7 +153,7 @@
  request.post(&#39;/user&#39;)
    .type(&#39;png&#39;)
 </code></pre><h2 id="serializing-request-body">Serializing request body</h2>
-<p>Superagent will automatically serialize JSON and forms. If you want to send the payload in a custom format, you can replace the built-in serialization with <code>.serialize()</code> method.</p>
+<p>SuperAgent will automatically serialize JSON and forms. If you want to send the payload in a custom format, you can replace the built-in serialization with <code>.serialize()</code> method.</p>
 <h2 id="setting-accept">Setting Accept</h2>
 <p>In a similar fashion to the <code>.type()</code> method it is also possible to set the Accept header via the short hand method <code>.accept()</code>. Which references <code>request.types</code> as well allowing you to specify either the full canonicalized MIME type name as type/subtype, or the extension suffix form as &quot;xml&quot;, &quot;json&quot;, &quot;png&quot;, etc for convenience:</p>
 <pre><code> request.get(&#39;/user&#39;)
@@ -173,7 +173,7 @@
   .send({ post: &#39;data&#39;, here: &#39;wahoo&#39; })
   .end(callback);
 </code></pre><h2 id="parsing-response-bodies">Parsing response bodies</h2>
-<p>  Super Agent will parse known response-body data for you, currently supporting <code>application/x-www-form-urlencoded</code>, <code>application/json</code>, and <code>multipart/form-data</code>.</p>
+<p>  SuperAgent will parse known response-body data for you, currently supporting <code>application/x-www-form-urlencoded</code>, <code>application/json</code>, and <code>multipart/form-data</code>.</p>
 <p>  You can set a custom parser (that takes precedence over built-in parsers) with the <code>.buffer(true).parse(fn)</code> method. If response buffering is not enabled (<code>.buffer(false)</code>) then the <code>response</code> event will be emitted without waiting for the body parser to finish, so <code>response.body</code> won&#39;t be available.</p>
 <h3 id="json-urlencoded">JSON / Urlencoded</h3>
 <p>  The property <code>res.body</code> is the parsed object, for example if a request responded with the JSON string &#39;{&quot;user&quot;:{&quot;name&quot;:&quot;tobi&quot;}}&#39;, <code>res.body.user.name</code> would be &quot;tobi&quot;. Likewise the x-www-form-urlencoded value of &quot;user[name]=tobi&quot; would yield the same result.</p>
@@ -268,7 +268,7 @@ var stream = fs.createWriteStream(&#39;path/to/my.json&#39;);
 var req = request.get(&#39;/some.json&#39;);
 req.pipe(stream);
 </code></pre><h2 id="multipart-requests">Multipart requests</h2>
-<p>  Super Agent is also great for <em>building</em> multipart requests for which it provides methods <code>.attach()</code> and <code>.field()</code>.</p>
+<p>  SuperAgent is also great for <em>building</em> multipart requests for which it provides methods <code>.attach()</code> and <code>.field()</code>.</p>
 <h3 id="attaching-files">Attaching files</h3>
 <p>  As mentioned a higher-level API is also provided, in the form of <code>.attach(name, [path], [filename])</code> and <code>.field(name, value)</code>. Attaching several files is simple, you can also provide a custom filename for the attachment, otherwise the basename of the attached file is used.</p>
 <pre><code>request
@@ -334,17 +334,17 @@ else if (err) {
   // all other error types we handle generically
 }
 </code></pre><h2 id="promise-and-generator-support">Promise and Generator support</h2>
-<p>Superagent&#39;s request is a &quot;thenable&quot; object that&#39;s compatible with JavaScript promises and <code>async</code>/<code>await</code> syntax.</p>
-<p>Libraries like <a href="https://github.com/tj/co">co</a> or a web framework like <a href="https://github.com/koajs/koa">koa</a> can <code>yield</code> on any superagent method:</p>
+<p>SuperAgent&#39;s request is a &quot;thenable&quot; object that&#39;s compatible with JavaScript promises and <code>async</code>/<code>await</code> syntax.</p>
+<p>Libraries like <a href="https://github.com/tj/co">co</a> or a web framework like <a href="https://github.com/koajs/koa">koa</a> can <code>yield</code> on any SuperAgent method:</p>
 <pre><code>var res = yield request
   .get(&#39;http://local&#39;)
   .auth(&#39;tobi&#39;, &#39;learnboost&#39;)
-</code></pre><p>Note that superagent expects the global <code>Promise</code> object to be present. You&#39;ll need a polyfill to use promises in Internet Explorer or Node.js 0.10.</p>
+</code></pre><p>Note that SuperAgent expects the global <code>Promise</code> object to be present. You&#39;ll need a polyfill to use promises in Internet Explorer or Node.js 0.10.</p>
 <h2 id="browser-and-node-versions">Browser and node versions</h2>
-<p>Superagent has two implementations: one for web browsers (using XHR) and one for Node.JS (using core http module). By default Browserify and WebPack will pick the browser version.</p>
+<p>SuperAgent has two implementations: one for web browsers (using XHR) and one for Node.JS (using core http module). By default Browserify and WebPack will pick the browser version.</p>
 <p>If want to use WebPack to compile code for Node.JS, you <em>must</em> specify <a href="webpack.github.io/docs/configuration.html#target">node target</a> in its configuration.</p>
 <h3 id="using-browser-version-in-electron">Using browser version in electron</h3>
-<p><a href="http://electron.atom.io/">Electron</a> developers report if you would prefer to use the browser version of superagent instead of the Node version, you can <code>require(&#39;superagent/superagent&#39;)</code>. Your requests will now show up in the Chrome developer tools Network tab. Note this environment is not covered by automated test suite and not officially supported.</p>
+<p><a href="http://electron.atom.io/">Electron</a> developers report if you would prefer to use the browser version of SuperAgent instead of the Node version, you can <code>require(&#39;superagent/superagent&#39;)</code>. Your requests will now show up in the Chrome developer tools Network tab. Note this environment is not covered by automated test suite and not officially supported.</p>
 
     </div>
     <a href="http://github.com/visionmedia/superagent"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub"></a>
