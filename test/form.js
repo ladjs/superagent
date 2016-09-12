@@ -1,6 +1,6 @@
 var setup = require('./support/setup');
 var base = setup.uri;
-
+var should = require('should');
 var request = require('../');
 
 describe('req.send(Object) as "form"', function(){
@@ -33,3 +33,19 @@ describe('req.send(Object) as "form"', function(){
     })
   })
 })
+
+describe('req.field', function(){
+  it('throw when empty', function(){
+    should.throws(function(){
+      request
+      .post(base + '/echo')
+      .field()
+    }, /name/);
+
+    should.throws(function(){
+      request
+      .post(base + '/echo')
+      .field('name')
+    }, /val/);
+  });
+});
