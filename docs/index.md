@@ -46,7 +46,7 @@ ES6 promises are supported. Instead of `.end()` you can call `.then()`:
 
        });
 
-  __DELETE__, __HEAD__, __POST__, __PUT__ and other __HTTP__ verbs may also be used, simply change the method name:
+  __DELETE__, __HEAD__, __PATCH__, __POST__, and __PUT__ requests can also be used, simply change the method name:
 
     request
       .head('/favicon.ico')
