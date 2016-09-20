@@ -1,4 +1,4 @@
-# 2.3.0
+# 2.3.0 (2016-09-20)
 
  * Enabled `.field()` to handle objects (Affan Shahid)
  * Added authentication with client certificates (terusus)
@@ -7,18 +7,18 @@
  * Fixed `event.direction` in uploads (Kornel Lesiński)
  * Fixed returned value of overwritten response object's `on()` method (Juan Dopazo)
 
-# 2.2.0
+# 2.2.0 (2016-08-13)
 
  * Added `timedout` property to node Request instance (Alexander Pope)
  * Unified `null` querystring values in node and browser environments. (George Chung)
 
-# 2.1.0
+# 2.1.0 (2016-06-14)
 
  * Refactored async parsers. Now the `end` callback waits for async parsers to finish (Kornel Lesiński)
  * Errors thrown in `.end()` callback don't cause the callback to be called twice (Kornel Lesiński)
  * Added `headers` to `toJSON()` (Tao)
 
-# 2.0.0
+# 2.0.0 (2016-05-29)
 
 ## Breaking changes
 
