@@ -1,3 +1,12 @@
+# 2.3.0
+
+ * Enabled `.field()` to handle objects (Affan Shahid)
+ * Added authentication with client certificates (terusus)
+ * Added `.catch()` for more Promise-like interface (Maxim Samoilov, Kornel Lesiński)
+ * Silenced errors from incomplete gzip streams for compatibility with web browsers (Kornel Lesiński)
+ * Fixed `event.direction` in uploads (Kornel Lesiński)
+ * Fixed returned value of overwritten response object's `on()` method (Juan Dopazo)
+
 # 2.2.0
 
  * Added `timedout` property to node Request instance (Alexander Pope)
