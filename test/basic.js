@@ -98,8 +98,13 @@ describe('request', function(){
 
   describe('res.error', function(){
     it('should should be an Error object', function(done){
+      var calledErrorEvent = false;
       request
       .get(uri + '/error')
+      .on('error', function(err){
+        assert(err.status === 500);
+        calledErrorEvent = true;
+      })
       .end(function(err, res){
         if (NODE) {
           res.error.message.should.equal('cannot GET /error (500)');
@@ -110,6 +115,7 @@ describe('request', function(){
         assert(res.error.status === 500);
         assert(err, 'should have an error for 500');
         assert.equal(err.message, 'Internal Server Error');
+        assert(calledErrorEvent);
         done();
       });
     })
