@@ -62,6 +62,6 @@
   },
   "main": "./lib/node/index.js",
   "engines": {
-    "node": ">= 0.10"
+    "node": ">= 0.12"
   }
 }
