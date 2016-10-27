@@ -1,3 +1,13 @@
+# 3.0.0
+
+ * Dropped support for Node 0.x. Please upgrade to at least Node 4.
+ * Dropped support for componentjs (Damien Caselli)
+ * Added common prototype for Node and browser versions (Andreas Helmberger)
+ * Added `http+unix:` schema to support Unix sockets (Yuki KAN)
+ * Added full `attach` options parameter in the Node version (Lapo Luchini)
+ * Internally changed `.on` to `.once` to prevent possible memory leaks (Matt Blair)
+ * Made all errors reported as an event (Kornel Lesiński)
+
 # 2.3.0 (2016-09-20)
 
  * Enabled `.field()` to handle objects (Affan Shahid)
