@@ -191,6 +191,17 @@ it('no progress event listener on xhr object when none registered on request', f
   }
 });
 
+it('should support req.responseType(..)', function(next){
+    request
+    .get('/foo')
+    .responseType('arraybuffer')
+    .on('request', function(req){
+        assert('arraybuffer' == req.xhr.responseType);
+        next();
+    })
+    .end();
+});
+
 it('Request#parse overrides body parser no matter Content-Type', function(done){
   var runParser = false;
 
