@@ -3,6 +3,8 @@
  * Dropped support for Node 0.x. Please upgrade to at least Node 4.
  * Dropped support for componentjs (Damien Caselli)
  * Removed deprecated `.part()`/`superagent.Part` APIs.
+ * Removed unreliable `.body` property on internal response object used by unbuffered parsers.
+   Note: the normal `response.body` is unaffected.
  * Added common prototype for Node and browser versions (Andreas Helmberger)
  * Added `http+unix:` schema to support Unix sockets (Yuki KAN)
  * Added full `attach` options parameter in the Node version (Lapo Luchini)
