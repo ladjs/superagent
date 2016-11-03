@@ -2,6 +2,7 @@
 
  * Dropped support for Node 0.x. Please upgrade to at least Node 4.
  * Dropped support for componentjs (Damien Caselli)
+ * Removed deprecated `.part()`/`superagent.Part` APIs.
  * Added common prototype for Node and browser versions (Andreas Helmberger)
  * Added `http+unix:` schema to support Unix sockets (Yuki KAN)
  * Added full `attach` options parameter in the Node version (Lapo Luchini)
