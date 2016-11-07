@@ -1,9 +1,9 @@
 
-var request = require('../..')
-  , express = require('express')
-  , assert = require('better-assert')
-  , fs = require('fs')
-  , app = express();
+var request = require('../..'),
+    express = require('express'),
+    assert = require('assert'),
+    fs = require('fs'),
+    app = express();
 
 app.get('/manny', function(req, res){
   res.status(200).json({name:"manny"});

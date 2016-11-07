@@ -1,5 +1,5 @@
 var EventEmitter = require('events').EventEmitter;
-var assert = require('better-assert');
+var assert = require('assert');
 var fs = require('fs');
 var StringDecoder = require('string_decoder').StringDecoder;
 var url = require('url');

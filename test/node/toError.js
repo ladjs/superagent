@@ -1,9 +1,8 @@
 
-var request = require('../..')
-  , express = require('express')
-  , assert = require('better-assert')
-  , app = express()
-  , url = require('url');
+var request = require('../..'),
+    express = require('express'),
+    assert = require('assert'),
+    app = express();
 
 app.get('/', function(req, res){
   res.status(400).send('invalid json');

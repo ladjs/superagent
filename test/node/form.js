@@ -1,8 +1,7 @@
 
-var request = require('../../')
-  , express = require('express')
-  , assert = require('better-assert')
-  , app = express();
+var request = require('../../'),
+    express = require('express'),
+    app = express();
 
 app.post('/echo', function(req, res){
   res.writeHead(200, req.headers);

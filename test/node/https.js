@@ -1,16 +1,15 @@
 
-var EventEmitter = require('events').EventEmitter
-  , request = require('../..')
-  , express = require('express')
-  , assert = require('better-assert')
-  , app = express()
-  , url = require('url')
-  , https = require('https')
-  , fs = require('fs')
-  , ca = fs.readFileSync(__dirname + '/fixtures/ca.cert.pem')
-  , key = fs.readFileSync(__dirname + '/fixtures/key.pem')
-  , cert = fs.readFileSync(__dirname + '/fixtures/cert.pem')
-  , server;
+var request = require('../..'),
+    express = require('express'),
+    assert = require('assert'),
+    app = express(),
+    url = require('url'),
+    https = require('https'),
+    fs = require('fs'),
+    ca = fs.readFileSync(__dirname + '/fixtures/ca.cert.pem'),
+    key = fs.readFileSync(__dirname + '/fixtures/key.pem'),
+    cert = fs.readFileSync(__dirname + '/fixtures/cert.pem'),
+    server;
 
 
 

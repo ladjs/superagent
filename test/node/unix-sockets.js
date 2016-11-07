@@ -1,19 +1,17 @@
-var request = require('../../')
-  , express = require('express')
-  , assert = require('better-assert')
-  , app = express()
-  , url = require('url')
-  , path = require('path')
-  , http = require('http')
-  , https = require('https')
-  , os = require('os')
-  , fs = require('fs')
-  , key = fs.readFileSync(__dirname + '/fixtures/key.pem')
-  , cert = fs.readFileSync(__dirname + '/fixtures/cert.pem')
-  , httpSockPath = [os.tmpdir(), 'superagent-http.sock'].join('/')
-  , httpsSockPath = [os.tmpdir(), 'superagent-https.sock'].join('/')
-  , httpServer
-  , httpsServer;
+var request = require('../../'),
+    express = require('express'),
+    assert = require('assert'),
+    app = express(),
+    http = require('http'),
+    https = require('https'),
+    os = require('os'),
+    fs = require('fs'),
+    key = fs.readFileSync(__dirname + '/fixtures/key.pem'),
+    cert = fs.readFileSync(__dirname + '/fixtures/cert.pem'),
+    httpSockPath = [os.tmpdir(), 'superagent-http.sock'].join('/'),
+    httpsSockPath = [os.tmpdir(), 'superagent-https.sock'].join('/'),
+    httpServer,
+    httpsServer;
 
 if (process.platform === 'win32') {
   return;
