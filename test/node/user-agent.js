@@ -1,9 +1,8 @@
 
-var request = require('../..')
-  , express = require('express')
-  , assert = require('better-assert')
-  , app = express()
-  , url = require('url');
+var request = require('../..'),
+    express = require('express'),
+    assert = require('assert'),
+    app = express();
 
 app.all('/ua', function(req, res){
   res.writeHead(200, req.headers);
@@ -37,7 +36,7 @@ describe('req.get()', function(){
     .set('User-Agent', 'foo/bar')
     .end(function(err, res){
       assert(res.headers);
-      assert(res.headers['user-agent'] == 'foo/bar');
+      assert.equal(res.headers['user-agent'], 'foo/bar');
       done();
     });
   });
@@ -48,7 +47,7 @@ describe('req.get()', function(){
     .unset('User-Agent')
     .end(function(err, res){
       assert(res.headers);
-      assert(res.headers['user-agent'] == void 0);
+      assert.equal(res.headers['user-agent'], void 0);
       done();
     });
   });

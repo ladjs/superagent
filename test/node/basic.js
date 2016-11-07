@@ -1,5 +1,5 @@
 var EventEmitter = require('events').EventEmitter;
-var assert = require('better-assert');
+var assert = require('assert');
 var fs = require('fs');
 var StringDecoder = require('string_decoder').StringDecoder;
 var url = require('url');
@@ -13,7 +13,7 @@ describe('[node] request', function(){
       request
       .get('http://localhost:5000/url?a=(b%29')
       .end(function(err, res){
-        assert('/url?a=(b%29' == res.text);
+        assert.equal('/url?a=(b%29', res.text);
         done();
       })
     })
@@ -35,7 +35,7 @@ describe('[node] request', function(){
       request
       .get('localhost:5000/login')
       .end(function(err, res){
-        assert(res.status == 200);
+        assert.equal(res.status, 200);
         done();
       })
     })
@@ -48,10 +48,10 @@ describe('[node] request', function(){
       .send({ foo: 'baz' })
       .end(function(err, res){
         var obj = res.toJSON();
-        assert('object' == typeof obj.header);
-        assert('object' == typeof obj.req);
-        assert(200 == obj.status);
-        assert('{"foo":"baz"}' == obj.text);
+        assert.equal('object', typeof obj.header);
+        assert.equal('object', typeof obj.req);
+        assert.equal(200, obj.status);
+        assert.equal('{"foo":"baz"}', obj.text);
         done();
       });
     });
@@ -83,7 +83,7 @@ describe('[node] request', function(){
       .post('http://localhost:5000/echo')
       .unset('User-Agent')
       .end(function(err, res){
-        assert(void 0 == res.header['user-agent']);
+        assert.equal(void 0, res.header['user-agent']);
         done();
       })
     })
@@ -93,14 +93,14 @@ describe('[node] request', function(){
     it('should set/get header fields case-insensitively', function(){
       var r = request.post('http://localhost:5000/echo');
       r.set('MiXeD', 'helloes');
-      assert(r.get('mixed') === 'helloes');
+      assert.strictEqual(r.get('mixed'), 'helloes');
     });
 
     it('should unset header fields case-insensitively', function () {
       var r = request.post('http://localhost:5000/echo');
       r.set('MiXeD', 'helloes');
       r.unset('MIXED');
-      assert(r.get('mixed') === undefined);
+      assert.strictEqual(r.get('mixed'), undefined);
     });
   });
 
@@ -146,8 +146,8 @@ describe('[node] request', function(){
       .get('http://localhost:5000/custom')
       .buffer()
       .end(function(err, res){
-        assert(null == err);
-        assert('custom stuff' == res.text);
+        assert.equal(null, err);
+        assert.equal('custom stuff', res.text);
         assert(res.buffered);
         done();
       });
@@ -162,8 +162,8 @@ describe('[node] request', function(){
       .send('hello this is dog')
       .buffer(false)
       .end(function(err, res){
-        assert(null == err);
-        assert(null == res.text);
+        assert.equal(null, err);
+        assert.equal(null, res.text);
         res.body.should.eql({});
         var buf = '';
         res.setEncoding('utf8');
@@ -182,7 +182,7 @@ describe('[node] request', function(){
       .get('http://localhost:5000/custom')
       .withCredentials()
       .end(function(err, res){
-        assert(null == err);
+        assert.equal(null, err);
         done();
       });
     })
@@ -201,7 +201,7 @@ describe('[node] request', function(){
       var req = request.get('http://localhost:5000/echo');
       var ret = req.agent(undefined);
       ret.should.equal(req);
-      assert(req.agent() === undefined);
+      assert.strictEqual(req.agent(), undefined);
       done();
     })
   })
@@ -225,8 +225,8 @@ describe('[node] request', function(){
       .type('application/x-dog')
       .send('hello this is dog')
       .end(function(err, res){
-        assert(null == err);
-        assert(null == res.text);
+        assert.equal(null, err);
+        assert.equal(null, res.text);
         res.body.should.eql({});
         var buf = '';
         res.setEncoding('utf8');
@@ -251,9 +251,9 @@ describe('[node] request', function(){
       .send(img)
       .buffer(false)
       .end(function(err, res){
-        assert(null == err);
+        assert.equal(null, err);
         assert(!res.buffered);
-        assert(res.header['content-length'] == Buffer.byteLength(img));
+        assert.equal(res.header['content-length'], Buffer.byteLength(img));
         done();
       });
     })
@@ -266,9 +266,9 @@ describe('[node] request', function(){
       .send(img)
       .buffer(true)
       .end(function(err, res){
-        assert(null == err);
+        assert.equal(null, err);
         assert(res.buffered);
-        assert(res.header['content-length'] == img.length);
+        assert.equal(res.header['content-length'], img.length);
         done();
       });
     })

@@ -4,7 +4,7 @@ var request = require('../../');
 
 function serialize(obj, res) {
   var val = request.serializeObject(obj);
-  assert(val == res
+  assert.equal(val, res
     , JSON.stringify(obj) + ' to "' + res + '" serialization failed. got: '
     + '"' + val + '"');
 }

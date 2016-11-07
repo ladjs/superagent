@@ -1,9 +1,9 @@
 
-var request = require('../..')
-  , express = require('express')
-  , assert = require('better-assert')
-  , fs = require('fs')
-  , app = express();
+var request = require('../..'),
+    express = require('express'),
+    assert = require('assert'),
+    fs = require('fs'),
+    app = express();
 
 app.get('/manny', function(req, res){
   res.status(200).json({name:"manny"});
@@ -50,8 +50,8 @@ describe('req.parse(fn)', function(){
     .parse(request.parse['application/json'])
     .end(function(err, res){
       assert(res.ok);
-      assert('{"name":"manny"}' == res.text);
-      assert('manny' == res.body.name);
+      assert.equal('{"name":"manny"}', res.text);
+      assert.equal('manny', res.body.name);
       done();
     });
   })
@@ -64,7 +64,7 @@ describe('req.parse(fn)', function(){
     })
     .end(function(err, res){
       assert(res.ok);
-      assert(res.text === undefined);
+      assert.strictEqual(res.text, undefined);
       res.body.should.eql({});
       done();
     });

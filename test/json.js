@@ -37,7 +37,7 @@ describe('req.send(Object) as "json"', function(){
     .send('null')
     .end(function(err, res){
       res.should.be.json();
-      assert(res.body === null);
+      assert.strictEqual(res.body, null);
       done();
     });
   });
@@ -138,9 +138,9 @@ describe('res.body', function(){
       request
       .head(uri + '/json')
       .end(function(err, res){
-        assert(err === null);
-        assert(res.text === undefined)
-        assert(Object.keys(res.body).length === 0)
+        assert.strictEqual(err, null);
+        assert.strictEqual(res.text, undefined)
+        assert.strictEqual(Object.keys(res.body).length, 0)
         done();
       });
     });
@@ -171,9 +171,9 @@ describe('res.body', function(){
       request
       .get(uri + '/no-content')
       .end(function(err, res){
-        assert(err === null);
-        assert(res.text === '');
-        assert(Object.keys(res.body).length === 0);
+        assert.strictEqual(err, null);
+        assert.strictEqual(res.text, '');
+        assert.strictEqual(Object.keys(res.body).length, 0);
         done();
       });
     });

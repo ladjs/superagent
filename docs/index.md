@@ -45,7 +45,7 @@ ES6 promises are supported. Instead of `.end()` you can call `.then()`:
        .end(function(err, res){
 
        });
- 
+
  The __node__ client supports making requests to [Unix Domain Sockets](http://en.wikipedia.org/wiki/Unix_domain_socket):
 
      // pattern: https?+unix://SOCKET_PATH/REQUEST_PATH
@@ -421,8 +421,8 @@ In a similar fashion to the `.type()` method it is also possible to set the Acce
       .get('http://localhost:4001/')
       .withCredentials()
       .end(function(err, res){
-        assert(200 == res.status);
-        assert('tobi' == res.text);
+        assert.equal(200, res.status);
+        assert.equal('tobi', res.text);
         next();
       })
 

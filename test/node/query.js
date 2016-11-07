@@ -1,9 +1,9 @@
 
-var request = require('../..')
-  , express = require('express')
-  , assert = require('better-assert')
-  , fs = require('fs')
-  , app = express();
+var request = require('../..'),
+    express = require('express'),
+    assert = require('assert'),
+    fs = require('fs'),
+    app = express();
 
 app.get('/', function(req, res){
   res.status(200).send(req.query);
@@ -107,7 +107,7 @@ describe('req.query(Object)', function(){
     .del(base)
     .query({ at: date })
     .end(function(err, res){
-      assert(date.toISOString() == res.body.at);
+      assert.equal(date.toISOString(), res.body.at);
       done();
     });
   })

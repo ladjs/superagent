@@ -12,7 +12,7 @@ describe('request', function(){
     it('should set statusCode', function(done){
       request
       .get(uri + '/login', function(err, res){
-        assert(res.statusCode === 200);
+        assert.strictEqual(res.statusCode, 200);
         done();
       })
     })
@@ -22,7 +22,7 @@ describe('request', function(){
     it('with callback in the method call', function(done) {
       request
       .get(uri + '/login', function(err, res) {
-          assert(res.status == 200);
+          assert.equal(res.status, 200);
           done();
       });
     })
@@ -31,7 +31,7 @@ describe('request', function(){
       request
       .post(uri + '/echo', { foo: 'bar' })
       .end(function(err, res) {
-        assert('{"foo":"bar"}' == res.text);
+        assert.equal('{"foo":"bar"}', res.text);
         done();
       });
     })
@@ -39,7 +39,7 @@ describe('request', function(){
     it('with callback and data in the method call', function(done) {
       request
       .post(uri + '/echo', { foo: 'bar' }, function(err, res) {
-        assert('{"foo":"bar"}' == res.text);
+        assert.equal('{"foo":"bar"}', res.text);
         done();
       });
     })
@@ -49,7 +49,7 @@ describe('request', function(){
     it('should invoke .end()', function(done){
       request
       .get(uri + '/login', function(err, res){
-        assert(res.status == 200);
+        assert.equal(res.status, 200);
         done();
       })
     })
@@ -60,7 +60,7 @@ describe('request', function(){
       request
       .get(uri + '/login')
       .end(function(err, res){
-        assert(res.status == 200);
+        assert.equal(res.status, 200);
         done();
       });
     })
@@ -102,7 +102,7 @@ describe('request', function(){
       request
       .get(uri + '/error')
       .on('error', function(err){
-        assert(err.status === 500);
+        assert.strictEqual(err.status, 500);
         calledErrorEvent = true;
       })
       .end(function(err, res){
@@ -112,7 +112,7 @@ describe('request', function(){
         else {
           res.error.message.should.equal('cannot GET ' + uri + '/error (500)');
         }
-        assert(res.error.status === 500);
+        assert.strictEqual(res.error.status, 500);
         assert(err, 'should have an error for 500');
         assert.equal(err.message, 'Internal Server Error');
         assert(calledErrorEvent);
@@ -140,7 +140,7 @@ describe('request', function(){
       request
       .get(uri + '/login')
       .end(function(err, res){
-        assert('Express' == res.header['x-powered-by']);
+        assert.equal('Express', res.header['x-powered-by']);
         done();
       });
     })
@@ -163,8 +163,8 @@ describe('request', function(){
       .get(uri + '/login')
       .end(function(err, res){
         assert(!err, 'should not have an error for success responses');
-        assert(200 == res.status);
-        assert(2 == res.statusType);
+        assert.equal(200, res.status);
+        assert.equal(2, res.statusType);
         done();
       });
     })
@@ -189,8 +189,8 @@ describe('request', function(){
       .set('X-Foo', 'bar')
       .set('X-Bar', 'baz')
       .end(function(err, res){
-        assert('bar' == res.header['x-foo']);
-        assert('baz' == res.header['x-bar']);
+        assert.equal('bar', res.header['x-foo']);
+        assert.equal('baz', res.header['x-bar']);
         done();
       })
     })
@@ -202,8 +202,8 @@ describe('request', function(){
       .post(uri + '/echo')
       .set({ 'X-Foo': 'bar', 'X-Bar': 'baz' })
       .end(function(err, res){
-        assert('bar' == res.header['x-foo']);
-        assert('baz' == res.header['x-bar']);
+        assert.equal('bar', res.header['x-foo']);
+        assert.equal('baz', res.header['x-bar']);
         done();
       })
     })
@@ -333,7 +333,7 @@ describe('request', function(){
       .post(uri + '/echo')
       .send({ name: 'tobi' })
       .end(function(err, res){
-        assert(null == err);
+        assert.equal(null, err);
         res.text.should.equal('{"name":"tobi"}');
         done();
       });
@@ -342,7 +342,7 @@ describe('request', function(){
     it('should emit request', function(done){
       var req = request.post(uri + '/echo');
       req.on('request', function(request){
-        assert(req == request);
+        assert.equal(req, request);
         done();
       });
       req.end();
@@ -383,8 +383,8 @@ describe('request', function(){
       request
       .get(uri + '/error')
       .then(null, function(err) {
-        assert(err.status == 500);
-        assert(err.response.text == 'boom');
+        assert.equal(err.status, 500);
+        assert.equal(err.response.text, 'boom');
         done();
       })
     })
@@ -399,8 +399,8 @@ describe('request', function(){
       request
       .get(uri + '/error')
       .catch(function(err) {
-        assert(err.status == 500);
-        assert(err.response.text == 'boom');
+        assert.equal(err.status, 500);
+        assert.equal(err.response.text, 'boom');
         done();
       })
     })
@@ -444,9 +444,9 @@ describe('request', function(){
       .send({ foo: 'baz' })
       .end(function(err, res){
         var json = req.toJSON();
-        assert('POST' == json.method);
+        assert.equal('POST', json.method);
         assert(/\/echo$/.test(json.url));
-        assert('baz' == json.data.foo);
+        assert.equal('baz', json.data.foo);
         done();
       });
     })
@@ -457,8 +457,8 @@ describe('request', function(){
       request.options(uri + '/options/echo/body')
       .send({ foo: 'baz' })
       .end(function(err, res){
-        assert(err == null);
-        assert(res.body.foo === 'baz');
+        assert.equal(err, null);
+        assert.strictEqual(res.body.foo, 'baz');
         done();
       });
     });

@@ -23,7 +23,7 @@ describe('request', function(){
         .use(uuid)
         .use(prefix)
         .end(function(err, res){
-          assert(res.statusCode === 200);
+          assert.strictEqual(res.statusCode, 200);
           assert.equal(res.get('X-UUID'), now);
           done();
         })
