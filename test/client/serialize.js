@@ -42,3 +42,41 @@ describe('request.parseString()', function(){
     parse('name=tj%26', { name: 'tj&' });
   });
 });
+
+describe('Merging objects', function(){
+  it('Don\'t mix FormData and JSON', function(){
+    if (!window.FormData) {
+      // Skip test if FormData is not supported by browser
+      return;
+    }
+
+    var data = new FormData();
+    data.append('foo', 'bar');
+
+    assert.throws(function(){
+      request
+        .post('/echo')
+        .send(data)
+        .send({allowed:false})
+    });
+  });
+
+  it('Don\'t mix Blob and JSON', function(){
+    if (!window.Blob) {
+      return;
+    }
+
+    request
+      .post('/echo')
+      .send(new Blob(["will be cleared"]))
+      .send(false)
+      .send({allowed:true});
+
+    assert.throws(function(){
+      request
+        .post('/echo')
+        .send(new Blob(["hello"]))
+        .send({allowed:false})
+    });
+  });
+});
