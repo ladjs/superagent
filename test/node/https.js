@@ -50,7 +50,7 @@ describe('https', function(){
         .ca(ca)
         .end(function(err, res){
           assert(res.ok);
-          assert('Safe and secure!' === res.text);
+          assert.strictEqual('Safe and secure!', res.text);
           done();
         })
       })
@@ -63,12 +63,12 @@ describe('https', function(){
         .get(testEndpoint)
         .end(function(err, res){
           assert(res.ok);
-          assert('Safe and secure!' === res.text);
+          assert.strictEqual('Safe and secure!', res.text);
           agent
           .get(url.parse(testEndpoint))
           .end(function(err, res){
             assert(res.ok);
-            assert('Safe and secure!' === res.text);
+            assert.strictEqual('Safe and secure!', res.text);
             done();
           })
         })
@@ -105,7 +105,7 @@ describe('https', function(){
         .cert(cert)
         .end(function(err, res){
           assert(res.ok);
-          assert('Safe and secure!' === res.text);
+          assert.strictEqual('Safe and secure!', res.text);
           done();
         })
       })
@@ -118,12 +118,12 @@ describe('https', function(){
         .get(testEndpoint)
         .end(function(err, res){
           assert(res.ok);
-          assert('Safe and secure!' === res.text);
+          assert.strictEqual('Safe and secure!', res.text);
           agent
           .get(url.parse(testEndpoint))
           .end(function(err, res){
             assert(res.ok);
-            assert('Safe and secure!' === res.text);
+            assert.strictEqual('Safe and secure!', res.text);
             done();
           })
         })

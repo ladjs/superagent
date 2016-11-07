@@ -11,8 +11,8 @@ describe('xdomain', function(){
     .get('//' + window.location.host + '/xdomain')
     .withCredentials()
     .end(function(err, res){
-      assert(200 == res.status);
-      assert('tobi' == res.text);
+      assert.equal(200, res.status);
+      assert.equal('tobi', res.text);
       next();
     });
   });

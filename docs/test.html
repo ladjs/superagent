@@ -27,7 +27,7 @@
             <dt>should invoke .end()</dt>
             <dd><pre><code>request
 .get(uri + '/login', function(err, res){
-  assert(res.status == 200);
+  assert.equal(res.status, 200);
   done();
 })</code></pre></dd>
           </dl>
@@ -39,7 +39,7 @@
             <dd><pre><code>request
 .get(uri + '/login')
 .end(function(err, res){
-  assert(res.status == 200);
+  assert.equal(res.status, 200);
   done();
 });</code></pre></dd>
           </dl>
@@ -57,7 +57,7 @@
   else {
     res.error.message.should.equal('cannot GET ' + uri + '/error (500)');
   }
-  assert(res.error.status === 500);
+  assert.strictEqual(res.error.status, 500);
   assert(err, 'should have an error for 500');
   assert.equal(err.message, 'Internal Server Error');
   done();
@@ -71,7 +71,7 @@
             <dd><pre><code>request
 .get(uri + '/login')
 .end(function(err, res){
-  assert('Express' == res.header['x-powered-by']);
+  assert.equal('Express', res.header['x-powered-by']);
   done();
 });</code></pre></dd>
           </dl>
@@ -96,8 +96,8 @@
 .get(uri + '/login')
 .end(function(err, res){
   assert(!err, 'should not have an error for success responses');
-  assert(200 == res.status);
-  assert(2 == res.statusType);
+  assert.equal(200, res.status);
+  assert.equal(2, res.statusType);
   done();
 });</code></pre></dd>
           </dl>
@@ -124,8 +124,8 @@
 .set('X-Foo', 'bar')
 .set('X-Bar', 'baz')
 .end(function(err, res){
-  assert('bar' == res.header['x-foo']);
-  assert('baz' == res.header['x-bar']);
+  assert.equal('bar', res.header['x-foo']);
+  assert.equal('baz', res.header['x-bar']);
   done();
 })</code></pre></dd>
           </dl>
@@ -138,8 +138,8 @@
 .post(uri + '/echo')
 .set({ 'X-Foo': 'bar', 'X-Bar': 'baz' })
 .end(function(err, res){
-  assert('bar' == res.header['x-foo']);
-  assert('baz' == res.header['x-bar']);
+  assert.equal('bar', res.header['x-foo']);
+  assert.equal('baz', res.header['x-bar']);
   done();
 })</code></pre></dd>
           </dl>
@@ -265,14 +265,14 @@
 .post(uri + '/echo')
 .send({ name: 'tobi' })
 .end(function(err, res){
-  assert(null == err);
+  assert.equal(null, err);
   res.text.should.equal('{&quot;name&quot;:&quot;tobi&quot;}');
   done();
 });</code></pre></dd>
             <dt>should emit request</dt>
             <dd><pre><code>var req = request.post(uri + '/echo');
 req.on('request', function(request){
-  assert(req == request);
+  assert.equal(req, request);
   done();
 });
 req.end();</code></pre></dd>
@@ -302,8 +302,8 @@ req.end();</code></pre></dd>
             <dd><pre><code>request
 .get(uri + '/error')
 .then(null, function(err) {
-  assert(err.status == 500);
-  assert(err.response.text == 'boom');
+  assert.equal(err.status, 500);
+  assert.equal(err.response.text, 'boom');
   done();
 })</code></pre></dd>
           </dl>
@@ -377,7 +377,7 @@ setTimeout(function() {
       .end(function(err, res) {
         should.not.exist(err);
         res.should.have.status(200);
-        assert(res.text === 'jar');
+        assert.strictEqual(res.text, 'jar');
         done();
       });
   });</code></pre></dd>
@@ -502,7 +502,7 @@ setTimeout(function() {
             <dt>should set statusCode</dt>
             <dd><pre><code>request
 .get('http://localhost:5000/login', function(err, res){
-  assert(res.statusCode === 200);
+  assert.strictEqual(res.statusCode, 200);
   done();
 })</code></pre></dd>
           </dl>
@@ -526,7 +526,7 @@ setTimeout(function() {
             <dd><pre><code>request
 .get('localhost:5000/login')
 .end(function(err, res){
-  assert(res.status == 200);
+  assert.equal(res.status, 200);
   done();
 })</code></pre></dd>
           </dl>
@@ -540,9 +540,9 @@ setTimeout(function() {
 .send({ foo: 'baz' })
 .end(function(err, res){
   var obj = res.request.toJSON();
-  assert('POST' == obj.method);
-  assert(':5000/echo' == obj.url);
-  assert('baz' == obj.data.foo);
+  assert.equal('POST', obj.method);
+  assert.equal(':5000/echo', obj.url);
+  assert.equal('baz', obj.data.foo);
   done();
 });</code></pre></dd>
           </dl>
@@ -553,20 +553,20 @@ setTimeout(function() {
             <dt>with callback in the method call</dt>
             <dd><pre><code>request
 .get('http://localhost:5000/login', function(err, res) {
-    assert(res.status == 200);
+    assert.equal(res.status, 200);
     done();
 });</code></pre></dd>
             <dt>with data in the method call</dt>
             <dd><pre><code>request
 .post('http://localhost:5000/echo', { foo: 'bar' })
 .end(function(err, res) {
-  assert('{&quot;foo&quot;:&quot;bar&quot;}' == res.text);
+  assert.equal('{&quot;foo&quot;:&quot;bar&quot;}', res.text);
   done();
 });</code></pre></dd>
             <dt>with callback and data in the method call</dt>
             <dd><pre><code>request
 .post('http://localhost:5000/echo', { foo: 'bar' }, function(err, res) {
-  assert('{&quot;foo&quot;:&quot;bar&quot;}' == res.text);
+  assert.equal('{&quot;foo&quot;:&quot;bar&quot;}', res.text);
   done();
 });</code></pre></dd>
           </dl>
@@ -580,10 +580,10 @@ setTimeout(function() {
 .send({ foo: 'baz' })
 .end(function(err, res){
   var obj = res.toJSON();
-  assert('object' == typeof obj.header);
-  assert('object' == typeof obj.req);
-  assert(200 == obj.status);
-  assert('{&quot;foo&quot;:&quot;baz&quot;}' == obj.text);
+  assert.equal('object', typeof obj.header);
+  assert.equal('object', typeof obj.req);
+  assert.equal(200, obj.status);
+  assert.equal('{&quot;foo&quot;:&quot;baz&quot;}', obj.text);
   done();
 });</code></pre></dd>
           </dl>
@@ -615,7 +615,7 @@ setTimeout(function() {
 .post('http://localhost:5000/echo')
 .unset('User-Agent')
 .end(function(err, res){
-  assert(void 0 == res.header['user-agent']);
+  assert.equal(void 0, res.header['user-agent']);
   done();
 })</code></pre></dd>
           </dl>
@@ -662,8 +662,8 @@ request
 .get('http://localhost:5000/custom')
 .buffer()
 .end(function(err, res){
-  assert(null == err);
-  assert('custom stuff' == res.text);
+  assert.equal(null, err);
+  assert.equal('custom stuff', res.text);
   assert(res.buffered);
   done();
 });</code></pre></dd>
@@ -679,8 +679,8 @@ request
 .send('hello this is dog')
 .buffer(false)
 .end(function(err, res){
-  assert(null == err);
-  assert(null == res.text);
+  assert.equal(null, err);
+  assert.equal(null, res.text);
   res.body.should.eql({});
   var buf = '';
   res.setEncoding('utf8');
@@ -708,7 +708,7 @@ done();</code></pre></dd>
             <dd><pre><code>var req = request.get('http://localhost:5000/echo');
 var ret = req.agent(undefined);
 ret.should.equal(req);
-assert(req.agent() === undefined);
+assert.strictEqual(req.agent(), undefined);
 done();</code></pre></dd>
           </dl>
         </section>
@@ -734,8 +734,8 @@ done();</code></pre></dd>
 .type('application/x-dog')
 .send('hello this is dog')
 .end(function(err, res){
-  assert(null == err);
-  assert(null == res.text);
+  assert.equal(null, err);
+  assert.equal(null, res.text);
   res.body.should.eql({});
   var buf = '';
   res.setEncoding('utf8');
@@ -761,9 +761,9 @@ request
 .send(img)
 .buffer(false)
 .end(function(err, res){
-  assert(null == err);
+  assert.equal(null, err);
   assert(!res.buffered);
-  assert(res.header['content-length'] == Buffer.byteLength(img));
+  assert.equal(res.header['content-length'], Buffer.byteLength(img));
   done();
 });</code></pre></dd>
             <dt>should be set to the length of a buffer object</dt>
@@ -774,9 +774,9 @@ request
 .send(img)
 .buffer(true)
 .end(function(err, res){
-  assert(null == err);
+  assert.equal(null, err);
   assert(res.buffered);
-  assert(res.header['content-length'] == img.length);
+  assert.equal(res.header['content-length'], img.length);
   done();
 });</code></pre></dd>
           </dl>
@@ -1006,7 +1006,7 @@ request
 .ca(cert)
 .end(function(err, res){
   assert(res.ok);
-  assert('Safe and secure!' === res.text);
+  assert.strictEqual('Safe and secure!', res.text);
   done();
 });</code></pre></dd>
           </dl>
@@ -1020,12 +1020,12 @@ agent
 .get('https://localhost:8443/')
 .end(function(err, res){
   assert(res.ok);
-  assert('Safe and secure!' === res.text);
+  assert.strictEqual('Safe and secure!', res.text);
   agent
   .get(url.parse('https://localhost:8443/'))
   .end(function(err, res){
     assert(res.ok);
-    assert('Safe and secure!' === res.text);
+    assert.strictEqual('Safe and secure!', res.text);
     done();
   });
 });</code></pre></dd>
@@ -1116,7 +1116,7 @@ agent
 .send('null')
 .end(function(err, res){
   res.should.be.json
-  assert(res.body === null);
+  assert.strictEqual(res.body, null);
   done();
 });</code></pre></dd>
         <dt>should work with value false</dt>
@@ -1207,9 +1207,9 @@ agent
             <dd><pre><code>request
 .head('http://localhost:3005/json')
 .end(function(err, res){
-  assert(err === null);
-  assert(res.text === undefined)
-  assert(Object.keys(res.body).length === 0)
+  assert.strictEqual(err, null);
+  assert.strictEqual(res.text, undefined)
+  assert.strictEqual(Object.keys(res.body).length, 0)
   done();
 });</code></pre></dd>
           </dl>
@@ -1233,9 +1233,9 @@ agent
             <dd><pre><code>request
 .get('http://localhost:3005/no-content')
 .end(function(err, res){
-  assert(err === null);
-  assert(res.text === '');
-  assert(Object.keys(res.body).length === 0);
+  assert.strictEqual(err, null);
+  assert.strictEqual(res.text, '');
+  assert.strictEqual(Object.keys(res.body).length, 0);
   done();
 });</code></pre></dd>
           </dl>
@@ -1360,8 +1360,8 @@ request
 .parse(request.parse['application/json'])
 .end(function(err, res){
   assert(res.ok);
-  assert('{&quot;name&quot;:&quot;manny&quot;}' == res.text);
-  assert('manny' == res.body.name);
+  assert.equal('{&quot;name&quot;:&quot;manny&quot;}', res.text);
+  assert.equal('manny', res.body.name);
   done();
 });</code></pre></dd>
         <dt>should be the only parser</dt>
@@ -1372,7 +1372,7 @@ request
 })
 .end(function(err, res){
   assert(res.ok);
-  assert(res.text === undefined);
+  assert.strictEqual(res.text, undefined);
   res.body.should.eql({});
   done();
 });</code></pre></dd>
@@ -1472,7 +1472,7 @@ req.pipe(stream);</code></pre></dd>
 .query({ b: '\uD800' })
 .end(function(err, res){
   assert(err instanceof Error);
-  assert('URIError' == err.name);
+  assert.equal('URIError', err.name);
   done();
 });</code></pre></dd>
         <dt>should support passing in a string</dt>
@@ -1538,7 +1538,7 @@ request
 .del('http://localhost:3006/')
 .query({ at: date })
 .end(function(err, res){
-  assert(date.toISOString() == res.body.at);
+  assert.equal(date.toISOString(), res.body.at);
   done();
 });</code></pre></dd>
         <dt>should work after setting header fields</dt>
@@ -1987,8 +1987,8 @@ req.end(function(err,res){
 .timeout(150)
 .end(function(err, res){
   assert(err, 'expected an error');
-  assert('number' == typeof err.timeout, 'expected an error with .timeout');
-  assert('ECONNABORTED' == err.code, 'expected abort error code')
+  assert.equal('number', typeof err.timeout, 'expected an error with .timeout');
+  assert.equal('ECONNABORTED', err.code, 'expected abort error code')
   done();
 });</code></pre></dd>
           </dl>
@@ -2003,11 +2003,11 @@ req.end(function(err,res){
 .get('http://localhost:' + server.address().port)
 .end(function(err, res){
   var err = res.toError();
-  assert(err.status == 400);
-  assert(err.method == 'GET');
-  assert(err.path == '/');
-  assert(err.message == 'cannot GET / (400)');
-  assert(err.text == 'invalid json');
+  assert.equal(err.status, 400);
+  assert.equal(err.method, 'GET');
+  assert.equal(err.path, '/');
+  assert.equal(err.message, 'cannot GET / (400)');
+  assert.equal(err.text, 'invalid json');
   done();
 });</code></pre></dd>
       </dl>
@@ -2030,7 +2030,7 @@ req.end(function(err,res){
 .set('User-Agent', 'foo/bar')
 .end(function(err, res){
   assert(res.headers);
-  assert(res.headers['user-agent'] == 'foo/bar');
+  assert.equal(res.headers['user-agent'], 'foo/bar');
   done();
 });</code></pre></dd>
         <dt>should be able to wipe user-agent</dt>
@@ -2039,7 +2039,7 @@ req.end(function(err,res){
 .unset('User-Agent')
 .end(function(err, res){
   assert(res.headers);
-  assert(res.headers['user-agent'] == void 0);
+  assert.equal(res.headers['user-agent'], void 0);
   done();
 });</code></pre></dd>
       </dl>

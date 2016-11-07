@@ -107,7 +107,7 @@ describe('req.query(Object)', function(){
     .del(base)
     .query({ at: date })
     .end(function(err, res){
-      assert(date.toISOString() == res.body.at);
+      assert.equal(date.toISOString(), res.body.at);
       done();
     });
   })

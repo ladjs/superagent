@@ -23,11 +23,11 @@ describe('res.toError()', function(){
     .get(base)
     .end(function(err, res){
       var err = res.toError();
-      assert(err.status == 400);
-      assert(err.method == 'GET');
-      assert(err.path == '/');
-      assert(err.message == 'cannot GET / (400)');
-      assert(err.text == 'invalid json');
+      assert.equal(err.status, 400);
+      assert.equal(err.method, 'GET');
+      assert.equal(err.path, '/');
+      assert.equal(err.message, 'cannot GET / (400)');
+      assert.equal(err.text, 'invalid json');
       done();
     });
   })

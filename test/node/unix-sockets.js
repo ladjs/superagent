@@ -44,22 +44,22 @@ describe('[unix-sockets] http', function() {
         .get(base + '/')
         .end(function(err, res) {
           assert(res.ok);
-          assert('root ok!' === res.text);
+          assert.strictEqual('root ok!', res.text);
           done();
         });
     });
-    
+
     it('path: /request/path', function(done) {
       request
         .get(base + '/request/path')
         .end(function(err, res) {
           assert(res.ok);
-          assert('request path ok!' === res.text);
+          assert.strictEqual('request path ok!', res.text);
           done();
         });
     });
   });
-  
+
   after(function(done) {
     httpServer.close(done);
   });
@@ -86,23 +86,23 @@ describe('[unix-sockets] https', function() {
         .ca(cert)
         .end(function(err, res) {
           assert(res.ok);
-          assert('root ok!' === res.text);
+          assert.strictEqual('root ok!', res.text);
           done();
         });
     });
-    
+
     it('path: /request/path', function(done) {
       request
         .get(base + '/request/path')
         .ca(cert)
         .end(function(err, res) {
           assert(res.ok);
-          assert('request path ok!' === res.text);
+          assert.strictEqual('request path ok!', res.text);
           done();
         });
     });
   });
-  
+
   after(function(done) {
     httpsServer.close(done);
   });

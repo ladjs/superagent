@@ -123,7 +123,7 @@ describe('request', function() {
             .end(function(err, res) {
               should.not.exist(err);
               res.should.have.status(200);
-              assert(res.text === 'jar');
+              assert.strictEqual(res.text, 'jar');
               done();
             });
         });

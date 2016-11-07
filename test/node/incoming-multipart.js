@@ -42,7 +42,7 @@
 //         res.body.should.eql({ name: 'tobi' });
 //         res.files.image.name.should.equal('something.png');
 //         res.files.image.type.should.equal('image/png');
-//         assert(null == res.text, 'res.text should be empty for multipart');
+//         assert.equal(null, res.text, 'res.text should be empty for multipart');
 //         done();
 //       });
 //     })
