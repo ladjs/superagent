@@ -8,6 +8,7 @@ var request = require('../..'),
     fs = require('fs'),
     ca = fs.readFileSync(__dirname + '/fixtures/ca.cert.pem'),
     key = fs.readFileSync(__dirname + '/fixtures/key.pem'),
+    pfx = fs.readFileSync(__dirname + '/fixtures/cert.pfx'),
     cert = fs.readFileSync(__dirname + '/fixtures/cert.pem'),
     server;
 
@@ -109,11 +110,37 @@ describe('https', function(){
           done();
         })
       })
+      it('should give a good response with client pfx', function(done){
+        request
+        .get(testEndpoint)
+        .pfx(pfx)
+        .end(function(err, res){
+          assert(res.ok);
+          assert.strictEqual('Safe and secure!', res.text);
+          done();
+        })
+      })
     })
 
     describe('.agent', function () {
       it('should be able to make multiple requests without redefining the certificates', function(done){
         var agent = request.agent({ca: ca, key: key, cert: cert});
+        agent
+        .get(testEndpoint)
+        .end(function(err, res){
+          assert(res.ok);
+          assert.strictEqual('Safe and secure!', res.text);
+          agent
+          .get(url.parse(testEndpoint))
+          .end(function(err, res){
+            assert(res.ok);
+            assert.strictEqual('Safe and secure!', res.text);
+            done();
+          })
+        })
+      })
+      it('should be able to make multiple requests without redefining pfx', function(done){
+        var agent = request.agent({pfx: pfx});
         agent
         .get(testEndpoint)
         .end(function(err, res){
