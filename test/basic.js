@@ -6,7 +6,7 @@ var assert = require('assert');
 var request = require('../');
 
 describe('request', function(){
-  this.timeout(10000);
+  this.timeout(20000);
 
   describe('res.statusCode', function(){
     it('should set statusCode', function(done){
