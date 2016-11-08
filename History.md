@@ -1,13 +1,18 @@
 # 3.0.0
 
+You can test it with `npm install superagent@next`
+
  * Dropped support for Node 0.x. Please upgrade to at least Node 4.
  * Dropped support for componentjs (Damien Caselli)
  * Removed deprecated `.part()`/`superagent.Part` APIs.
  * Removed unreliable `.body` property on internal response object used by unbuffered parsers.
    Note: the normal `response.body` is unaffected.
+ * Multiple `.send()` calls mixing `Buffer`/`Blob` and JSON data are not possible and will now throw instead of messing up the data.
+ * Improved `.send()` data object type check (Fernando Mendes)
  * Added common prototype for Node and browser versions (Andreas Helmberger)
  * Added `http+unix:` schema to support Unix sockets (Yuki KAN)
  * Added full `attach` options parameter in the Node version (Lapo Luchini)
+ * Added `pfx` TLS option with new `pfx()` method. (Reid Burke)
  * Internally changed `.on` to `.once` to prevent possible memory leaks (Matt Blair)
  * Made all errors reported as an event (Kornel Lesiński)
 
