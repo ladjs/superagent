@@ -6,7 +6,7 @@ var assert = require('assert');
 var request = require('../');
 
 describe('req.send(Object) as "json"', function(){
-  this.timeout(10000);
+  this.timeout(20000);
 
   it('should default to json', function(done){
     request
@@ -119,7 +119,7 @@ describe('req.send(Object) as "json"', function(){
 })
 
 describe('res.body', function(){
-  this.timeout(10000);
+  this.timeout(20000);
 
   describe('application/json', function(){
     it('should parse the body', function(done){

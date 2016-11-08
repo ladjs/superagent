@@ -47,7 +47,7 @@
     "mocha": "^3.1.2",
     "should": "^11.1.1",
     "should-http": "^0.0.4",
-    "zuul": "^3.10.1"
+    "zuul": "^3.11.1"
   },
   "browser": {
     "./lib/node/index.js": "./lib/client.js",

@@ -2,7 +2,7 @@ var assert = require('assert');
 var request = require('../../');
 
 describe('request', function() {
-  this.timeout(10000);
+  this.timeout(20000);
 
 it('request() error object', function(next) {
   request('GET', '/error').end(function(err, res) {

@@ -6,7 +6,7 @@ var assert = require('assert');
 var request = require('../');
 
 describe('request', function(){
-  this.timeout(10000);
+  this.timeout(20000);
   describe('on redirect', function(){
     it('should retain header fields', function(done){
       request
@@ -49,6 +49,10 @@ describe('request', function(){
         res.headers.location.should.equal('/reply-method')
       })
       .end(function(err, res){
+        if (err) {
+          done(err);
+          return;
+        }
         res.text.should.equal('method=get');
         done();
       })
@@ -67,6 +71,10 @@ describe('request', function(){
         res.headers.location.should.equal('/reply-method')
       })
       .end(function(err, res){
+        if (err) {
+          done(err);
+          return;
+        }
         res.text.should.equal('method=put');
         done();
       })
@@ -85,6 +93,10 @@ describe('request', function(){
         res.headers.location.should.equal('/reply-method')
       })
       .end(function(err, res){
+        if (err) {
+          done(err);
+          return;
+        }
         res.text.should.equal('method=put');
         done();
       })

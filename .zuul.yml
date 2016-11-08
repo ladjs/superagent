@@ -1,5 +1,6 @@
 ui: mocha-bdd
 server: ./test/support/server.js
+tunnel_host: http://focusaurus.com
 browsers:
   - name: chrome
     version: latest

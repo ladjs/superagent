@@ -6,7 +6,7 @@ var assert = require('assert');
 var request = require('../');
 
 describe('request', function(){
-  this.timeout(10000);
+  this.timeout(20000);
   describe('use', function(){
     it('should use plugin success', function(done){
       var now = '' + Date.now();
