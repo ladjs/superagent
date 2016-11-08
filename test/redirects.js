@@ -49,6 +49,10 @@ describe('request', function(){
         res.headers.location.should.equal('/reply-method')
       })
       .end(function(err, res){
+        if (err) {
+          done(err);
+          return;
+        }
         res.text.should.equal('method=get');
         done();
       })
@@ -67,6 +71,10 @@ describe('request', function(){
         res.headers.location.should.equal('/reply-method')
       })
       .end(function(err, res){
+        if (err) {
+          done(err);
+          return;
+        }
         res.text.should.equal('method=put');
         done();
       })
@@ -85,6 +93,10 @@ describe('request', function(){
         res.headers.location.should.equal('/reply-method')
       })
       .end(function(err, res){
+        if (err) {
+          done(err);
+          return;
+        }
         res.text.should.equal('method=put');
         done();
       })
