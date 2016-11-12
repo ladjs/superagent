@@ -263,6 +263,25 @@ In a similar fashion to the `.type()` method it is also possible to set the Acce
 
   You would have the values `res.body.name` provided as "Tobi", and `res.files.image` as a `File` object containing the path on disk, filename, and other properties.
 
+### Binary
+
+In browsers, you may use `.responseType('blob')` to request handling of binary response bodies. This API is unnecessary when running in node.js. The supported argument values for this method are
+
+- `'blob'` passed through to the XmlHTTPRequest `responseType` property
+- `'arraybuffer'` passed through to the XmlHTTPRequest `responseType` property
+
+**Example**
+
+```js
+req.get('/')
+  .responseType('blob')
+  .end(function (error, res) {
+    // res.body will be a browser native Blob type here
+  });
+```
+
+For more information, see the Mozilla Developer Network [xhr.responseType docs](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/responseType).
+
 ## Response properties
 
   Many helpful flags and properties are set on the `Response` object, ranging from the response text, parsed response body, header fields, status flags and more.
