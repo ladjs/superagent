@@ -238,6 +238,18 @@ if ('FormData' in window) {
     })
     .end();
   });
+  it('get error status code and rawResponse on file download', function(next) {
+    request
+    .get('/arraybuffer-unauthorized')
+    .responseType('arraybuffer') 
+    .end(function(err, res) {
+      assert(err.statusCode, 401);
+      assert(err.rawResponse instanceof ArrayBuffer);
+      var decodedString = String.fromCharCode.apply(null, new Uint8Array(err.rawResponse));
+      assert(decodedString, '{"message":"Authorization has been denied for this request."}');
+      next();
+    });
+  });
 }
 
 });
