@@ -235,6 +235,28 @@ In a similar fashion to the `.type()` method it is also possible to set the Acce
       .send({ post: 'data', here: 'wahoo' })
       .end(callback);
 
+  By default the query string is not assembled in any particular order. An asciibetically-sorted query string can be enabled with `req.sortQuery()`. Use `req.sortQuery(false)` if you need to disable this after enabling it. You may also provide a custom sorting comparison function with `req.sortQuery(myComparisonFn)`. The comparison function should take 2 arguments and return a negative/zero/positive integer.
+
+  **Examples**
+
+```js
+       // default order
+       request.get('/user')
+         .query('name=Nick')
+         .query('search=Manny')
+         .sortQuery()
+         .end(callback)
+
+       // customized sort function
+       request.get('/user')
+         .query('name=Nick')
+         .query('search=Manny')
+         .sortQuery(function(a, b){
+           return a.length - b.length;
+         })
+         .end(callback)
+```
+
 ## Parsing response bodies
 
   SuperAgent will parse known response-body data for you, currently supporting `application/x-www-form-urlencoded`, `application/json`, and `multipart/form-data`.

@@ -463,4 +463,46 @@ describe('request', function(){
       });
     });
   });
+
+  describe('req.sortQuery()', function(){
+    it('should sort the request querystring', function(done){
+      request
+      .get(uri + '/url')
+      .query('search=Manny')
+      .query('order=desc')
+      .sortQuery()
+      .end(function(err, res){
+        assert.equal(res.text, '/url?order=desc&search=Manny')
+        done();
+      });
+    });
+
+    it('should allow disabling sorting', function(done){
+      request
+      .get(uri + '/url')
+      .query('search=Manny')
+      .query('order=desc')
+      .sortQuery() // take default of true
+      .sortQuery(false) // override it in later call
+      .end(function(err, res){
+        assert.equal(res.text, '/url?search=Manny&order=desc')
+        done();
+      });
+    });
+
+    it('should sort the request querystring using customized function', function(done) {
+      request
+      .get(uri + '/url')
+      .query('name=Nick')
+      .query('search=Manny')
+      .query('order=desc')
+      .sortQuery(function(a, b){
+        return a.length - b.length;
+      })
+      .end(function(err, res){
+        assert.equal(res.text, '/url?name=Nick&order=desc&search=Manny')
+        done();
+      });
+    });
+  })
 })
