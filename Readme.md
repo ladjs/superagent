@@ -51,6 +51,8 @@ var prefix = require('superagent-prefix')('/static');
 
 request
   .get('/some-url')
+  .query({ foo: 'fooValue', bar: 'barValue' })
+  .auth('username', 'password')
   .use(prefix) // Prefixes *only* this request
   .use(nocache) // Prevents caching of *only* this request
   .end(function(err, res){
