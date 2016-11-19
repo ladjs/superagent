@@ -1,7 +1,5 @@
 # 3.0.0
 
-You can test it with `npm install superagent@next`
-
  * Dropped support for Node 0.x. Please upgrade to at least Node 4.
  * Dropped support for componentjs (Damien Caselli)
  * Removed deprecated `.part()`/`superagent.Part` APIs.
