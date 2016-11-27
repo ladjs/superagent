@@ -22,7 +22,7 @@
 
 ## Request basics
 
- A request can be initiated by invoking the appropriate method on the `request` object, then calling `.end()` to send the request. For example a simple GET request:
+ A request can be initiated by invoking the appropriate method on the `request` object, then calling `.end()` to send the request. For example a simple __GET__ request:
 
      request
        .get('/search')
@@ -56,7 +56,7 @@ ES6 promises are supported. Instead of `.end()` you can call `.then()`:
 
        });
 
-  `DELETE`, `HEAD`, `PATCH`, `POST`, and `PUT` requests can also be used, simply change the method name:
+  __DELETE__, __HEAD__, __PATCH__, __POST__, and __PUT__ requests can also be used, simply change the method name:
 
     request
       .head('/favicon.ico')
@@ -66,7 +66,7 @@ ES6 promises are supported. Instead of `.end()` you can call `.then()`:
 
   __DELETE__ can be also called as `.del()` for compatibility with old IE where `delete` is a reserved word.
 
-  The HTTP method defaults to `GET`, so if you wish, the following is valid:
+  The HTTP method defaults to __GET__, so if you wish, the following is valid:
 
      request('/search', function(err, res){
 
@@ -89,9 +89,9 @@ ES6 promises are supported. Instead of `.end()` you can call `.then()`:
        .set({ 'API-Key': 'foobar', Accept: 'application/json' })
        .end(callback);
 
-## GET requests
+## `GET` requests
 
- The `.query()` method accepts objects, which when used with the `GET` method will form a query-string. The following will produce the path `/search?query=Manny&range=1..5&order=desc`.
+ The `.query()` method accepts objects, which when used with the __GET__ method will form a query-string. The following will produce the path `/search?query=Manny&range=1..5&order=desc`.
 
      request
        .get('/search')
@@ -143,7 +143,7 @@ You can also use the `.query()` method for HEAD requests. The following will pro
 
 ## `POST` / `PUT` requests
 
-  A typical JSON `POST` request might look a little like the following, where we set the `Content-Type` header field appropriately, and "write" some data, in this case just a JSON string.
+  A typical JSON __POST__ request might look a little like the following, where we set the Content-Type header field appropriately, and "write" some data, in this case just a JSON string.
 
       request.post('/user')
         .set('Content-Type', 'application/json')
@@ -171,7 +171,7 @@ You can also use the `.query()` method for HEAD requests. The following will pro
         .send('pet=tobi')
         .end(callback);
 
-  SuperAgent formats are extensible, however by default "json" and "form" are supported. To send the data as `application/x-www-form-urlencoded` simply invoke `.type()` with "form", where the default is "json". This request will POST the body "name=tj&pet=tobi".
+  SuperAgent formats are extensible, however by default "json" and "form" are supported. To send the data as `application/x-www-form-urlencoded` simply invoke `.type()` with "form", where the default is "json". This request will __POST__ the body "name=tj&pet=tobi".
 
       request.post('/user')
         .type('form')
@@ -222,7 +222,7 @@ If you are calling Facebook's API, be sure to send an `Accept: application/json`
 
 ## Query strings
 
-  `res.query(obj)` is a method which may be used to build up a query-string. For example populating `?format=json&dest=/login` on a `POST`:
+  `res.query(obj)` is a method which may be used to build up a query-string. For example populating `?format=json&dest=/login` on a __POST__:
 
     request
       .post('/')
