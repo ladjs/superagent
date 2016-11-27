@@ -1,4 +1,5 @@
 var express = require('express');
+var multer = require('multer');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var basicAuth = require('basic-auth-connect');
@@ -25,6 +26,15 @@ app.all('/unique', function(req, res){
 });
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(multer().none());
+
+app.all('/formecho', function(req, res){
+  if (!/application\/x-www-form-urlencoded|multipart\/form-data/.test(req.headers['content-type'])) {
+    return res.status(400).end("wrong type");
+  }
+  res.json(req.body);
+});
+
 app.use(bodyParser.json());
 app.use(cookieParser());
 
