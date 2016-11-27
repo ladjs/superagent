@@ -1,10 +1,12 @@
 var setup = require('./support/setup');
 var base = setup.uri;
 var should = require('should');
-var assert = require('assert');
 var request = require('../');
 
+var assert = require('assert');
 if (!assert.deepStrictEqual) assert.deepStrictEqual = assert.deepEqual;
+
+var formDataSupported = setup.NODE || 'undefined' !== FormData;
 
 describe('req.send(Object) as "form"', function(){
   describe('with req.type() set to form', function(){
@@ -39,6 +41,10 @@ describe('req.send(Object) as "form"', function(){
 
 describe('req.field', function(){
   it('allow bools', function(done){
+    if (!formDataSupported) {
+      return done();
+    }
+
     request
       .post(base + '/formecho')
       .field('bools', true)
@@ -51,6 +57,10 @@ describe('req.field', function(){
   });
 
   it('allow objects', function(done){
+    if (!formDataSupported) {
+      return done();
+    }
+
     request
       .post(base + '/formecho')
       .field({bools: true, strings: 'true'})
@@ -62,6 +72,10 @@ describe('req.field', function(){
   });
 
   it('works with arrays in objects', function(done){
+    if (!formDataSupported) {
+      return done();
+    }
+
     request
       .post(base + '/formecho')
       .field({numbers: [1,2,3]})
@@ -73,6 +87,10 @@ describe('req.field', function(){
   });
 
   it('works with arrays', function(done){
+    if (!formDataSupported) {
+      return done();
+    }
+
     request
       .post(base + '/formecho')
       .field('letters', ['a', 'b', 'c'])
