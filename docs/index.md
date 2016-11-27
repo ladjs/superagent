@@ -64,13 +64,7 @@ ES6 promises are supported. Instead of `.end()` you can call `.then()`:
 
       });
 
-  `DELETE` is a special-case, as it's a reserved word, so the method is named `.del()`:
-
-    request
-      .del('/user/1')
-      .end(function(err, res){
-
-      });
+  __DELETE__ can be also called as `.del()` for compatibility with old IE where `delete` is a reserved word.
 
   The HTTP method defaults to `GET`, so if you wish, the following is valid:
 
