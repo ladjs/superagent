@@ -46,7 +46,7 @@ ES6 promises are supported. Instead of `.end()` you can call `.then()`:
 
        });
 
- The __node__ client supports making requests to [Unix Domain Sockets](http://en.wikipedia.org/wiki/Unix_domain_socket):
+ The __Node__ client supports making requests to [Unix Domain Sockets](http://en.wikipedia.org/wiki/Unix_domain_socket):
 
      // pattern: https?+unix://SOCKET_PATH/REQUEST_PATH
      //          Use `%2F` as `/` in SOCKET_PATH
@@ -56,7 +56,7 @@ ES6 promises are supported. Instead of `.end()` you can call `.then()`:
 
        });
 
-  __DELETE__, __HEAD__, __PATCH__, __POST__, and __PUT__ requests can also be used, simply change the method name:
+  `DELETE`, `HEAD`, `PATCH`, `POST`, and `PUT` requests can also be used, simply change the method name:
 
     request
       .head('/favicon.ico')
@@ -64,7 +64,7 @@ ES6 promises are supported. Instead of `.end()` you can call `.then()`:
 
       });
 
-  __DELETE__ is a special-case, as it's a reserved word, so the method is named `.del()`:
+  `DELETE` is a special-case, as it's a reserved word, so the method is named `.del()`:
 
     request
       .del('/user/1')
@@ -72,7 +72,7 @@ ES6 promises are supported. Instead of `.end()` you can call `.then()`:
 
       });
 
-  The HTTP method defaults to __GET__, so if you wish, the following is valid:
+  The HTTP method defaults to `GET`, so if you wish, the following is valid:
 
      request('/search', function(err, res){
 
@@ -97,7 +97,7 @@ ES6 promises are supported. Instead of `.end()` you can call `.then()`:
 
 ## GET requests
 
- The `.query()` method accepts objects, which when used with the __GET__ method will form a query-string. The following will produce the path `/search?query=Manny&range=1..5&order=desc`.
+ The `.query()` method accepts objects, which when used with the `GET` method will form a query-string. The following will produce the path `/search?query=Manny&range=1..5&order=desc`.
 
      request
        .get('/search')
@@ -136,7 +136,7 @@ ES6 promises are supported. Instead of `.end()` you can call `.then()`:
 
         });
 
-## HEAD requests
+## `HEAD` requests
 
 You can also use the `.query()` method for HEAD requests. The following will produce the path `/users?email=joe@smith.com`.
 
@@ -147,9 +147,9 @@ You can also use the `.query()` method for HEAD requests. The following will pro
 
         });
 
-## POST / PUT requests
+## `POST` / `PUT` requests
 
-  A typical JSON __POST__ request might look a little like the following, where we set the Content-Type header field appropriately, and "write" some data, in this case just a JSON string.
+  A typical JSON `POST` request might look a little like the following, where we set the `Content-Type` header field appropriately, and "write" some data, in this case just a JSON string.
 
       request.post('/user')
         .set('Content-Type', 'application/json')
@@ -169,7 +169,7 @@ You can also use the `.query()` method for HEAD requests. The following will pro
         .send({ pet: 'tobi' })
         .end(callback)
 
-  By default sending strings will set the Content-Type to `application/x-www-form-urlencoded`,
+  By default sending strings will set the `Content-Type` to `application/x-www-form-urlencoded`,
   multiple calls will be concatenated with `&`, here resulting in `name=tj&pet=tobi`:
 
       request.post('/user')
@@ -187,7 +187,7 @@ You can also use the `.query()` method for HEAD requests. The following will pro
 
  Note: "form" is aliased as "form-data" and "urlencoded" for backwards compat.
 
-## Setting the Content-Type
+## Setting the `Content-Type`
 
   The obvious solution is to use the `.set()` method:
 
@@ -213,7 +213,7 @@ SuperAgent will automatically serialize JSON and forms. If you want to send the 
 
 ## Setting Accept
 
-In a similar fashion to the `.type()` method it is also possible to set the Accept header via the short hand method `.accept()`. Which references `request.types` as well allowing you to specify either the full canonicalized MIME type name as type/subtype, or the extension suffix form as "xml", "json", "png", etc for convenience:
+In a similar fashion to the `.type()` method it is also possible to set the `Accept` header via the short hand method `.accept()`. Which references `request.types` as well allowing you to specify either the full canonicalized MIME type name as `type/subtype`, or the extension suffix form as "xml", "json", "png", etc. for convenience:
 
      request.get('/user')
        .accept('application/json')
@@ -226,7 +226,7 @@ In a similar fashion to the `.type()` method it is also possible to set the Acce
 
 ## Query strings
 
-  `res.query(obj)` is a method which may be used to build up a query-string. For example populating `?format=json&dest=/login` on a __POST__:
+  `res.query(obj)` is a method which may be used to build up a query-string. For example populating `?format=json&dest=/login` on a `POST`:
 
     request
       .post('/')
