@@ -38,7 +38,7 @@ ES6 promises are supported. Instead of `.end()` you can call `.then()`:
 
     request('GET', '/search').then(success, failure);
 
- The __node__ client may also provide absolute urls:
+ The __Node__ client may also provide absolute URLs. In browsers absolute URLs won't work unless the server implements [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS).
 
      request
        .get('http://example.com/search')
@@ -184,8 +184,6 @@ You can also use the `.query()` method for HEAD requests. The following will pro
         .send({ name: 'tj' })
         .send({ pet: 'tobi' })
         .end(callback)
-
- Note: "form" is aliased as "form-data" and "urlencoded" for backwards compat.
 
 ## Setting the `Content-Type`
 
