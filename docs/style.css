@@ -54,7 +54,8 @@ pre {
 }
 
 code {
-  font: 12px/1 monaco, monospace;
+  font-family: monaco, monospace, sans-serif;
+  font-size: 0.85em;
 }
 
 p code {
