@@ -231,26 +231,24 @@ If you are calling Facebook's API, be sure to send an `Accept: application/json`
       .send({ post: 'data', here: 'wahoo' })
       .end(callback);
 
-  By default the query string is not assembled in any particular order. An asciibetically-sorted query string can be enabled with `req.sortQuery()`. Use `req.sortQuery(false)` if you need to disable this after enabling it. You may also provide a custom sorting comparison function with `req.sortQuery(myComparisonFn)`. The comparison function should take 2 arguments and return a negative/zero/positive integer.
-
-  **Examples**
+  By default the query string is not assembled in any particular order. An asciibetically-sorted query string can be enabled with `req.sortQuery()`. You may also provide a custom sorting comparison function with `req.sortQuery(myComparisonFn)`. The comparison function should take 2 arguments and return a negative/zero/positive integer.
 
 ```js
-       // default order
-       request.get('/user')
-         .query('name=Nick')
-         .query('search=Manny')
-         .sortQuery()
-         .end(callback)
+ // default order
+ request.get('/user')
+   .query('name=Nick')
+   .query('search=Manny')
+   .sortQuery()
+   .end(callback)
 
-       // customized sort function
-       request.get('/user')
-         .query('name=Nick')
-         .query('search=Manny')
-         .sortQuery(function(a, b){
-           return a.length - b.length;
-         })
-         .end(callback)
+ // customized sort function
+ request.get('/user')
+   .query('name=Nick')
+   .query('search=Manny')
+   .sortQuery(function(a, b){
+     return a.length - b.length;
+   })
+   .end(callback)
 ```
 
 ## Parsing response bodies
@@ -261,7 +259,9 @@ If you are calling Facebook's API, be sure to send an `Accept: application/json`
 
 ### JSON / Urlencoded
 
-  The property `res.body` is the parsed object, for example if a request responded with the JSON string '{"user":{"name":"tobi"}}', `res.body.user.name` would be "tobi". Likewise the x-www-form-urlencoded value of "user[name]=tobi" would yield the same result.
+  The property `res.body` is the parsed object, for example if a request responded with the JSON string '{"user":{"name":"tobi"}}', `res.body.user.name` would be "tobi". Likewise the x-www-form-urlencoded value of "user[name]=tobi" would yield the same result. Only one level of nesting is supported. If you need more complex data, send JSON instead.
+
+  Arrays are sent by repeating the key. `.send({color: ['red','blue']})` sends `color=red&color=blue`. If you want the array keys to contain `[]` in their name, you must add it yourself, as SuperAgent doesn't add it automatically.
 
 ### Multipart
 
@@ -288,10 +288,8 @@ In browsers, you may use `.responseType('blob')` to request handling of binary r
 - `'blob'` passed through to the XmlHTTPRequest `responseType` property
 - `'arraybuffer'` passed through to the XmlHTTPRequest `responseType` property
 
-**Example**
-
 ```js
-req.get('/')
+req.get('/binary.data')
   .responseType('blob')
   .end(function (error, res) {
     // res.body will be a browser native Blob type here
