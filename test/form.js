@@ -61,6 +61,28 @@ describe('req.field', function(){
       });
   });
 
+  it('works with arrays in objects', function(done){
+    request
+      .post(base + '/formecho')
+      .field({numbers: [1,2,3]})
+      .end(function(err, res){
+        assert.ifError(err);
+        assert.deepStrictEqual(res.body, {numbers:['1','2','3']});
+        done();
+      });
+  });
+
+  it('works with arrays', function(done){
+    request
+      .post(base + '/formecho')
+      .field('letters', ['a', 'b', 'c'])
+      .end(function(err, res){
+        assert.ifError(err);
+        assert.deepStrictEqual(res.body, {letters: ['a', 'b', 'c']});
+        done();
+      });
+  });
+
   it('throw when empty', function(){
     should.throws(function(){
       request
