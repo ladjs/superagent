@@ -391,6 +391,19 @@ For more information, see the Mozilla Developer Network [xhr.responseType docs](
       .redirects(2)
       .end(callback);
 
+## Preserving cookies
+
+  In Node SuperAgent does not save cookies by default, but you can use the `.agent()` method to create a copy of SuperAgent that saves cookies. Each copy has a separate cookie jar.
+
+    const agent = request.agent();
+    agent
+      .post('/login')
+      .then(() => {
+        return agent.get('/cookied-page');
+      });
+
+  In browsers cookies are managed automatically by the browser, and there is no `.agent()` method.
+
 ## Piping data
 
   The Node client allows you to pipe data to and from the request. For example piping a file's contents as the request:
