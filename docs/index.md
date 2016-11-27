@@ -222,6 +222,10 @@ In a similar fashion to the `.type()` method it is also possible to set the `Acc
      request.post('/user')
        .accept('png')
 
+### Facebook and Accept JSON
+
+If you are calling Facebook's API, be sure to send an `Accept: application/json` header in your request. If you don't do this, Facebook will respond with `Content-Type: text/javascript; charset=UTF-8`, which SuperAgent will not parse and thus `res.body` will be undefined. You can do this with either `req.accept('json')` or `req.header('Accept', 'application/json')`. See [issue 1078](https://github.com/visionmedia/superagent/issues/1078) for details.
+
 ## Query strings
 
   `res.query(obj)` is a method which may be used to build up a query-string. For example populating `?format=json&dest=/login` on a `POST`:
@@ -523,10 +527,6 @@ Libraries like [co](https://github.com/tj/co) or a web framework like [koa](http
     const res = yield req;
 
 Note that SuperAgent expects the global `Promise` object to be present. You'll need a polyfill to use promises in Internet Explorer or Node.js 0.10.
-
-## Facebook and Accept JSON
-
-If you are calling Facebook's API, be sure to send an `Accept: application/json` header in your request. If you don't do this, Facebook will respond with `Content-Type: text/javascript; charset=UTF-8`, which superagent will not parse and thus `res.body` will be undefined. You can do this with either `req.accept('json')` or `req.header('Accept', 'application/json')`. See [issue 1078](https://github.com/visionmedia/superagent/issues/1078) for details.
 
 ## Browser and node versions
 
