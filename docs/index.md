@@ -397,21 +397,18 @@ For more information, see the Mozilla Developer Network [xhr.responseType docs](
 
   The Node client allows you to pipe data to and from the request. For example piping a file's contents as the request:
 
-    var request = require('superagent')
-      , fs = require('fs');
+    const request = require('superagent');
+    const fs = require('fs');
 
-    var stream = fs.createReadStream('path/to/my.json');
-    var req = request.post('/somewhere');
+    const stream = fs.createReadStream('path/to/my.json');
+    const req = request.post('/somewhere');
     req.type('json');
     stream.pipe(req);
 
   Or piping the response to a file:
 
-    var request = require('superagent')
-      , fs = require('fs');
-
-    var stream = fs.createWriteStream('path/to/my.json');
-    var req = request.get('/some.json');
+    const stream = fs.createWriteStream('path/to/my.json');
+    const req = request.get('/some.json');
     req.pipe(stream);
 
 ## Multipart requests
@@ -509,9 +506,10 @@ SuperAgent's request is a "thenable" object that's compatible with JavaScript pr
 
 Libraries like [co](https://github.com/tj/co) or a web framework like [koa](https://github.com/koajs/koa) can `yield` on any SuperAgent method:
 
-    var res = yield request
+    const req = request
       .get('http://local')
-      .auth('tobi', 'learnboost')
+      .auth('tobi', 'learnboost');
+    const res = yield req;
 
 Note that SuperAgent expects the global `Promise` object to be present. You'll need a polyfill to use promises in Internet Explorer or Node.js 0.10.
 
