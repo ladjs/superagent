@@ -1,5 +1,4 @@
 var setup = require('./support/setup');
-var NODE = setup.NODE;
 var uri = setup.uri;
 
 var assert = require('assert');
@@ -27,6 +26,58 @@ describe('request', function(){
           assert.equal(res.get('X-UUID'), now);
           done();
         })
-    })
-  })
+    });
+  });
+})
+
+describe('subclass', function() {
+  var OriginalRequest;
+  beforeEach(function(){
+    OriginalRequest = request.Request;
+  });
+  afterEach(function(){
+    request.Request = OriginalRequest;
+  });
+
+  it('should be an instance of Request', function(){
+    var req = request.get('/');
+    assert(req instanceof request.Request);
+  });
+
+  it('should use patched subclass', function(){
+    assert(OriginalRequest);
+
+    var constructorCalled, sendCalled;
+    function NewRequest() {
+      constructorCalled = true;
+      OriginalRequest.apply(this, arguments);
+    }
+    NewRequest.prototype = Object.create(OriginalRequest.prototype);
+    NewRequest.prototype.send = function() {
+      sendCalled = true;
+      return this;
+    };
+
+    request.Request = NewRequest;
+
+    var req = request.get('/').send();
+    assert(constructorCalled);
+    assert(sendCalled);
+    assert(req instanceof NewRequest);
+    assert(req instanceof OriginalRequest);
+  });
+
+  it('should use patched subclass in agent too', function(){
+    if (!request.agent) return; // Node-only
+
+    function NewRequest() {
+      OriginalRequest.apply(this, arguments);
+    }
+    NewRequest.prototype = Object.create(OriginalRequest.prototype);
+    request.Request = NewRequest;
+
+    var req = request.agent().del('/');
+    assert(req instanceof NewRequest);
+    assert(req instanceof OriginalRequest);
+  });
 })
