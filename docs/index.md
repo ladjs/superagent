@@ -38,7 +38,7 @@ ES6 promises are supported. Instead of `.end()` you can call `.then()`:
 
     request('GET', '/search').then(success, failure);
 
- The __Node__ client may also provide absolute URLs. In browsers absolute URLs won't work unless the server implements [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS).
+ The __Node__ client may also provide absolute URLs. In browsers absolute URLs won't work unless the server implements [CORS](#cors).
 
      request
        .get('http://example.com/search')
@@ -460,17 +460,17 @@ For more information, see the Mozilla Developer Network [xhr.responseType docs](
 
 ## CORS
 
+  For security reasons, browsers will block cross-origin requests unless the server opts-in using CORS headers. Browsers will also make extra __OPTIONS__ requests to check what HTTP headers and methods are allowed by the server. [Read more about CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS).
+
   The `.withCredentials()` method enables the ability to send cookies
-  from the origin, however only when "Access-Control-Allow-Origin" is
-  _not_ a wildcard ("*"), and "Access-Control-Allow-Credentials" is "true".
+  from the origin, however only when `Access-Control-Allow-Origin` is _not_ a wildcard ("*"), and `Access-Control-Allow-Credentials` is "true".
 
     request
-      .get('http://localhost:4001/')
+      .get('http://api.example.com:4001/')
       .withCredentials()
-      .end(function(err, res){
+      .then(function(res){
         assert.equal(200, res.status);
         assert.equal('tobi', res.text);
-        next();
       })
 
 ## Error handling
