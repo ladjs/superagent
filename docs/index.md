@@ -424,7 +424,7 @@ For more information, see the Mozilla Developer Network [xhr.responseType docs](
 
 ### Attaching files
 
-  As mentioned a higher-level API is also provided, in the form of `.attach(name, [path], [filename])` and `.field(name, value)`. Attaching several files is simple, you can also provide a custom filename for the attachment, otherwise the basename of the attached file is used.
+  As mentioned a higher-level API is also provided, in the form of `.attach(name, [path], [filename])` and `.field(name, value)`/`.field(object)`. Attaching several files is simple, you can also provide a custom filename for the attachment, otherwise the basename of the attached file is used.
 
     request
       .post('/upload')
@@ -441,6 +441,7 @@ For more information, see the Mozilla Developer Network [xhr.responseType docs](
        .post('/upload')
        .field('user[name]', 'Tobi')
        .field('user[email]', 'tobi@learnboost.com')
+       .field('friends[]', ['loki', 'jane'])
        .attach('image', 'path/to/tobi.png')
        .end(callback);
 

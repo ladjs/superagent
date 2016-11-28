@@ -1,4 +1,10 @@
-# 3.0.0
+# 3.1.0 (2016-11-28)
+
+ * Added `.sortQuery()` (vicanso)
+ * Added support for arrays and bools in `.field()` (Kornel Lesiński)
+ * Made `superagent.Request` subclassable without need to patch all static methods (Kornel Lesiński)
+
+# 3.0.0 (2016-11-19)
 
  * Dropped support for Node 0.x. Please upgrade to at least Node 4.
  * Dropped support for componentjs (Damien Caselli)
