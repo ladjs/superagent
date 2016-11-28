@@ -27,18 +27,17 @@ request
   });
 ```
 
-## Supported browsers
+## Supported browsers and Node versions
 
 Tested browsers:
 
-- Latest Android
-- Latest Firefox
-- Latest Chrome
+- Latest Firefox, Chrome, Safari
+- Latest Android, iPhone
 - IE10 through latest. IE9 with polyfills.
-- Latest iPhone
-- Latest Safari
 
 Even though IE9 is supported, a polyfill for `window.FormData` is required for `.field()`, and `window.btoa` is needed to use basic auth.
+
+Node 4 or later is required.
 
 # Plugins
 
@@ -117,7 +116,7 @@ Edit tests and refresh your browser. You do not have to restart the test runner.
 
 **npm (for browserify)** is handled via the `package.json` `browser` field which allows users to install SuperAgent via npm, reference it from their browser code with `require('superagent')`, and then build their own application bundle via `browserify`, which will use `lib/client.js` as the SuperAgent entrypoint.
 
-**bower** is configured via the `bower.json` file. Bower installs files directly from git/github without any transformation.
+**bower** is configured via the `bower.json` file. Bower installs files directly from git/github without any transformation, so you *must* use Browserify or Webpack (or use npm).
 
 ## License
 
