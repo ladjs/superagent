@@ -1,5 +1,5 @@
 var assert = require('assert');
-var utils = require('../../lib/node/utils');
+var utils = require('../../lib/utils');
 
 describe('utils.type(str)', function(){
   it('should return the mime type', function(){
