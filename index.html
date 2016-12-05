@@ -33,7 +33,7 @@
    });
 </code></pre><p>  A method string may also be passed:</p>
 <pre><code>request(&#39;GET&#39;, &#39;/search&#39;).end(callback);
-</code></pre><p>ES6 promises are supported. Instead of <code>.end()</code> you can call <code>.then()</code>:</p>
+</code></pre><p>ES6 promises are supported. <em>Instead</em> of <code>.end()</code> you can call <code>.then()</code>:</p>
 <pre><code>request(&#39;GET&#39;, &#39;/search&#39;).then(success, failure);
 </code></pre><p> The <strong>Node</strong> client may also provide absolute URLs. In browsers absolute URLs won&#39;t work unless the server implements <a href="#cors">CORS</a>.</p>
 <pre><code> request
@@ -375,7 +375,7 @@ else if (err) {
   // all other error types we handle generically
 }
 </code></pre><h2 id="promise-and-generator-support">Promise and Generator support</h2>
-<p>SuperAgent&#39;s request is a &quot;thenable&quot; object that&#39;s compatible with JavaScript promises and <code>async</code>/<code>await</code> syntax.</p>
+<p>SuperAgent&#39;s request is a &quot;thenable&quot; object that&#39;s compatible with JavaScript promises and <code>async</code>/<code>await</code> syntax. Do not call <code>.end()</code> if you&#39;re using promises.</p>
 <p>Libraries like <a href="https://github.com/tj/co">co</a> or a web framework like <a href="https://github.com/koajs/koa">koa</a> can <code>yield</code> on any SuperAgent method:</p>
 <pre><code>const req = request
   .get(&#39;http://local&#39;)
