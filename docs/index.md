@@ -34,7 +34,7 @@
 
     request('GET', '/search').end(callback);
 
-ES6 promises are supported. Instead of `.end()` you can call `.then()`:
+ES6 promises are supported. *Instead* of `.end()` you can call `.then()`:
 
     request('GET', '/search').then(success, failure);
 
@@ -510,7 +510,7 @@ Your callback function will always be passed two arguments: error and response. 
 
 ## Promise and Generator support
 
-SuperAgent's request is a "thenable" object that's compatible with JavaScript promises and `async`/`await` syntax.
+SuperAgent's request is a "thenable" object that's compatible with JavaScript promises and `async`/`await` syntax. Do not call `.end()` if you're using promises.
 
 Libraries like [co](https://github.com/tj/co) or a web framework like [koa](https://github.com/koajs/koa) can `yield` on any SuperAgent method:
 
