@@ -465,6 +465,16 @@ describe('request', function(){
   });
 
   describe('req.sortQuery()', function(){
+    it('nop with no querystring', function(done){
+      request
+      .get(uri + '/url')
+      .sortQuery()
+      .end(function(err, res){
+        assert.equal(res.text, '/url')
+        done();
+      });
+    });
+
     it('should sort the request querystring', function(done){
       request
       .get(uri + '/url')
