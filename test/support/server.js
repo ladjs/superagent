@@ -199,6 +199,14 @@ app.get('/text', function(req, res){
   res.send("just some text");
 });
 
+app.get('/basic-auth', basicAuth('tobi', 'learnboost'), function(req, res){
+  res.end('you win!');
+});
+
+app.get('/basic-auth/again', basicAuth('tobi', ''), function(req, res){
+  res.end('you win again!');
+});
+
 app.post('/auth', basicAuth('foo', 'bar'), function(req, res) {
   var auth = req.headers.authorization,
       parts = auth.split(' '),
