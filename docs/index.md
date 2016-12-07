@@ -353,12 +353,27 @@ For more information, see the Mozilla Developer Network [xhr.responseType docs](
 
   To abort requests simply invoke the `req.abort()` method.
 
-## Request timeouts
+## Timeouts
 
-  A timeout can be applied by invoking `req.timeout(ms)`, after which an error
-  will be triggered. To differentiate between other errors the `err.timeout` property
-  is set to the `ms` value. __NOTE__ that this is a timeout applied to the request
-  and all subsequent redirects, not per request.
+Sometimes networks and servers get "stuck" and never respond after accepting a request. Set timeouts to avoid requests waiting forever.
+
+  * `req.timeout({deadline:ms})` or `req.timeout(ms)` (where `ms` is a number of milliseconds > 0) sets a deadline for the entire request (including all redirects) to complete. If the response isn't fully downloaded within that time, the request will be aborted.
+
+  * `req.timeout({response:ms})` sets maximum time to wait for the first byte to arrive from the server, but it does not limit how long the entire download can take. Response timeout should be a few seconds longer than just the time it takes server to respond, because it also includes time to make DNS lookup, TCP/IP and TLS connections.
+
+You should use both `deadline` and `response` timeouts. This way you can use a short response timeout to detect unresponsive networks quickly, and a long deadline to give time for downloads on slow, but reliable, networks.
+
+    request
+      .get('/big-file?network=slow')
+      .timeout({
+        response: 5000,  // Wait 5 seconds for the server to start sending,
+        deadline: 60000, // but allow 1 minute for the file to finish loading.
+      })
+      .end(function(err, res){
+        if (err.timeout) { /* timed out! */ }
+      });
+
+Timeout errors have a `.timeout` property.
 
 ## Authentication
 
