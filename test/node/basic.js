@@ -58,7 +58,7 @@ describe('[node] request', function(){
     it('should default to an empty object', function(){
       return request
       .get('http://localhost:5000/login')
-      .end(function(res){
+      .then(function(res){
         res.links.should.eql({});
       })
     })
