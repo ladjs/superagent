@@ -1,29 +1,13 @@
+var setup = require('./support/setup');
+var base = setup.uri;
+var assert = require('assert');
+var request = require('../');
 
-var request = require('../..')
-  , express = require('express')
-  , assert = require('assert')
-  , app = express();
-
-app.get('/:ms', function(req, res){
-  var ms = parseInt(req.params.ms, 10);
-  setTimeout(function(){
-    res.send('hello');
-  }, ms);
-});
-
-var base = 'http://localhost'
-var server;
-before(function listen(done) {
-  server = app.listen(0, function listening() {
-    base += ':' + server.address().port;
-    done();
-  });
-});
 describe('.timeout(ms)', function(){
-  describe('when timeout is exceeded', function(done){
+  describe('when timeout is exceeded', function(){
     it('should error', function(done){
       request
-      .get(base + '/500')
+      .get(base + '/delay/500')
       .timeout(150)
       .end(function(err, res){
         assert(err, 'expected an error');
