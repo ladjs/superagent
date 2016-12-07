@@ -1,47 +1,7 @@
-
-var request = require('../..'),
-    express = require('express'),
-    assert = require('assert'),
-    fs = require('fs'),
-    app = express();
-
-app.get('/manny', function(req, res){
-  res.status(200).json({name:"manny"});
-});
-
-
-var img = fs.readFileSync(__dirname + '/fixtures/test.png');
-
-app.get('/image', function(req, res){
-  res.writeHead(200, {'Content-Type': 'image/png' });
-  res.end(img, 'binary');
-});
-
-app.get('/chunked-json', function(req, res){
-  res.set('content-type', 'application/json');
-  res.set('Transfer-Encoding', 'chunked');
-
-  var chunk = 0;
-  var interval = setInterval(function(){
-    chunk++;
-    if(chunk === 1) res.write('{ "name_' + chunk + '": "');
-    if(chunk > 1) res.write('value_' + chunk + '", "name_' + chunk + '": "');
-    if(chunk === 10) {
-      clearInterval(interval);
-      res.write('value_' + chunk + '"}');
-      res.end();
-    }
-  },10);
-});
-
-var base = 'http://localhost'
-var server;
-before(function listen(done) {
-  server = app.listen(0, function listening() {
-    base += ':' + server.address().port;
-    done();
-  });
-});
+var assert = require('assert');
+var request = require('../../');
+var setup = require('../support/setup');
+var base = setup.uri;
 
 describe('req.parse(fn)', function(){
   it('should take precedence over default parsers', function(done){
@@ -114,5 +74,4 @@ describe('req.parse(fn)', function(){
 
     setTimeout(function(){req.abort()},50);
   })
-
 })

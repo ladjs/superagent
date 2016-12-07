@@ -3,6 +3,7 @@ var multer = require('multer');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var basicAuth = require('basic-auth-connect');
+var fs = require('fs');
 
 var app = express();
 
@@ -320,6 +321,46 @@ app.get('/header/2', function(req, res){
 
 app.get('/bad-redirect', function(req, res){
   res.status(307).end();
+});
+
+app.all('/ua', function(req, res){
+  res.writeHead(200, req.headers);
+  req.pipe(res);
+});
+
+app.get('/manny', function(req, res){
+  res.status(200).json({name:"manny"});
+});
+
+app.get('/image', function(req, res){
+  var img = fs.readFileSync(__dirname + '/../node/fixtures/test.png');
+  res.writeHead(200, {'Content-Type': 'image/png' });
+  res.end(img, 'binary');
+});
+
+app.get('/chunked-json', function(req, res){
+  res.set('content-type', 'application/json');
+  res.set('Transfer-Encoding', 'chunked');
+
+  var chunk = 0;
+  var interval = setInterval(function(){
+    chunk++;
+    if(chunk === 1) res.write('{ "name_' + chunk + '": "');
+    if(chunk > 1) res.write('value_' + chunk + '", "name_' + chunk + '": "');
+    if(chunk === 10) {
+      clearInterval(interval);
+      res.write('value_' + chunk + '"}');
+      res.end();
+    }
+  },10);
+});
+
+app.get('/if-mod', function(req, res){
+  if (req.header('if-modified-since')) {
+    res.status(304).end();
+  } else {
+    res.send('' + Date.now());
+  }
 });
 
 app.listen(process.env.ZUUL_PORT);

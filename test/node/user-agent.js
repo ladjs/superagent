@@ -1,22 +1,7 @@
-
-var request = require('../..'),
-    express = require('express'),
-    assert = require('assert'),
-    app = express();
-
-app.all('/ua', function(req, res){
-  res.writeHead(200, req.headers);
-  req.pipe(res);
-});
-
-var base = 'http://localhost'
-var server;
-before(function listen(done) {
-  server = app.listen(0, function listening() {
-    base += ':' + server.address().port;
-    done();
-  });
-});
+var assert = require('assert');
+var request = require('../../');
+var setup = require('../support/setup');
+var base = setup.uri;
 
 describe('req.get()', function(){
   it('should set a default user-agent', function(){
