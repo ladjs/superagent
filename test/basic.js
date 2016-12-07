@@ -12,9 +12,11 @@ describe('request', function(){
     it('should set statusCode', function(done){
       request
       .get(uri + '/login', function(err, res){
+        try {
         assert.strictEqual(res.statusCode, 200);
         done();
-      })
+        } catch(e) { done(e); }
+      });
     })
   })
 
@@ -49,9 +51,11 @@ describe('request', function(){
     it('should invoke .end()', function(done){
       request
       .get(uri + '/login', function(err, res){
+        try {
         assert.equal(res.status, 200);
         done();
-      })
+        } catch(e) { done(e); }
+      });
     })
   })
 
@@ -60,8 +64,10 @@ describe('request', function(){
       request
       .get(uri + '/login')
       .end(function(err, res){
+        try {
         assert.equal(res.status, 200);
         done();
+        } catch(e) { done(e); }
       });
     })
 
@@ -106,6 +112,7 @@ describe('request', function(){
         calledErrorEvent = true;
       })
       .end(function(err, res){
+        try {
         if (NODE) {
           res.error.message.should.equal('cannot GET /error (500)');
         }
@@ -117,6 +124,7 @@ describe('request', function(){
         assert.equal(err.message, 'Internal Server Error');
         assert(calledErrorEvent);
         done();
+        } catch(e) { done(e); }
       });
     })
 
@@ -140,8 +148,10 @@ describe('request', function(){
       request
       .get(uri + '/login')
       .end(function(err, res){
+        try {
         assert.equal('Express', res.header['x-powered-by']);
         done();
+        } catch(e) { done(e); }
       });
     })
   })
@@ -151,8 +161,10 @@ describe('request', function(){
       request
       .get(uri + '/login')
       .end(function(err, res){
+        try {
         res.charset.should.equal('utf-8');
         done();
+        } catch(e) { done(e); }
       });
     })
   })
@@ -162,10 +174,12 @@ describe('request', function(){
       request
       .get(uri + '/login')
       .end(function(err, res){
+        try {
         assert(!err, 'should not have an error for success responses');
         assert.equal(200, res.status);
         assert.equal(2, res.statusType);
         done();
+        } catch(e) { done(e); }
       });
     })
   })
@@ -175,9 +189,11 @@ describe('request', function(){
       request
       .get(uri + '/login')
       .end(function(err, res){
+        try {
         res.type.should.equal('text/html');
         res.charset.should.equal('utf-8');
         done();
+        } catch(e) { done(e); }
       });
     })
   })
@@ -189,10 +205,12 @@ describe('request', function(){
       .set('X-Foo', 'bar')
       .set('X-Bar', 'baz')
       .end(function(err, res){
+        try {
         assert.equal('bar', res.header['x-foo']);
         assert.equal('baz', res.header['x-bar']);
         done();
-      })
+        } catch(e) { done(e); }
+      });
     })
   })
 
@@ -202,10 +220,12 @@ describe('request', function(){
       .post(uri + '/echo')
       .set({ 'X-Foo': 'bar', 'X-Bar': 'baz' })
       .end(function(err, res){
+        try {
         assert.equal('bar', res.header['x-foo']);
         assert.equal('baz', res.header['x-bar']);
         done();
-      })
+        } catch(e) { done(e); }
+      });
     })
   })
 
@@ -215,8 +235,10 @@ describe('request', function(){
       .post(uri + '/echo')
       .type('text/x-foo')
       .end(function(err, res){
+        try {
         res.header['content-type'].should.equal('text/x-foo');
         done();
+        } catch(e) { done(e); }
       });
     })
 
@@ -226,8 +248,10 @@ describe('request', function(){
       .type('json')
       .send('{"a": 1}')
       .end(function(err, res){
+        try {
         res.should.be.json();
         done();
+        } catch(e) { done(e); }
       });
     })
 
@@ -236,8 +260,10 @@ describe('request', function(){
       .post(uri + '/echo')
       .type('html')
       .end(function(err, res){
+        try {
         res.header['content-type'].should.equal('text/html');
         done();
+        } catch(e) { done(e); }
       });
     })
   })
@@ -248,8 +274,10 @@ describe('request', function(){
       .get(uri + '/echo')
       .accept('text/x-foo')
       .end(function(err, res){
+        try {
          res.header['accept'].should.equal('text/x-foo');
          done();
+        } catch(e) { done(e); }
       });
     })
 
@@ -258,8 +286,10 @@ describe('request', function(){
       .get(uri + '/echo')
       .accept('json')
       .end(function(err, res){
+        try {
         res.header['accept'].should.equal('application/json');
         done();
+        } catch(e) { done(e); }
       });
     })
 
@@ -268,8 +298,10 @@ describe('request', function(){
       .get(uri + '/echo')
       .accept('xml')
       .end(function(err, res){
+        try {
         res.header['accept'].should.equal('application/xml');
         done();
+        } catch(e) { done(e); }
       });
     })
 
@@ -278,8 +310,10 @@ describe('request', function(){
       .get(uri + '/echo')
       .accept('html')
       .end(function(err, res){
+        try {
         res.header['accept'].should.equal('text/html');
         done();
+        } catch(e) { done(e); }
       });
     })
   })
@@ -291,8 +325,10 @@ describe('request', function(){
       .type('json')
       .send('{"name":"tobi"}')
       .end(function(err, res){
+        try {
         res.text.should.equal('{"name":"tobi"}');
         done();
+        } catch(e) { done(e); }
       });
     })
   })
@@ -303,9 +339,11 @@ describe('request', function(){
       .post(uri + '/echo')
       .send({ name: 'tobi' })
       .end(function(err, res){
+        try {
         res.should.be.json();
         res.text.should.equal('{"name":"tobi"}');
         done();
+        } catch(e) { done(e); }
       });
     })
 
@@ -316,13 +354,15 @@ describe('request', function(){
         .send({ name: 'tobi' })
         .send({ age: 1 })
         .end(function(err, res){
+            try {
           res.should.be.json();
           if (NODE) {
             res.buffered.should.be.true;
           }
           res.text.should.equal('{"name":"tobi","age":1}');
           done();
-        });
+          } catch(e) { done(e); }
+      });
       })
     })
   })
@@ -333,9 +373,11 @@ describe('request', function(){
       .post(uri + '/echo')
       .send({ name: 'tobi' })
       .end(function(err, res){
+        try {
         assert.equal(null, err);
         res.text.should.equal('{"name":"tobi"}');
         done();
+        } catch(e) { done(e); }
       });
     })
 
@@ -411,8 +453,10 @@ describe('request', function(){
       var req = request
       .get(uri + '/delay/3000')
       .end(function(err, res){
+        try {
         assert(false, 'should not complete the request');
-      });
+        } catch(e) { done(e); }
+    });
 
       req.on('abort', done);
 
@@ -425,7 +469,9 @@ describe('request', function(){
       var req = request
       .get(uri + '/delay/3000')
       .end(function(err, res){
+        try {
         assert(false, 'should not complete the request');
+        } catch(e) { done(e); }
       });
 
       // This also verifies only a single 'done' event is emitted
@@ -443,11 +489,13 @@ describe('request', function(){
       .post(uri + '/echo')
       .send({ foo: 'baz' })
       .end(function(err, res){
+        try {
         var json = req.toJSON();
         assert.equal('POST', json.method);
         assert(/\/echo$/.test(json.url));
         assert.equal('baz', json.data.foo);
         done();
+        } catch(e) { done(e); }
       });
     })
   })
@@ -457,9 +505,11 @@ describe('request', function(){
       request.options(uri + '/options/echo/body')
       .send({ foo: 'baz' })
       .end(function(err, res){
+        try {
         assert.equal(err, null);
         assert.strictEqual(res.body.foo, 'baz');
         done();
+        } catch(e) { done(e); }
       });
     });
   });
@@ -470,8 +520,10 @@ describe('request', function(){
       .get(uri + '/url')
       .sortQuery()
       .end(function(err, res){
+        try {
         assert.equal(res.text, '/url')
         done();
+        } catch(e) { done(e); }
       });
     });
 
@@ -482,8 +534,10 @@ describe('request', function(){
       .query('order=desc')
       .sortQuery()
       .end(function(err, res){
+        try {
         assert.equal(res.text, '/url?order=desc&search=Manny')
         done();
+        } catch(e) { done(e); }
       });
     });
 
@@ -495,8 +549,10 @@ describe('request', function(){
       .sortQuery() // take default of true
       .sortQuery(false) // override it in later call
       .end(function(err, res){
+        try {
         assert.equal(res.text, '/url?search=Manny&order=desc')
         done();
+        } catch(e) { done(e); }
       });
     });
 
@@ -510,8 +566,10 @@ describe('request', function(){
         return a.length - b.length;
       })
       .end(function(err, res){
+        try {
         assert.equal(res.text, '/url?name=Nick&order=desc&search=Manny')
         done();
+        } catch(e) { done(e); }
       });
     });
   })
