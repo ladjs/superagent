@@ -19,36 +19,33 @@ before(function listen(done) {
 });
 
 describe('req.get()', function(){
-  it('should set a default user-agent', function(done){
-    request
+  it('should set a default user-agent', function(){
+    return request
     .get(base + '/ua')
-    .end(function(err, res){
+    .then(function(res){
       assert(res.headers);
       assert(res.headers['user-agent']);
       assert(/^node-superagent\/\d+\.\d+\.\d+(?:-[a-z]+\.\d+|$)/.test(res.headers['user-agent']));
-      done();
     });
   });
 
-  it('should be able to override user-agent', function(done){
-    request
+  it('should be able to override user-agent', function(){
+    return request
     .get(base + '/ua')
     .set('User-Agent', 'foo/bar')
-    .end(function(err, res){
+    .then(function(res){
       assert(res.headers);
       assert.equal(res.headers['user-agent'], 'foo/bar');
-      done();
     });
   });
 
-  it('should be able to wipe user-agent', function(done){
-    request
+  it('should be able to wipe user-agent', function(){
+    return request
     .get(base + '/ua')
     .unset('User-Agent')
-    .end(function(err, res){
+    .then(function(res){
       assert(res.headers);
       assert.equal(res.headers['user-agent'], void 0);
-      done();
     });
   });
 });

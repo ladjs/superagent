@@ -56,17 +56,16 @@ describe('req.parse(fn)', function(){
     });
   })
 
-  it('should be the only parser', function(done){
-    request
+  it('should be the only parser', function(){
+    return request
     .get(base + '/image')
     .parse(function(res, fn) {
       res.on('data', function() {});
     })
-    .end(function(err, res){
+    .then(function(res){
       assert(res.ok);
       assert.strictEqual(res.text, undefined);
       res.body.should.eql({});
-      done();
     });
   })
 

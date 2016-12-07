@@ -20,50 +20,46 @@ describe('[node] request', function(){
   })
 
   describe('with an object', function(){
-    it('should format the url', function(done){
-      request
+    it('should format the url', function(){
+      return request
       .get(url.parse('http://localhost:5000/login'))
-      .end(function(err, res){
+      .then(function(res){
         assert(res.ok);
-        done();
       })
     })
   })
 
   describe('without a schema', function(){
-    it('should default to http', function(done){
-      request
+    it('should default to http', function(){
+      return request
       .get('localhost:5000/login')
-      .end(function(err, res){
+      .then(function(res){
         assert.equal(res.status, 200);
-        done();
       })
     })
   })
 
   describe('res.toJSON()', function(){
-    it('should describe the response', function(done){
-      request
+    it('should describe the response', function(){
+      return request
       .post('http://localhost:5000/echo')
       .send({ foo: 'baz' })
-      .end(function(err, res){
+      .then(function(res){
         var obj = res.toJSON();
         assert.equal('object', typeof obj.header);
         assert.equal('object', typeof obj.req);
         assert.equal(200, obj.status);
         assert.equal('{"foo":"baz"}', obj.text);
-        done();
       });
     });
   })
 
   describe('res.links', function(){
-    it('should default to an empty object', function(done){
-      request
+    it('should default to an empty object', function(){
+      return request
       .get('http://localhost:5000/login')
-      .end(function(err, res){
+      .end(function(res){
         res.links.should.eql({});
-        done();
       })
     })
 

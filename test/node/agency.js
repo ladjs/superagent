@@ -69,15 +69,13 @@ describe('request', function() {
     var agent3 = request.agent();
     var agent4 = request.agent();
 
-    it('should gain a session on POST', function(done) {
-      agent3
+    it('should gain a session on POST', function() {
+      return agent3
         .post(base + '/signin')
-        .end(function(err, res) {
-          should.not.exist(err);
+        .then(function(res) {
           res.should.have.status(200);
           should.not.exist(res.headers['set-cookie']);
           res.text.should.containEql('dashboard');
-          done();
         });
     });
 
@@ -92,40 +90,33 @@ describe('request', function() {
         });
     });
 
-    it('should gain a session (cookies already set)', function(done) {
-      agent1
+    it('should gain a session (cookies already set)', function() {
+      return agent1
         .post(base + '/signin')
-        .end(function(err, res) {
-          should.not.exist(err);
+        .then(function(res) {
           res.should.have.status(200);
           should.not.exist(res.headers['set-cookie']);
           res.text.should.containEql('dashboard');
-          done();
         });
     });
 
-    it('should persist cookies across requests', function(done) {
-      agent1
+    it('should persist cookies across requests', function() {
+      return agent1
         .get(base + '/dashboard')
-        .end(function(err, res) {
-          should.not.exist(err);
+        .then(function(res) {
           res.should.have.status(200);
-          done();
         });
     });
 
-    it('should have the cookie set in the end callback', function(done) {
-      agent4
+    it('should have the cookie set in the end callback', function() {
+      return agent4
         .post(base + '/setcookie')
-        .end(function(err, res) {
-          agent4
-            .get(base + '/getcookie')
-            .end(function(err, res) {
-              should.not.exist(err);
-              res.should.have.status(200);
-              assert.strictEqual(res.text, 'jar');
-              done();
-            });
+        .then(function() {
+          return agent4.get(base + '/getcookie')
+        })
+        .then(function(res) {
+          res.should.have.status(200);
+          assert.strictEqual(res.text, 'jar');
         });
     });
 
@@ -139,37 +130,31 @@ describe('request', function() {
         });
     });
 
-    it('should not lose cookies between agents', function(done) {
-      agent1
+    it('should not lose cookies between agents', function() {
+      return agent1
         .get(base + '/dashboard')
-        .end(function(err, res) {
-          should.not.exist(err);
+        .then(function(res) {
           res.should.have.status(200);
-          done();
         });
     });
 
-    it('should be able to follow redirects', function(done) {
-      agent1
+    it('should be able to follow redirects', function() {
+      return agent1
         .get(base)
-        .end(function(err, res) {
-          should.not.exist(err);
+        .then(function(res) {
           res.should.have.status(200);
           res.text.should.containEql('dashboard');
-          done();
         });
     });
 
-    it('should be able to post redirects', function(done) {
-      agent1
+    it('should be able to post redirects', function() {
+      return agent1
         .post(base + '/redirect')
         .send({ foo: 'bar', baz: 'blaaah' })
-        .end(function(err, res) {
-          should.not.exist(err);
+        .then(function(res) {
           res.should.have.status(200);
           res.text.should.containEql('simple');
           res.redirects.should.eql([base + '/simple']);
-          done();
         });
     });
 
@@ -186,14 +171,12 @@ describe('request', function() {
         });
     });
 
-    it('should be able to create a new session (clear cookie)', function(done) {
-      agent1
+    it('should be able to create a new session (clear cookie)', function() {
+      return agent1
         .post(base + '/signout')
-        .end(function(err, res) {
-          should.not.exist(err);
+        .then(function(res) {
           res.should.have.status(200);
           should.exist(res.headers['set-cookie']);
-          done();
         });
     });
 
