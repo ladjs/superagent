@@ -682,7 +682,7 @@ it('req.timeout(ms)', function(next){
     try {
     assert(err, 'error missing');
     assert.equal(1000, err.timeout, 'err.timeout missing');
-    assert.equal('timeout of 1000ms exceeded', err.message, 'err.message incorrect');
+    assert.equal('Timeout of 1000ms exceeded', err.message, 'err.message incorrect');
     assert.equal(null, res);
     assert(req.timedout, true);
     next();
@@ -698,7 +698,7 @@ it('req.timeout(ms) with redirect', function(next) {
     try {
     assert(err, 'error missing');
     assert.equal(1000, err.timeout, 'err.timeout missing');
-    assert.equal('timeout of 1000ms exceeded', err.message, 'err.message incorrect');
+    assert.equal('Timeout of 1000ms exceeded', err.message, 'err.message incorrect');
     assert.equal(null, res);
     assert(req.timedout, true);
     next();
