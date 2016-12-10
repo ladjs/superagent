@@ -31,6 +31,18 @@ describe('.timeout(ms)', function(){
       });
     });
 
+    it('should support setting individual options', function(done){
+      request
+      .get(base + '/delay/500')
+      .timeout({deadline: 10})
+      .timeout({response: 99999})
+      .end(function(err, res){
+        assert(err, 'expected an error');
+        assert.equal('ECONNABORTED', err.code, 'expected abort error code')
+        done();
+      });
+    });
+
     it('should error on response', function(done){
       request
       .get(base + '/delay/500')
