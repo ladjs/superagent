@@ -1,34 +1,7 @@
-var request = require('../../')
-  , express = require('express')
-  , assert = require('assert')
-  , app = express()
-  , fs = require('fs')
-  , should = require('should');
-
-app.get('/', function (req, res) {
-  res.redirect('/movies');
-});
-
-app.get('/movies', function (req, res) {
-  res.redirect('/movies/all');
-});
-
-app.get('/movies/all', function (req, res) {
-  res.redirect('/movies/all/0');
-});
-
-app.get('/movies/all/0', function (req, res) {
-  res.send('first movie page');
-});
-
-var base = 'http://localhost'
-var server;
-before(function listen(done) {
-  server = app.listen(0, function listening() {
-    base += ':' + server.address().port;
-    done();
-  });
-});
+var request = require('../../');
+var setup = require('../support/setup');
+var base = setup.uri;
+var fs = require('fs');
 
 describe('pipe on redirect', function () {
   var destPath = 'test/node/fixtures/pipe.txt';

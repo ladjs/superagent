@@ -3,6 +3,7 @@ var multer = require('multer');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var basicAuth = require('basic-auth-connect');
+var fs = require('fs');
 
 var app = express();
 
@@ -161,6 +162,42 @@ app.get('/delay/const', function (req, res) {
   res.redirect('/delay/3000');
 });
 
+var slowBodyCallback;
+app.get('/delay/slowbody', function(req, res){
+  res.writeHead(200, {"Content-Type":"application/octet-stream"});
+
+  // Send lots of garbage data to overflow all buffers along the way,
+  // so that the browser gets some data before the request is done
+  var initialDataSent = new Promise(function(resolve){
+    res.write(new Buffer(4000), function(){
+      res.write(new Buffer(16000));
+      resolve();
+    });
+  });
+
+  // Make sure sending of request body takes over 1s,
+  // so that the test can't pass by accident.
+  var minimumTime = new Promise(function(resolve){setTimeout(resolve, 1001)});
+
+  new Promise(function(resolve){
+    // Waiting full 10 seconds for the test would be too annoying,
+    // so the remote callback is a hack to push the test forward
+    slowBodyCallback = resolve;
+    setTimeout(resolve, 10000);
+  })
+  .then(function(){
+    return Promise.all([initialDataSent, minimumTime]);
+  })
+  .then(function(){
+    res.end('bye');
+  });
+});
+
+app.get('/delay/slowbody/finish', function(req, res){
+  if (slowBodyCallback) slowBodyCallback();
+  res.sendStatus(204);
+});
+
 app.get('/delay/:ms', function(req, res){
   var ms = ~~req.params.ms;
   setTimeout(function(){
@@ -197,6 +234,14 @@ app.get('/invalid-json-forbidden', function(req, res) {
 
 app.get('/text', function(req, res){
   res.send("just some text");
+});
+
+app.get('/basic-auth', basicAuth('tobi', 'learnboost'), function(req, res){
+  res.end('you win!');
+});
+
+app.get('/basic-auth/again', basicAuth('tobi', ''), function(req, res){
+  res.end('you win again!');
 });
 
 app.post('/auth', basicAuth('foo', 'bar'), function(req, res) {
@@ -312,6 +357,46 @@ app.get('/header/2', function(req, res){
 
 app.get('/bad-redirect', function(req, res){
   res.status(307).end();
+});
+
+app.all('/ua', function(req, res){
+  res.writeHead(200, req.headers);
+  req.pipe(res);
+});
+
+app.get('/manny', function(req, res){
+  res.status(200).json({name:"manny"});
+});
+
+app.get('/image', function(req, res){
+  var img = fs.readFileSync(__dirname + '/../node/fixtures/test.png');
+  res.writeHead(200, {'Content-Type': 'image/png' });
+  res.end(img, 'binary');
+});
+
+app.get('/chunked-json', function(req, res){
+  res.set('content-type', 'application/json');
+  res.set('Transfer-Encoding', 'chunked');
+
+  var chunk = 0;
+  var interval = setInterval(function(){
+    chunk++;
+    if(chunk === 1) res.write('{ "name_' + chunk + '": "');
+    if(chunk > 1) res.write('value_' + chunk + '", "name_' + chunk + '": "');
+    if(chunk === 10) {
+      clearInterval(interval);
+      res.write('value_' + chunk + '"}');
+      res.end();
+    }
+  },10);
+});
+
+app.get('/if-mod', function(req, res){
+  if (req.header('if-modified-since')) {
+    res.status(304).end();
+  } else {
+    res.send('' + Date.now());
+  }
 });
 
 app.listen(process.env.ZUUL_PORT);

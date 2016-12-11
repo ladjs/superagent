@@ -1,3 +1,12 @@
+# 3.2.0 (2016-12-11)
+
+ * Added `.timeout({response:ms})`, which allows limiting maximum response time independently from total download time (Kornel Lesiński)
+ * Added warnings when `.end()` is called more than once (Kornel Lesiński)
+ * Added `response.links` to browser version (Lukas Eipert)
+ * `btoa` is no longer required in IE9 (Kornel Lesiński)
+ * Fixed `.sortQuery()` on URLs without query strings (Kornel Lesiński)
+ * Refactored common response code into `ResponseBase` (Lukas Eipert)
+
 # 3.1.0 (2016-11-28)
 
  * Added `.sortQuery()` (vicanso)

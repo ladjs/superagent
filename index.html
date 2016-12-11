@@ -265,11 +265,25 @@ Tobi
  res.forbidden = 403 == status;
 </code></pre><h2 id="aborting-requests">Aborting requests</h2>
 <p>  To abort requests simply invoke the <code>req.abort()</code> method.</p>
-<h2 id="request-timeouts">Request timeouts</h2>
-<p>  A timeout can be applied by invoking <code>req.timeout(ms)</code>, after which an error
-  will be triggered. To differentiate between other errors the <code>err.timeout</code> property
-  is set to the <code>ms</code> value. <strong>NOTE</strong> that this is a timeout applied to the request
-  and all subsequent redirects, not per request.</p>
+<h2 id="timeouts">Timeouts</h2>
+<p>Sometimes networks and servers get &quot;stuck&quot; and never respond after accepting a request. Set timeouts to avoid requests waiting forever.</p>
+<ul>
+<li><p><code>req.timeout({deadline:ms})</code> or <code>req.timeout(ms)</code> (where <code>ms</code> is a number of milliseconds &gt; 0) sets a deadline for the entire request (including all redirects) to complete. If the response isn&#39;t fully downloaded within that time, the request will be aborted.</p>
+</li>
+<li><p><code>req.timeout({response:ms})</code> sets maximum time to wait for the first byte to arrive from the server, but it does not limit how long the entire download can take. Response timeout should be a few seconds longer than just the time it takes server to respond, because it also includes time to make DNS lookup, TCP/IP and TLS connections.</p>
+</li>
+</ul>
+<p>You should use both <code>deadline</code> and <code>response</code> timeouts. This way you can use a short response timeout to detect unresponsive networks quickly, and a long deadline to give time for downloads on slow, but reliable, networks.</p>
+<pre><code>request
+  .get(&#39;/big-file?network=slow&#39;)
+  .timeout({
+    response: 5000,  // Wait 5 seconds for the server to start sending,
+    deadline: 60000, // but allow 1 minute for the file to finish loading.
+  })
+  .end(function(err, res){
+    if (err.timeout) { /* timed out! */ }
+  });
+</code></pre><p>Timeout errors have a <code>.timeout</code> property.</p>
 <h2 id="authentication">Authentication</h2>
 <p>  In both Node and browsers auth available via the <code>.auth()</code> method:</p>
 <pre><code>request
