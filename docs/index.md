@@ -498,7 +498,7 @@ Your callback function will always be passed two arguments: error and response. 
 
      });
 
-     An "error" event is also emitted, with you can listen for:
+An "error" event is also emitted, with you can listen for:
 
     request
       .post('/upload')
@@ -508,7 +508,7 @@ Your callback function will always be passed two arguments: error and response. 
 
       });
 
-  Note that a 4xx or 5xx response with super agent **are** considered an error by default. For example if you get a 500 or 403 response, this status information will be available via `err.status`. Errors from such responses also contain an `err.response` field with all of the properties mentioned in "Response properties". The library behaves in this way to handle the common case of wanting success responses and treating HTTP error status codes as errors while still allowing for custom logic around specific error conditions.
+  Note that a 4xx or 5xx response with super agent **are** considered an error by default. For example if you get a 500 or 403 response, this status information will be available via `err.status`. Errors from such responses also contain an `err.response` field with all of the properties mentioned in "[Response properties](#response-properties)". The library behaves in this way to handle the common case of wanting success responses and treating HTTP error status codes as errors while still allowing for custom logic around specific error conditions.
 
   Network failures, timeouts, and other errors that produce no response will contain no `err.status` or `err.response` fields.
 
