@@ -270,4 +270,15 @@ if ('FormData' in window) {
   });
 }
 
+it('parse should take precedence over default parse', function(done){
+  request
+  .get('/foo')
+  .parse(function(res, text) { return 'customText: ' + res.status; })
+  .end(function(err, res){
+    assert(res.ok);
+    assert(res.body === 'customText: 200');
+    done();
+  });
+});
+
 });
