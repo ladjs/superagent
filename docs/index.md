@@ -523,6 +523,14 @@ An "error" event is also emitted, with you can listen for:
       // all other error types we handle generically
     }
 
+Alternatively, you can use the `.ok(callback)` method to decide whether a response is an error or not. The callback to the `ok` function gets a response and returns `true` if the response should be interpreted as success.
+
+    request.get('/404')
+      .ok(res => res.status < 500)
+      .then(response => {
+        // reads 404 page as a successful response
+      })
+
 ## Promise and Generator support
 
 SuperAgent's request is a "thenable" object that's compatible with JavaScript promises and `async`/`await` syntax. Do not call `.end()` if you're using promises.
