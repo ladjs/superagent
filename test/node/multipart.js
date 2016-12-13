@@ -183,7 +183,7 @@ describe('Request', function(){
       .field('last-name', 'bar')
       .end(function(err, res) {
         if(err) done(err);
-        res.should.be.ok;
+        res.should.be.ok();
         res.body['first-name'].should.equal('foo');
         res.body['last-name'].should.equal('bar');
         done();
@@ -197,7 +197,7 @@ describe('Request', function(){
       .field({ 'first-name': 'foo', 'last-name': 'bar' })
       .end(function(err, res) {
         if(err) done(err);
-        res.should.be.ok;
+        res.should.be.ok();
         res.body['first-name'].should.equal('foo');
         res.body['last-name'].should.equal('bar');
         done();
