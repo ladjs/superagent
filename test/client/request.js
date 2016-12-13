@@ -124,7 +124,8 @@ it('GET blob object', function(next){
     .get('/blob', { foo: 'bar'})
     .responseType('blob')
     .end(function(err, res){
-      assert.deepEqual(res.xhr.response instanceof Blob, true);
+      assert(res.xhr.response instanceof Blob);
+      assert(res.body instanceof Blob);
       next();
     });
 });
@@ -222,7 +223,7 @@ it('Request#parse overrides body parser no matter Content-Type', function(done){
 
 // Don't run on browsers without xhr2 support
 if ('FormData' in window) {
-  it('xhr2 download file', function(next) {
+  it('xhr2 download file old hack', function(next) {
     request.parse['application/vnd.superagent'] = function (obj) {
       return obj;
     };
@@ -238,14 +239,31 @@ if ('FormData' in window) {
     })
     .end();
   });
+
+  it('xhr2 download file responseType', function(next) {
+    request.parse['application/vnd.superagent'] = function (obj) {
+      return obj;
+    };
+
+    request
+    .get('/arraybuffer')
+    .responseType('arraybuffer')
+    .on('response', function(res) {
+      assert(res.body instanceof ArrayBuffer);
+      next();
+    })
+    .end();
+  });
+
   it('get error status code and rawResponse on file download', function(next) {
     request
     .get('/arraybuffer-unauthorized')
-    .responseType('arraybuffer') 
+    .responseType('arraybuffer')
     .end(function(err, res) {
-      assert(err.statusCode, 401);
-      assert(err.rawResponse instanceof ArrayBuffer);
-      var decodedString = String.fromCharCode.apply(null, new Uint8Array(err.rawResponse));
+      assert.equal(err.status, 401);
+      assert(res.body instanceof ArrayBuffer);
+      assert(err.response.body instanceof ArrayBuffer);
+      var decodedString = String.fromCharCode.apply(null, new Uint8Array(res.body));
       assert(decodedString, '{"message":"Authorization has been denied for this request."}');
       next();
     });
