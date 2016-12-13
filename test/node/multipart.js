@@ -1,30 +1,14 @@
+'use strict';
 
-var request = require('../../')
-  , express = require('express')
-  , assert = require('assert')
-  , app = express()
-  , fs = require('fs');
+var request = require('../../');
+var setup = require('../support/setup');
+var base = setup.uri;
+var assert = require('assert');
+var fs = require('fs');
 
 function read(file) {
   return fs.readFileSync(file, 'utf8');
 }
-
-app.post('/echo', function(req, res){
-  res.writeHead(200, req.headers);
-  req.pipe(res);
-});
-
-var base = 'http://localhost'
-var server;
-before(function listen(done) {
-  server = app.listen(0, function listening() {
-    base += ':' + server.address().port;
-    done();
-  });
-});
-// function boundary(ct) {
-//   return ct.match(/boundary="(.*)"/)[1];
-// }
 
 describe('Request', function(){
 //   describe('#part()', function(){

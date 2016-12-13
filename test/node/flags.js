@@ -1,42 +1,9 @@
+'use strict';
 
-var EventEmitter = require('events').EventEmitter
-  , request = require('../../')
-  , express = require('express')
-  , assert = require('assert')
-  , app = express();
-
-app.get('/error', function(req, res){
-  throw new Error('oh noes');
-});
-
-app.get('/login', function(req, res){
-  res.status(200).send('<form id="login"></form>');
-});
-
-app.get('/bad-request', function(req, res){
-  res.status(400).end();
-});
-
-app.get('/unauthorized', function(req, res){
-  res.status(401).end();
-});
-
-app.get('/not-acceptable', function(req, res){
-  res.status(406).end();
-});
-
-app.get('/no-content', function(req, res){
-  res.status(204).end();
-});
-
-var base = 'http://localhost'
-var server;
-before(function listen(done) {
-  server = app.listen(0, function listening() {
-    base += ':' + server.address().port;
-    done();
-  });
-});
+var request = require('../../');
+var setup = require('../support/setup');
+var base = setup.uri;
+var assert = require('assert');
 
 describe('flags', function(){
 
