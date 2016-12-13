@@ -10,98 +10,97 @@ function read(file) {
   return fs.readFileSync(file, 'utf8');
 }
 
-describe('Request', function(){
+describe('Reques', function(){
 
+  describe('#field(name, value)', function(){
+    it('should set a multipart field value', function(done){
+      var req = request.post(base + '/echo');
 
-//   describe('#field(name, value)', function(){
-//     it('should set a multipart field value', function(done){
-//       var req = request.post(base + '/echo');
+      req.field('user[name]', 'tobi');
+      req.field('user[age]', '2');
+      req.field('user[species]', 'ferret');
 
-//       req.field('user[name]', 'tobi');
-//       req.field('user[age]', '2');
-//       req.field('user[species]', 'ferret');
+      req.end(function(err, res){
+        if (err) return done(err);
+        res.body['user[name]'].should.equal('tobi');
+        res.body['user[age]'].should.equal('2');
+        res.body['user[species]'].should.equal('ferret');
+        done();
+      });
+    })
 
-//       req.end(function(err, res){
-//         if (err) return done(err);
-//         res.body['user[name]'].should.equal('tobi');
-//         res.body['user[age]'].should.equal('2');
-//         res.body['user[species]'].should.equal('ferret');
-//         done();
-//       });
-//     })
+    it('should work with file attachments', function(done){
+      var req = request.post(base + '/echo');
 
-//     it('should work with file attachments', function(done){
-//       var req = request.post(base + '/echo');
+      req.field('name', 'Tobi');
+      req.attach('document', 'test/node/fixtures/user.html');
+      req.field('species', 'ferret');
 
-//       req.field('name', 'Tobi');
-//       req.attach('document', 'test/node/fixtures/user.html');
-//       req.field('species', 'ferret');
+      req.end(function(err, res){
+        if (err) return done(err);
+        res.body.name.should.equal('Tobi');
+        res.body.species.should.equal('ferret');
 
-//       req.end(function(err, res){
-//         if (err) return done(err);
-//         res.body.name.should.equal('Tobi');
-//         res.body.species.should.equal('ferret');
+        var html = res.files.document;
+        html.name.should.equal('user.html');
+        html.type.should.equal('text/html');
+        read(html.path).should.equal('<h1>name</h1>');
+        done();
+      })
+    })
+  })
 
-//         var html = res.files.document;
-//         html.name.should.equal('user.html');
-//         html.type.should.equal('text/html');
-//         read(html.path).should.equal('<h1>name</h1>');
-//         done();
-//       })
-//     })
-//   })
+  describe('#attach(name, path)', function(){
+    it('should attach a file', function(done){
+      var req = request.post(base + '/echo');
 
-//   describe('#attach(name, path)', function(){
-//     it('should attach a file', function(done){
-//       var req = request.post(base + '/echo');
+      req.attach('one', 'test/node/fixtures/user.html');
+      req.attach('two', 'test/node/fixtures/user.json');
+      req.attach('three', 'test/node/fixtures/user.txt');
 
-//       req.attach('one', 'test/node/fixtures/user.html');
-//       req.attach('two', 'test/node/fixtures/user.json');
-//       req.attach('three', 'test/node/fixtures/user.txt');
+      req.end(function(err, res){
+        if (err) return done(err);
+        var html = res.files.one;
+        var json = res.files.two
+        var text = res.files.three;
 
-//       req.end(function(err, res){
-//         if (err) return done(err);
-//         var html = res.files.one;
-//         var json = res.files.two
-//         var text = res.files.three;
+        html.name.should.equal('user.html');
+        html.type.should.equal('text/html');
+        read(html.path).should.equal('<h1>name</h1>');
 
-//         html.name.should.equal('user.html');
-//         html.type.should.equal('text/html');
-//         read(html.path).should.equal('<h1>name</h1>');
+        json.name.should.equal('user.json');
+        json.type.should.equal('application/json');
+        read(json.path).should.equal('{"name":"tobi"}');
 
-//         json.name.should.equal('user.json');
-//         json.type.should.equal('application/json');
-//         read(json.path).should.equal('{"name":"tobi"}');
+        text.name.should.equal('user.txt');
+        text.type.should.equal('text/plain');
+        read(text.path).should.equal('Tobi');
 
-//         text.name.should.equal('user.txt');
-//         text.type.should.equal('text/plain');
-//         read(text.path).should.equal('Tobi');
+        done();
+      })
+    })
 
-//         done();
-//       })
-//     })
+    describe('when a file does not exist', function(){
+      it('should emit an error', function(done){
+        var req = request.post(base + '/echo');
 
-//     describe('when a file does not exist', function(){
-//       it('should emit an error', function(done){
-//         var req = request.post(base + '/echo');
+        req.attach('name', 'foo');
+        req.attach('name2', 'bar');
+        req.attach('name3', 'baz');
 
-//         req.attach('name', 'foo');
-//         req.attach('name2', 'bar');
-//         req.attach('name3', 'baz');
+        req.on('error', function(err){
+          err.message.should.containEql('ENOENT');
+          err.path.should.equal('foo');
+          done();
+        });
 
-//         req.on('error', function(err){
-//           err.message.should.containEql('ENOENT');
-//           err.path.should.equal('foo');
-//           done();
-//         });
-
-//         req.end(function(err, res){
-//           if (err) return done(err);
-//           assert(0, 'end() was called');
-//         });
-//       })
-//     })
-//   })
+        req.end(function(err, res){
+          if (err) return done(err);
+          assert(0, 'end() was called');
+        });
+      })
+    })
+  })
 
   describe('#attach(name, path, filename)', function(){
     it('should use the custom filename', function(done){
