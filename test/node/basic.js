@@ -1,17 +1,20 @@
-var EventEmitter = require('events').EventEmitter;
-var assert = require('assert');
-var fs = require('fs');
-var StringDecoder = require('string_decoder').StringDecoder;
-var url = require('url');
+'use strict';
 
 var request = require('../../');
+var setup = require('../support/setup');
+var base = setup.uri;
+var assert = require('assert');
+var fs = require('fs');
+var EventEmitter = require('events').EventEmitter;
+var StringDecoder = require('string_decoder').StringDecoder;
+var url = require('url');
 
 describe('[node] request', function(){
 
   describe('with an url', function(){
     it('should preserve the encoding of the url', function(done){
       request
-      .get('http://localhost:5000/url?a=(b%29')
+      .get(base + '/url?a=(b%29')
       .end(function(err, res){
         assert.equal('/url?a=(b%29', res.text);
         done();
@@ -22,7 +25,7 @@ describe('[node] request', function(){
   describe('with an object', function(){
     it('should format the url', function(){
       return request
-      .get(url.parse('http://localhost:5000/login'))
+      .get(url.parse(base + '/login'))
       .then(function(res){
         assert(res.ok);
       })
@@ -42,7 +45,7 @@ describe('[node] request', function(){
   describe('res.toJSON()', function(){
     it('should describe the response', function(){
       return request
-      .post('http://localhost:5000/echo')
+      .post(base + '/echo')
       .send({ foo: 'baz' })
       .then(function(res){
         var obj = res.toJSON();
@@ -57,7 +60,7 @@ describe('[node] request', function(){
   describe('res.links', function(){
     it('should default to an empty object', function(){
       return request
-      .get('http://localhost:5000/login')
+      .get(base + '/login')
       .then(function(res){
         res.links.should.eql({});
       })
@@ -65,7 +68,7 @@ describe('[node] request', function(){
 
     it('should parse the Link header field', function(done){
       request
-      .get('http://localhost:5000/links')
+      .get(base + '/links')
       .end(function(err, res){
         res.links.next.should.equal('https://api.github.com/repos/visionmedia/mocha/issues?page=2');
         done();
@@ -76,7 +79,7 @@ describe('[node] request', function(){
   describe('req.unset(field)', function(){
     it('should remove the header field', function(done){
       request
-      .post('http://localhost:5000/echo')
+      .post(base + '/echo')
       .unset('User-Agent')
       .end(function(err, res){
         assert.equal(void 0, res.header['user-agent']);
@@ -87,13 +90,13 @@ describe('[node] request', function(){
 
   describe('case-insensitive', function(){
     it('should set/get header fields case-insensitively', function(){
-      var r = request.post('http://localhost:5000/echo');
+      var r = request.post(base + '/echo');
       r.set('MiXeD', 'helloes');
       assert.strictEqual(r.get('mixed'), 'helloes');
     });
 
     it('should unset header fields case-insensitively', function () {
-      var r = request.post('http://localhost:5000/echo');
+      var r = request.post(base + '/echo');
       r.set('MiXeD', 'helloes');
       r.unset('MIXED');
       assert.strictEqual(r.get('mixed'), undefined);
@@ -102,7 +105,7 @@ describe('[node] request', function(){
 
   describe('req.write(str)', function(){
     it('should write the given data', function(done){
-      var req = request.post('http://localhost:5000/echo');
+      var req = request.post(base + '/echo');
       req.set('Content-Type', 'application/json');
       assert.equal('boolean', typeof req.write('{"name"'));
       assert.equal('boolean', typeof req.write(':"tobi"}'));
@@ -130,7 +133,7 @@ describe('[node] request', function(){
       };
 
       request
-      .post('http://localhost:5000/echo')
+      .post(base + '/echo')
       .send('{"name":"tobi"}')
       .pipe(stream);
     })
@@ -139,7 +142,7 @@ describe('[node] request', function(){
   describe('.buffer()', function(){
     it('should enable buffering', function(done){
       request
-      .get('http://localhost:5000/custom')
+      .get(base + '/custom')
       .buffer()
       .end(function(err, res){
         assert.equal(null, err);
@@ -153,7 +156,7 @@ describe('[node] request', function(){
   describe('.buffer(false)', function(){
     it('should disable buffering', function(done){
       request
-      .post('http://localhost:5000/echo')
+      .post(base + '/echo')
       .type('application/x-dog')
       .send('hello this is dog')
       .buffer(false)
@@ -175,7 +178,7 @@ describe('[node] request', function(){
   describe('.withCredentials()', function(){
     it('should not throw an error when using the client-side "withCredentials" method', function(done){
       request
-      .get('http://localhost:5000/custom')
+      .get(base + '/custom')
       .withCredentials()
       .end(function(err, res){
         assert.equal(null, err);
@@ -186,7 +189,7 @@ describe('[node] request', function(){
 
   describe('.agent()', function(){
     it('should return the defaut agent', function(done){
-      var req = request.post('http://localhost:5000/echo');
+      var req = request.post(base + '/echo');
       req.agent().should.equal(false);
       done();
     })
@@ -194,7 +197,7 @@ describe('[node] request', function(){
 
   describe('.agent(undefined)', function(){
     it('should set an agent to undefined and ensure it is chainable', function(done){
-      var req = request.get('http://localhost:5000/echo');
+      var req = request.get(base + '/echo');
       var ret = req.agent(undefined);
       ret.should.equal(req);
       assert.strictEqual(req.agent(), undefined);
@@ -205,7 +208,7 @@ describe('[node] request', function(){
   describe('.agent(new http.Agent())', function(){
     it('should set passed agent', function(done){
       var http = require('http');
-      var req = request.get('http://localhost:5000/echo');
+      var req = request.get(base + '/echo');
       var agent = new http.Agent();
       var ret = req.agent(agent);
       ret.should.equal(req);
@@ -217,7 +220,7 @@ describe('[node] request', function(){
   describe('with a content type other than application/json or text/*', function(){
     it('should disable buffering', function(done){
       request
-      .post('http://localhost:5000/echo')
+      .post(base + '/echo')
       .type('application/x-dog')
       .send('hello this is dog')
       .end(function(err, res){
@@ -242,7 +245,7 @@ describe('[node] request', function(){
       var img = fs.readFileSync(__dirname + '/fixtures/test.png');
       img = decoder.write(img);
       request
-      .post('http://localhost:5000/echo')
+      .post(base + '/echo')
       .type('application/x-image')
       .send(img)
       .buffer(false)
@@ -257,7 +260,7 @@ describe('[node] request', function(){
     it('should be set to the length of a buffer object', function(done){
       var img = fs.readFileSync(__dirname + '/fixtures/test.png');
       request
-      .post('http://localhost:5000/echo')
+      .post(base + '/echo')
       .type('application/x-image')
       .send(img)
       .buffer(true)

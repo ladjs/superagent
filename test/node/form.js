@@ -1,27 +1,9 @@
+'use strict';
 
-var request = require('../../'),
-    assert = require('assert'),
-    express = require('express'),
-    app = express();
-
-app.post('/echo', function(req, res){
-  res.writeHead(200, req.headers);
-  req.pipe(res);
-});
-
-app.get('/form-data', function(req, res){
-  res.header('Content-Type', 'application/x-www-form-urlencoded');
-  res.send('pet[name]=manny');
-});
-
-var base = 'http://localhost'
-var server;
-before(function listen(done) {
-  server = app.listen(0, function listening() {
-    base += ':' + server.address().port;
-    done();
-  });
-});
+var request = require('../../');
+var setup = require('../support/setup');
+var base = setup.uri;
+var assert = require('assert');
 
 describe('Merging objects', function(){
   it('Don\'t mix Buffer and JSON', function(){

@@ -367,17 +367,15 @@ req.pipe(stream);
  .end(function(err, res){
 
  });
-
- An &quot;error&quot; event is also emitted, with you can listen for:
-
-request
+</code></pre><p>An &quot;error&quot; event is also emitted, with you can listen for:</p>
+<pre><code>request
   .post(&#39;/upload&#39;)
   .attach(&#39;image&#39;, &#39;path/to/tobi.png&#39;)
   .on(&#39;error&#39;, handle)
   .end(function(err, res){
 
   });
-</code></pre><p>  Note that a 4xx or 5xx response with super agent <strong>are</strong> considered an error by default. For example if you get a 500 or 403 response, this status information will be available via <code>err.status</code>. Errors from such responses also contain an <code>err.response</code> field with all of the properties mentioned in &quot;Response properties&quot;. The library behaves in this way to handle the common case of wanting success responses and treating HTTP error status codes as errors while still allowing for custom logic around specific error conditions.</p>
+</code></pre><p>  Note that a 4xx or 5xx response with super agent <strong>are</strong> considered an error by default. For example if you get a 500 or 403 response, this status information will be available via <code>err.status</code>. Errors from such responses also contain an <code>err.response</code> field with all of the properties mentioned in &quot;<a href="#response-properties">Response properties</a>&quot;. The library behaves in this way to handle the common case of wanting success responses and treating HTTP error status codes as errors while still allowing for custom logic around specific error conditions.</p>
 <p>  Network failures, timeouts, and other errors that produce no response will contain no <code>err.status</code> or <code>err.response</code> fields.</p>
 <p>  If you wish to handle 404 or other HTTP error responses, you can query the <code>err.status</code> property.
   When an HTTP error occurs (4xx or 5xx response) the <code>res.error</code> property is an <code>Error</code> object,
@@ -388,6 +386,12 @@ request
 else if (err) {
   // all other error types we handle generically
 }
+</code></pre><p>Alternatively, you can use the <code>.ok(callback)</code> method to decide whether a response is an error or not. The callback to the <code>ok</code> function gets a response and returns <code>true</code> if the response should be interpreted as success.</p>
+<pre><code>request.get(&#39;/404&#39;)
+  .ok(res =&gt; res.status &lt; 500)
+  .then(response =&gt; {
+    // reads 404 page as a successful response
+  })
 </code></pre><h2 id="promise-and-generator-support">Promise and Generator support</h2>
 <p>SuperAgent&#39;s request is a &quot;thenable&quot; object that&#39;s compatible with JavaScript promises and <code>async</code>/<code>await</code> syntax. Do not call <code>.end()</code> if you&#39;re using promises.</p>
 <p>Libraries like <a href="https://github.com/tj/co">co</a> or a web framework like <a href="https://github.com/koajs/koa">koa</a> can <code>yield</code> on any SuperAgent method:</p>

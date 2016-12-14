@@ -101,6 +101,28 @@ return Promise.all([req, req, req])
         <section class="suite">
           <h1>res.error</h1>
           <dl>
+            <dt>ok</dt>
+            <dd><pre><code>var calledErrorEvent = false;
+var calledOKHandler = false;
+request
+.get(uri + '/error')
+.ok(function(res){
+  assert.strictEqual(500, res.status);
+  calledOKHandler = true;
+  return true;
+})
+.on('error', function(err){
+  calledErrorEvent = true;
+})
+.end(function(err, res){
+  try{
+    assert.ifError(err);
+    assert.strictEqual(res.status, 500);
+    assert(!calledErrorEvent);
+    assert(calledOKHandler);
+    done();
+  } catch(e) { done(e); }
+});</code></pre></dd>
             <dt>should should be an Error object</dt>
             <dd><pre><code>var calledErrorEvent = false;
 request
@@ -134,6 +156,19 @@ return request
   assert.fail();
 }, function(err){
   assert.equal(err.message, 'Internal Server Error');
+});</code></pre></dd>
+            <dt>with .ok() returning false</dt>
+            <dd><pre><code>if ('undefined' === typeof Promise) {
+  return;
+}
+return request
+.get(uri + '/echo')
+.ok(function() {return false;})
+.then(function(){
+  assert.fail();
+}, function(err){
+  assert.equal(200, err.response.status);
+  assert.equal(err.message, 'OK');
 });</code></pre></dd>
           </dl>
         </section>
@@ -1876,7 +1911,7 @@ request
           <dl>
             <dt>should preserve the encoding of the url</dt>
             <dd><pre><code>request
-.get('http://localhost:5000/url?a=(b%29')
+.get(base + '/url?a=(b%29')
 .end(function(err, res){
   assert.equal('/url?a=(b%29', res.text);
   done();
@@ -1888,7 +1923,7 @@ request
           <dl>
             <dt>should format the url</dt>
             <dd><pre><code>return request
-.get(url.parse('http://localhost:5000/login'))
+.get(url.parse(base + '/login'))
 .then(function(res){
   assert(res.ok);
 })</code></pre></dd>
@@ -1910,7 +1945,7 @@ request
           <dl>
             <dt>should describe the response</dt>
             <dd><pre><code>return request
-.post('http://localhost:5000/echo')
+.post(base + '/echo')
 .send({ foo: 'baz' })
 .then(function(res){
   var obj = res.toJSON();
@@ -1926,13 +1961,13 @@ request
           <dl>
             <dt>should default to an empty object</dt>
             <dd><pre><code>return request
-.get('http://localhost:5000/login')
+.get(base + '/login')
 .then(function(res){
   res.links.should.eql({});
 })</code></pre></dd>
             <dt>should parse the Link header field</dt>
             <dd><pre><code>request
-.get('http://localhost:5000/links')
+.get(base + '/links')
 .end(function(err, res){
   res.links.next.should.equal('https://api.github.com/repos/visionmedia/mocha/issues?page=2');
   done();
@@ -1944,7 +1979,7 @@ request
           <dl>
             <dt>should remove the header field</dt>
             <dd><pre><code>request
-.post('http://localhost:5000/echo')
+.post(base + '/echo')
 .unset('User-Agent')
 .end(function(err, res){
   assert.equal(void 0, res.header['user-agent']);
@@ -1956,11 +1991,11 @@ request
           <h1>case-insensitive</h1>
           <dl>
             <dt>should set/get header fields case-insensitively</dt>
-            <dd><pre><code>var r = request.post('http://localhost:5000/echo');
+            <dd><pre><code>var r = request.post(base + '/echo');
 r.set('MiXeD', 'helloes');
 assert.strictEqual(r.get('mixed'), 'helloes');</code></pre></dd>
             <dt>should unset header fields case-insensitively</dt>
-            <dd><pre><code>var r = request.post('http://localhost:5000/echo');
+            <dd><pre><code>var r = request.post(base + '/echo');
 r.set('MiXeD', 'helloes');
 r.unset('MIXED');
 assert.strictEqual(r.get('mixed'), undefined);</code></pre></dd>
@@ -1970,7 +2005,7 @@ assert.strictEqual(r.get('mixed'), undefined);</code></pre></dd>
           <h1>req.write(str)</h1>
           <dl>
             <dt>should write the given data</dt>
-            <dd><pre><code>var req = request.post('http://localhost:5000/echo');
+            <dd><pre><code>var req = request.post(base + '/echo');
 req.set('Content-Type', 'application/json');
 assert.equal('boolean', typeof req.write('{&quot;name&quot;'));
 assert.equal('boolean', typeof req.write(':&quot;tobi&quot;}'));
@@ -1995,7 +2030,7 @@ stream.end = function(){
   done();
 };
 request
-.post('http://localhost:5000/echo')
+.post(base + '/echo')
 .send('{&quot;name&quot;:&quot;tobi&quot;}')
 .pipe(stream);</code></pre></dd>
           </dl>
@@ -2005,7 +2040,7 @@ request
           <dl>
             <dt>should enable buffering</dt>
             <dd><pre><code>request
-.get('http://localhost:5000/custom')
+.get(base + '/custom')
 .buffer()
 .end(function(err, res){
   assert.equal(null, err);
@@ -2020,7 +2055,7 @@ request
           <dl>
             <dt>should disable buffering</dt>
             <dd><pre><code>request
-.post('http://localhost:5000/echo')
+.post(base + '/echo')
 .type('application/x-dog')
 .send('hello this is dog')
 .buffer(false)
@@ -2043,7 +2078,7 @@ request
           <dl>
             <dt>should not throw an error when using the client-side &quot;withCredentials&quot; method</dt>
             <dd><pre><code>request
-.get('http://localhost:5000/custom')
+.get(base + '/custom')
 .withCredentials()
 .end(function(err, res){
   assert.equal(null, err);
@@ -2055,7 +2090,7 @@ request
           <h1>.agent()</h1>
           <dl>
             <dt>should return the defaut agent</dt>
-            <dd><pre><code>var req = request.post('http://localhost:5000/echo');
+            <dd><pre><code>var req = request.post(base + '/echo');
 req.agent().should.equal(false);
 done();</code></pre></dd>
           </dl>
@@ -2064,7 +2099,7 @@ done();</code></pre></dd>
           <h1>.agent(undefined)</h1>
           <dl>
             <dt>should set an agent to undefined and ensure it is chainable</dt>
-            <dd><pre><code>var req = request.get('http://localhost:5000/echo');
+            <dd><pre><code>var req = request.get(base + '/echo');
 var ret = req.agent(undefined);
 ret.should.equal(req);
 assert.strictEqual(req.agent(), undefined);
@@ -2076,7 +2111,7 @@ done();</code></pre></dd>
           <dl>
             <dt>should set passed agent</dt>
             <dd><pre><code>var http = require('http');
-var req = request.get('http://localhost:5000/echo');
+var req = request.get(base + '/echo');
 var agent = new http.Agent();
 var ret = req.agent(agent);
 ret.should.equal(req);
@@ -2089,7 +2124,7 @@ done();</code></pre></dd>
           <dl>
             <dt>should disable buffering</dt>
             <dd><pre><code>request
-.post('http://localhost:5000/echo')
+.post(base + '/echo')
 .type('application/x-dog')
 .send('hello this is dog')
 .end(function(err, res){
@@ -2115,7 +2150,7 @@ done();</code></pre></dd>
 var img = fs.readFileSync(__dirname + '/fixtures/test.png');
 img = decoder.write(img);
 request
-.post('http://localhost:5000/echo')
+.post(base + '/echo')
 .type('application/x-image')
 .send(img)
 .buffer(false)
@@ -2128,7 +2163,7 @@ request
             <dt>should be set to the length of a buffer object</dt>
             <dd><pre><code>var img = fs.readFileSync(__dirname + '/fixtures/test.png');
 request
-.post('http://localhost:5000/echo')
+.post(base + '/echo')
 .type('application/x-image')
 .send(img)
 .buffer(true)
@@ -2497,8 +2532,85 @@ agent
       </dl>
     </section>
     <section class="suite">
-      <h1>Request</h1>
+      <h1>Reques</h1>
       <dl>
+        <section class="suite">
+          <h1>#field(name, value)</h1>
+          <dl>
+            <dt>should set a multipart field value</dt>
+            <dd><pre><code>var req = request.post(base + '/echo');
+req.field('user[name]', 'tobi');
+req.field('user[age]', '2');
+req.field('user[species]', 'ferret');
+req.end(function(err, res){
+  if (err) return done(err);
+  res.body['user[name]'].should.equal('tobi');
+  res.body['user[age]'].should.equal('2');
+  res.body['user[species]'].should.equal('ferret');
+  done();
+});</code></pre></dd>
+            <dt>should work with file attachments</dt>
+            <dd><pre><code>var req = request.post(base + '/echo');
+req.field('name', 'Tobi');
+req.attach('document', 'test/node/fixtures/user.html');
+req.field('species', 'ferret');
+req.end(function(err, res){
+  if (err) return done(err);
+  res.body.name.should.equal('Tobi');
+  res.body.species.should.equal('ferret');
+  var html = res.files.document;
+  html.name.should.equal('user.html');
+  html.type.should.equal('text/html');
+  read(html.path).should.equal('&lt;h1&gt;name&lt;/h1&gt;');
+  done();
+})</code></pre></dd>
+          </dl>
+        </section>
+        <section class="suite">
+          <h1>#attach(name, path)</h1>
+          <dl>
+            <dt>should attach a file</dt>
+            <dd><pre><code>var req = request.post(base + '/echo');
+req.attach('one', 'test/node/fixtures/user.html');
+req.attach('two', 'test/node/fixtures/user.json');
+req.attach('three', 'test/node/fixtures/user.txt');
+req.end(function(err, res){
+  if (err) return done(err);
+  var html = res.files.one;
+  var json = res.files.two
+  var text = res.files.three;
+  html.name.should.equal('user.html');
+  html.type.should.equal('text/html');
+  read(html.path).should.equal('&lt;h1&gt;name&lt;/h1&gt;');
+  json.name.should.equal('user.json');
+  json.type.should.equal('application/json');
+  read(json.path).should.equal('{&quot;name&quot;:&quot;tobi&quot;}');
+  text.name.should.equal('user.txt');
+  text.type.should.equal('text/plain');
+  read(text.path).should.equal('Tobi');
+  done();
+})</code></pre></dd>
+            <section class="suite">
+              <h1>when a file does not exist</h1>
+              <dl>
+                <dt>should emit an error</dt>
+                <dd><pre><code>var req = request.post(base + '/echo');
+req.attach('name', 'foo');
+req.attach('name2', 'bar');
+req.attach('name3', 'baz');
+req.on('error', function(err){
+  err.message.should.containEql('ENOENT');
+  err.path.should.equal('foo');
+  done();
+});
+req.end(function(err, res){
+  if (err) return done(err);
+  assert(0, 'end() was called');
+});</code></pre></dd>
+              </dl>
+            </section>
+          </dl>
+        </section>
         <section class="suite">
           <h1>#attach(name, path, filename)</h1>
           <dl>
@@ -2562,7 +2674,7 @@ request
 .field('last-name', 'bar')
 .end(function(err, res) {
   if(err) done(err);
-  res.should.be.ok;
+  res.should.be.ok();
   res.body['first-name'].should.equal('foo');
   res.body['last-name'].should.equal('bar');
   done();
@@ -2577,7 +2689,7 @@ request
 .field({ 'first-name': 'foo', 'last-name': 'bar' })
 .end(function(err, res) {
   if(err) done(err);
-  res.should.be.ok;
+  res.should.be.ok();
   res.body['first-name'].should.equal('foo');
   res.body['last-name'].should.equal('bar');
   done();

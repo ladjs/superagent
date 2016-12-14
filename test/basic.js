@@ -102,7 +102,32 @@ describe('request', function(){
     });
   })
 
+
   describe('res.error', function(){
+    it('ok', function(done){
+      var calledErrorEvent = false;
+      var calledOKHandler = false;
+      request
+      .get(uri + '/error')
+      .ok(function(res){
+        assert.strictEqual(500, res.status);
+        calledOKHandler = true;
+        return true;
+      })
+      .on('error', function(err){
+        calledErrorEvent = true;
+      })
+      .end(function(err, res){
+        try{
+          assert.ifError(err);
+          assert.strictEqual(res.status, 500);
+          assert(!calledErrorEvent);
+          assert(calledOKHandler);
+          done();
+        } catch(e) { done(e); }
+      });
+    });
+
     it('should should be an Error object', function(done){
       var calledErrorEvent = false;
       request
@@ -139,6 +164,22 @@ describe('request', function(){
         assert.fail();
       }, function(err){
         assert.equal(err.message, 'Internal Server Error');
+      });
+    })
+
+    it('with .ok() returning false', function(){
+      if ('undefined' === typeof Promise) {
+        return;
+      }
+
+      return request
+      .get(uri + '/echo')
+      .ok(function() {return false;})
+      .then(function(){
+        assert.fail();
+      }, function(err){
+        assert.equal(200, err.response.status);
+        assert.equal(err.message, 'OK');
       });
     })
   })

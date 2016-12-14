@@ -1,3 +1,10 @@
+# 3.3.0
+
+ * Added `.ok(callback)` that allows customizing which responses are errors (Kornel Lesiński)
+ * Added `.responseType()` to Node version (Kornel Lesiński)
+ * Added `.parse()` to browser version (jakepearson)
+ * Fixed parse error when using `responseType('blob')` (Kornel Lesiński)
+
 # 3.2.0 (2016-12-11)
 
  * Added `.timeout({response:ms})`, which allows limiting maximum response time independently from total download time (Kornel Lesiński)
