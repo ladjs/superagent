@@ -1,4 +1,4 @@
-# 3.3.0
+# 3.3.0 (2016-12-14)
 
  * Added `.ok(callback)` that allows customizing which responses are errors (Kornel Lesiński)
  * Added `.responseType()` to Node version (Kornel Lesiński)
