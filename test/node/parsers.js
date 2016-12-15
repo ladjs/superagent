@@ -68,10 +68,16 @@ describe('req.parse(fn)', function(){
     var req = request
     .get(base + '/chunked-json')
     .end(function(err){
-      assert(!err);
+      assert.ifError(err);
       done();
     });
 
     setTimeout(function(){req.abort()},50);
-  })
+  });
+
+  it('should not reject promise on aborted chunked json', function(){
+    var req = request.get(base + '/chunked-json')
+    setTimeout(function(){req.abort()},50);
+    return req;
+  });
 })
