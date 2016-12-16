@@ -13,31 +13,28 @@ function read(file) {
 describe('Reques', function(){
 
   describe('#field(name, value)', function(){
-    it('should set a multipart field value', function(done){
+    it('should set a multipart field value', function(){
       var req = request.post(base + '/echo');
 
       req.field('user[name]', 'tobi');
       req.field('user[age]', '2');
       req.field('user[species]', 'ferret');
 
-      req.end(function(err, res){
-        if (err) return done(err);
+      return req.then(function(res){
         res.body['user[name]'].should.equal('tobi');
         res.body['user[age]'].should.equal('2');
         res.body['user[species]'].should.equal('ferret');
-        done();
       });
     })
 
-    it('should work with file attachments', function(done){
+    it('should work with file attachments', function(){
       var req = request.post(base + '/echo');
 
       req.field('name', 'Tobi');
       req.attach('document', 'test/node/fixtures/user.html');
       req.field('species', 'ferret');
 
-      req.end(function(err, res){
-        if (err) return done(err);
+      return req.then(function(res){
         res.body.name.should.equal('Tobi');
         res.body.species.should.equal('ferret');
 
@@ -45,21 +42,19 @@ describe('Reques', function(){
         html.name.should.equal('user.html');
         html.type.should.equal('text/html');
         read(html.path).should.equal('<h1>name</h1>');
-        done();
-      })
+      });
     })
   })
 
   describe('#attach(name, path)', function(){
-    it('should attach a file', function(done){
+    it('should attach a file', function(){
       var req = request.post(base + '/echo');
 
       req.attach('one', 'test/node/fixtures/user.html');
       req.attach('two', 'test/node/fixtures/user.json');
       req.attach('three', 'test/node/fixtures/user.txt');
 
-      req.end(function(err, res){
-        if (err) return done(err);
+      return req.then(function(res){
         var html = res.files.one;
         var json = res.files.two
         var text = res.files.three;
@@ -75,9 +70,7 @@ describe('Reques', function(){
         text.name.should.equal('user.txt');
         text.type.should.equal('text/plain');
         read(text.path).should.equal('Tobi');
-
-        done();
-      })
+      });
     })
 
     describe('when a file does not exist', function(){
@@ -103,18 +96,16 @@ describe('Reques', function(){
   })
 
   describe('#attach(name, path, filename)', function(){
-    it('should use the custom filename', function(done){
-      request
+    it('should use the custom filename', function(){
+      return request
       .post(base + '/echo')
       .attach('document', 'test/node/fixtures/user.html', 'doc.html')
-      .end(function(err, res){
-        if (err) return done(err);
+      .then(function(res){
         var html = res.files.document;
         html.name.should.equal('doc.html');
         html.type.should.equal('text/html');
         read(html.path).should.equal('<h1>name</h1>');
-        done();
-      })
+      });
     })
     it('should fire progress event', function(done){
       var loaded = 0;

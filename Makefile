@@ -23,7 +23,7 @@ test-browser:
 	SAUCE_APPIUM_VERSION=1.6 ./node_modules/.bin/zuul -- $(BROWSERTESTS)
 
 test-browser-local:
-	./node_modules/.bin/zuul --local 4000 -- $(BROWSERTESTS)
+	./node_modules/.bin/zuul --no-coverage --local 4000 -- $(BROWSERTESTS)
 
 lib-cov:
 	jscoverage lib lib-cov

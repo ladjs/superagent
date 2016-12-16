@@ -162,6 +162,20 @@ app.get('/delay/const', function (req, res) {
   res.redirect('/delay/3000');
 });
 
+app.get('/delay/zip', function (req, res) {
+  res.writeHead(200, {"Content-Type":"text/plain", "Content-Encoding":"gzip"});
+  setTimeout(function(){
+    res.end();
+  }, 10000);
+});
+
+app.get('/delay/json', function (req, res) {
+  res.writeHead(200, {"Content-Type":"application/json"});
+  setTimeout(function(){
+    res.end();
+  }, 10000);
+});
+
 var slowBodyCallback;
 app.get('/delay/slowbody', function(req, res){
   res.writeHead(200, {"Content-Type":"application/octet-stream"});
