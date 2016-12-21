@@ -134,6 +134,10 @@ app.put('/user/:id', function(req, res){
   res.send('updated');
 });
 
+app.put('/user/:id/body', function(req, res){
+  res.send("received " + req.body.user);
+});
+
 app.patch('/user/:id', function(req, res){
   res.send('updated');
 });

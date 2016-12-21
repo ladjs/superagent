@@ -169,6 +169,15 @@ it('put()', function(next){
   });
 });
 
+it('put().send()', function(next){
+  request.put(uri + '/user/13/body').send({user:"new"}).end(function(err, res){
+    try {
+    assert.equal('received new', res.text, 'response text');
+    next();
+    } catch(e) { next(e); }
+  });
+});
+
 it('post()', function(next){
   request.post(uri + '/user').end(function(err, res){
     try {
