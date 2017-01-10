@@ -10,7 +10,5 @@ browsers:
     version: latest
   - name: iphone
     version: latest
-  - name: android
-    version: latest
   - name: ie
     version: 9..latest
