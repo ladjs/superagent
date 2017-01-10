@@ -114,4 +114,21 @@ describe('req.field', function(){
       .field('name')
     }, /val/);
   });
+
+  it('cannot be mixed with send()', function(){
+    assert.throws(function(){
+      request
+      .post('/echo')
+      .field('form', 'data')
+      .send('hi');
+    });
+
+    assert.throws(function(){
+      request
+      .post('/echo')
+      .send('hi')
+      .field('form', 'data');
+    });
+  });
+
 });

@@ -70,6 +70,29 @@ it('defaults attached files to original file names', function(next){
     });
 });
 
+it('attach() cannot be mixed with send()', function(){
+  if (!window.FormData || !window.File) {
+    // Skip test if FormData is are not supported by browser
+    return;
+  }
+
+  assert.throws(function(){
+    var file = new File([""], "image.jpg", { type: "image/jpeg" });
+    request
+    .post('/echo')
+    .attach('image', file)
+    .send('hi');
+  });
+
+  assert.throws(function(){
+    var file = new File([""], "image.jpg", { type: "image/jpeg" });
+    request
+    .post('/echo')
+    .send('hi')
+    .attach('image', file);
+  });
+});
+
 it('GET invalid json', function(next) {
   request
   .get('/invalid-json')
