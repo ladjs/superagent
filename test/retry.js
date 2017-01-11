@@ -23,7 +23,6 @@ describe('.retry(count)', function(){
     .get(base + '/error/ok')
     .retry(2)
     .end(function(err, res){
-      assert(res instanceof request.Response, 'respond with Response');
       assert(res.ok, 'response should be ok');
       assert(res.text, 'res.text');
       done();
@@ -50,7 +49,6 @@ describe('.retry(count)', function(){
     .timeout(50)
     .retry(2)
     .end(function(err, res){
-      assert(res instanceof request.Response, 'respond with Response');
       assert(res.ok, 'response should be ok');
       assert(res.text, 'res.text');
       done();
