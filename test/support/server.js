@@ -417,4 +417,14 @@ app.get('/if-mod', function(req, res){
   }
 });
 
+var attempts = 0;
+app.get('/error/ok', function(req, res) {
+  if (!attempts++) {
+    res.status(500).send('boom');
+  } else {
+    res.send('ok');
+    attempts = 0;
+  }
+});
+
 app.listen(process.env.ZUUL_PORT);
