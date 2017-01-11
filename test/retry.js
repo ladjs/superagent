@@ -12,7 +12,7 @@ describe('.retry(count)', function(){
     .retry(2)
     .end(function(err, res){
       assert(err, 'expected an error');
-      assert.equal(3, err.attempts, 'expected an error with .attempts');
+      assert.equal(2, err.retries, 'expected an error with .attempts');
       assert.equal(500, err.status, 'expected an error status of 500');
       done();
     });
@@ -36,7 +36,7 @@ describe('.retry(count)', function(){
     .retry(2)
     .end(function(err, res){
       assert(err, 'expected an error');
-      assert.equal(3, err.attempts, 'expected an error with .attempts');
+      assert.equal(2, err.retries, 'expected an error with .attempts');
       assert.equal('number', typeof err.timeout, 'expected an error with .timeout');
       assert.equal('ECONNABORTED', err.code, 'expected abort error code')
       done();
