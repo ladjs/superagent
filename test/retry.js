@@ -19,8 +19,9 @@ describe('.retry(count)', function(){
   });
 
   it('should handle successful request after repeat attempt from server error', function(done){
+    var id = Math.random() * 1000000 * Date.now();
     request
-    .get(base + '/error/ok')
+    .get(base + '/error/ok/' + id)
     .retry(2)
     .end(function(err, res){
       assert(res.ok, 'response should be ok');
@@ -44,8 +45,9 @@ describe('.retry(count)', function(){
   });
 
   it('should handle successful request after repeat attempt from server timeout', function(done) {
+    var id = Math.random() * 1000000 * Date.now();
     request
-    .get(base + '/delay/150/ok')
+    .get(base + '/delay/150/ok/' + id)
     .timeout(50)
     .retry(2)
     .end(function(err, res){
