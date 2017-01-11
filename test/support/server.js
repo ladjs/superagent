@@ -417,30 +417,51 @@ app.get('/if-mod', function(req, res){
   }
 });
 
-var errored = {};
+var called = {};
 app.get('/error/ok/:id', function(req, res) {
   var id = req.params.id;
-  if (!errored[id]) {
-    errored[id] = true;
+  if (!called[id]) {
+    called[id] = true;
     res.status(500).send('boom');
   } else {
-    res.send('ok');
-    delete errored[id];
+    res.send(req.headers);
+    delete called[id];
   }
 });
 
-var delayed = {};
 app.get('/delay/:ms/ok/:id', function(req, res){
   var id = req.params.id;
-  if (!delayed[id]) {
-    delayed[id] = true;
+  if (!called[id]) {
+    called[id] = true;
     var ms = ~~req.params.ms;
     setTimeout(function(){
       res.sendStatus(200);
     }, ms);
   } else {
     res.send('ok');
-    delete delayed[id];
+    delete called[id];
+  }
+});
+
+app.get('/error/redirect/:id', function(req, res) {
+  var id = req.params.id;
+  if (!called[id]) {
+    called[id] = true;
+    res.status(500).send('boom');
+  } else {
+    res.redirect('/movies');
+    delete called[id];
+  }
+});
+
+app.get('/error/redirect-error:id', function(req, res) {
+  var id = req.params.id;
+  if (!called[id]) {
+    called[id] = true;
+    res.status(500).send('boom');
+  } else {
+    res.redirect('/error');
+    delete called[id];
   }
 });
 

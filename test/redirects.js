@@ -37,6 +37,32 @@ describe('request', function(){
         }
       });
     })
+
+    it('should successfully redirect after retry on error', function(done){
+      var id = Math.random() * 1000000 * Date.now();
+      request
+      .get(base + '/error/redirect/' + id)
+      .retry(2)
+      .end(function(err, res){
+        assert(res.ok, 'response should be ok');
+        assert(res.text, 'first movie page');
+        done();
+      });
+    });
+
+    it('should preserve retries across redirects', function(done) {
+      var id = Math.random() * 1000000 * Date.now();
+      request
+      .get(base + '/error/redirect-error' + id)
+      .retry(2)
+      .end(function(err, res){
+        assert(err, 'expected an error');
+        assert.equal(2, err.retries, 'expected an error with .retries');
+        assert.equal(500, err.status, 'expected an error status of 500');
+        done();
+      });
+
+    });
   });
 
   describe('on 303', function(){
