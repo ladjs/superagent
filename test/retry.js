@@ -12,7 +12,7 @@ describe('.retry(count)', function(){
     .retry(2)
     .end(function(err, res){
       assert(err, 'expected an error');
-      assert.equal(2, err.retries, 'expected an error with .attempts');
+      assert.equal(2, err.retries, 'expected an error with .retries');
       assert.equal(500, err.status, 'expected an error status of 500');
       done();
     });
@@ -37,7 +37,7 @@ describe('.retry(count)', function(){
     .retry(2)
     .end(function(err, res){
       assert(err, 'expected an error');
-      assert.equal(2, err.retries, 'expected an error with .attempts');
+      assert.equal(2, err.retries, 'expected an error with .retries');
       assert.equal('number', typeof err.timeout, 'expected an error with .timeout');
       assert.equal('ECONNABORTED', err.code, 'expected abort error code')
       done();
@@ -82,5 +82,32 @@ describe('.retry(count)', function(){
     }, 150);
   });
 
-  it('should handle successful redirected request after repeat attempt from server error');
+  it('should correctly retain header fields', function(done) {
+    var id = Math.random() * 1000000 * Date.now();
+    request
+    .get(base + '/error/ok/' + id)
+    .retry(2)
+    .set('X-Foo', 'bar')
+    .end(function(err, res){
+      try {
+        assert(res.body);
+        res.body.should.have.property('x-foo', 'bar');
+        done();
+      } catch(err) {
+        done(err);
+      }
+    });
+  });
+
+  it('should not retry on 4xx responses', function(done) {
+    request
+    .get(base + '/bad-request')
+    .retry(2)
+    .end(function(err, res){
+      assert(err, 'expected an error');
+      assert.equal(0, err.retries, 'expected an error with 0 .retries');
+      assert.equal(400, err.status, 'expected an error status of 400');
+      done();
+    });
+  });
 })
