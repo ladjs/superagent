@@ -417,13 +417,26 @@ app.get('/if-mod', function(req, res){
   }
 });
 
-var attempts = 0;
+var errAttempts = 0;
 app.get('/error/ok', function(req, res) {
-  if (!attempts++) {
+  if (!errAttempts++) {
     res.status(500).send('boom');
   } else {
     res.send('ok');
-    attempts = 0;
+    errAttempts = 0;
+  }
+});
+
+var delayAttempts = 0;
+app.get('/delay/:ms/ok', function(req, res){
+  if (!delayAttempts++) {
+    var ms = ~~req.params.ms;
+    setTimeout(function(){
+      res.sendStatus(200);
+    }, ms);
+  } else {
+    res.send('ok');
+    delayAttempts = 0;
   }
 });
 
