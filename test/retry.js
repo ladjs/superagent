@@ -57,5 +57,30 @@ describe('.retry(count)', function(){
     });
   });
 
+  it('should correctly abort a retry attempt', function(done) {
+    var aborted = false;
+    var req = request
+    .get(base + '/delay/200')
+    .timeout(100)
+    .retry(2)
+    .end(function(err, res){
+      try {
+        assert(false, 'should not complete the request');
+      } catch(e) { done(e); }
+    });
+
+    req.on('abort', function() {
+      aborted = true;
+    });
+
+    setTimeout(function() {
+      req.abort();
+      setTimeout(function() {
+        assert(aborted, 'should be aborted');
+        done();
+      }, 150)
+    }, 150);
+  });
+
   it('should handle successful redirected request after repeat attempt from server error');
 })
