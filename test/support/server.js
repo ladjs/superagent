@@ -417,26 +417,30 @@ app.get('/if-mod', function(req, res){
   }
 });
 
-var errAttempts = 0;
-app.get('/error/ok', function(req, res) {
-  if (!errAttempts++) {
+var errored = {};
+app.get('/error/ok/:id', function(req, res) {
+  var id = req.params.id;
+  if (!errored[id]) {
+    errored[id] = true;
     res.status(500).send('boom');
   } else {
     res.send('ok');
-    errAttempts = 0;
+    delete errored[id];
   }
 });
 
-var delayAttempts = 0;
-app.get('/delay/:ms/ok', function(req, res){
-  if (!delayAttempts++) {
+var delayed = {};
+app.get('/delay/:ms/ok/:id', function(req, res){
+  var id = req.params.id;
+  if (!delayed[id]) {
+    delayed[id] = true;
     var ms = ~~req.params.ms;
     setTimeout(function(){
       res.sendStatus(200);
     }, ms);
   } else {
     res.send('ok');
-    delayAttempts = 0;
+    delete delayed[id];
   }
 });
 
