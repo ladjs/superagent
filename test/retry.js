@@ -15,10 +15,14 @@ describe('.retry(count)', function(){
     .get(base + '/error')
     .retry(2)
     .end(function(err, res){
+      try {
       assert(err, 'expected an error');
       assert.equal(2, err.retries, 'expected an error with .retries');
       assert.equal(500, err.status, 'expected an error status of 500');
       done();
+      } catch(err) {
+        done(err);
+      }
     });
   });
 
@@ -27,9 +31,14 @@ describe('.retry(count)', function(){
     .get(base + '/error/ok/' + uniqid())
     .retry(2)
     .end(function(err, res){
+      try {
+      assert.ifError(err);
       assert(res.ok, 'response should be ok');
       assert(res.text, 'res.text');
       done();
+      } catch(err) {
+        done(err);
+      }
     });
   });
 
@@ -39,11 +48,15 @@ describe('.retry(count)', function(){
     .timeout(50)
     .retry(2)
     .end(function(err, res){
+      try {
       assert(err, 'expected an error');
       assert.equal(2, err.retries, 'expected an error with .retries');
       assert.equal('number', typeof err.timeout, 'expected an error with .timeout');
       assert.equal('ECONNABORTED', err.code, 'expected abort error code')
       done();
+      } catch(err) {
+        done(err);
+      }
     });
   });
 
@@ -53,9 +66,14 @@ describe('.retry(count)', function(){
     .timeout(50)
     .retry(2)
     .end(function(err, res){
+      try {
+      assert.ifError(err);
       assert(res.ok, 'response should be ok');
       assert(res.text, 'res.text');
       done();
+      } catch(err) {
+        done(err);
+      }
     });
   });
 
@@ -78,8 +96,12 @@ describe('.retry(count)', function(){
     setTimeout(function() {
       req.abort();
       setTimeout(function() {
+        try {
         assert(aborted, 'should be aborted');
         done();
+        } catch(err) {
+          done(err);
+        }
       }, 150)
     }, 150);
   });
@@ -89,8 +111,9 @@ describe('.retry(count)', function(){
     .get(base + '/error/ok/' + uniqid())
     .retry(2)
     .set('X-Foo', 'bar')
-    .end(function(_, res){
+    .end(function(err, res){
       try {
+        assert.ifError(err);
         assert(res.body);
         res.body.should.have.property('x-foo', 'bar');
         done();
@@ -105,10 +128,14 @@ describe('.retry(count)', function(){
     .get(base + '/bad-request')
     .retry(2)
     .end(function(err, res){
+      try {
       assert(err, 'expected an error');
       assert.equal(0, err.retries, 'expected an error with 0 .retries');
       assert.equal(400, err.status, 'expected an error status of 400');
       done();
+      } catch(err) {
+        done(err);
+      }
     });
   });
 })
