@@ -44,8 +44,8 @@ describe('.retry(count)', function(){
 
   it('should handle server timeout error after repeat attempt', function(done) {
     request
-    .get(base + '/delay/150')
-    .timeout(50)
+    .get(base + '/delay/400')
+    .timeout(200)
     .retry(2)
     .end(function(err, res){
       try {
@@ -62,8 +62,8 @@ describe('.retry(count)', function(){
 
   it('should handle successful request after repeat attempt from server timeout', function(done) {
     request
-    .get(base + '/delay/150/ok/' + uniqid())
-    .timeout(50)
+    .get(base + '/delay/400/ok/' + uniqid())
+    .timeout(200)
     .retry(2)
     .end(function(err, res){
       try {
@@ -80,8 +80,8 @@ describe('.retry(count)', function(){
   it('should correctly abort a retry attempt', function(done) {
     var aborted = false;
     var req = request
-    .get(base + '/delay/200')
-    .timeout(100)
+    .get(base + '/delay/400')
+    .timeout(200)
     .retry(2)
     .end(function(err, res){
       try {
