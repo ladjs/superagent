@@ -3,6 +3,10 @@ var base = setup.uri;
 var assert = require('assert');
 var request = require('../');
 
+function uniqid() {
+  return Math.random() * 10000000;
+}
+
 describe('.retry(count)', function(){
   this.timeout(15000);
 
@@ -19,9 +23,8 @@ describe('.retry(count)', function(){
   });
 
   it('should handle successful request after repeat attempt from server error', function(done){
-    var id = Math.random() * 1000000 * Date.now();
     request
-    .get(base + '/error/ok/' + id)
+    .get(base + '/error/ok/' + uniqid())
     .retry(2)
     .end(function(err, res){
       assert(res.ok, 'response should be ok');
@@ -45,9 +48,8 @@ describe('.retry(count)', function(){
   });
 
   it('should handle successful request after repeat attempt from server timeout', function(done) {
-    var id = Math.random() * 1000000 * Date.now();
     request
-    .get(base + '/delay/150/ok/' + id)
+    .get(base + '/delay/150/ok/' + uniqid())
     .timeout(50)
     .retry(2)
     .end(function(err, res){
@@ -83,12 +85,11 @@ describe('.retry(count)', function(){
   });
 
   it('should correctly retain header fields', function(done) {
-    var id = Math.random() * 1000000 * Date.now();
     request
-    .get(base + '/error/ok/' + id)
+    .get(base + '/error/ok/' + uniqid())
     .retry(2)
     .set('X-Foo', 'bar')
-    .end(function(err, res){
+    .end(function(_, res){
       try {
         assert(res.body);
         res.body.should.have.property('x-foo', 'bar');
