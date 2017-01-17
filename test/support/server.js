@@ -134,6 +134,10 @@ app.put('/user/:id', function(req, res){
   res.send('updated');
 });
 
+app.put('/user/:id/body', function(req, res){
+  res.send("received " + req.body.user);
+});
+
 app.patch('/user/:id', function(req, res){
   res.send('updated');
 });
@@ -160,6 +164,20 @@ app.post('/todo/item', function(req, res){
 
 app.get('/delay/const', function (req, res) {
   res.redirect('/delay/3000');
+});
+
+app.get('/delay/zip', function (req, res) {
+  res.writeHead(200, {"Content-Type":"text/plain", "Content-Encoding":"gzip"});
+  setTimeout(function(){
+    res.end();
+  }, 10000);
+});
+
+app.get('/delay/json', function (req, res) {
+  res.writeHead(200, {"Content-Type":"application/json"});
+  setTimeout(function(){
+    res.end();
+  }, 10000);
 });
 
 var slowBodyCallback;
@@ -396,6 +414,54 @@ app.get('/if-mod', function(req, res){
     res.status(304).end();
   } else {
     res.send('' + Date.now());
+  }
+});
+
+var called = {};
+app.get('/error/ok/:id', function(req, res) {
+  var id = req.params.id;
+  if (!called[id]) {
+    called[id] = true;
+    res.status(500).send('boom');
+  } else {
+    res.send(req.headers);
+    delete called[id];
+  }
+});
+
+app.get('/delay/:ms/ok/:id', function(req, res){
+  var id = req.params.id;
+  if (!called[id]) {
+    called[id] = true;
+    var ms = ~~req.params.ms;
+    setTimeout(function(){
+      res.sendStatus(200);
+    }, ms);
+  } else {
+    res.send('ok');
+    delete called[id];
+  }
+});
+
+app.get('/error/redirect/:id', function(req, res) {
+  var id = req.params.id;
+  if (!called[id]) {
+    called[id] = true;
+    res.status(500).send('boom');
+  } else {
+    res.redirect('/movies');
+    delete called[id];
+  }
+});
+
+app.get('/error/redirect-error:id', function(req, res) {
+  var id = req.params.id;
+  if (!called[id]) {
+    called[id] = true;
+    res.status(500).send('boom');
+  } else {
+    res.redirect('/error');
+    delete called[id];
   }
 });
 

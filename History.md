@@ -1,4 +1,8 @@
-# 3.3.0
+# 3.3.1 (2016-12-17)
+
+  * Fixed "double callback bug" warning on timeouts of gzipped responses
+
+# 3.3.0 (2016-12-14)
 
  * Added `.ok(callback)` that allows customizing which responses are errors (Kornel Lesiński)
  * Added `.responseType()` to Node version (Kornel Lesiński)

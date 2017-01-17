@@ -1,3 +1,4 @@
+
 var assert = require('assert');
 var request = require('../../');
 
@@ -277,6 +278,15 @@ it('parse should take precedence over default parse', function(done){
   .end(function(err, res){
     assert(res.ok);
     assert(res.body === 'customText: 200');
+    done();
+  });
+});
+
+it('handles `xhr.open()` errors', function(done){
+  request
+  .get('http://foo\0.com') // throws "Failed to execute 'open' on 'XMLHttpRequest': Invalid URL"
+  .end(function(err, res){
+    assert(err);
     done();
   });
 });
