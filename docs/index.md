@@ -251,6 +251,39 @@ If you are calling Facebook's API, be sure to send an `Accept: application/json`
    .end(callback)
 ```
 
+### HTTPS Request
+
+SuperAgent supports method to make HTTP request using TLS/SSL.
+
+- `.ca()`: Set the CA certificate(s) to trust
+- `.cert()`: Set the client certificate chain(s)
+- `.key()`: Set the client private key(s)
+- `.pfx()`: Set the client PFX or PKCS12 encoded private key and certificate chain
+
+For more information, see Node.js [https.request docs](https://nodejs.org/api/https.html#https_https_request_options_callback).
+
+```js
+var ca = fs.readFileSync('ca.cert.pem'),
+    key = fs.readFileSync('key.pem'),
+    cert = fs.readFileSync('cert.pem');
+
+request
+  .post('/secure')
+  .ca(ca)
+  .key(key)
+  .cert(cert)
+  .end(callback);
+```
+
+```js
+var pfx = fs.readFileSync('cert.pfx');
+
+request
+  .post('/secure')
+  .pfx(pfx)
+  .end(callback);
+```
+
 ## Parsing response bodies
 
   SuperAgent will parse known response-body data for you, currently supporting `application/x-www-form-urlencoded`, `application/json`, and `multipart/form-data`.
