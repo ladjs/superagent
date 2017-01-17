@@ -940,6 +940,27 @@ should.throws(function(){
     done(err);
   }
 });</code></pre></dd>
+            <dt>should successfully redirect after retry on error</dt>
+            <dd><pre><code>var id = Math.random() * 1000000 * Date.now();
+request
+.get(base + '/error/redirect/' + id)
+.retry(2)
+.end(function(err, res){
+  assert(res.ok, 'response should be ok');
+  assert(res.text, 'first movie page');
+  done();
+});</code></pre></dd>
+            <dt>should preserve retries across redirects</dt>
+            <dd><pre><code>var id = Math.random() * 1000000 * Date.now();
+request
+.get(base + '/error/redirect-error' + id)
+.retry(2)
+.end(function(err, res){
+  assert(err, 'expected an error');
+  assert.equal(2, err.retries, 'expected an error with .retries');
+  assert.equal(500, err.status, 'expected an error status of 500');
+  done();
+});</code></pre></dd>
           </dl>
         </section>
         <section class="suite">
@@ -1138,6 +1159,13 @@ next();</code></pre></dd>
         <dd><pre><code>request.put(uri + '/user/12').end(function(err, res){
   try {
   assert.equal('updated', res.text, 'response text');
+  next();
+  } catch(e) { next(e); }
+});</code></pre></dd>
+        <dt>put().send()</dt>
+        <dd><pre><code>request.put(uri + '/user/13/body').send({user:&quot;new&quot;}).end(function(err, res){
+  try {
+  assert.equal('received new', res.text, 'response text');
   next();
   } catch(e) { next(e); }
 });</code></pre></dd>
@@ -1626,6 +1654,124 @@ try {
       </dl>
     </section>
     <section class="suite">
+      <h1>.retry(count)</h1>
+      <dl>
+        <dt>should handle server error after repeat attempt</dt>
+        <dd><pre><code>request
+.get(base + '/error')
+.retry(2)
+.end(function(err, res){
+  try {
+  assert(err, 'expected an error');
+  assert.equal(2, err.retries, 'expected an error with .retries');
+  assert.equal(500, err.status, 'expected an error status of 500');
+  done();
+  } catch(err) {
+    done(err);
+  }
+});</code></pre></dd>
+        <dt>should handle successful request after repeat attempt from server error</dt>
+        <dd><pre><code>request
+.get(base + '/error/ok/' + uniqid())
+.retry(2)
+.end(function(err, res){
+  try {
+  assert.ifError(err);
+  assert(res.ok, 'response should be ok');
+  assert(res.text, 'res.text');
+  done();
+  } catch(err) {
+    done(err);
+  }
+});</code></pre></dd>
+        <dt>should handle server timeout error after repeat attempt</dt>
+        <dd><pre><code>request
+.get(base + '/delay/400')
+.timeout(200)
+.retry(2)
+.end(function(err, res){
+  try {
+  assert(err, 'expected an error');
+  assert.equal(2, err.retries, 'expected an error with .retries');
+  assert.equal('number', typeof err.timeout, 'expected an error with .timeout');
+  assert.equal('ECONNABORTED', err.code, 'expected abort error code')
+  done();
+  } catch(err) {
+    done(err);
+  }
+});</code></pre></dd>
+        <dt>should handle successful request after repeat attempt from server timeout</dt>
+        <dd><pre><code>request
+.get(base + '/delay/400/ok/' + uniqid())
+.timeout(200)
+.retry(2)
+.end(function(err, res){
+  try {
+  assert.ifError(err);
+  assert(res.ok, 'response should be ok');
+  assert(res.text, 'res.text');
+  done();
+  } catch(err) {
+    done(err);
+  }
+});</code></pre></dd>
+        <dt>should correctly abort a retry attempt</dt>
+        <dd><pre><code>var aborted = false;
+var req = request
+.get(base + '/delay/400')
+.timeout(200)
+.retry(2)
+.end(function(err, res){
+  try {
+    assert(false, 'should not complete the request');
+  } catch(e) { done(e); }
+});
+req.on('abort', function() {
+  aborted = true;
+});
+setTimeout(function() {
+  req.abort();
+  setTimeout(function() {
+    try {
+    assert(aborted, 'should be aborted');
+    done();
+    } catch(err) {
+      done(err);
+    }
+  }, 150)
+}, 150);</code></pre></dd>
+        <dt>should correctly retain header fields</dt>
+        <dd><pre><code>request
+.get(base + '/error/ok/' + uniqid())
+.retry(2)
+.set('X-Foo', 'bar')
+.end(function(err, res){
+  try {
+    assert.ifError(err);
+    assert(res.body);
+    res.body.should.have.property('x-foo', 'bar');
+    done();
+  } catch(err) {
+    done(err);
+  }
+});</code></pre></dd>
+        <dt>should not retry on 4xx responses</dt>
+        <dd><pre><code>request
+.get(base + '/bad-request')
+.retry(2)
+.end(function(err, res){
+  try {
+  assert(err, 'expected an error');
+  assert.equal(0, err.retries, 'expected an error with 0 .retries');
+  assert.equal(400, err.status, 'expected an error status of 400');
+  done();
+  } catch(err) {
+    done(err);
+  }
+});</code></pre></dd>
+      </dl>
+    </section>
+    <section class="suite">
       <h1>.timeout(ms)</h1>
       <dl>
         <section class="suite">
@@ -1634,6 +1780,27 @@ try {
             <dt>should error</dt>
             <dd><pre><code>request
 .get(base + '/delay/500')
+.timeout(150)
+.end(function(err, res){
+  assert(err, 'expected an error');
+  assert.equal('number', typeof err.timeout, 'expected an error with .timeout');
+  assert.equal('ECONNABORTED', err.code, 'expected abort error code')
+  done();
+});</code></pre></dd>
+            <dt>should handle gzip timeout</dt>
+            <dd><pre><code>request
+.get(base + '/delay/zip')
+.timeout(150)
+.end(function(err, res){
+  assert(err, 'expected an error');
+  assert.equal('number', typeof err.timeout, 'expected an error with .timeout');
+  assert.equal('ECONNABORTED', err.code, 'expected abort error code')
+  done();
+});</code></pre></dd>
+            <dt>should handle buffer timeout</dt>
+            <dd><pre><code>request
+.get(base + '/delay/json')
+.buffer(true)
 .timeout(150)
 .end(function(err, res){
   assert(err, 'expected an error');
@@ -2542,28 +2709,24 @@ agent
 req.field('user[name]', 'tobi');
 req.field('user[age]', '2');
 req.field('user[species]', 'ferret');
-req.end(function(err, res){
-  if (err) return done(err);
+return req.then(function(res){
   res.body['user[name]'].should.equal('tobi');
   res.body['user[age]'].should.equal('2');
   res.body['user[species]'].should.equal('ferret');
-  done();
 });</code></pre></dd>
             <dt>should work with file attachments</dt>
             <dd><pre><code>var req = request.post(base + '/echo');
 req.field('name', 'Tobi');
 req.attach('document', 'test/node/fixtures/user.html');
 req.field('species', 'ferret');
-req.end(function(err, res){
-  if (err) return done(err);
+return req.then(function(res){
   res.body.name.should.equal('Tobi');
   res.body.species.should.equal('ferret');
   var html = res.files.document;
   html.name.should.equal('user.html');
   html.type.should.equal('text/html');
   read(html.path).should.equal('&lt;h1&gt;name&lt;/h1&gt;');
-  done();
-})</code></pre></dd>
+});</code></pre></dd>
           </dl>
         </section>
         <section class="suite">
@@ -2574,8 +2737,7 @@ req.end(function(err, res){
 req.attach('one', 'test/node/fixtures/user.html');
 req.attach('two', 'test/node/fixtures/user.json');
 req.attach('three', 'test/node/fixtures/user.txt');
-req.end(function(err, res){
-  if (err) return done(err);
+return req.then(function(res){
   var html = res.files.one;
   var json = res.files.two
   var text = res.files.three;
@@ -2588,8 +2750,7 @@ req.end(function(err, res){
   text.name.should.equal('user.txt');
   text.type.should.equal('text/plain');
   read(text.path).should.equal('Tobi');
-  done();
-})</code></pre></dd>
+});</code></pre></dd>
             <section class="suite">
               <h1>when a file does not exist</h1>
               <dl>
@@ -2615,17 +2776,15 @@ req.end(function(err, res){
           <h1>#attach(name, path, filename)</h1>
           <dl>
             <dt>should use the custom filename</dt>
-            <dd><pre><code>request
+            <dd><pre><code>return request
 .post(base + '/echo')
 .attach('document', 'test/node/fixtures/user.html', 'doc.html')
-.end(function(err, res){
-  if (err) return done(err);
+.then(function(res){
   var html = res.files.document;
   html.name.should.equal('doc.html');
   html.type.should.equal('text/html');
   read(html.path).should.equal('&lt;h1&gt;name&lt;/h1&gt;');
-  done();
-})</code></pre></dd>
+});</code></pre></dd>
             <dt>should fire progress event</dt>
             <dd><pre><code>var loaded = 0;
 var total = 0;
@@ -2795,10 +2954,14 @@ request
         <dd><pre><code>var req = request
 .get(base + '/chunked-json')
 .end(function(err){
-  assert(!err);
+  assert.ifError(err);
   done();
 });
 setTimeout(function(){req.abort()},50);</code></pre></dd>
+        <dt>should not reject promise on aborted chunked json</dt>
+        <dd><pre><code>var req = request.get(base + '/chunked-json')
+setTimeout(function(){req.abort()},50);
+return req;</code></pre></dd>
       </dl>
     </section>
     <section class="suite">

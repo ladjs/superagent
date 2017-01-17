@@ -193,6 +193,31 @@
    })
    .end(callback)
 </code></pre>
+<h2 id="tls-options">TLS options</h2>
+<p>In Node.js SuperAgent supports methods to configure HTTPS requests:</p>
+<ul>
+<li><code>.ca()</code>: Set the CA certificate(s) to trust</li>
+<li><code>.cert()</code>: Set the client certificate chain(s)</li>
+<li><code>.key()</code>: Set the client private key(s)</li>
+<li><code>.pfx()</code>: Set the client PFX or PKCS12 encoded private key and certificate chain</li>
+</ul>
+<p>For more information, see Node.js <a href="https://nodejs.org/api/https.html#https_https_request_options_callback">https.request docs</a>.</p>
+<pre><code class="lang-js">var key = fs.readFileSync(&#39;key.pem&#39;),
+    cert = fs.readFileSync(&#39;cert.pem&#39;);
+
+request
+  .post(&#39;/client-auth&#39;)
+  .key(key)
+  .cert(cert)
+  .end(callback);
+</code></pre>
+<pre><code class="lang-js">var ca = fs.readFileSync(&#39;ca.cert.pem&#39;);
+
+request
+  .post(&#39;https://localhost/private-ca-server&#39;)
+  .ca(ca)
+  .end(callback);
+</code></pre>
 <h2 id="parsing-response-bodies">Parsing response bodies</h2>
 <p>  SuperAgent will parse known response-body data for you, currently supporting <code>application/x-www-form-urlencoded</code>, <code>application/json</code>, and <code>multipart/form-data</code>.</p>
 <p>  You can set a custom parser (that takes precedence over built-in parsers) with the <code>.buffer(true).parse(fn)</code> method. If response buffering is not enabled (<code>.buffer(false)</code>) then the <code>response</code> event will be emitted without waiting for the body parser to finish, so <code>response.body</code> won&#39;t be available.</p>

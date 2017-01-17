@@ -251,9 +251,9 @@ If you are calling Facebook's API, be sure to send an `Accept: application/json`
    .end(callback)
 ```
 
-### HTTPS Request
+## TLS options
 
-SuperAgent supports method to make HTTP request using TLS/SSL.
+In Node.js SuperAgent supports methods to configure HTTPS requests:
 
 - `.ca()`: Set the CA certificate(s) to trust
 - `.cert()`: Set the client certificate chain(s)
@@ -263,24 +263,22 @@ SuperAgent supports method to make HTTP request using TLS/SSL.
 For more information, see Node.js [https.request docs](https://nodejs.org/api/https.html#https_https_request_options_callback).
 
 ```js
-var ca = fs.readFileSync('ca.cert.pem'),
-    key = fs.readFileSync('key.pem'),
+var key = fs.readFileSync('key.pem'),
     cert = fs.readFileSync('cert.pem');
 
 request
-  .post('/secure')
-  .ca(ca)
+  .post('/client-auth')
   .key(key)
   .cert(cert)
   .end(callback);
 ```
 
 ```js
-var pfx = fs.readFileSync('cert.pfx');
+var ca = fs.readFileSync('ca.cert.pem');
 
 request
-  .post('/secure')
-  .pfx(pfx)
+  .post('https://localhost/private-ca-server')
+  .ca(ca)
   .end(callback);
 ```
 
