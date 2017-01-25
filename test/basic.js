@@ -398,7 +398,7 @@ describe('request', function(){
             try {
           res.should.be.json();
           if (NODE) {
-            res.buffered.should.be.true;
+            res.buffered.should.be.true();
           }
           res.text.should.equal('{"name":"tobi","age":1}');
           done();
