@@ -1,3 +1,8 @@
+# 3.4.0 (2017-01-25)
+
+ * New `.retry(n)` method and `err.retries` (Alexander Pope)
+ * Docs for HTTPS request (Jun Wan Goh)
+
 # 3.3.1 (2016-12-17)
 
   * Fixed "double callback bug" warning on timeouts of gzipped responses
