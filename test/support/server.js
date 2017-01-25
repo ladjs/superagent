@@ -386,10 +386,16 @@ app.get('/manny', function(req, res){
   res.status(200).json({name:"manny"});
 });
 
-app.get('/image', function(req, res){
+function serveImageWithType(res, type) {
   var img = fs.readFileSync(__dirname + '/../node/fixtures/test.png');
-  res.writeHead(200, {'Content-Type': 'image/png' });
+  res.writeHead(200, {'Content-Type': type });
   res.end(img, 'binary');
+}
+app.get('/image', function(req, res){
+  serveImageWithType(res, 'image/png');
+});
+app.get('/image-as-octets', function(req, res){
+  serveImageWithType(res, 'application/octet-stream');
 });
 
 app.get('/chunked-json', function(req, res){
