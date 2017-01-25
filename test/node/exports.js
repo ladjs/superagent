@@ -15,6 +15,6 @@ describe('exports', function(){
 
   it('should expose .parse', function(){
     Object.keys(request.parse)
-      .should.eql(['application/x-www-form-urlencoded', 'application/json', 'text', 'image']);
+      .should.eql(['application/x-www-form-urlencoded', 'application/json', 'text', 'application/octet-stream', 'image']);
   })
 })
