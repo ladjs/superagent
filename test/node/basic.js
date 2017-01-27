@@ -272,4 +272,17 @@ describe('[node] request', function(){
       });
     })
   })
+
+  it('should send body with .get().send()', function(next){
+    request
+    .get(base + '/echo')
+    .set('Content-Type', 'text/plain')
+    .send('wahoo')
+    .end(function(err, res){
+    try {
+      assert.equal('wahoo', res.text);
+      next();
+      } catch(e) { next(e); }
+    });
+  });
 });
