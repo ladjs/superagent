@@ -42,6 +42,22 @@ describe('.retry(count)', function(){
     });
   });
 
+  it('should not retry if passed undefined', function(done){
+    request
+    .get(base + '/error')
+    .retry(undefined)
+    .end(function(err, res){
+      try {
+      assert(err, 'expected an error');
+      assert.equal(undefined, err.retries, 'expected an error without .retries');
+      assert.equal(500, err.status, 'expected an error status of 500');
+      done();
+      } catch(err) {
+        done(err);
+      }
+    });
+  });
+
   it('should handle server error after repeat attempt', function(done){
     request
     .get(base + '/error')
@@ -62,6 +78,22 @@ describe('.retry(count)', function(){
     request
     .get(base + '/error')
     .retry()
+    .end(function(err, res){
+      try {
+      assert(err, 'expected an error');
+      assert.equal(1, err.retries, 'expected an error with .retries');
+      assert.equal(500, err.status, 'expected an error status of 500');
+      done();
+      } catch(err) {
+        done(err);
+      }
+    });
+  });
+
+  it('should retry if passed "true"', function(done){
+    request
+    .get(base + '/error')
+    .retry(true)
     .end(function(err, res){
       try {
       assert(err, 'expected an error');
