@@ -26,14 +26,14 @@ describe('.retry(count)', function(){
     });
   });
 
-  it('should handle server error after repeat attempt', function(done){
+  it('should not retry if passed an invalid number', function(done){
     request
     .get(base + '/error')
-    .retry(2)
+    .retry(-2)
     .end(function(err, res){
       try {
       assert(err, 'expected an error');
-      assert.equal(2, err.retries, 'expected an error with .retries');
+      assert.equal(undefined, err.retries, 'expected an error without .retries');
       assert.equal(500, err.status, 'expected an error status of 500');
       done();
       } catch(err) {
@@ -42,14 +42,14 @@ describe('.retry(count)', function(){
     });
   });
 
-  it('should retry if passed an invalid number', function(done){
+  it('should handle server error after repeat attempt', function(done){
     request
     .get(base + '/error')
-    .retry(-2)
+    .retry(2)
     .end(function(err, res){
       try {
       assert(err, 'expected an error');
-      assert.equal(1, err.retries, 'expected an error with .retries');
+      assert.equal(2, err.retries, 'expected an error with .retries');
       assert.equal(500, err.status, 'expected an error status of 500');
       done();
       } catch(err) {
