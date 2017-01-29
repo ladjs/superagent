@@ -425,6 +425,10 @@ app.get('/if-mod', function(req, res){
 
 var called = {};
 app.get('/error/ok/:id', function(req, res) {
+  if (req.query.qs != 'present') {
+    return res.status(400).end("query string lost");
+  }
+
   var id = req.params.id;
   if (!called[id]) {
     called[id] = true;

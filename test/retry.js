@@ -29,6 +29,7 @@ describe('.retry(count)', function(){
   it('should handle successful request after repeat attempt from server error', function(done){
     request
     .get(base + '/error/ok/' + uniqid())
+    .query({qs:'present'})
     .retry(2)
     .end(function(err, res){
       try {
@@ -109,6 +110,7 @@ describe('.retry(count)', function(){
   it('should correctly retain header fields', function(done) {
     request
     .get(base + '/error/ok/' + uniqid())
+    .query({qs:'present'})
     .retry(2)
     .set('X-Foo', 'bar')
     .end(function(err, res){
