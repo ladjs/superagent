@@ -1,3 +1,9 @@
+# 3.4.1 (2017-01-29)
+
+ * Allow `retry()` and `retry(0)` (Alexander Pope)
+ * Allow optional body/data in DELETE requests (Alpha Shuro)
+ * Fixed query string on retried requests (Kornel Lesiński)
+
 # 3.4.0 (2017-01-25)
 
  * New `.retry(n)` method and `err.retries` (Alexander Pope)
