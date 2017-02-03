@@ -39,6 +39,17 @@ describe('req.send(Object) as "form"', function(){
   })
 })
 
+describe('req.attach', function(){
+  it('ignores null file', function(done){
+    request
+      .post('/echo')
+      .attach('image', null)
+      .end(function(err, res){
+        done();
+      });
+  });
+});
+
 describe('req.field', function(){
   it('allow bools', function(done){
     if (!formDataSupported) {
