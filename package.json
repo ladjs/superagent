@@ -52,7 +52,6 @@
   },
   "browser": {
     "./lib/node/index.js": "./lib/client.js",
-    "emitter": "component-emitter",
     "./test/support/server.js": "./test/support/blank.js"
   },
   "component": {
