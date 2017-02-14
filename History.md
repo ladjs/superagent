@@ -1,3 +1,10 @@
+# 3.4.3 (2017-02-14)
+
+ * Fixed being able to define own parsers when their mime type starts with `text/` (Damien Clark)
+ * `withCredentials(false)` (Andy Woods)
+ * Use `formData.on` instead of `.once` (Kornel Lesiński)
+ * Ignore `attach("file",null)` (Kornel Lesiński)
+
 # 3.4.1 (2017-01-29)
 
  * Allow `retry()` and `retry(0)` (Alexander Pope)
