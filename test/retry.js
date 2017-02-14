@@ -230,18 +230,18 @@ describe('.retry(count)', function(){
       callbackCallCount++;
     }
     request
-      .get(base + '/error')
-      .retry(2, retryCallback)
-      .end(function(err, res){
-        try {
-          assert(err, 'expected an error');
-          assert.equal(2, err.retries, 'expected an error with .retries');
-          assert.equal(500, err.status, 'expected an error status of 500');
-          assert.equal(2, callbackCallCount, 'expected the callback to be called on each retry');
-          done();
-        } catch(err) {
-          done(err);
-        }
-      });
+    .get(base + '/error')
+    .retry(2, retryCallback)
+    .end(function(err, res){
+      try {
+        assert(err, 'expected an error');
+        assert.equal(2, err.retries, 'expected an error with .retries');
+        assert.equal(500, err.status, 'expected an error status of 500');
+        assert.equal(2, callbackCallCount, 'expected the callback to be called on each retry');
+        done();
+      } catch(err) {
+        done(err);
+      }
+    });
   });
 })
