@@ -226,8 +226,9 @@ describe('.retry(count)', function(){
 
   it('should execute callback on retry if passed', function(done) {
     var callbackCallCount = 0;
-    var retries = 1;
-    function retryCallback() {
+    var retries = 2;
+    function retryCallback(request) {
+      console.log(request);
       callbackCallCount++;
     }
     request
@@ -236,7 +237,7 @@ describe('.retry(count)', function(){
       .end(function(err, res){
         try {
           assert(err, 'expected an error');
-          assert.equal(1, err.retries, 'expected an error with .retries');
+          assert.equal(retries, err.retries, 'expected an error with .retries');
           assert.equal(500, err.status, 'expected an error status of 500');
           assert.equal(retries, callbackCallCount, 'expected the callback to be called on retry');
           done();
