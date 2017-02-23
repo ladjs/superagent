@@ -1,3 +1,13 @@
+# 3.5.0 (2017-02-23)
+
+ * Add errno to distinguish between request timeout and body download timeout (#1184) (Kornel Lesiński)
+ * Warn about bogus timeout options (#1185) (Kornel Lesiński)
+
+# 3.4.4 (2017-02-17)
+
+ * Treat videos like images (Kornel Lesiński)
+ * Avoid renaming module (Kornel Lesiński)
+
 # 3.4.3 (2017-02-14)
 
  * Fixed being able to define own parsers when their mime type starts with `text/` (Damien Clark)
