@@ -562,6 +562,23 @@ Alternatively, you can use the `.ok(callback)` method to decide whether a respon
         // reads 404 page as a successful response
       })
 
+## Progress tracking
+
+SuperAgent fires `progress` events on upload and download of large files.
+
+    request.post(url)
+      .attach(file)
+      .on('progress', event => {
+        /* the event is:
+        {
+          direction: "upload" or "download"
+          percent: 0 to 100 // may be missing if file size is unknown
+          total: // total file size, may be missing
+          loaded: // bytes downloaded or uploaded so far
+        } */
+      })
+      .end()
+
 ## Promise and Generator support
 
 SuperAgent's request is a "thenable" object that's compatible with JavaScript promises and `async`/`await` syntax. Do not call `.end()` if you're using promises.
