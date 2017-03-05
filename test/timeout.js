@@ -64,6 +64,7 @@ describe('.timeout(ms)', function(){
       .end(function(err, res){
         assert(err, 'expected an error');
         assert.equal('ECONNABORTED', err.code, 'expected abort error code')
+        assert.equal('ETIME', err.errno);
         done();
       });
     });
@@ -76,6 +77,7 @@ describe('.timeout(ms)', function(){
         assert(err, 'expected an error');
         assert.equal('number', typeof err.timeout, 'expected an error with .timeout');
         assert.equal('ECONNABORTED', err.code, 'expected abort error code')
+        assert.equal('ETIMEDOUT', err.errno);
         done();
       });
     });

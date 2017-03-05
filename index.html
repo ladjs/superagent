@@ -417,6 +417,20 @@ else if (err) {
   .then(response =&gt; {
     // reads 404 page as a successful response
   })
+</code></pre><h2 id="progress-tracking">Progress tracking</h2>
+<p>SuperAgent fires <code>progress</code> events on upload and download of large files.</p>
+<pre><code>request.post(url)
+  .attach(file)
+  .on(&#39;progress&#39;, event =&gt; {
+    /* the event is:
+    {
+      direction: &quot;upload&quot; or &quot;download&quot;
+      percent: 0 to 100 // may be missing if file size is unknown
+      total: // total file size, may be missing
+      loaded: // bytes downloaded or uploaded so far
+    } */
+  })
+  .end()
 </code></pre><h2 id="promise-and-generator-support">Promise and Generator support</h2>
 <p>SuperAgent&#39;s request is a &quot;thenable&quot; object that&#39;s compatible with JavaScript promises and <code>async</code>/<code>await</code> syntax. Do not call <code>.end()</code> if you&#39;re using promises.</p>
 <p>Libraries like <a href="https://github.com/tj/co">co</a> or a web framework like <a href="https://github.com/koajs/koa">koa</a> can <code>yield</code> on any SuperAgent method:</p>

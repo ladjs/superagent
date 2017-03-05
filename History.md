@@ -1,3 +1,31 @@
+# 3.5.0 (2017-02-23)
+
+ * Add errno to distinguish between request timeout and body download timeout (#1184) (Kornel Lesiński)
+ * Warn about bogus timeout options (#1185) (Kornel Lesiński)
+
+# 3.4.4 (2017-02-17)
+
+ * Treat videos like images (Kornel Lesiński)
+ * Avoid renaming module (Kornel Lesiński)
+
+# 3.4.3 (2017-02-14)
+
+ * Fixed being able to define own parsers when their mime type starts with `text/` (Damien Clark)
+ * `withCredentials(false)` (Andy Woods)
+ * Use `formData.on` instead of `.once` (Kornel Lesiński)
+ * Ignore `attach("file",null)` (Kornel Lesiński)
+
+# 3.4.1 (2017-01-29)
+
+ * Allow `retry()` and `retry(0)` (Alexander Pope)
+ * Allow optional body/data in DELETE requests (Alpha Shuro)
+ * Fixed query string on retried requests (Kornel Lesiński)
+
+# 3.4.0 (2017-01-25)
+
+ * New `.retry(n)` method and `err.retries` (Alexander Pope)
+ * Docs for HTTPS request (Jun Wan Goh)
+
 # 3.3.1 (2016-12-17)
 
   * Fixed "double callback bug" warning on timeouts of gzipped responses

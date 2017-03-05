@@ -10,6 +10,54 @@ function uniqid() {
 describe('.retry(count)', function(){
   this.timeout(15000);
 
+  it('should not retry if passed "0"', function(done){
+    request
+    .get(base + '/error')
+    .retry(0)
+    .end(function(err, res){
+      try {
+      assert(err, 'expected an error');
+      assert.equal(undefined, err.retries, 'expected an error without .retries');
+      assert.equal(500, err.status, 'expected an error status of 500');
+      done();
+      } catch(err) {
+        done(err);
+      }
+    });
+  });
+
+  it('should not retry if passed an invalid number', function(done){
+    request
+    .get(base + '/error')
+    .retry(-2)
+    .end(function(err, res){
+      try {
+      assert(err, 'expected an error');
+      assert.equal(undefined, err.retries, 'expected an error without .retries');
+      assert.equal(500, err.status, 'expected an error status of 500');
+      done();
+      } catch(err) {
+        done(err);
+      }
+    });
+  });
+
+  it('should not retry if passed undefined', function(done){
+    request
+    .get(base + '/error')
+    .retry(undefined)
+    .end(function(err, res){
+      try {
+      assert(err, 'expected an error');
+      assert.equal(undefined, err.retries, 'expected an error without .retries');
+      assert.equal(500, err.status, 'expected an error status of 500');
+      done();
+      } catch(err) {
+        done(err);
+      }
+    });
+  });
+
   it('should handle server error after repeat attempt', function(done){
     request
     .get(base + '/error')
@@ -26,9 +74,42 @@ describe('.retry(count)', function(){
     });
   });
 
+  it('should retry if passed nothing', function(done){
+    request
+    .get(base + '/error')
+    .retry()
+    .end(function(err, res){
+      try {
+      assert(err, 'expected an error');
+      assert.equal(1, err.retries, 'expected an error with .retries');
+      assert.equal(500, err.status, 'expected an error status of 500');
+      done();
+      } catch(err) {
+        done(err);
+      }
+    });
+  });
+
+  it('should retry if passed "true"', function(done){
+    request
+    .get(base + '/error')
+    .retry(true)
+    .end(function(err, res){
+      try {
+      assert(err, 'expected an error');
+      assert.equal(1, err.retries, 'expected an error with .retries');
+      assert.equal(500, err.status, 'expected an error status of 500');
+      done();
+      } catch(err) {
+        done(err);
+      }
+    });
+  });
+
   it('should handle successful request after repeat attempt from server error', function(done){
     request
     .get(base + '/error/ok/' + uniqid())
+    .query({qs:'present'})
     .retry(2)
     .end(function(err, res){
       try {
@@ -109,6 +190,7 @@ describe('.retry(count)', function(){
   it('should correctly retain header fields', function(done) {
     request
     .get(base + '/error/ok/' + uniqid())
+    .query({qs:'present'})
     .retry(2)
     .set('X-Foo', 'bar')
     .end(function(err, res){

@@ -83,10 +83,12 @@ describe('req.send(Object) as "json"', function(){
     .get(uri + '/echo')
     .send({ tobi: 'ferret' })
     .end(function(err, res){
-      res.should.be.json();
-      res.text.should.equal('{"tobi":"ferret"}');
-      ({"tobi":"ferret"}).should.eql(res.body);
-      done();
+      try {
+        res.should.be.json();
+        res.text.should.equal('{"tobi":"ferret"}');
+        ({"tobi":"ferret"}).should.eql(res.body);
+        done();
+      } catch(e) {done(e);}
     });
   });
 
@@ -138,10 +140,12 @@ describe('res.body', function(){
       request
       .head(uri + '/json')
       .end(function(err, res){
+        try {
         assert.strictEqual(err, null);
         assert.strictEqual(res.text, undefined)
         assert.strictEqual(Object.keys(res.body).length, 0)
         done();
+        } catch(e) {done(e);}
       });
     });
   });
@@ -171,10 +175,12 @@ describe('res.body', function(){
       request
       .get(uri + '/no-content')
       .end(function(err, res){
+        try {
         assert.strictEqual(err, null);
         assert.strictEqual(res.text, '');
         assert.strictEqual(Object.keys(res.body).length, 0);
         done();
+        } catch(e) {done(e);}
       });
     });
   });

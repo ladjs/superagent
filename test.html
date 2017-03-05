@@ -387,7 +387,7 @@ return request
     try {
   res.should.be.json();
   if (NODE) {
-    res.buffered.should.be.true;
+    res.buffered.should.be.true();
   }
   res.text.should.equal('{&quot;name&quot;:&quot;tobi&quot;,&quot;age&quot;:1}');
   done();
@@ -652,6 +652,18 @@ setTimeout(function() {
       </dl>
     </section>
     <section class="suite">
+      <h1>req.attach</h1>
+      <dl>
+        <dt>ignores null file</dt>
+        <dd><pre><code>request
+  .post('/echo')
+  .attach('image', null)
+  .end(function(err, res){
+    done();
+  });</code></pre></dd>
+      </dl>
+    </section>
+    <section class="suite">
       <h1>req.field</h1>
       <dl>
         <dt>allow bools</dt>
@@ -783,10 +795,12 @@ should.throws(function(){
 .get(uri + '/echo')
 .send({ tobi: 'ferret' })
 .end(function(err, res){
-  res.should.be.json();
-  res.text.should.equal('{&quot;tobi&quot;:&quot;ferret&quot;}');
-  ({&quot;tobi&quot;:&quot;ferret&quot;}).should.eql(res.body);
-  done();
+  try {
+    res.should.be.json();
+    res.text.should.equal('{&quot;tobi&quot;:&quot;ferret&quot;}');
+    ({&quot;tobi&quot;:&quot;ferret&quot;}).should.eql(res.body);
+    done();
+  } catch(e) {done(e);}
 });</code></pre></dd>
         <dt>should work with vendor MIME type</dt>
         <dd><pre><code>request
@@ -839,10 +853,12 @@ should.throws(function(){
             <dd><pre><code>request
 .head(uri + '/json')
 .end(function(err, res){
+  try {
   assert.strictEqual(err, null);
   assert.strictEqual(res.text, undefined)
   assert.strictEqual(Object.keys(res.body).length, 0)
   done();
+  } catch(e) {done(e);}
 });</code></pre></dd>
           </dl>
         </section>
@@ -872,10 +888,12 @@ should.throws(function(){
             <dd><pre><code>request
 .get(uri + '/no-content')
 .end(function(err, res){
+  try {
   assert.strictEqual(err, null);
   assert.strictEqual(res.text, '');
   assert.strictEqual(Object.keys(res.body).length, 0);
   done();
+  } catch(e) {done(e);}
 });</code></pre></dd>
           </dl>
         </section>
@@ -1656,6 +1674,48 @@ try {
     <section class="suite">
       <h1>.retry(count)</h1>
       <dl>
+        <dt>should not retry if passed &quot;0&quot;</dt>
+        <dd><pre><code>request
+.get(base + '/error')
+.retry(0)
+.end(function(err, res){
+  try {
+  assert(err, 'expected an error');
+  assert.equal(undefined, err.retries, 'expected an error without .retries');
+  assert.equal(500, err.status, 'expected an error status of 500');
+  done();
+  } catch(err) {
+    done(err);
+  }
+});</code></pre></dd>
+        <dt>should not retry if passed an invalid number</dt>
+        <dd><pre><code>request
+.get(base + '/error')
+.retry(-2)
+.end(function(err, res){
+  try {
+  assert(err, 'expected an error');
+  assert.equal(undefined, err.retries, 'expected an error without .retries');
+  assert.equal(500, err.status, 'expected an error status of 500');
+  done();
+  } catch(err) {
+    done(err);
+  }
+});</code></pre></dd>
+        <dt>should not retry if passed undefined</dt>
+        <dd><pre><code>request
+.get(base + '/error')
+.retry(undefined)
+.end(function(err, res){
+  try {
+  assert(err, 'expected an error');
+  assert.equal(undefined, err.retries, 'expected an error without .retries');
+  assert.equal(500, err.status, 'expected an error status of 500');
+  done();
+  } catch(err) {
+    done(err);
+  }
+});</code></pre></dd>
         <dt>should handle server error after repeat attempt</dt>
         <dd><pre><code>request
 .get(base + '/error')
@@ -1670,9 +1730,38 @@ try {
     done(err);
   }
 });</code></pre></dd>
+        <dt>should retry if passed nothing</dt>
+        <dd><pre><code>request
+.get(base + '/error')
+.retry()
+.end(function(err, res){
+  try {
+  assert(err, 'expected an error');
+  assert.equal(1, err.retries, 'expected an error with .retries');
+  assert.equal(500, err.status, 'expected an error status of 500');
+  done();
+  } catch(err) {
+    done(err);
+  }
+});</code></pre></dd>
+        <dt>should retry if passed &quot;true&quot;</dt>
+        <dd><pre><code>request
+.get(base + '/error')
+.retry(true)
+.end(function(err, res){
+  try {
+  assert(err, 'expected an error');
+  assert.equal(1, err.retries, 'expected an error with .retries');
+  assert.equal(500, err.status, 'expected an error status of 500');
+  done();
+  } catch(err) {
+    done(err);
+  }
+});</code></pre></dd>
         <dt>should handle successful request after repeat attempt from server error</dt>
         <dd><pre><code>request
 .get(base + '/error/ok/' + uniqid())
+.query({qs:'present'})
 .retry(2)
 .end(function(err, res){
   try {
@@ -1743,6 +1832,7 @@ setTimeout(function() {
         <dt>should correctly retain header fields</dt>
         <dd><pre><code>request
 .get(base + '/error/ok/' + uniqid())
+.query({qs:'present'})
 .retry(2)
 .set('X-Foo', 'bar')
 .end(function(err, res){
@@ -1826,6 +1916,7 @@ setTimeout(function() {
 .end(function(err, res){
   assert(err, 'expected an error');
   assert.equal('ECONNABORTED', err.code, 'expected abort error code')
+  assert.equal('ETIME', err.errno);
   done();
 });</code></pre></dd>
             <dt>should error on response</dt>
@@ -1836,6 +1927,7 @@ setTimeout(function() {
   assert(err, 'expected an error');
   assert.equal('number', typeof err.timeout, 'expected an error with .timeout');
   assert.equal('ECONNABORTED', err.code, 'expected abort error code')
+  assert.equal('ETIMEDOUT', err.errno);
   done();
 });</code></pre></dd>
             <dt>should accept slow body with fast response</dt>
@@ -2073,6 +2165,17 @@ request
     <section class="suite">
       <h1>[node] request</h1>
       <dl>
+        <dt>should send body with .get().send()</dt>
+        <dd><pre><code>request
+.get(base + '/echo')
+.set('Content-Type', 'text/plain')
+.send('wahoo')
+.end(function(err, res){
+try {
+  assert.equal('wahoo', res.text);
+  next();
+  } catch(e) { next(e); }
+});</code></pre></dd>
         <section class="suite">
           <h1>with an url</h1>
           <dl>
@@ -2355,7 +2458,7 @@ request
   .should.eql(['application/x-www-form-urlencoded', 'application/json']);</code></pre></dd>
         <dt>should expose .parse</dt>
         <dd><pre><code>Object.keys(request.parse)
-  .should.eql(['application/x-www-form-urlencoded', 'application/json', 'text', 'image']);</code></pre></dd>
+  .should.eql(['application/x-www-form-urlencoded', 'application/json', 'text', 'application/octet-stream', 'image']);</code></pre></dd>
       </dl>
     </section>
     <section class="suite">
@@ -2625,6 +2728,23 @@ agent
             <dd><pre><code>request
 .get(base + '/image')
 .end(function(err, res){
+  res.type.should.equal('image/png');
+  Buffer.isBuffer(res.body).should.be.true();
+  (res.body.length - img.length).should.equal(0);
+  done();
+});</code></pre></dd>
+          </dl>
+        </section>
+        <section class="suite">
+          <h1>application/octet-stream</h1>
+          <dl>
+            <dt>should parse the body</dt>
+            <dd><pre><code>request
+.get(base + '/image-as-octets')
+.buffer(true) // that's tech debt :(
+.end(function(err, res){
+  res.type.should.equal('application/octet-stream');
+  Buffer.isBuffer(res.body).should.be.true();
   (res.body.length - img.length).should.equal(0);
   done();
 });</code></pre></dd>

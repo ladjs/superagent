@@ -386,10 +386,16 @@ app.get('/manny', function(req, res){
   res.status(200).json({name:"manny"});
 });
 
-app.get('/image', function(req, res){
+function serveImageWithType(res, type) {
   var img = fs.readFileSync(__dirname + '/../node/fixtures/test.png');
-  res.writeHead(200, {'Content-Type': 'image/png' });
+  res.writeHead(200, {'Content-Type': type });
   res.end(img, 'binary');
+}
+app.get('/image', function(req, res){
+  serveImageWithType(res, 'image/png');
+});
+app.get('/image-as-octets', function(req, res){
+  serveImageWithType(res, 'application/octet-stream');
 });
 
 app.get('/chunked-json', function(req, res){
@@ -419,6 +425,10 @@ app.get('/if-mod', function(req, res){
 
 var called = {};
 app.get('/error/ok/:id', function(req, res) {
+  if (req.query.qs != 'present') {
+    return res.status(400).end("query string lost");
+  }
+
   var id = req.params.id;
   if (!called[id]) {
     called[id] = true;
