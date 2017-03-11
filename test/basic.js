@@ -197,6 +197,26 @@ describe('request', function(){
     })
   })
 
+  describe('set headers', function() {
+    before(function() {
+      Object.prototype.invalid = '\n';
+    });
+
+    after(function() {
+      delete Object.prototype.invalid;
+    });
+
+    it('should only set headers for ownProperties of header', function(done) {
+      try {
+        request
+          .get(uri + '/echo')
+          .end(done);
+      } catch (e) {
+        done(e)
+      }
+    });
+  });
+
   describe('res.charset', function(){
     it('should be set when present', function(done){
       request
