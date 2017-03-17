@@ -33,4 +33,17 @@ describe('res.body', function(){
       });
     });
   });
+  describe('application/octet-stream', function(){
+      it('should parse the body (using responseType)', function(done){
+          request
+              .get(base + '/image-as-octets')
+              .responseType('blob')
+              .end(function(err, res){
+                  res.type.should.equal('application/octet-stream');
+                  Buffer.isBuffer(res.body).should.be.true();
+                  (res.body.length - img.length).should.equal(0);
+                  done();
+              });
+      });
+  });
 });
