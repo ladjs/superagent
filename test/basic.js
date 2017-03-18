@@ -519,11 +519,14 @@ describe('request', function(){
         } catch(e) { done(e); }
     });
 
+      req.on('error', function(error){
+        done(error);
+      });
       req.on('abort', done);
 
       setTimeout(function() {
         req.abort();
-      }, 1000);
+      }, 500);
     })
 
     it('should allow chaining .abort() several times', function(done){
