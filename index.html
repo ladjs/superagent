@@ -156,7 +156,13 @@
    .type(&#39;png&#39;)
 </code></pre><h2 id="serializing-request-body">Serializing request body</h2>
 <p>SuperAgent will automatically serialize JSON and forms. If you want to send the payload in a custom format, you can replace the built-in serialization with <code>.serialize()</code> method.</p>
-<h2 id="setting-accept">Setting Accept</h2>
+<h2 id="retrying-requests">Retrying requests</h2>
+<p>When given the <code>.retry()</code> method, SuperAgent will automatically retry requests, if they fail in a way that is transient or could be due to a flaky Internet connection. <code>.retry()</code> takes an optional argument which is the maximum number of times to retry failed requests; the default is 3 times.</p>
+<pre><code> request
+   .get(&#39;http://example.com/search&#39;)
+   .retry(2)
+   .end(callback);
+</code></pre><h2 id="setting-accept">Setting Accept</h2>
 <p>In a similar fashion to the <code>.type()</code> method it is also possible to set the <code>Accept</code> header via the short hand method <code>.accept()</code>. Which references <code>request.types</code> as well allowing you to specify either the full canonicalized MIME type name as <code>type/subtype</code>, or the extension suffix form as &quot;xml&quot;, &quot;json&quot;, &quot;png&quot;, etc. for convenience:</p>
 <pre><code> request.get(&#39;/user&#39;)
    .accept(&#39;application/json&#39;)

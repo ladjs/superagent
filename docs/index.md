@@ -203,6 +203,15 @@ You can also use the `.query()` method for HEAD requests. The following will pro
 
 SuperAgent will automatically serialize JSON and forms. If you want to send the payload in a custom format, you can replace the built-in serialization with `.serialize()` method.
 
+## Retrying requests
+
+When given the `.retry()` method, SuperAgent will automatically retry requests, if they fail in a way that is transient or could be due to a flaky Internet connection. `.retry()` takes an optional argument which is the maximum number of times to retry failed requests; the default is 3 times.
+
+     request
+       .get('http://example.com/search')
+       .retry(2)
+       .end(callback);
+
 ## Setting Accept
 
 In a similar fashion to the `.type()` method it is also possible to set the `Accept` header via the short hand method `.accept()`. Which references `request.types` as well allowing you to specify either the full canonicalized MIME type name as `type/subtype`, or the extension suffix form as "xml", "json", "png", etc. for convenience:

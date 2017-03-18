@@ -187,6 +187,19 @@ return request
           </dl>
         </section>
         <section class="suite">
+          <h1>set headers</h1>
+          <dl>
+            <dt>should only set headers for ownProperties of header</dt>
+            <dd><pre><code>try {
+  request
+    .get(uri + '/echo')
+    .end(done);
+} catch (e) {
+  done(e)
+}</code></pre></dd>
+          </dl>
+        </section>
+        <section class="suite">
           <h1>res.charset</h1>
           <dl>
             <dt>should be set when present</dt>
@@ -483,10 +496,13 @@ request
   assert(false, 'should not complete the request');
   } catch(e) { done(e); }
     });
+req.on('error', function(error){
+  done(error);
+});
 req.on('abort', done);
 setTimeout(function() {
   req.abort();
-}, 1000);</code></pre></dd>
+}, 500);</code></pre></dd>
             <dt>should allow chaining .abort() several times</dt>
             <dd><pre><code>var req = request
 .get(uri + '/delay/3000')
@@ -2748,6 +2764,21 @@ agent
   (res.body.length - img.length).should.equal(0);
   done();
 });</code></pre></dd>
+          </dl>
+        </section>
+        <section class="suite">
+          <h1>application/octet-stream</h1>
+          <dl>
+            <dt>should parse the body (using responseType)</dt>
+            <dd><pre><code>request
+    .get(base + '/image-as-octets')
+    .responseType('blob')
+    .end(function(err, res){
+        res.type.should.equal('application/octet-stream');
+        Buffer.isBuffer(res.body).should.be.true();
+        (res.body.length - img.length).should.equal(0);
+        done();
+    });</code></pre></dd>
           </dl>
         </section>
       </dl>

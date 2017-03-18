@@ -197,6 +197,26 @@ describe('request', function(){
     })
   })
 
+  describe('set headers', function() {
+    before(function() {
+      Object.prototype.invalid = '\n';
+    });
+
+    after(function() {
+      delete Object.prototype.invalid;
+    });
+
+    it('should only set headers for ownProperties of header', function(done) {
+      try {
+        request
+          .get(uri + '/echo')
+          .end(done);
+      } catch (e) {
+        done(e)
+      }
+    });
+  });
+
   describe('res.charset', function(){
     it('should be set when present', function(done){
       request
@@ -499,11 +519,14 @@ describe('request', function(){
         } catch(e) { done(e); }
     });
 
+      req.on('error', function(error){
+        done(error);
+      });
       req.on('abort', done);
 
       setTimeout(function() {
         req.abort();
-      }, 1000);
+      }, 500);
     })
 
     it('should allow chaining .abort() several times', function(done){

@@ -30,5 +30,21 @@ describe('xdomain', function(){
         next();
       });
     });
+
+    it('should handle x-domain failure after repeat attempts', function(next){
+      request
+      .get('//tunne127.com')
+      .retry(2)
+      .end(function(err, res){
+        try {
+          assert(err, 'error missing');
+          assert(err.crossDomain, 'not .crossDomain');
+          assert.equal(2, err.retries, 'expected an error with .retries');
+          next();
+        } catch(err) {
+          next(err);
+        }
+      });
+    });
   }
 });

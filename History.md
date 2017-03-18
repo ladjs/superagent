@@ -1,3 +1,9 @@
+# 3.5.1 (2017-03-18)
+
+ * Allow crossDomain errors to be retried (#1194) (Michael Olson)
+ * Read responseType property from the correct object (Julien Dupouy)
+ * Check for ownProperty before adding header (Lucas Vieira)
+
 # 3.5.0 (2017-02-23)
 
  * Add errno to distinguish between request timeout and body download timeout (#1184) (Kornel Lesiński)
