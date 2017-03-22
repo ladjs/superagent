@@ -426,7 +426,7 @@ else if (err) {
 </code></pre><h2 id="progress-tracking">Progress tracking</h2>
 <p>SuperAgent fires <code>progress</code> events on upload and download of large files.</p>
 <pre><code>request.post(url)
-  .attach(file)
+  .attach(&#39;field_name&#39;, file)
   .on(&#39;progress&#39;, event =&gt; {
     /* the event is:
     {
