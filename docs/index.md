@@ -576,7 +576,7 @@ Alternatively, you can use the `.ok(callback)` method to decide whether a respon
 SuperAgent fires `progress` events on upload and download of large files.
 
     request.post(url)
-      .attach(file)
+      .attach('field_name', file)
       .on('progress', event => {
         /* the event is:
         {
