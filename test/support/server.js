@@ -448,7 +448,7 @@ app.get('/delay/:ms/ok/:id', function(req, res){
       res.sendStatus(200);
     }, ms);
   } else {
-    res.send('ok');
+    res.send('ok = ' + req.url);
     delete called[id];
   }
 });
