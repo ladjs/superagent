@@ -54,6 +54,15 @@
     "./lib/node/index.js": "./lib/client.js",
     "./test/support/server.js": "./test/support/blank.js"
   },
+  "jspm": {
+    "main": "./lib/client.js",
+    "config": "./config.js",
+    "registery": "jspm",
+    "dependencies": {
+      "emitter": "npm:component-emitter@^1.1.2",
+      "reduce": "npm:reduce-component@^1.0.1"
+    }
+  },
   "component": {
     "scripts": {
       "superagent": "lib/client.js"
