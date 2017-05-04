@@ -175,7 +175,7 @@
 </code></pre><h3 id="facebook-and-accept-json">Facebook and Accept JSON</h3>
 <p>If you are calling Facebook&#39;s API, be sure to send an <code>Accept: application/json</code> header in your request. If you don&#39;t do this, Facebook will respond with <code>Content-Type: text/javascript; charset=UTF-8</code>, which SuperAgent will not parse and thus <code>res.body</code> will be undefined. You can do this with either <code>req.accept(&#39;json&#39;)</code> or <code>req.header(&#39;Accept&#39;, &#39;application/json&#39;)</code>. See <a href="https://github.com/visionmedia/superagent/issues/1078">issue 1078</a> for details.</p>
 <h2 id="query-strings">Query strings</h2>
-<p>  <code>res.query(obj)</code> is a method which may be used to build up a query-string. For example populating <code>?format=json&amp;dest=/login</code> on a <strong>POST</strong>:</p>
+<p>  <code>req.query(obj)</code> is a method which may be used to build up a query-string. For example populating <code>?format=json&amp;dest=/login</code> on a <strong>POST</strong>:</p>
 <pre><code>request
   .post(&#39;/&#39;)
   .query({ format: &#39;json&#39; })
@@ -447,7 +447,7 @@ const res = yield req;
 </code></pre><p>Note that SuperAgent expects the global <code>Promise</code> object to be present. You&#39;ll need a polyfill to use promises in Internet Explorer or Node.js 0.10.</p>
 <h2 id="browser-and-node-versions">Browser and node versions</h2>
 <p>SuperAgent has two implementations: one for web browsers (using XHR) and one for Node.JS (using core http module). By default Browserify and WebPack will pick the browser version.</p>
-<p>If want to use WebPack to compile code for Node.JS, you <em>must</em> specify <a href="webpack.github.io/docs/configuration.html#target">node target</a> in its configuration.</p>
+<p>If want to use WebPack to compile code for Node.JS, you <em>must</em> specify <a href="https://webpack.github.io/docs/configuration.html#target">node target</a> in its configuration.</p>
 <h3 id="using-browser-version-in-electron">Using browser version in electron</h3>
 <p><a href="http://electron.atom.io/">Electron</a> developers report if you would prefer to use the browser version of SuperAgent instead of the Node version, you can <code>require(&#39;superagent/superagent&#39;)</code>. Your requests will now show up in the Chrome developer tools Network tab. Note this environment is not covered by automated test suite and not officially supported.</p>
 
