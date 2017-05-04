@@ -231,7 +231,7 @@ If you are calling Facebook's API, be sure to send an `Accept: application/json`
 
 ## Query strings
 
-  `res.query(obj)` is a method which may be used to build up a query-string. For example populating `?format=json&dest=/login` on a __POST__:
+  `req.query(obj)` is a method which may be used to build up a query-string. For example populating `?format=json&dest=/login` on a __POST__:
 
     request
       .post('/')
