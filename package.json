@@ -54,6 +54,11 @@
     "./lib/node/index.js": "./lib/client.js",
     "./test/support/server.js": "./test/support/blank.js"
   },
+  "browser": {
+    "./lib/node/index.js": "./lib/client.js",
+    "reduce": "./lib/reduce.js",
+    "emitter": "emitter-component"
+  },
   "component": {
     "scripts": {
       "superagent": "lib/client.js"
