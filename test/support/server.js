@@ -227,6 +227,11 @@ app.get('/querystring', function(req, res){
   res.send(req.query);
 });
 
+app.get('/querystring-in-header', function(req, res){
+  res.set('query', JSON.stringify(req.query));
+  res.send();
+});
+
 app.get('/echo-header/:field', function(req, res){
   res.send(req.headers[req.params.field]);
 });

@@ -656,6 +656,26 @@ it('GET querystring with strings and objects', function(next){
   });
 });
 
+it('GET shorthand payload goes to querystring', function(next){
+  request
+  .get(uri + '/querystring', {foo: 'FOO', bar: 'BAR'}, function(err, res){
+    try {
+    assert.deepEqual(res.body, { foo: 'FOO', bar: 'BAR' });
+    next();
+    } catch(e) { next(e); }
+  });
+});
+
+it('HEAD shorthand payload goes to querystring', function(next){
+  request
+  .head(uri + '/querystring-in-header', {foo: 'FOO', bar: 'BAR'}, function(err, res){
+    try {
+    assert.deepEqual(JSON.parse(res.headers.query), { foo: 'FOO', bar: 'BAR' });
+    next();
+    } catch(e) { next(e); }
+  });
+});
+
 it('request(method, url)', function(next){
   request('GET', uri + '/foo').end(function(err, res){
     try {
