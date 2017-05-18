@@ -10,6 +10,7 @@ var request = require('../..'),
     key = fs.readFileSync(__dirname + '/fixtures/key.pem'),
     pfx = fs.readFileSync(__dirname + '/fixtures/cert.pfx'),
     cert = fs.readFileSync(__dirname + '/fixtures/cert.pem'),
+    passpfx = fs.readFileSync(__dirname + '/fixtures/passcert.pfx'),
     server;
 
 
@@ -77,7 +78,6 @@ describe('https', function(){
     })
   })
 
-
   describe('client certificates', function() {
     before(function listen(done) {
       server = https.createServer({
@@ -114,6 +114,19 @@ describe('https', function(){
         request
         .get(testEndpoint)
         .pfx(pfx)
+        .end(function(err, res){
+          assert(res.ok);
+          assert.strictEqual('Safe and secure!', res.text);
+          done();
+        })
+      })
+      it('should give a good response with client pfx with passphrase', function(done){
+        request
+        .get(testEndpoint)
+        .pfx({
+          pfx: passpfx,
+          passphrase: 'test'
+        })
         .end(function(err, res){
           assert(res.ok);
           assert.strictEqual('Safe and secure!', res.text);
