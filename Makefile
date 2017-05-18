@@ -44,12 +44,12 @@ index.html: docs/index.md docs/head.html docs/tail.html
 		> $@
 
 docclean:
-	rm -f index.html test.html
+	rm -f index.html docs/test.html
 
 test-docs: docs/head.html docs/tail.html
 	make test REPORTER=doc \
 		| cat docs/head.html - docs/tail.html \
-		> test.html
+		> docs/test.html
 
 clean:
 	rm -fr superagent.js components
