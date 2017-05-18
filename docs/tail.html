@@ -17,13 +17,20 @@
           .replace(/\b(function|new|throw|return|var|if|else)\b/gm, '<span class="keyword">$1</span>')
       }
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/3.0.0/tocbot.js"></script>
     <script>
-	  $('#menu').tocify({
-	    selectors: 'h2',
-	    hashGenerator: 'pretty'
-	  });
+      // Only use tocbot for main docs, not test docs
+      if (document.querySelector('#superagent')) {
+        tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '#menu',
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '#content',
+          // Which headings to grab inside of the contentSelector element.
+          headingSelector: 'h2',
+          smoothScroll: false
+        });
+      }
     </script>
   </body>
 </html>
