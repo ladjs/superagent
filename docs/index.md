@@ -1,7 +1,7 @@
 
 # SuperAgent
 
- SuperAgent is light-weight progressive ajax API crafted for flexibility, readability, and a low learning curve after being frustrated with many of the existing request APIs. It also works with Node.js!
+SuperAgent is light-weight progressive ajax API crafted for flexibility, readability, and a low learning curve after being frustrated with many of the existing request APIs. It also works with Node.js!
 
      request
        .post('/api/pet')
@@ -18,11 +18,11 @@
 
 ## Test documentation
 
-  The following [test documentation](docs/test.html) was generated with [Mocha's](http://mochajs.org/) "doc" reporter, and directly reflects the test suite. This provides an additional source of documentation.
+The following [test documentation](docs/test.html) was generated with [Mocha's](http://mochajs.org/) "doc" reporter, and directly reflects the test suite. This provides an additional source of documentation.
 
 ## Request basics
 
- A request can be initiated by invoking the appropriate method on the `request` object, then calling `.end()` to send the request. For example a simple __GET__ request:
+A request can be initiated by invoking the appropriate method on the `request` object, then calling `.end()` to send the request. For example a simple __GET__ request:
 
      request
        .get('/search')
@@ -30,7 +30,7 @@
 
        });
 
-  A method string may also be passed:
+A method string may also be passed:
 
     request('GET', '/search').end(callback);
 
@@ -38,7 +38,7 @@ ES6 promises are supported. *Instead* of `.end()` you can call `.then()`:
 
     request('GET', '/search').then(success, failure);
 
- The __Node__ client may also provide absolute URLs. In browsers absolute URLs won't work unless the server implements [CORS](#cors).
+The __Node__ client may also provide absolute URLs. In browsers absolute URLs won't work unless the server implements [CORS](#cors).
 
      request
        .get('http://example.com/search')
@@ -46,7 +46,7 @@ ES6 promises are supported. *Instead* of `.end()` you can call `.then()`:
 
        });
 
- The __Node__ client supports making requests to [Unix Domain Sockets](http://en.wikipedia.org/wiki/Unix_domain_socket):
+The __Node__ client supports making requests to [Unix Domain Sockets](http://en.wikipedia.org/wiki/Unix_domain_socket):
 
      // pattern: https?+unix://SOCKET_PATH/REQUEST_PATH
      //          Use `%2F` as `/` in SOCKET_PATH
@@ -56,7 +56,7 @@ ES6 promises are supported. *Instead* of `.end()` you can call `.then()`:
 
        });
 
-  __DELETE__, __HEAD__, __PATCH__, __POST__, and __PUT__ requests can also be used, simply change the method name:
+__DELETE__, __HEAD__, __PATCH__, __POST__, and __PUT__ requests can also be used, simply change the method name:
 
     request
       .head('/favicon.ico')
@@ -64,7 +64,7 @@ ES6 promises are supported. *Instead* of `.end()` you can call `.then()`:
 
       });
 
-  __DELETE__ can be also called as `.del()` for compatibility with old IE where `delete` is a reserved word.
+__DELETE__ can be also called as `.del()` for compatibility with old IE where `delete` is a reserved word.
 
   The HTTP method defaults to __GET__, so if you wish, the following is valid:
 
@@ -74,7 +74,7 @@ ES6 promises are supported. *Instead* of `.end()` you can call `.then()`:
 
 ## Setting header fields
 
-  Setting header fields is simple, invoke `.set()` with a field name and value:
+Setting header fields is simple, invoke `.set()` with a field name and value:
 
      request
        .get('/search')
@@ -82,7 +82,7 @@ ES6 promises are supported. *Instead* of `.end()` you can call `.then()`:
        .set('Accept', 'application/json')
        .end(callback);
 
-  You may also pass an object to set several fields in a single call:
+You may also pass an object to set several fields in a single call:
 
      request
        .get('/search')
@@ -91,7 +91,7 @@ ES6 promises are supported. *Instead* of `.end()` you can call `.then()`:
 
 ## `GET` requests
 
- The `.query()` method accepts objects, which when used with the __GET__ method will form a query-string. The following will produce the path `/search?query=Manny&range=1..5&order=desc`.
+The `.query()` method accepts objects, which when used with the __GET__ method will form a query-string. The following will produce the path `/search?query=Manny&range=1..5&order=desc`.
 
      request
        .get('/search')
@@ -102,7 +102,7 @@ ES6 promises are supported. *Instead* of `.end()` you can call `.then()`:
 
        });
 
-  Or as a single object:
+Or as a single object:
 
     request
       .get('/search')
@@ -111,7 +111,7 @@ ES6 promises are supported. *Instead* of `.end()` you can call `.then()`:
 
       });
 
-  The `.query()` method accepts strings as well:
+The `.query()` method accepts strings as well:
 
       request
         .get('/querystring')
@@ -120,7 +120,7 @@ ES6 promises are supported. *Instead* of `.end()` you can call `.then()`:
 
         });
 
-  Or joined:
+Or joined:
 
       request
         .get('/querystring')
@@ -143,27 +143,27 @@ You can also use the `.query()` method for HEAD requests. The following will pro
 
 ## `POST` / `PUT` requests
 
-  A typical JSON __POST__ request might look a little like the following, where we set the Content-Type header field appropriately, and "write" some data, in this case just a JSON string.
+A typical JSON __POST__ request might look a little like the following, where we set the Content-Type header field appropriately, and "write" some data, in this case just a JSON string.
 
       request.post('/user')
         .set('Content-Type', 'application/json')
         .send('{"name":"tj","pet":"tobi"}')
         .end(callback)
 
-  Since JSON is undoubtably the most common, it's the _default_! The following example is equivalent to the previous.
+Since JSON is undoubtably the most common, it's the _default_! The following example is equivalent to the previous.
 
       request.post('/user')
         .send({ name: 'tj', pet: 'tobi' })
         .end(callback)
 
-  Or using multiple `.send()` calls:
+Or using multiple `.send()` calls:
 
       request.post('/user')
         .send({ name: 'tj' })
         .send({ pet: 'tobi' })
         .end(callback)
 
-  By default sending strings will set the `Content-Type` to `application/x-www-form-urlencoded`,
+By default sending strings will set the `Content-Type` to `application/x-www-form-urlencoded`,
   multiple calls will be concatenated with `&`, here resulting in `name=tj&pet=tobi`:
 
       request.post('/user')
@@ -171,7 +171,7 @@ You can also use the `.query()` method for HEAD requests. The following will pro
         .send('pet=tobi')
         .end(callback);
 
-  SuperAgent formats are extensible, however by default "json" and "form" are supported. To send the data as `application/x-www-form-urlencoded` simply invoke `.type()` with "form", where the default is "json". This request will __POST__ the body "name=tj&pet=tobi".
+SuperAgent formats are extensible, however by default "json" and "form" are supported. To send the data as `application/x-www-form-urlencoded` simply invoke `.type()` with "form", where the default is "json". This request will __POST__ the body "name=tj&pet=tobi".
 
       request.post('/user')
         .type('form')
@@ -181,14 +181,14 @@ You can also use the `.query()` method for HEAD requests. The following will pro
 
 ## Setting the `Content-Type`
 
-  The obvious solution is to use the `.set()` method:
+The obvious solution is to use the `.set()` method:
 
      request.post('/user')
        .set('Content-Type', 'application/json')
 
-  As a short-hand the `.type()` method is also available, accepting
-  the canonicalized MIME type name complete with type/subtype, or
-  simply the extension name such as "xml", "json", "png", etc:
+As a short-hand the `.type()` method is also available, accepting
+the canonicalized MIME type name complete with type/subtype, or
+simply the extension name such as "xml", "json", "png", etc:
 
      request.post('/user')
        .type('application/json')
@@ -240,7 +240,7 @@ If you are calling Facebook's API, be sure to send an `Accept: application/json`
       .send({ post: 'data', here: 'wahoo' })
       .end(callback);
 
-  By default the query string is not assembled in any particular order. An asciibetically-sorted query string can be enabled with `req.sortQuery()`. You may also provide a custom sorting comparison function with `req.sortQuery(myComparisonFn)`. The comparison function should take 2 arguments and return a negative/zero/positive integer.
+By default the query string is not assembled in any particular order. An asciibetically-sorted query string can be enabled with `req.sortQuery()`. You may also provide a custom sorting comparison function with `req.sortQuery(myComparisonFn)`. The comparison function should take 2 arguments and return a negative/zero/positive integer.
 
 ```js
  // default order
@@ -293,19 +293,19 @@ request
 
 ## Parsing response bodies
 
-  SuperAgent will parse known response-body data for you, currently supporting `application/x-www-form-urlencoded`, `application/json`, and `multipart/form-data`.
+SuperAgent will parse known response-body data for you, currently supporting `application/x-www-form-urlencoded`, `application/json`, and `multipart/form-data`.
 
-  You can set a custom parser (that takes precedence over built-in parsers) with the `.buffer(true).parse(fn)` method. If response buffering is not enabled (`.buffer(false)`) then the `response` event will be emitted without waiting for the body parser to finish, so `response.body` won't be available.
+You can set a custom parser (that takes precedence over built-in parsers) with the `.buffer(true).parse(fn)` method. If response buffering is not enabled (`.buffer(false)`) then the `response` event will be emitted without waiting for the body parser to finish, so `response.body` won't be available.
 
 ### JSON / Urlencoded
 
-  The property `res.body` is the parsed object, for example if a request responded with the JSON string '{"user":{"name":"tobi"}}', `res.body.user.name` would be "tobi". Likewise the x-www-form-urlencoded value of "user[name]=tobi" would yield the same result. Only one level of nesting is supported. If you need more complex data, send JSON instead.
+The property `res.body` is the parsed object, for example if a request responded with the JSON string '{"user":{"name":"tobi"}}', `res.body.user.name` would be "tobi". Likewise the x-www-form-urlencoded value of "user[name]=tobi" would yield the same result. Only one level of nesting is supported. If you need more complex data, send JSON instead.
 
-  Arrays are sent by repeating the key. `.send({color: ['red','blue']})` sends `color=red&color=blue`. If you want the array keys to contain `[]` in their name, you must add it yourself, as SuperAgent doesn't add it automatically.
+Arrays are sent by repeating the key. `.send({color: ['red','blue']})` sends `color=red&color=blue`. If you want the array keys to contain `[]` in their name, you must add it yourself, as SuperAgent doesn't add it automatically.
 
 ### Multipart
 
-  The Node client supports _multipart/form-data_ via the [Formidable](https://github.com/felixge/node-formidable) module. When parsing multipart responses, the object `res.files` is also available to you. Suppose for example a request responds with the following multipart body:
+The Node client supports _multipart/form-data_ via the [Formidable](https://github.com/felixge/node-formidable) module. When parsing multipart responses, the object `res.files` is also available to you. Suppose for example a request responds with the following multipart body:
 
     --whoop
     Content-Disposition: attachment; name="image"; filename="tobi.png"
@@ -319,7 +319,7 @@ request
     Tobi
     --whoop--
 
-  You would have the values `res.body.name` provided as "Tobi", and `res.files.image` as a `File` object containing the path on disk, filename, and other properties.
+You would have the values `res.body.name` provided as "Tobi", and `res.files.image` as a `File` object containing the path on disk, filename, and other properties.
 
 ### Binary
 
@@ -340,32 +340,27 @@ For more information, see the Mozilla Developer Network [xhr.responseType docs](
 
 ## Response properties
 
-  Many helpful flags and properties are set on the `Response` object, ranging from the response text, parsed response body, header fields, status flags and more.
+Many helpful flags and properties are set on the `Response` object, ranging from the response text, parsed response body, header fields, status flags and more.
 
 ### Response text
 
-  The `res.text` property contains the unparsed response body string. This
-  property is always present for the client API, and only when the mime type
-  matches "text/*", "*/json", or "x-www-form-urlencoded" by default for node. The
-  reasoning is to conserve memory, as buffering text of large bodies such as multipart files or images is extremely inefficient.
-
-  To force buffering see the "Buffering responses" section.
+The `res.text` property contains the unparsed response body string. This property is always present for the client API, and only when the mime type matches "text/*", "*/json", or "x-www-form-urlencoded" by default for node. The reasoning is to conserve memory, as buffering text of large bodies such as multipart files or images is extremely inefficient. To force buffering see the "Buffering responses" section.
 
 ### Response body
 
-  Much like SuperAgent can auto-serialize request data, it can also automatically parse it. When a parser is defined for the Content-Type, it is parsed, which by default includes "application/json" and "application/x-www-form-urlencoded". The parsed object is then available via `res.body`.
+Much like SuperAgent can auto-serialize request data, it can also automatically parse it. When a parser is defined for the Content-Type, it is parsed, which by default includes "application/json" and "application/x-www-form-urlencoded". The parsed object is then available via `res.body`.
 
 ### Response header fields
 
-  The `res.header` contains an object of parsed header fields, lowercasing field names much like node does. For example `res.header['content-length']`.
+The `res.header` contains an object of parsed header fields, lowercasing field names much like node does. For example `res.header['content-length']`.
 
 ### Response Content-Type
 
-  The Content-Type response header is special-cased, providing `res.type`, which is void of the charset (if any). For example the Content-Type of "text/html; charset=utf8" will provide "text/html" as `res.type`, and the `res.charset` property would then contain "utf8".
+The Content-Type response header is special-cased, providing `res.type`, which is void of the charset (if any). For example the Content-Type of "text/html; charset=utf8" will provide "text/html" as `res.type`, and the `res.charset` property would then contain "utf8".
 
 ### Response status
 
-  The response status flags help determine if the request was a success, among other useful information, making SuperAgent ideal for interacting with RESTful web services. These flags are currently defined as:
+The response status flags help determine if the request was a success, among other useful information, making SuperAgent ideal for interacting with RESTful web services. These flags are currently defined as:
 
      var type = status / 100 | 0;
 
@@ -391,7 +386,7 @@ For more information, see the Mozilla Developer Network [xhr.responseType docs](
 
 ## Aborting requests
 
-  To abort requests simply invoke the `req.abort()` method.
+To abort requests simply invoke the `req.abort()` method.
 
 ## Timeouts
 
@@ -417,7 +412,7 @@ Timeout errors have a `.timeout` property.
 
 ## Authentication
 
-  In both Node and browsers auth available via the `.auth()` method:
+In both Node and browsers auth available via the `.auth()` method:
 
     request
       .get('http://local')
@@ -425,17 +420,17 @@ Timeout errors have a `.timeout` property.
       .end(callback);
 
 
-  In the _Node_ client Basic auth can be in the URL as "user:pass":
+In the _Node_ client Basic auth can be in the URL as "user:pass":
 
     request.get('http://tobi:learnboost@local').end(callback);
 
-  By default only `Basic` auth is used. In browser you can add `{type:'auto'}` to enable all methods built-in in the browser (Digest, NTLM, etc.):
+By default only `Basic` auth is used. In browser you can add `{type:'auto'}` to enable all methods built-in in the browser (Digest, NTLM, etc.):
 
     request.auth('digest', 'secret', {type:'auto'})
 
 ## Following redirects
 
-  By default up to 5 redirects will be followed, however you may specify this with the `res.redirects(n)` method:
+By default up to 5 redirects will be followed, however you may specify this with the `res.redirects(n)` method:
 
     request
       .get('/some.png')
@@ -444,7 +439,7 @@ Timeout errors have a `.timeout` property.
 
 ## Preserving cookies
 
-  In Node SuperAgent does not save cookies by default, but you can use the `.agent()` method to create a copy of SuperAgent that saves cookies. Each copy has a separate cookie jar.
+In Node SuperAgent does not save cookies by default, but you can use the `.agent()` method to create a copy of SuperAgent that saves cookies. Each copy has a separate cookie jar.
 
     const agent = request.agent();
     agent
@@ -453,11 +448,11 @@ Timeout errors have a `.timeout` property.
         return agent.get('/cookied-page');
       });
 
-  In browsers cookies are managed automatically by the browser, and there is no `.agent()` method.
+In browsers cookies are managed automatically by the browser, and there is no `.agent()` method.
 
 ## Piping data
 
-  The Node client allows you to pipe data to and from the request. For example piping a file's contents as the request:
+The Node client allows you to pipe data to and from the request. For example piping a file's contents as the request:
 
     const request = require('superagent');
     const fs = require('fs');
@@ -467,7 +462,7 @@ Timeout errors have a `.timeout` property.
     req.type('json');
     stream.pipe(req);
 
-  Or piping the response to a file:
+Or piping the response to a file:
 
     const stream = fs.createWriteStream('path/to/my.json');
     const req = request.get('/some.json');
@@ -475,11 +470,11 @@ Timeout errors have a `.timeout` property.
 
 ## Multipart requests
 
-  SuperAgent is also great for _building_ multipart requests for which it provides methods `.attach()` and `.field()`.
+SuperAgent is also great for _building_ multipart requests for which it provides methods `.attach()` and `.field()`.
 
 ### Attaching files
 
-  As mentioned a higher-level API is also provided, in the form of `.attach(name, [path], [filename])` and `.field(name, value)`/`.field(object)`. Attaching several files is simple, you can also provide a custom filename for the attachment, otherwise the basename of the attached file is used.
+As mentioned a higher-level API is also provided, in the form of `.attach(name, [path], [filename])` and `.field(name, value)`/`.field(object)`. Attaching several files is simple, you can also provide a custom filename for the attachment, otherwise the basename of the attached file is used.
 
     request
       .post('/upload')
@@ -490,7 +485,7 @@ Timeout errors have a `.timeout` property.
 
 ### Field values
 
-  Much like form fields in HTML, you can set field values with the `.field(name, value)` method. Suppose you want to upload a few images with your name and email, your request might look something like this:
+Much like form fields in HTML, you can set field values with the `.field(name, value)` method. Suppose you want to upload a few images with your name and email, your request might look something like this:
 
      request
        .post('/upload')
@@ -502,22 +497,19 @@ Timeout errors have a `.timeout` property.
 
 ## Compression
 
-  The node client supports compressed responses, best of all, you don't have to do anything! It just works.
+The node client supports compressed responses, best of all, you don't have to do anything! It just works.
 
 ## Buffering responses
 
-  To force buffering of response bodies as `res.text` you may invoke `req.buffer()`. To undo the default of buffering for text responses such
-  as "text/plain", "text/html" etc you may invoke `req.buffer(false)`.
+To force buffering of response bodies as `res.text` you may invoke `req.buffer()`. To undo the default of buffering for text responses such as "text/plain", "text/html" etc you may invoke `req.buffer(false)`.
 
-  When buffered the `res.buffered` flag is provided, you may use this to
-  handle both buffered and unbuffered responses in the same callback.
+When buffered the `res.buffered` flag is provided, you may use this to handle both buffered and unbuffered responses in the same callback.
 
 ## CORS
 
-  For security reasons, browsers will block cross-origin requests unless the server opts-in using CORS headers. Browsers will also make extra __OPTIONS__ requests to check what HTTP headers and methods are allowed by the server. [Read more about CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS).
+For security reasons, browsers will block cross-origin requests unless the server opts-in using CORS headers. Browsers will also make extra __OPTIONS__ requests to check what HTTP headers and methods are allowed by the server. [Read more about CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS).
 
-  The `.withCredentials()` method enables the ability to send cookies
-  from the origin, however only when `Access-Control-Allow-Origin` is _not_ a wildcard ("*"), and `Access-Control-Allow-Credentials` is "true".
+The `.withCredentials()` method enables the ability to send cookies from the origin, however only when `Access-Control-Allow-Origin` is _not_ a wildcard ("*"), and `Access-Control-Allow-Credentials` is "true".
 
     request
       .get('http://api.example.com:4001/')
@@ -548,13 +540,11 @@ An "error" event is also emitted, with you can listen for:
 
       });
 
-  Note that a 4xx or 5xx response with super agent **are** considered an error by default. For example if you get a 500 or 403 response, this status information will be available via `err.status`. Errors from such responses also contain an `err.response` field with all of the properties mentioned in "[Response properties](#response-properties)". The library behaves in this way to handle the common case of wanting success responses and treating HTTP error status codes as errors while still allowing for custom logic around specific error conditions.
+Note that a 4xx or 5xx response with super agent **are** considered an error by default. For example if you get a 500 or 403 response, this status information will be available via `err.status`. Errors from such responses also contain an `err.response` field with all of the properties mentioned in "[Response properties](#response-properties)". The library behaves in this way to handle the common case of wanting success responses and treating HTTP error status codes as errors while still allowing for custom logic around specific error conditions.
 
-  Network failures, timeouts, and other errors that produce no response will contain no `err.status` or `err.response` fields.
+Network failures, timeouts, and other errors that produce no response will contain no `err.status` or `err.response` fields.
 
-  If you wish to handle 404 or other HTTP error responses, you can query the `err.status` property.
-  When an HTTP error occurs (4xx or 5xx response) the `res.error` property is an `Error` object,
-  this allows you to perform checks such as:
+If you wish to handle 404 or other HTTP error responses, you can query the `err.status` property. When an HTTP error occurs (4xx or 5xx response) the `res.error` property is an `Error` object, this allows you to perform checks such as:
 
     if (err && err.status === 404) {
       alert('oh no ' + res.body.message);
