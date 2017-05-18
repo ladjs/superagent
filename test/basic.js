@@ -360,7 +360,7 @@ describe('request', function(){
       .accept('xml')
       .end(function(err, res){
         try {
-        res.header['accept'].should.equal('text/xml');
+        res.header['accept'].should.equal('application/xml');
         done();
         } catch(e) { done(e); }
       });

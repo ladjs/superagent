@@ -295,7 +295,7 @@ it('request .accept() with xml', function(next){
   .accept('xml')
   .end(function(err, res){
   try {
-    assert.equal('text/xml', res.text, res.text);
+    assert.equal('application/xml', res.text, res.text);
     next();
     } catch(e) { next(e); }
   });
