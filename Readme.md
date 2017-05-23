@@ -19,7 +19,7 @@ Works with [browserify](https://github.com/substack/node-browserify) and should 
 ```js
 request
   .post('/api/pet')
-  .send({ name: 'Manny', species: 'cat' })
+  .send({ name: 'Manny', species: 'cat' }) // sends a JSON post body
   .set('X-API-Key', 'foobar')
   .set('Accept', 'application/json')
   .end(function(err, res){

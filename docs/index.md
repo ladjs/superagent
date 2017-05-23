@@ -150,7 +150,7 @@ A typical JSON __POST__ request might look a little like the following, where we
         .send('{"name":"tj","pet":"tobi"}')
         .end(callback)
 
-Since JSON is undoubtably the most common, it's the _default_! The following example is equivalent to the previous.
+Since JSON is undoubtedly the most common, it's the _default_! The following example is equivalent to the previous.
 
       request.post('/user')
         .send({ name: 'tj', pet: 'tobi' })
