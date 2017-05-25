@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <title>Superagent standalone example</title>
+  <script src="superagent-1.2.0.js"></script>
+ </head>
+ <body>
+  <script>
+    request.get('data.json').end(function (err, res) {
+	  console.log(res.body);
+	});
+  </script>
+ </body>
+</html>
