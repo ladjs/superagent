@@ -31,6 +31,18 @@ describe('Basic auth', function(){
     })
   })
 
+  describe('req.auth(user, pass) including options', function(){
+    it('should set Authorization', function(done){
+      request
+        .get(base + '/basic-auth')
+        .auth('tobi', 'learnboost', { type: 'auto' })
+        .end(function(err, res){
+          res.status.should.equal(200);
+          done();
+        });
+    })
+  })
+
   describe('req.auth(user + ":" + pass)', function(){
     it('should set authorization', function(done){
       request
@@ -40,6 +52,18 @@ describe('Basic auth', function(){
         res.status.should.eql(200);
         done();
       });
+    })
+  })
+
+  describe('req.auth(user + ":" + pass) including options', function(){
+    it('should set authorization', function(done){
+      request
+        .get(base + '/basic-auth/again')
+        .auth('tobi', { type: 'basic' })
+        .end(function(err, res){
+          res.status.should.eql(200);
+          done();
+        });
     })
   })
 })
