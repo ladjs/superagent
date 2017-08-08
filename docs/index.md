@@ -178,6 +178,12 @@ SuperAgent formats are extensible, however by default "json" and "form" are supp
         .send({ name: 'tj' })
         .send({ pet: 'tobi' })
         .end(callback)
+        
+Sending a [`FormData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData/FormData) object is also supported. The following example will __POST__ the content of the HTML form identified by id="myForm":
+
+      request.post('/user')
+        .send(new FormData(document.getElementById('myForm')))
+        .end(callback)
 
 ## Setting the `Content-Type`
 
