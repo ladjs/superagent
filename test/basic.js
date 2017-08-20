@@ -199,7 +199,7 @@ describe('request', function(){
 
   describe('set headers', function() {
     before(function() {
-      Object.prototype.invalid = '\n';
+      Object.prototype.invalid = 'invalid';
     });
 
     after(function() {
@@ -209,8 +209,14 @@ describe('request', function(){
     it('should only set headers for ownProperties of header', function(done) {
       try {
         request
-          .get(uri + '/echo')
-          .end(done);
+          .get(uri + '/echo-headers')
+          .set('valid', 'ok')
+          .end(function(err, res){
+            if (!err && res.body && res.body.valid && !res.body.hasOwnProperty('invalid')) {
+              return done();
+            }
+            done(err || Error("fail"));
+          });
       } catch (e) {
         done(e)
       }

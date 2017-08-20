@@ -236,6 +236,10 @@ app.get('/echo-header/:field', function(req, res){
   res.send(req.headers[req.params.field]);
 });
 
+app.get('/echo-headers', function(req, res){
+  res.json(req.headers);
+});
+
 app.post('/pet', function(req, res){
   res.send('added ' + req.body.name + ' the ' + req.body.species);
 });
