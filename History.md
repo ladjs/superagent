@@ -1,3 +1,11 @@
+# 3.6.0 (2017-08-20)
+
+ * Support disabling TCP_NODELAY option (#1240) (xiamengyu)
+ * Send payload in query string for GET and HEAD shorthand API (Peter Lyons)
+ * Support passphrase with pfx certificate (Paul Westerdale (ABRS Limited))
+ * Documentation improvements (Peter Lyons)
+ * Fixed duplicated query string params (#1200) (Kornel)
+
 # 3.5.1 (2017-03-18)
 
  * Allow crossDomain errors to be retried (#1194) (Michael Olson)
