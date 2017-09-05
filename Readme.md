@@ -75,6 +75,20 @@ Please prefix your plugin with `superagent-*` so that it can easily be found by 
 
 For SuperAgent extensions such as couchdb and oauth visit the [wiki](https://github.com/visionmedia/superagent/wiki).
 
+## Upgrading from previous versions:
+
+Our breaking changes are mostly in rarely used functionality and from stricter error handling.
+
+* [2.x to 3.x](https://github.com/visionmedia/superagent/releases/tag/v3.0.0):
+  - Ensure you're running Node 4 or later. We dropped support for Node 0.x.
+  - Test code that calls `.send()` multiple times. Invalid calls to `.send()` will now throw instead of sending garbage.
+* [1.x to 2.x](https://github.com/visionmedia/superagent/releases/tag/v2.0.0):
+  - If you use `.parse()` in the *browser* version, rename it to `.serialize()`.
+  - If you rely on `undefined` in query-string values being sent literally as the text "undefined", switch to checking for missing value instead. `?key=undefined` is now `?key` (without a value).
+  - If you use `.then()` in Internet Explorer, ensure that you have a polyfill that adds a global `Promise` object.
+* 0.x to 1.x:
+  - Use `.end(function(err, res){})`. 1-argument version is no longer supported.
+
 ## Running node tests
 
 Install dependencies:
