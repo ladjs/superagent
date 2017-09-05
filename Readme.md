@@ -14,15 +14,15 @@ node:
 $ npm install superagent
 ```
 
-Works with [browserify](https://github.com/substack/node-browserify) and should work with [webpack](https://github.com/visionmedia/superagent/wiki/SuperAgent-for-Webpack)
+Works with [browserify](https://github.com/substack/node-browserify) and [webpack](https://github.com/visionmedia/superagent/wiki/SuperAgent-for-Webpack).
 
 ```js
 request
   .post('/api/pet')
   .send({ name: 'Manny', species: 'cat' }) // sends a JSON post body
   .set('X-API-Key', 'foobar')
-  .set('Accept', 'application/json')
-  .end(function(err, res){
+  .set('accept', 'json')
+  .end((err, res) => {
     // Calling the end function will send the request
   });
 ```
@@ -33,27 +33,25 @@ Tested browsers:
 
 - Latest Firefox, Chrome, Safari
 - Latest Android, iPhone
-- IE10 through latest. IE9 with polyfills.
-
-Even though IE9 is supported, a polyfill for `window.FormData` is required for `.field()`.
+- IE10 through latest. IE9 with polyfills. Even though IE9 is supported, a polyfill for `window.FormData` is required for `.field()`.
 
 Node 4 or later is required.
 
-# Plugins
+## Plugins
 
 SuperAgent is easily extended via plugins.
 
 ```js
-var nocache = require('superagent-no-cache');
-var request = require('superagent');
-var prefix = require('superagent-prefix')('/static');
+const nocache = require('superagent-no-cache');
+const request = require('superagent');
+const prefix = require('superagent-prefix')('/static');
 
 request
   .get('/some-url')
   .query({ action: 'edit', city: 'London' }) // query string
   .use(prefix) // Prefixes *only* this request
   .use(nocache) // Prevents caching of *only* this request
-  .end(function(err, res){
+  .end((err, res) => {
     // Do something
   });
 ```
