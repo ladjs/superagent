@@ -486,7 +486,9 @@ To send a file use `.attach(name, [file], [options])`. You can attach multiple f
 
  * `name` — filed name in the form.
  * `file` — either string with file path or `Blob`/`Buffer` object.
- * `options` — (optional) either string with custom file name or `{filename: string}` object. In Node also `{contentType: ''}` is supported. In browser create a `Blob` with an appropriate type instead.
+ * `options` — (optional) either string with custom file name or `{filename: string}` object. In Node also `{contentType: 'mime/type'}` is supported. In browser create a `Blob` with an appropriate type instead.
+
+<br>
 
     request
       .post('/upload')
