@@ -178,7 +178,7 @@ SuperAgent formats are extensible, however by default "json" and "form" are supp
         .send({ name: 'tj' })
         .send({ pet: 'tobi' })
         .end(callback)
-        
+
 Sending a [`FormData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData/FormData) object is also supported. The following example will __POST__ the content of the HTML form identified by id="myForm":
 
       request.post('/user')
@@ -478,20 +478,26 @@ Or piping the response to a file:
 
 SuperAgent is also great for _building_ multipart requests for which it provides methods `.attach()` and `.field()`.
 
+When you use `.field()` or `.attach()` you can't use `.send()` and you *must not* set `Content-Type` (the correct type will be set for you).
+
 ### Attaching files
 
-As mentioned a higher-level API is also provided, in the form of `.attach(name, [path], [filename])` and `.field(name, value)`/`.field(object)`. Attaching several files is simple, you can also provide a custom filename for the attachment, otherwise the basename of the attached file is used.
+To send a file use `.attach(name, [file], [options])`. You can attach multiple files by calling `.attach` multiple times. The arguments are:
+
+ * `name` — filed name in the form.
+ * `file` — either string with file path or `Blob`/`Buffer` object.
+ * `options` — (optional) either string with custom file name or `{filename: string}` object. In Node also `{contentType: ''}` is supported. In browser create a `Blob` with an appropriate type instead.
 
     request
       .post('/upload')
-      .attach('avatar', 'path/to/tobi.png', 'user.png')
-      .attach('image', 'path/to/loki.png')
-      .attach('file', 'path/to/jane.png')
+      .attach('image1', 'path/to/felix.jpeg')
+      .attach('image2', imageBuffer, 'luna.jpeg')
+      .field('caption', 'My cats')
       .end(callback);
 
 ### Field values
 
-Much like form fields in HTML, you can set field values with the `.field(name, value)` method. Suppose you want to upload a few images with your name and email, your request might look something like this:
+Much like form fields in HTML, you can set field values with `.field(name, value)` and `.field({name: value})`. Suppose you want to upload a few images with your name and email, your request might look something like this:
 
      request
        .post('/upload')
