@@ -467,6 +467,8 @@ The Node client allows you to pipe data to and from the request. For example pip
     const req = request.post('/somewhere');
     req.type('json');
     stream.pipe(req);
+    
+Note that when you pipe to a request, superagent sends the piped data with [chunked transfer encoding](https://en.wikipedia.org/wiki/Chunked_transfer_encoding), which isn't supported by all servers (for instance, Python WSGI servers).
 
 Or piping the response to a file:
 
