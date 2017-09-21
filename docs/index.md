@@ -468,6 +468,9 @@ The Node client allows you to pipe data to and from the request. For example pip
     req.type('json');
     stream.pipe(req);
 
+After piping data into the request, it will emit either a `'response'` or an `'error'` event.  You may alternatively use
+`.then` and/or `.catch` to wait on it.
+
 Or piping the response to a file:
 
     const stream = fs.createWriteStream('path/to/my.json');

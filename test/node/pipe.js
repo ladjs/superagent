@@ -44,6 +44,37 @@ describe('request pipe', function(){
     stream.pipe(req);
   })
 
+  it('should resolve after acting as a writable stream', function(done){
+    var req = request.post(base);
+    var stream = fs.createReadStream('test/node/fixtures/user.json');
+
+    req.type('json');
+
+    stream.pipe(req);
+
+    req.then(function(res) {
+      res.body.should.eql({ name: 'tobi' });
+      done();
+    }, function(err) {
+      done.fail(err);
+    })
+  })
+
+  it('should reject after acting as a writable stream', function(done){
+    var req = request.post('invalid');
+    var stream = fs.createReadStream('test/node/fixtures/user.json');
+
+    req.type('json');
+
+    stream.pipe(req);
+
+    req.then(function() {
+      done.fail('expected an error')
+    }, function(err) {
+      done();
+    })
+  })
+
   it('should act as a readable stream', function(done){
     var stream = fs.createWriteStream(destPath);
 
