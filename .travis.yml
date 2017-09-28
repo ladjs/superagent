@@ -1,9 +1,9 @@
 sudo: false
 language: node_js
 node_js:
-  - "7.1"
-  - "6.9"
-  - "4.6"
+  - "8"
+  - "6"
+  - "4"
 
 env:
   global:
@@ -12,5 +12,5 @@ env:
 
 matrix:
   include:
-    - node_js: "4.6"
+    - node_js: "6"
       env: BROWSER=1
