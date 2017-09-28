@@ -366,8 +366,9 @@ describe('request', function(){
       .accept('xml')
       .end(function(err, res){
         try {
-        res.header['accept'].should.equal('application/xml');
-        done();
+          // Mime module keeps changing this :(
+          assert(res.header['accept'] == "application/xml" || res.header['accept'] == "text/xml");
+          done();
         } catch(e) { done(e); }
       });
     })

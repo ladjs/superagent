@@ -294,9 +294,10 @@ it('request .accept() with xml', function(next){
   .get(uri + '/echo-header/accept')
   .accept('xml')
   .end(function(err, res){
-  try {
-    assert.equal('application/xml', res.text, res.text);
-    next();
+    try {
+      // We can't depend on mime module to be consistent with this
+      assert(res.text == "application/xml" || res.text == "text/xml");
+      next();
     } catch(e) { next(e); }
   });
 });
