@@ -1,3 +1,9 @@
+# 3.6.2 (2017-10-02)
+
+ * Upgrade MIME type dependency to a newer, secure version
+ * Recognize PDF MIME as binary
+ * Fix for error in subsequent require() calls (Steven de Salas)
+
 # 3.6.0 (2017-08-20)
 
  * Support disabling TCP_NODELAY option (#1240) (xiamengyu)
