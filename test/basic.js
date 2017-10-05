@@ -182,6 +182,22 @@ describe('request', function(){
         assert.equal(err.message, 'OK');
       });
     })
+
+    it('with .ok() throwing an Error', function(){
+      if ('undefined' === typeof Promise) {
+        return;
+      }
+
+      return request
+      .get(uri + '/echo')
+      .ok(function() {throw new Error('boom');})
+      .then(function(){
+        assert.fail();
+      }, function(err){
+        assert.equal(200, err.response.status);
+        assert.equal(err.message, 'boom');
+      });
+    })
   })
 
   describe('res.header', function(){
