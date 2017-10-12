@@ -20,7 +20,7 @@ test-cov: lib-cov
 	SUPERAGENT_COV=1 $(MAKE) test REPORTER=html-cov > coverage.html
 
 test-browser:
-	SAUCE_APPIUM_VERSION=1.6 ./node_modules/.bin/zuul -- $(BROWSERTESTS)
+	SAUCE_APPIUM_VERSION=1.7 ./node_modules/.bin/zuul -- $(BROWSERTESTS)
 
 test-browser-local:
 	./node_modules/.bin/zuul --no-coverage --local 4000 -- $(BROWSERTESTS)
