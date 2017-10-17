@@ -73,6 +73,21 @@ describe('zlib', function() {
       });
   });
 
+  it('should protect from zip bombs', function(done) {
+    request
+      .get(base)
+      .buffer(true)
+      .maxResponseSize(1)
+      .end(function(err, res) {
+        try {
+          assert.equal("Maximum response size reached", err && err.message);
+          done();
+        } catch(err) {
+          done(err);
+        }
+      });
+  });
+
   it('should ignore trailing junk', function(done) {
     request
       .get(base + '/junk')
