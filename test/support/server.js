@@ -281,6 +281,16 @@ app.post('/auth', basicAuth('foo', 'bar'), function(req, res) {
   res.send({ user : user, pass : pass });
 });
 
+app.post('/auth/again', basicAuth('foo', ''), function(req, res) {
+  var auth = req.headers.authorization,
+    parts = auth.split(' '),
+    credentials = new Buffer(parts[1], 'base64').toString().split(':'),
+    user = credentials[0],
+    pass = credentials[1];
+
+  res.send({ user : user, pass : pass });
+});
+
 app.get('/error', function(req, res){
   res.status(500).send('boom');
 });

@@ -180,6 +180,47 @@ it('auth type "auto"', function(next){
   });
 });
 
+it('auth type "basic" cannot be used if btoa is not defined', function (next) {
+  window.btoa = undefined;
+
+  assert.throws(
+    function () {
+      request
+        .post('/auth')
+        .auth('foo', 'bar', { type: 'basic' });
+    },
+    Error
+  );
+
+  next();
+});
+
+it('basic auth without pass but with options should set authentication', function(next){
+  window.btoa = window.btoa || require('Base64').btoa;
+
+  request
+    .post('/auth/again')
+    .auth('foo', {type: 'basic'})
+    .end(function(err, res){
+      assert.equal('foo', res.body.user);
+      assert.equal('', res.body.pass);
+      next();
+    });
+});
+
+it('basic auth without pass should set authentication', function(next){
+  window.btoa = window.btoa || require('Base64').btoa;
+
+  request
+    .post('/auth/again')
+    .auth('foo')
+    .end(function(err, res){
+      assert.equal('foo', res.body.user);
+      assert.equal('', res.body.pass);
+      next();
+    });
+});
+
 it('progress event listener on xhr object registered when some on the request', function(){
   var req = request
   .get('/foo')
