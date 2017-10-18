@@ -470,6 +470,9 @@ The Node client allows you to pipe data to and from the request. For example pip
     
 Note that when you pipe to a request, superagent sends the piped data with [chunked transfer encoding](https://en.wikipedia.org/wiki/Chunked_transfer_encoding), which isn't supported by all servers (for instance, Python WSGI servers).
 
+After piping data into the request, it will emit either a `'response'` or an `'error'` event.  You may alternatively use
+`.then` and/or `.catch` to wait on it.
+
 Or piping the response to a file:
 
     const stream = fs.createWriteStream('path/to/my.json');
