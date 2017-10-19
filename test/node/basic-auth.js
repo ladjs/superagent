@@ -1,45 +1,44 @@
-var request = require('../../');
-var setup = require('../support/setup');
-var base = setup.uri;
-var URL = require('url');
+"use strict";
+const request = require("../../");
+const setup = require("../support/setup");
+const base = setup.uri;
+const URL = require("url");
 
-describe('Basic auth', function(){
-  describe('when credentials are present in url', function(){
-    it('should set Authorization', function(done){
-      var new_url = URL.parse(base);
-      new_url.auth = 'tobi:learnboost';
-      new_url.pathname = '/basic-auth';
+describe("Basic auth", () => {
+  describe("when credentials are present in url", () => {
+    it("should set Authorization", done => {
+      const new_url = URL.parse(base);
+      new_url.auth = "tobi:learnboost";
+      new_url.pathname = "/basic-auth";
 
-      request
-      .get(URL.format(new_url))
-      .end(function(err, res){
+      request.get(URL.format(new_url)).end((err, res) => {
         res.status.should.equal(200);
         done();
       });
-    })
-  })
+    });
+  });
 
-  describe('req.auth(user, pass)', function(){
-    it('should set Authorization', function(done){
+  describe("req.auth(user, pass)", () => {
+    it("should set Authorization", done => {
       request
-      .get(base + '/basic-auth')
-      .auth('tobi', 'learnboost')
-      .end(function(err, res){
-        res.status.should.equal(200);
-        done();
-      });
-    })
-  })
+        .get(`${base}/basic-auth`)
+        .auth("tobi", "learnboost")
+        .end((err, res) => {
+          res.status.should.equal(200);
+          done();
+        });
+    });
+  });
 
-  describe('req.auth(user + ":" + pass)', function(){
-    it('should set authorization', function(done){
+  describe('req.auth(user + ":" + pass)', () => {
+    it("should set authorization", done => {
       request
-      .get(base + '/basic-auth/again')
-      .auth('tobi')
-      .end(function(err, res){
-        res.status.should.eql(200);
-        done();
-      });
-    })
-  })
-})
+        .get(`${base}/basic-auth/again`)
+        .auth("tobi")
+        .end((err, res) => {
+          res.status.should.eql(200);
+          done();
+        });
+    });
+  });
+});
