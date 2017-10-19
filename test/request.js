@@ -197,7 +197,7 @@ it('del()', function(next){
 });
 
 it('delete()', function(next){
-  request.delete(uri + '/user/12').end(function(err, res){
+  request['delete'](uri + '/user/12').end(function(err, res){
     try {
     assert.equal('deleted', res.text, 'response text');
     next();
