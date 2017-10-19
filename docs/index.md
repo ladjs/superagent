@@ -443,7 +443,9 @@ By default up to 5 redirects will be followed, however you may specify this with
       .redirects(2)
       .end(callback);
 
-## Preserving cookies
+## Agents for global state
+
+### Saving cookies
 
 In Node SuperAgent does not save cookies by default, but you can use the `.agent()` method to create a copy of SuperAgent that saves cookies. Each copy has a separate cookie jar.
 
@@ -454,7 +456,18 @@ In Node SuperAgent does not save cookies by default, but you can use the `.agent
         return agent.get('/cookied-page');
       });
 
-In browsers cookies are managed automatically by the browser, and there is no `.agent()` method.
+In browsers cookies are managed automatically by the browser, so the `.agent()` does not isolate cookies.
+
+### Default options for multiple requests
+
+Regular request methods (`.use()`, `.set()`, `.auth()`) called on the agent will be used as defaults for all requests made by that agent.
+
+    const agent = request.agent()
+      .use(plugin)
+      .auth(shared);
+
+    await agent.get('/with-plugin-and-auth');
+    await agent.get('/also-with-plugin-and-auth');
 
 ## Piping data
 
@@ -467,7 +480,7 @@ The Node client allows you to pipe data to and from the request. For example pip
     const req = request.post('/somewhere');
     req.type('json');
     stream.pipe(req);
-    
+
 Note that when you pipe to a request, superagent sends the piped data with [chunked transfer encoding](https://en.wikipedia.org/wiki/Chunked_transfer_encoding), which isn't supported by all servers (for instance, Python WSGI servers).
 
 Or piping the response to a file:
