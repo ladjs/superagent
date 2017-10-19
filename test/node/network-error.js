@@ -16,11 +16,10 @@ function getFreePort(fn) {
 
 describe("with network error", () => {
   before(function(done) {
-    const self = this;
     // connecting to a free port
     // will trigger a connection refused
     getFreePort(port => {
-      self.port = port;
+      this.port = port;
       done();
     });
   });
