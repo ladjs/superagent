@@ -1,6 +1,7 @@
 # 3.8.0
 
  * Added support for "globally" defined headers and event handlers via `superagent.agent()`. It now remembers default settings for all its requests.
+ * Added optional callback to `.retry()` (Alexander Murphy)
  * Unified auth args handling in node/browser (Edmundo Alvarez)
  * Fixed error handling in zlib pipes (Kornel)
  * Documented that 3xx status codes are errors (Mickey Reiss)
