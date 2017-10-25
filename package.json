@@ -3,7 +3,7 @@
   "version": "3.8.0",
   "description": "elegant & feature rich browser / node HTTP with a fluent API",
   "scripts": {
-    "prepublish": "make all",
+    "prepare": "make all",
     "test": "make test"
   },
   "keywords": [
