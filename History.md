@@ -1,3 +1,7 @@
+# 3.8.1 (2017-11-08)
+
+ * Clear authorization header on cross-domain redirect
+
 # 3.8.0
 
  * Added support for "globally" defined headers and event handlers via `superagent.agent()`. It now remembers default settings for all its requests.
