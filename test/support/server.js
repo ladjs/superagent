@@ -248,6 +248,10 @@ app.get('/pets', function(req, res){
   res.send(['tobi', 'loki', 'jane']);
 });
 
+app.get('/json-seq', function(req, res){
+  res.set('content-type', 'application/json-seq').send('\x1e{"id":1}\n\x1e{"id":2}\n');
+});
+
 app.get('/invalid-json', function(req, res) {
   res.set('content-type', 'application/json');
   // sample invalid json taken from https://github.com/swagger-api/swagger-ui/issues/1354
