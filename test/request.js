@@ -518,6 +518,19 @@ it('GET json', function(next){
   });
 });
 
+it('GET json-seq', function(next){
+  request
+  .get(uri + '/json-seq')
+  .buffer()
+  .end(function(err, res){
+    try{
+    assert.ifError(err);
+    assert.deepEqual(res.text, '\x1e{"id":1}\n\x1e{"id":2}\n');
+    next();
+    } catch(e) { next(e); }
+  });
+});
+
 it('GET x-www-form-urlencoded', function(next){
   request
   .get(uri + '/foo')
