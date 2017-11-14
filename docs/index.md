@@ -493,6 +493,22 @@ Or piping the response to a file:
     const req = request.get('/some.json');
     req.pipe(stream);
 
+Note that you should **NOT** attempt to pipe the result of `.end()` or the `Response` object:
+
+    // Don't do either of these:
+    const stream = getAWritableStream();
+    const req = request
+      .get('/some.json')
+      // this pipes garbage to the stream and fails in unexpected ways
+      .end((err, response) => response.pipe(stream))
+    const req = request
+      .get('/some.json')
+      .end()
+      // this is also unsupported, .pipe calls .end for you.
+      .pipe(stream);
+
+In a [future version](https://github.com/visionmedia/superagent/issues/1188) of superagent, improper calls to `pipe()` will fail.
+
 ## Multipart requests
 
 SuperAgent is also great for _building_ multipart requests for which it provides methods `.attach()` and `.field()`.
