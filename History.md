@@ -1,3 +1,8 @@
+# 3.8.2 (2017-12-09)
+
+ * Fixed handling of exceptions thrown from callbacks
+ * Stricter matching of `+json` MIME types.
+
 # 3.8.1 (2017-11-08)
 
  * Clear authorization header on cross-domain redirect
