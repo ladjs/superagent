@@ -8,12 +8,8 @@ SuperAgent is light-weight progressive ajax API crafted for flexibility, readabi
        .send({ name: 'Manny', species: 'cat' })
        .set('X-API-Key', 'foobar')
        .set('Accept', 'application/json')
-       .end(function(err, res){
-         if (err || !res.ok) {
-           alert('Oh no! error');
-         } else {
-           alert('yay got ' + JSON.stringify(res.body));
-         }
+       .then(function(res) {
+          alert('yay got ' + JSON.stringify(res.body));
        });
 
 ## Test documentation
@@ -22,27 +18,32 @@ The following [test documentation](docs/test.html) was generated with [Mocha's](
 
 ## Request basics
 
-A request can be initiated by invoking the appropriate method on the `request` object, then calling `.end()` to send the request. For example a simple __GET__ request:
+A request can be initiated by invoking the appropriate method on the `request` object, then calling `.then()` (or `.end()` [or `await`](#promise-and-generator-support)) to send the request. For example a simple __GET__ request:
 
      request
        .get('/search')
-       .end(function(err, res){
-
+       .then(function(res) {
+          // res.body, res.headers, res.status
+       })
+       .catch(function(err) {
+          // err.message, err.response
        });
 
-A method string may also be passed:
-
-    request('GET', '/search').end(callback);
-
-ES6 promises are supported. *Instead* of `.end()` you can call `.then()`:
+HTTP method may also be passed as a string:
 
     request('GET', '/search').then(success, failure);
 
-The __Node__ client may also provide absolute URLs. In browsers absolute URLs won't work unless the server implements [CORS](#cors).
+Old-style callbacks are also supported. *Instead of* `.then()` you can call `.end()`:
+
+    request('GET', '/search').end(function(err, res){
+      if (res.ok) {}
+    });
+
+Absolute URLs can be used. In web browsers absolute URLs work only if the server implements [CORS](#cors).
 
      request
        .get('http://example.com/search')
-       .end(function(err, res){
+       .then(function(res) {
 
        });
 
@@ -52,7 +53,7 @@ The __Node__ client supports making requests to [Unix Domain Sockets](http://en.
      //          Use `%2F` as `/` in SOCKET_PATH
      request
        .get('http+unix://%2Fabsolute%2Fpath%2Fto%2Funix.sock/search')
-       .end(function(err, res){
+       .then(res => {
 
        });
 
@@ -60,13 +61,13 @@ __DELETE__, __HEAD__, __PATCH__, __POST__, and __PUT__ requests can also be used
 
     request
       .head('/favicon.ico')
-      .end(function(err, res){
+      .then(function(res) {
 
       });
 
 __DELETE__ can be also called as `.del()` for compatibility with old IE where `delete` is a reserved word.
 
-  The HTTP method defaults to __GET__, so if you wish, the following is valid:
+The HTTP method defaults to __GET__, so if you wish, the following is valid:
 
      request('/search', function(err, res){
 
@@ -80,14 +81,14 @@ Setting header fields is simple, invoke `.set()` with a field name and value:
        .get('/search')
        .set('API-Key', 'foobar')
        .set('Accept', 'application/json')
-       .end(callback);
+       .then(callback);
 
 You may also pass an object to set several fields in a single call:
 
      request
        .get('/search')
        .set({ 'API-Key': 'foobar', Accept: 'application/json' })
-       .end(callback);
+       .then(callback);
 
 ## `GET` requests
 
@@ -98,7 +99,7 @@ The `.query()` method accepts objects, which when used with the __GET__ method w
        .query({ query: 'Manny' })
        .query({ range: '1..5' })
        .query({ order: 'desc' })
-       .end(function(err, res){
+       .then(function(res) {
 
        });
 
@@ -107,7 +108,7 @@ Or as a single object:
     request
       .get('/search')
       .query({ query: 'Manny', range: '1..5', order: 'desc' })
-      .end(function(err, res){
+      .then(function(res) {
 
       });
 
@@ -116,7 +117,7 @@ The `.query()` method accepts strings as well:
       request
         .get('/querystring')
         .query('search=Manny&range=1..5')
-        .end(function(err, res){
+        .then(function(res) {
 
         });
 
@@ -126,7 +127,7 @@ Or joined:
         .get('/querystring')
         .query('search=Manny')
         .query('range=1..5')
-        .end(function(err, res){
+        .then(function(res) {
 
         });
 
@@ -137,7 +138,7 @@ You can also use the `.query()` method for HEAD requests. The following will pro
       request
         .head('/users')
         .query({ email: 'joe@smith.com' })
-        .end(function(err, res){
+        .then(function(res) {
 
         });
 
@@ -148,20 +149,20 @@ A typical JSON __POST__ request might look a little like the following, where we
       request.post('/user')
         .set('Content-Type', 'application/json')
         .send('{"name":"tj","pet":"tobi"}')
-        .end(callback)
+        .then(callback)
 
 Since JSON is undoubtedly the most common, it's the _default_! The following example is equivalent to the previous.
 
       request.post('/user')
         .send({ name: 'tj', pet: 'tobi' })
-        .end(callback)
+        .then(callback)
 
 Or using multiple `.send()` calls:
 
       request.post('/user')
         .send({ name: 'tj' })
         .send({ pet: 'tobi' })
-        .end(callback)
+        .then(callback)
 
 By default sending strings will set the `Content-Type` to `application/x-www-form-urlencoded`,
   multiple calls will be concatenated with `&`, here resulting in `name=tj&pet=tobi`:
@@ -169,7 +170,7 @@ By default sending strings will set the `Content-Type` to `application/x-www-for
       request.post('/user')
         .send('name=tj')
         .send('pet=tobi')
-        .end(callback);
+        .then(callback);
 
 SuperAgent formats are extensible, however by default "json" and "form" are supported. To send the data as `application/x-www-form-urlencoded` simply invoke `.type()` with "form", where the default is "json". This request will __POST__ the body "name=tj&pet=tobi".
 
@@ -177,13 +178,13 @@ SuperAgent formats are extensible, however by default "json" and "form" are supp
         .type('form')
         .send({ name: 'tj' })
         .send({ pet: 'tobi' })
-        .end(callback)
+        .then(callback)
 
 Sending a [`FormData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData/FormData) object is also supported. The following example will __POST__ the content of the HTML form identified by id="myForm":
 
       request.post('/user')
         .send(new FormData(document.getElementById('myForm')))
-        .end(callback)
+        .then(callback)
 
 ## Setting the `Content-Type`
 
@@ -217,8 +218,9 @@ This method has two optional arguments: number of retries (default 3) and a call
 
      request
        .get('http://example.com/search')
-       .retry(2)
-       .end(callback);
+       .retry(2) // or:
+       .retry(2, callback)
+       .then(finished);
 
 Use `.retry()` only with requests that are *idempotent* (i.e. multiple requests reaching the server won't cause undesirable side effects like duplicate purchases).
 
@@ -248,7 +250,7 @@ If you are calling Facebook's API, be sure to send an `Accept: application/json`
       .query({ format: 'json' })
       .query({ dest: '/login' })
       .send({ post: 'data', here: 'wahoo' })
-      .end(callback);
+      .then(callback);
 
 By default the query string is not assembled in any particular order. An asciibetically-sorted query string can be enabled with `req.sortQuery()`. You may also provide a custom sorting comparison function with `req.sortQuery(myComparisonFn)`. The comparison function should take 2 arguments and return a negative/zero/positive integer.
 
@@ -258,7 +260,7 @@ By default the query string is not assembled in any particular order. An asciibe
    .query('name=Nick')
    .query('search=Manny')
    .sortQuery()
-   .end(callback)
+   .then(callback)
 
  // customized sort function
  request.get('/user')
@@ -267,7 +269,7 @@ By default the query string is not assembled in any particular order. An asciibe
    .sortQuery(function(a, b){
      return a.length - b.length;
    })
-   .end(callback)
+   .then(callback)
 ```
 
 ## TLS options
@@ -289,7 +291,7 @@ request
   .post('/client-auth')
   .key(key)
   .cert(cert)
-  .end(callback);
+  .then(callback);
 ```
 
 ```js
@@ -298,7 +300,7 @@ var ca = fs.readFileSync('ca.cert.pem');
 request
   .post('https://localhost/private-ca-server')
   .ca(ca)
-  .end(callback);
+  .then(res => {});
 ```
 
 ## Parsing response bodies
@@ -414,7 +416,7 @@ You should use both `deadline` and `response` timeouts. This way you can use a s
         response: 5000,  // Wait 5 seconds for the server to start sending,
         deadline: 60000, // but allow 1 minute for the file to finish loading.
       })
-      .end(function(err, res){
+      .then(function(res) {
         if (err.timeout) { /* timed out! */ }
       });
 
@@ -427,12 +429,12 @@ In both Node and browsers auth available via the `.auth()` method:
     request
       .get('http://local')
       .auth('tobi', 'learnboost')
-      .end(callback);
+      .then(callback);
 
 
 In the _Node_ client Basic auth can be in the URL as "user:pass":
 
-    request.get('http://tobi:learnboost@local').end(callback);
+    request.get('http://tobi:learnboost@local').then(callback);
 
 By default only `Basic` auth is used. In browser you can add `{type:'auto'}` to enable all methods built-in in the browser (Digest, NTLM, etc.):
 
@@ -445,7 +447,7 @@ By default up to 5 redirects will be followed, however you may specify this with
     request
       .get('/some.png')
       .redirects(2)
-      .end(callback);
+      .then(callback);
 
 ## Agents for global state
 
@@ -530,7 +532,7 @@ To send a file use `.attach(name, [file], [options])`. You can attach multiple f
       .attach('image1', 'path/to/felix.jpeg')
       .attach('image2', imageBuffer, 'luna.jpeg')
       .field('caption', 'My cats')
-      .end(callback);
+      .then(callback);
 
 ### Field values
 
@@ -542,7 +544,7 @@ Much like form fields in HTML, you can set field values with `.field(name, value
        .field('user[email]', 'tobi@learnboost.com')
        .field('friends[]', ['loki', 'jane'])
        .attach('image', 'path/to/tobi.png')
-       .end(callback);
+       .then(callback);
 
 ## Compression
 
@@ -563,7 +565,7 @@ The `.withCredentials()` method enables the ability to send cookies from the ori
     request
       .get('http://api.example.com:4001/')
       .withCredentials()
-      .then(function(res){
+      .then(function(res) {
         assert.equal(200, res.status);
         assert.equal('tobi', res.text);
       })
@@ -575,7 +577,7 @@ Your callback function will always be passed two arguments: error and response. 
     request
      .post('/upload')
      .attach('image', 'path/to/tobi.png')
-     .end(function(err, res){
+     .then(function(res) {
 
      });
 
@@ -585,7 +587,7 @@ An "error" event is also emitted, with you can listen for:
       .post('/upload')
       .attach('image', 'path/to/tobi.png')
       .on('error', handle)
-      .end(function(err, res){
+      .then(function(res) {
 
       });
 
