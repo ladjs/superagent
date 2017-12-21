@@ -23,42 +23,6 @@ describe('request', function(){
       });
     })
 
-    it('should merge cookies if agent is used', function(done){
-      request
-      .agent()
-      .get(base + '/cookie-redirect')
-      .set('Cookie', 'orig=1; replaced=not')
-      .end(function(err, res){
-        try {
-          assert.ifError(err);
-          assert(/orig=1/.test(res.text));
-          assert(/replaced=yes/.test(res.text));
-          assert(/from-redir=1/.test(res.text));
-          done();
-        } catch(err) {
-          done(err);
-        }
-      });
-    })
-
-    it('should not merge cookies if agent is not used', function(done){
-      request
-      .get(base + '/cookie-redirect')
-      .set('Cookie', 'orig=1; replaced=not')
-      .end(function(err, res){
-        try {
-          assert.ifError(err);
-          assert(/orig=1/.test(res.text));
-          assert(/replaced=not/.test(res.text));
-          assert(!/replaced=yes/.test(res.text));
-          assert(!/from-redir/.test(res.text));
-          done();
-        } catch(err) {
-          done(err);
-        }
-      });
-    })
-
     it('should preserve timeout across redirects', function(done){
       request
       .get(base + '/movies/random')

@@ -7,6 +7,43 @@ const request = require("../../");
 
 describe("request", () => {
   describe("on redirect", () => {
+
+    it('should merge cookies if agent is used', function(done){
+      request
+      .agent()
+      .get(base + '/cookie-redirect')
+      .set('Cookie', 'orig=1; replaced=not')
+      .end(function(err, res){
+        try {
+          assert.ifError(err);
+          assert(/orig=1/.test(res.text), "orig=1/.test");
+          assert(/replaced=yes/.test(res.text), "replaced=yes/.test");
+          assert(/from-redir=1/.test(res.text), "from-redir=1");
+          done();
+        } catch(err) {
+          done(err);
+        }
+      });
+    })
+
+    it('should not merge cookies if agent is not used', function(done){
+      request
+      .get(base + '/cookie-redirect')
+      .set('Cookie', 'orig=1; replaced=not')
+      .end(function(err, res){
+        try {
+          assert.ifError(err);
+          assert(/orig=1/.test(res.text), "/orig=1");
+          assert(/replaced=not/.test(res.text), "/replaced=not");
+          assert(!/replaced=yes/.test(res.text), "!/replaced=yes");
+          assert(!/from-redir/.test(res.text), "!/from-redir");
+          done();
+        } catch(err) {
+          done(err);
+        }
+      });
+    })
+
     it("should follow Location", done => {
       const redirects = [];
 
