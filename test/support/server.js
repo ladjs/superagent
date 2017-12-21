@@ -346,6 +346,17 @@ app.options('/options/echo/body', bodyParser.json(), function (req, res) {
   res.send(req.body);
 });
 
+app.get('/cookie-redirect', function(req, res){
+  res.set("Set-Cookie", "replaced=yes");
+  res.append("Set-Cookie", "from-redir=1", true);
+  res.redirect(303, '/cookie-redirect-2');
+});
+
+app.get('/cookie-redirect-2', function(req, res){
+  res.set('content-type', 'text/plain');
+  res.send(req.headers.cookie);
+});
+
 app.put('/redirect-303', function(req, res){
   res.redirect(303, '/reply-method');
 });
