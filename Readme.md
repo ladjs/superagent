@@ -63,13 +63,14 @@ Existing plugins:
  * [superagent-mock](https://github.com/M6Web/superagent-mock) - simulate HTTP calls by returning data fixtures based on the requested URL
  * [superagent-mocker](https://github.com/shuvalov-anton/superagent-mocker) — simulate REST API
  * [superagent-cache](https://github.com/jpodwys/superagent-cache) - A global SuperAgent patch with built-in, flexible caching
-  * [superagent-cache-plugin](https://github.com/jpodwys/superagent-cache-plugin) - A SuperAgent plugin with built-in, flexible caching
+ * [superagent-cache-plugin](https://github.com/jpodwys/superagent-cache-plugin) - A SuperAgent plugin with built-in, flexible caching
  * [superagent-jsonapify](https://github.com/alex94puchades/superagent-jsonapify) - A lightweight [json-api](http://jsonapi.org/format/) client addon for superagent
  * [superagent-serializer](https://github.com/zzarcon/superagent-serializer) - Converts server payload into different cases
  * [superagent-use](https://github.com/koenpunt/superagent-use) - A client addon to apply plugins to all requests.
  * [superagent-httpbackend](https://www.npmjs.com/package/superagent-httpbackend) - stub out requests using AngularJS' $httpBackend syntax
  * [superagent-throttle](https://github.com/leviwheatcroft/superagent-throttle) - queues and intelligently throttles requests
  * [superagent-charset](https://github.com/magicdawn/superagent-charset) - add charset support for node's SuperAgent
+ * [superagent-declare](https://github.com/damoclark/superagent-declare) - A simple [declarative](https://en.wikipedia.org/wiki/Declarative_programming) API for SuperAgent
 
 Please prefix your plugin with `superagent-*` so that it can easily be found by others.
 
