@@ -102,6 +102,7 @@ describe("https", () => {
           .key(key)
           .cert(cert)
           .end((err, res) => {
+            assert.ifError(err);
             assert(res.ok);
             assert.strictEqual("Safe and secure!", res.text);
             done();
@@ -112,6 +113,7 @@ describe("https", () => {
           .get(testEndpoint)
           .pfx(pfx)
           .end((err, res) => {
+            assert.ifError(err);
             assert(res.ok);
             assert.strictEqual("Safe and secure!", res.text);
             done();
@@ -125,6 +127,7 @@ describe("https", () => {
             passphrase: "test",
           })
           .end((err, res) => {
+            assert.ifError(err);
             assert(res.ok);
             assert.strictEqual("Safe and secure!", res.text);
             done();
@@ -136,9 +139,11 @@ describe("https", () => {
       it("should be able to make multiple requests without redefining the certificates", done => {
         const agent = request.agent({ ca, key, cert });
         agent.get(testEndpoint).end((err, res) => {
+          assert.ifError(err);
           assert(res.ok);
           assert.strictEqual("Safe and secure!", res.text);
           agent.get(url.parse(testEndpoint)).end((err, res) => {
+            assert.ifError(err);
             assert(res.ok);
             assert.strictEqual("Safe and secure!", res.text);
             done();
@@ -148,9 +153,11 @@ describe("https", () => {
       it("should be able to make multiple requests without redefining pfx", done => {
         const agent = request.agent({ pfx });
         agent.get(testEndpoint).end((err, res) => {
+          assert.ifError(err);
           assert(res.ok);
           assert.strictEqual("Safe and secure!", res.text);
           agent.get(url.parse(testEndpoint)).end((err, res) => {
+            assert.ifError(err);
             assert(res.ok);
             assert.strictEqual("Safe and secure!", res.text);
             done();
