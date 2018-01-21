@@ -208,8 +208,28 @@ simply the extension name such as "xml", "json", "png", etc:
 
 ## Serializing request body
 
-SuperAgent will automatically serialize JSON and forms. If you want to send the payload in a custom format, you can replace the built-in serialization with `.serialize()` method.
+SuperAgent will automatically serialize JSON and forms.
+You can setup automatic serialization for other types as well:
 
+```js
+request.serialize['application/xml'] = function (obj) {
+    return 'string generated from obj';
+};
+
+//going forward, all requests with a Content-type of
+//'application/xml' will be automatically serialized
+```
+If you want to send the payload in a custom format, you can replace
+the built-in serialization with the `.serialize()` method on a per-request basis:
+
+```js
+request
+    .post('/user')
+    .send({foo: 'bar'})
+    .serialize(function serializer(obj) {
+        return 'string generated from obj';
+    });
+```
 ## Retrying requests
 
 When given the `.retry()` method, SuperAgent will automatically retry requests, if they fail in a way that is transient or could be due to a flaky Internet connection.
@@ -305,7 +325,27 @@ request
 
 ## Parsing response bodies
 
-SuperAgent will parse known response-body data for you, currently supporting `application/x-www-form-urlencoded`, `application/json`, and `multipart/form-data`.
+SuperAgent will parse known response-body data for you,
+currently supporting `application/x-www-form-urlencoded`,
+`application/json`, and `multipart/form-data`. You can setup
+automatic parsing for other response-body data as well:
+
+```js
+//browser
+request.parse['application/xml'] = function (str) {
+    return {'object': 'parsed from str'};
+};
+
+//node
+request.parse['application/xml'] = function (res, cb) {
+    //parse response text and set res.body here
+
+    cb(null, res);
+};
+
+//going forward, responses of type 'application/xml'
+//will be parsed automatically
+```
 
 You can set a custom parser (that takes precedence over built-in parsers) with the `.buffer(true).parse(fn)` method. If response buffering is not enabled (`.buffer(false)`) then the `response` event will be emitted without waiting for the body parser to finish, so `response.body` won't be available.
 
