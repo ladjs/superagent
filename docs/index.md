@@ -514,10 +514,8 @@ Regular request methods called on the agent will be used as defaults for all req
 
     await agent.get('/with-plugin-and-auth');
     await agent.get('/also-with-plugin-and-auth');
-   
-The complete list of methods that the agent can use to set defaults is:
 
-     "use", "on", "once", "set", "query", "type", "accept", "auth", "withCredentials", "sortQuery", "retry", "ok", "redirects", "timeout", "buffer", "serialize", "parse", "ca", "key", "pfx", "cert"
+The complete list of methods that the agent can use to set defaults is: `use`, `on`, `once`, `set`, `query`, `type`, `accept`, `auth`, `withCredentials`, `sortQuery`, `retry`, `ok`, `redirects`, `timeout`, `buffer`, `serialize`, `parse`, `ca`, `key`, `pfx`, `cert`.
 
 ## Piping data
 
