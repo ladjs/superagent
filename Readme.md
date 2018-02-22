@@ -70,6 +70,7 @@ Existing plugins:
  * [superagent-httpbackend](https://www.npmjs.com/package/superagent-httpbackend) - stub out requests using AngularJS' $httpBackend syntax
  * [superagent-throttle](https://github.com/leviwheatcroft/superagent-throttle) - queues and intelligently throttles requests
  * [superagent-charset](https://github.com/magicdawn/superagent-charset) - add charset support for node's SuperAgent
+ * [superagent-verbose-errors](https://github.com/jcoreio/superagent-verbose-errors) - include response body in error messages for failed requests
 
 Please prefix your plugin with `superagent-*` so that it can easily be found by others.
 
