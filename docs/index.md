@@ -563,7 +563,7 @@ When you use `.field()` or `.attach()` you can't use `.send()` and you *must not
 
 To send a file use `.attach(name, [file], [options])`. You can attach multiple files by calling `.attach` multiple times. The arguments are:
 
- * `name` — file name in the form.
+ * `name` — field name in the form.
  * `file` — either string with file path or `Blob`/`Buffer` object.
  * `options` — (optional) either string with custom file name or `{filename: string}` object. In Node also `{contentType: 'mime/type'}` is supported. In browser create a `Blob` with an appropriate type instead.
 
