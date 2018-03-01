@@ -519,7 +519,9 @@ The complete list of methods that the agent can use to set defaults is: `use`, `
 
 ## Piping data
 
-The Node client allows you to pipe data to and from the request. For example piping a file's contents as the request:
+The Node client allows you to pipe data to and from the request. Please note that `.pipe()` is used **instead of** `.end()`/`.then()` methods.
+
+For example piping a file's contents as the request:
 
     const request = require('superagent');
     const fs = require('fs');
@@ -537,19 +539,19 @@ Or piping the response to a file:
     const req = request.get('/some.json');
     req.pipe(stream);
 
-Note that you should **NOT** attempt to pipe the result of `.end()` or the `Response` object:
+ It's not possible to mix pipes and callbacks or promises. Note that you should **NOT** attempt to pipe the result of `.end()` or the `Response` object:
 
     // Don't do either of these:
     const stream = getAWritableStream();
     const req = request
       .get('/some.json')
-      // this pipes garbage to the stream and fails in unexpected ways
-      .end((err, response) => response.pipe(stream))
+      // BAD: this pipes garbage to the stream and fails in unexpected ways
+      .end((err, this_does_not_work) => this_does_not_work.pipe(stream))
     const req = request
       .get('/some.json')
       .end()
-      // this is also unsupported, .pipe calls .end for you.
-      .pipe(stream);
+      // BAD: this is also unsupported, .pipe calls .end for you.
+      .pipe(nope_its_too_late);
 
 In a [future version](https://github.com/visionmedia/superagent/issues/1188) of superagent, improper calls to `pipe()` will fail.
 
@@ -673,7 +675,9 @@ SuperAgent fires `progress` events on upload and download of large files.
 
 ## Promise and Generator support
 
-SuperAgent's request is a "thenable" object that's compatible with JavaScript promises and `async`/`await` syntax. Do not call `.end()` if you're using promises.
+SuperAgent's request is a "thenable" object that's compatible with JavaScript promises and `async`/`await` syntax.
+
+If you're using promises, **do not** call `.end()` or `.pipe()`. Any use of `.then()` or `await` disables all other ways of using the request.
 
 Libraries like [co](https://github.com/tj/co) or a web framework like [koa](https://github.com/koajs/koa) can `yield` on any SuperAgent method:
 
