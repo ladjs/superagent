@@ -82,4 +82,24 @@ describe("flags", () => {
       });
     });
   });
+
+  describe("with 201 Created", () => {
+    it("should set res.created", done => {
+      request.post(`${base}/created`).end((err, res) => {
+        assert(!err);
+        assert(res.created, "response should be .created");
+        done();
+      });
+    });
+  });
+
+  describe("with 422 Unprocessable Entity", () => {
+    it("should set res.unprocessableEntity", done => {
+      request.post(`${base}/unprocessable-entity`).end((err, res) => {
+        assert(err);
+        assert(res.unprocessableEntity, "response should be .unprocessableEntity");
+        done();
+      });
+    });
+  });
 });
