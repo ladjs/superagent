@@ -310,6 +310,14 @@ app.delete('/no-content', function(req, res){
   res.sendStatus(204);
 });
 
+app.post('/created', function(req, res) {
+  res.status(201).send('created');
+});
+
+app.post('/unprocessable-entity', function(req, res) {
+  res.status(422).send('unprocessable entity');
+});
+
 app.get('/arraybuffer', function(req, res) {
   var content = new ArrayBuffer(1000);
   res.set('Content-Type', 'application/vnd.superagent');
