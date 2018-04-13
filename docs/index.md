@@ -456,8 +456,10 @@ You should use both `deadline` and `response` timeouts. This way you can use a s
         response: 5000,  // Wait 5 seconds for the server to start sending,
         deadline: 60000, // but allow 1 minute for the file to finish loading.
       })
-      .then(function(res) {
-        if (err.timeout) { /* timed out! */ }
+      .then(res => {
+          /* responded in time */
+        }, err => {
+          if (err.timeout) { /* timed out! */ } else { /* other error */ }
       });
 
 Timeout errors have a `.timeout` property.
