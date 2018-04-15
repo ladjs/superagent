@@ -8,12 +8,12 @@ const request = require("../../");
 describe("request", () => {
   describe("on redirect", () => {
 
-    it('should merge cookies if agent is used', function(done){
+    it('should merge cookies if agent is used', done => {
       request
       .agent()
-      .get(base + '/cookie-redirect')
+      .get(`${base}/cookie-redirect`)
       .set('Cookie', 'orig=1; replaced=not')
-      .end(function(err, res){
+      .end((err, res) => {
         try {
           assert.ifError(err);
           assert(/orig=1/.test(res.text), "orig=1/.test");
@@ -26,11 +26,11 @@ describe("request", () => {
       });
     })
 
-    it('should not merge cookies if agent is not used', function(done){
+    it('should not merge cookies if agent is not used', done => {
       request
-      .get(base + '/cookie-redirect')
+      .get(`${base}/cookie-redirect`)
       .set('Cookie', 'orig=1; replaced=not')
-      .end(function(err, res){
+      .end((err, res) => {
         try {
           assert.ifError(err);
           assert(/orig=1/.test(res.text), "/orig=1");
