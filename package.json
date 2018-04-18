@@ -31,7 +31,7 @@
     "form-data": "^2.3.1",
     "formidable": "^1.2.0",
     "methods": "^1.1.1",
-    "mime": "^1.4.1",
+    "mime": "^2.0.3",
     "qs": "^6.5.1",
     "readable-stream": "^2.3.5"
   },
