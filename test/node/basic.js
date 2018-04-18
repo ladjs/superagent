@@ -138,6 +138,24 @@ describe("[node] request", () => {
           done();
         });
     });
+    it("should take precedence over request.buffer['someMimeType'] = false", done => {
+        const type = 'application/barbaz';
+        const send = 'some text';
+        request.buffer[type] = false;
+        request
+            .post(`${base}/echo`)
+            .type(type)
+            .send(send)
+            .buffer()
+            .end((err, res) => {
+                delete request.buffer[type];
+                assert.equal(null, err);
+                assert.equal(res.type, type);
+                assert.equal(send, res.text);
+                assert(res.buffered);
+                done();
+            })
+    })
   });
 
   describe(".buffer(false)", () => {
@@ -162,6 +180,33 @@ describe("[node] request", () => {
           });
         });
     });
+      it("should take precedence over request.buffer['someMimeType'] = true", done => {
+          const type = 'application/foobar';
+          const send = 'hello this is a dog';
+          request.buffer[type] = true;
+          request
+              .post(`${base}/echo`)
+              .type(type)
+              .send(send)
+              .buffer(false)
+              .end((err, res) => {
+                  delete request.buffer[type];
+                  assert.equal(null, err);
+                  assert.equal(null, res.text);
+                  assert.equal(res.type, type);
+                  assert(!res.buffered);
+                  res.body.should.eql({});
+                  let buf = "";
+                  res.setEncoding("utf8");
+                  res.on("data", chunk => {
+                      buf += chunk;
+                  });
+                  res.on("end", () => {
+                      buf.should.equal(send);
+                      done();
+                  });
+              });
+      });
   });
 
   describe(".withCredentials()", () => {

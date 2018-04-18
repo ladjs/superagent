@@ -23,4 +23,8 @@ describe("exports", () => {
       "image",
     ]);
   });
+
+  it("should export .buffer", () => {
+    Object.keys(request.buffer).should.eql([]);
+  });
 });
