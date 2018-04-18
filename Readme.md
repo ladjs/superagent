@@ -35,7 +35,7 @@ Tested browsers:
 - Latest Android, iPhone
 - IE10 through latest. IE9 with polyfills. Even though IE9 is supported, a polyfill for `window.FormData` is required for `.field()`.
 
-Node 4 or later is required.
+Node 6 or later is required.
 
 ## Plugins
 

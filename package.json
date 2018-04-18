@@ -1,6 +1,6 @@
 {
   "name": "superagent",
-  "version": "3.8.2",
+  "version": "4.0.0-alpha.1",
   "description": "elegant & feature rich browser / node HTTP with a fluent API",
   "scripts": {
     "prepare": "make all",
@@ -61,6 +61,6 @@
   },
   "main": "./lib/node/index.js",
   "engines": {
-    "node": ">= 4.0"
+    "node": ">= 6.0"
   }
 }
