@@ -142,12 +142,12 @@ describe('.retry(count)', function(){
   });
 
   it('should handle successful request after repeat attempt from server timeout', function(done) {
-    var url = '/delay/400/ok/' + uniqid() + '?built=in';
+    var url = '/delay/600/ok/' + uniqid() + '?built=in';
     request
     .get(base + url)
     .query("string=ified")
     .query({"json":"ed"})
-    .timeout(200)
+    .timeout(300)
     .retry(2)
     .end(function(err, res){
       try {
