@@ -6,7 +6,7 @@ const base = setup.uri;
 
 describe("req.buffer['someMimeType']", () => {
 
-    it('should respect that agent.buffer(true) takes precedent', () => {
+    it('should respect that agent.buffer(true) takes precedent', done => {
         const agent = request.agent();
         agent.buffer(true);
         const type = 'application/somerandomtype';
@@ -26,7 +26,7 @@ describe("req.buffer['someMimeType']", () => {
             })
     });
 
-    it('should respect that agent.buffer(false) takes precedent', () => {
+    it('should respect that agent.buffer(false) takes precedent', done => {
         const agent = request.agent();
         agent.buffer(false);
         const type = 'application/barrr';
