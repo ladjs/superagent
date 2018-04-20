@@ -5,6 +5,10 @@ const request = require("../.."),
   fs = require("fs"),
   app = express();
 
+app.get("/raw-query", (req, res) => {
+  res.status(200).send(req.url.substr(req.url.indexOf('?') + 1));
+})
+
 app.get("/", (req, res) => {
   res.status(200).send(req.query);
 });
@@ -85,6 +89,31 @@ describe("req.query(String)", () => {
         done();
       });
   });
+
+  it("should not encode raw backticks, but leave encoded ones as is", () => {
+    return Promise.all([
+      request
+        .get(`${base}/raw-query`)
+        .query("name=`t%60bi`&age`=2")
+        .then(res => {
+          res.text.should.eql("name=`t%60bi`&age`=2");
+        }),
+
+      request
+        .get(base + "/raw-query?`age%60`=2%60\`")
+        .then(res => {
+          res.text.should.eql("`age%60`=2%60`");
+        }),
+
+      request
+        .get(`${base}/raw-query`)
+        .query("name=`t%60bi`")
+        .query("age`=2")
+        .then(res => {
+          res.text.should.eql("name=`t%60bi`&age`=2");
+        })
+    ]);
+  });
 });
 
 describe("req.query(Object)", () => {
@@ -96,6 +125,19 @@ describe("req.query(Object)", () => {
       .query({ limit: ["1", "2"] })
       .end((err, res) => {
         res.body.should.eql({ name: "tobi", order: "asc", limit: ["1", "2"] });
+        done();
+      });
+  });
+
+  // See commit message for the reasoning here.
+  it("should encode raw backticks", done => {
+    request
+      .get(`${base}/raw-query`)
+      .query({ name: "`tobi`" })
+      .query({ "orde%60r": null })
+      .query({ "`limit`": ["%602`"] })
+      .end((err, res) => {
+        res.text.should.eql("name=%60tobi%60&orde%2560r&%60limit%60=%25602%60");
         done();
       });
   });
