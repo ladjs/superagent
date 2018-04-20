@@ -30,6 +30,7 @@ describe('request.serializeObject()', function(){
     serialize({ name: 'tj', age: 24 }, 'name=tj&age=24');
     serialize({ name: '&tj&' }, 'name=%26tj%26');
     serialize({ '&name&': 'tj' }, '%26name%26=tj');
+    serialize({ hello: "`test`" }, "hello=%60test%60");
   });
 });
 
@@ -40,6 +41,7 @@ describe('request.parseString()', function(){
     parse('redirect=/&ok', { redirect: '/', ok: '' });
     parse('%26name=tj', { '&name': 'tj' });
     parse('name=tj%26', { name: 'tj&' });
+    parse("%60", { "`": "" });
   });
 });
 
