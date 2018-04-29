@@ -12,3 +12,8 @@ browsers:
     version: latest
   - name: ie
     version: 9..latest
+browserify:
+  - transform:
+      name: babelify
+      presets:
+        - [ babel-preset-es2015, { loose: true } ]

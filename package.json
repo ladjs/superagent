@@ -37,6 +37,9 @@
   },
   "devDependencies": {
     "Base64": "^1.0.1",
+    "babel-core": "^6.26.3",
+    "babel-preset-es2015": "^6.24.1",
+    "babelify": "^8.0.0",
     "basic-auth-connect": "^1.0.0",
     "body-parser": "^1.18.2",
     "browserify": "^16.2.0",

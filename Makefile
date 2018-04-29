@@ -29,6 +29,7 @@ lib-cov:
 
 superagent.js: lib/node/*.js lib/node/parsers/*.js
 	@./node_modules/.bin/browserify \
+		-t [ babelify --presets [ "babel-preset-es2015" --loose true ] ]  \
 		--standalone superagent \
 		--outfile superagent.js .
 
