@@ -1,3 +1,21 @@
+# 4.0.0
+
+## Breaking changes
+
+ * Node.js v4 has reached it's end of life, so we no longer support it. It's v6+ or later.
+ * We now use ES6 in the browser code, too.
+    * If you're using Browserify or Webpack to package code for Internet Explorer, you will also have to use Babel.
+    * The pre-built node_modules/superagent.js is still ES5-compatible.
+
+## Minor changes
+
+ * Throw if `req.abort().end()` is called
+ * Throw if using unsupported mix of send and field
+ * Reject `.end()` promise on all error events (Kornel Lesiński)
+ * Set `https.servername` from the `Host` header (Kornel Lesiński)
+ * Leave backticks unencoded in query strings where possible (Ethan Resnick)
+ * Update node-mime to 2.x (Alexey Kucherenko)
+ * Allow default buffer settings based on response-type (shrey)
 
 # 3.8.3 (2018-04-29)
 
