@@ -10,7 +10,7 @@ function read(file) {
   return fs.readFileSync(file, "utf8");
 }
 
-describe("Reques", () => {
+describe("Multipart", () => {
   describe("#field(name, value)", () => {
     it("should set a multipart field value", () => {
       const req = request.post(`${base}/echo`);
@@ -90,6 +90,14 @@ describe("Reques", () => {
           if (err) return done(err);
           assert(0, "end() was called");
         });
+      });
+
+      it("promise should fail", () => {
+        request.post('nevermind')
+        .field({a:1,b:2})
+        .attach('c', 'does-not-exist.txt')
+        .then(() => assert.fail("It should not allow this"))
+        .catch(() => true);
       });
     });
   });
