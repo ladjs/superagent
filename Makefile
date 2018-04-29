@@ -13,7 +13,6 @@ test-node:
 		--require should \
 		--reporter $(REPORTER) \
 		--timeout 5000 \
-		--growl \
 		$(NODETESTS)
 
 test-cov: lib-cov
