@@ -1,3 +1,11 @@
+
+# 3.8.3 (2018-04-29)
+
+ * Add flags for 201 & 422 responses (Nikhil Fadnis)
+ * Emit progress event while uploading Node `Buffer` via send method (Sergey Akhalkov)
+ * Fixed setting correct cookies for redirects (Damien Clark)
+ * Replace .catch with ['catch'] for IE9 Support (Miguel Stevens)
+
 # 3.8.2 (2017-12-09)
 
  * Fixed handling of exceptions thrown from callbacks
