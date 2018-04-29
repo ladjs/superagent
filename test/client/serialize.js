@@ -1,16 +1,16 @@
-var assert = require('assert');
+const assert = require('assert');
 
-var request = require('../../');
+const request = require('../../');
 
 function serialize(obj, res) {
-  var val = request.serializeObject(obj);
+  const val = request.serializeObject(obj);
   assert.equal(val, res
     , JSON.stringify(obj) + ' to "' + res + '" serialization failed. got: '
     + '"' + val + '"');
 }
 
 function parse(str, obj) {
-  var val = request.parseString(str);
+  const val = request.parseString(str);
   assert.deepEqual(val
     , obj
     , '"' + str + '" to '
@@ -18,8 +18,8 @@ function parse(str, obj) {
     + JSON.stringify(val));
 }
 
-describe('request.serializeObject()', function(){
-  it('should serialize', function() {
+describe('request.serializeObject()', () => {
+  it('should serialize', () => {
     serialize('test', 'test');
     serialize('foo=bar', 'foo=bar');
     serialize({ foo: 'bar' }, 'foo=bar');
@@ -34,8 +34,8 @@ describe('request.serializeObject()', function(){
   });
 });
 
-describe('request.parseString()', function(){
-  it('should parse', function() {
+describe('request.parseString()', () => {
+  it('should parse', () => {
     parse('name=tj', { name: 'tj' });
     parse('name=Manny&species=cat', { name: 'Manny', species: 'cat' });
     parse('redirect=/&ok', { redirect: '/', ok: '' });
@@ -45,17 +45,17 @@ describe('request.parseString()', function(){
   });
 });
 
-describe('Merging objects', function(){
-  it('Don\'t mix FormData and JSON', function(){
+describe('Merging objects', () => {
+  it('Don\'t mix FormData and JSON', () => {
     if (!window.FormData) {
       // Skip test if FormData is not supported by browser
       return;
     }
 
-    var data = new FormData();
+    const data = new FormData();
     data.append('foo', 'bar');
 
-    assert.throws(function(){
+    assert.throws(() => {
       request
         .post('/echo')
         .send(data)
@@ -63,7 +63,7 @@ describe('Merging objects', function(){
     });
   });
 
-  it('Don\'t mix Blob and JSON', function(){
+  it('Don\'t mix Blob and JSON', () => {
     if (!window.Blob) {
       return;
     }
@@ -74,7 +74,7 @@ describe('Merging objects', function(){
       .send(false)
       .send({allowed:true});
 
-    assert.throws(function(){
+    assert.throws(() => {
       request
         .post('/echo')
         .send(new Blob(["hello"]))

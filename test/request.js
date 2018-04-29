@@ -1,22 +1,22 @@
-var setup = require('./support/setup');
-var uri = setup.uri;
-var assert = require('assert');
-var request = require('../');
+const setup = require('./support/setup');
+const uri = setup.uri;
+const assert = require('assert');
+const request = require('../');
 
 describe('request', function() {
   this.timeout(20000);
 
-it('Request inheritance', function(){
+it('Request inheritance', () => {
   assert(request.get(uri + '/') instanceof request.Request);
 });
 
-it('request() simple GET without callback', function(next){
+it('request() simple GET without callback', next => {
   request('GET', 'test/test.request.js').end();
   next();
 });
 
-it('request() simple GET', function(next){
-  request('GET', uri + '/ok').end(function(err, res){
+it('request() simple GET', next => {
+  request('GET', uri + '/ok').end((err, res) => {
     try {
     assert(res instanceof request.Response, 'respond with Response');
     assert(res.ok, 'response should be ok');
@@ -26,8 +26,8 @@ it('request() simple GET', function(next){
   });
 });
 
-it('request() simple HEAD', function(next){
-  request.head(uri + '/ok').end(function(err, res){
+it('request() simple HEAD', next => {
+  request.head(uri + '/ok').end((err, res) => {
     try {
     assert(res instanceof request.Response, 'respond with Response');
     assert(res.ok, 'response should be ok');
@@ -38,8 +38,8 @@ it('request() simple HEAD', function(next){
 });
 
 
-it('request() GET 5xx', function(next){
-  request('GET', uri + '/error').end(function(err, res){
+it('request() GET 5xx', next => {
+  request('GET', uri + '/error').end((err, res) => {
     try {
     assert(err);
     assert.equal(err.message, 'Internal Server Error');
@@ -52,8 +52,8 @@ it('request() GET 5xx', function(next){
   });
 });
 
-it('request() GET 4xx', function(next){
-  request('GET', uri + '/notfound').end(function(err, res){
+it('request() GET 4xx', next => {
+  request('GET', uri + '/notfound').end((err, res) => {
     try {
     assert(err);
     assert.equal(err.message, 'Not Found');
@@ -66,8 +66,8 @@ it('request() GET 4xx', function(next){
   });
 });
 
-it('request() GET 404 Not Found', function(next){
-  request('GET', uri + '/notfound').end(function(err, res){
+it('request() GET 404 Not Found', next => {
+  request('GET', uri + '/notfound').end((err, res) => {
     try {
     assert(err);
     assert(res.notFound, 'response should be .notFound');
@@ -76,8 +76,8 @@ it('request() GET 404 Not Found', function(next){
   });
 });
 
-it('request() GET 400 Bad Request', function(next){
-  request('GET', uri + '/bad-request').end(function(err, res){
+it('request() GET 400 Bad Request', next => {
+  request('GET', uri + '/bad-request').end((err, res) => {
     try {
     assert(err);
     assert(res.badRequest, 'response should be .badRequest');
@@ -86,8 +86,8 @@ it('request() GET 400 Bad Request', function(next){
   });
 });
 
-it('request() GET 401 Bad Request', function(next){
-  request('GET', uri + '/unauthorized').end(function(err, res){
+it('request() GET 401 Bad Request', next => {
+  request('GET', uri + '/unauthorized').end((err, res) => {
     try {
     assert(err);
     assert(res.unauthorized, 'response should be .unauthorized');
@@ -96,8 +96,8 @@ it('request() GET 401 Bad Request', function(next){
   });
 });
 
-it('request() GET 406 Not Acceptable', function(next){
-  request('GET', uri + '/not-acceptable').end(function(err, res){
+it('request() GET 406 Not Acceptable', next => {
+  request('GET', uri + '/not-acceptable').end((err, res) => {
     try {
     assert(err);
     assert(res.notAcceptable, 'response should be .notAcceptable');
@@ -106,8 +106,8 @@ it('request() GET 406 Not Acceptable', function(next){
   });
 });
 
-it('request() GET 204 No Content', function(next){
-  request('GET', uri + '/no-content').end(function(err, res){
+it('request() GET 204 No Content', next => {
+  request('GET', uri + '/no-content').end((err, res) => {
     try {
     assert.ifError(err);
     assert(res.noContent, 'response should be .noContent');
@@ -116,8 +116,8 @@ it('request() GET 204 No Content', function(next){
   });
 });
 
-it('request() DELETE 204 No Content', function(next){
-  request('DELETE', uri + '/no-content').end(function(err, res){
+it('request() DELETE 204 No Content', next => {
+  request('DELETE', uri + '/no-content').end((err, res) => {
     try {
     assert.ifError(err);
     assert(res.noContent, 'response should be .noContent');
@@ -126,8 +126,8 @@ it('request() DELETE 204 No Content', function(next){
   });
 });
 
-it('request() header parsing', function(next){
-  request('GET', uri + '/notfound').end(function(err, res){
+it('request() header parsing', next => {
+  request('GET', uri + '/notfound').end((err, res) => {
     try {
     assert(err);
     assert.equal('text/html; charset=utf-8', res.header['content-type']);
@@ -137,8 +137,8 @@ it('request() header parsing', function(next){
   });
 });
 
-it('request() .status', function(next){
-  request('GET', uri + '/notfound').end(function(err, res){
+it('request() .status', next => {
+  request('GET', uri + '/notfound').end((err, res) => {
     try {
     assert(err);
     assert.equal(404, res.status, 'response .status');
@@ -148,8 +148,8 @@ it('request() .status', function(next){
   });
 });
 
-it('get()', function(next){
-  request.get( uri + '/notfound').end(function(err, res){
+it('get()', next => {
+  request.get( uri + '/notfound').end((err, res) => {
     try {
     assert(err);
     assert.equal(404, res.status, 'response .status');
@@ -160,8 +160,8 @@ it('get()', function(next){
 });
 
 
-it('put()', function(next){
-  request.put(uri + '/user/12').end(function(err, res){
+it('put()', next => {
+  request.put(uri + '/user/12').end((err, res) => {
     try {
     assert.equal('updated', res.text, 'response text');
     next();
@@ -169,8 +169,8 @@ it('put()', function(next){
   });
 });
 
-it('put().send()', function(next){
-  request.put(uri + '/user/13/body').send({user:"new"}).end(function(err, res){
+it('put().send()', next => {
+  request.put(uri + '/user/13/body').send({user:"new"}).end((err, res) => {
     try {
     assert.equal('received new', res.text, 'response text');
     next();
@@ -178,8 +178,8 @@ it('put().send()', function(next){
   });
 });
 
-it('post()', function(next){
-  request.post(uri + '/user').end(function(err, res){
+it('post()', next => {
+  request.post(uri + '/user').end((err, res) => {
     try {
     assert.equal('created', res.text, 'response text');
     next();
@@ -187,8 +187,8 @@ it('post()', function(next){
   });
 });
 
-it('del()', function(next){
-  request.del(uri + '/user/12').end(function(err, res){
+it('del()', next => {
+  request.del(uri + '/user/12').end((err, res) => {
     try {
     assert.equal('deleted', res.text, 'response text');
     next();
@@ -196,8 +196,8 @@ it('del()', function(next){
   });
 });
 
-it('delete()', function(next){
-  request['delete'](uri + '/user/12').end(function(err, res){
+it('delete()', next => {
+  request['delete'](uri + '/user/12').end((err, res) => {
     try {
     assert.equal('deleted', res.text, 'response text');
     next();
@@ -205,11 +205,11 @@ it('delete()', function(next){
   });
 });
 
-it('post() data', function(next){
+it('post() data', next => {
   request.post(uri + '/todo/item')
   .type('application/octet-stream')
   .send('tobi')
-  .end(function(err, res){
+  .end((err, res) => {
     try {
     assert.equal('added "tobi"', res.text, 'response text');
     next();
@@ -217,12 +217,12 @@ it('post() data', function(next){
   });
 });
 
-it('request .type()', function(next){
+it('request .type()', next => {
   request
   .post(uri + '/user/12/pet')
   .type('urlencoded')
   .send('pet=tobi')
-  .end(function(err, res){
+  .end((err, res) => {
     try {
     assert.equal('added pet "tobi"', res.text, 'response text');
     next();
@@ -230,12 +230,12 @@ it('request .type()', function(next){
   });
 });
 
-it('request .type() with alias', function(next){
+it('request .type() with alias', next => {
   request
   .post(uri + '/user/12/pet')
   .type('application/x-www-form-urlencoded')
   .send('pet=tobi')
-  .end(function(err, res){
+  .end((err, res) => {
     try {
     assert.equal('added pet "tobi"', res.text, 'response text');
     next();
@@ -243,21 +243,21 @@ it('request .type() with alias', function(next){
   });
 });
 
-it('request .get() with no data or callback', function(next){
+it('request .get() with no data or callback', next => {
   request.get(uri + '/echo-header/content-type');
   next();
 });
 
-it('request .send() with no data only', function(next){
+it('request .send() with no data only', next => {
   request.post(uri + '/user/5/pet').type('urlencoded').send('pet=tobi');
   next();
 });
 
-it('request .send() with callback only', function(next){
+it('request .send() with callback only', next => {
   request
   .get(uri + '/echo-header/accept')
   .set('Accept', 'foo/bar')
-  .end(function(err, res){
+  .end((err, res) => {
     try {
     assert.equal('foo/bar', res.text);
     next();
@@ -265,11 +265,11 @@ it('request .send() with callback only', function(next){
   });
 });
 
-it('request .accept() with json', function(next){
+it('request .accept() with json', next => {
   request
   .get(uri + '/echo-header/accept')
   .accept('json')
-  .end(function(err, res){
+  .end((err, res) => {
     try {
     assert.equal('application/json', res.text);
     next();
@@ -277,11 +277,11 @@ it('request .accept() with json', function(next){
   });
 });
 
-it('request .accept() with application/json', function(next){
+it('request .accept() with application/json', next => {
   request
   .get(uri + '/echo-header/accept')
   .accept('application/json')
-  .end(function(err, res){
+  .end((err, res) => {
     try {
     assert.equal('application/json', res.text);
     next();
@@ -289,11 +289,11 @@ it('request .accept() with application/json', function(next){
   });
 });
 
-it('request .accept() with xml', function(next){
+it('request .accept() with xml', next => {
   request
   .get(uri + '/echo-header/accept')
   .accept('xml')
-  .end(function(err, res){
+  .end((err, res) => {
     try {
       // We can't depend on mime module to be consistent with this
       assert(res.text == "application/xml" || res.text == "text/xml");
@@ -302,11 +302,11 @@ it('request .accept() with xml', function(next){
   });
 });
 
-it('request .accept() with application/xml', function(next){
+it('request .accept() with application/xml', next => {
   request
   .get(uri + '/echo-header/accept')
   .accept('application/xml')
-  .end(function(err, res){
+  .end((err, res) => {
   try {
     assert.equal('application/xml', res.text);
     next();
@@ -317,12 +317,12 @@ it('request .accept() with application/xml', function(next){
 
 // FIXME: ie6 will POST rather than GET here due to data(),
 //        but I'm not 100% sure why.  Newer IEs are OK.
-it('request .end()', function(next){
+it('request .end()', next => {
   request
   .get(uri + '/echo-header/content-type')
   .set('Content-Type', 'text/plain')
   .send('wahoo')
-  .end(function(err, res){
+  .end((err, res) => {
   try {
     assert.equal('text/plain', res.text);
     next();
@@ -330,12 +330,12 @@ it('request .end()', function(next){
   });
 });
 
-it('request .send()', function(next){
+it('request .send()', next => {
   request
   .get(uri + '/echo-header/content-type')
   .set('Content-Type', 'text/plain')
   .send('wahoo')
-  .end(function(err, res){
+  .end((err, res) => {
   try {
     assert.equal('text/plain', res.text);
     next();
@@ -343,12 +343,12 @@ it('request .send()', function(next){
   });
 });
 
-it('request .set()', function(next){
+it('request .set()', next => {
   request
   .get(uri + '/echo-header/content-type')
   .set('Content-Type', 'text/plain')
   .send('wahoo')
-  .end(function(err, res){
+  .end((err, res) => {
   try {
     assert.equal('text/plain', res.text);
     next();
@@ -356,12 +356,12 @@ it('request .set()', function(next){
   });
 });
 
-it('request .set(object)', function(next){
+it('request .set(object)', next => {
   request
   .get(uri + '/echo-header/content-type')
   .set({ 'Content-Type': 'text/plain' })
   .send('wahoo')
-  .end(function(err, res){
+  .end((err, res) => {
   try {
     assert.equal('text/plain', res.text);
     next();
@@ -369,12 +369,12 @@ it('request .set(object)', function(next){
   });
 });
 
-it('POST urlencoded', function(next){
+it('POST urlencoded', next => {
   request
   .post(uri + '/pet')
   .type('urlencoded')
   .send({ name: 'Manny', species: 'cat' })
-  .end(function(err, res){
+  .end((err, res) => {
   try {
     assert.equal('added Manny the cat', res.text);
     next();
@@ -382,12 +382,12 @@ it('POST urlencoded', function(next){
   });
 });
 
-it('POST json', function(next){
+it('POST json', next => {
   request
   .post(uri + '/pet')
   .type('json')
   .send({ name: 'Manny', species: 'cat' })
-  .end(function(err, res){
+  .end((err, res) => {
   try {
     assert.equal('added Manny the cat', res.text);
     next();
@@ -395,11 +395,11 @@ it('POST json', function(next){
   });
 });
 
-it('POST json array', function(next){
+it('POST json array', next => {
   request
   .post(uri + '/echo')
   .send([1,2,3])
-  .end(function(err, res){
+  .end((err, res) => {
   try {
     assert.equal('application/json', res.header['content-type'].split(';')[0]);
     assert.equal('[1,2,3]', res.text);
@@ -408,11 +408,11 @@ it('POST json array', function(next){
   });
 });
 
-it('POST json default', function(next){
+it('POST json default', next => {
   request
   .post(uri + '/pet')
   .send({ name: 'Manny', species: 'cat' })
-  .end(function(err, res){
+  .end((err, res) => {
   try {
     assert.equal('added Manny the cat', res.text);
     next();
@@ -420,12 +420,12 @@ it('POST json default', function(next){
   });
 });
 
-it('POST json contentType charset', function(next){
+it('POST json contentType charset', next => {
   request
   .post(uri + '/echo')
   .set('Content-Type', 'application/json; charset=UTF-8')
   .send({ data: ['data1', 'data2'] })
-  .end(function(err, res){
+  .end((err, res) => {
   try {
     assert.equal('{"data":["data1","data2"]}', res.text);
     next();
@@ -433,12 +433,12 @@ it('POST json contentType charset', function(next){
   });
 });
 
-it('POST json contentType vendor', function(next){
+it('POST json contentType vendor', next => {
   request
   .post(uri + '/echo')
   .set('Content-Type', 'application/vnd.example+json')
   .send({ data: ['data1', 'data2'] })
-  .end(function(err, res){
+  .end((err, res) => {
   try {
     assert.equal('{"data":["data1","data2"]}', res.text);
     next();
@@ -446,12 +446,12 @@ it('POST json contentType vendor', function(next){
   });
 });
 
-it('POST multiple .send() calls', function(next){
+it('POST multiple .send() calls', next => {
   request
   .post(uri + '/pet')
   .send({ name: 'Manny' })
   .send({ species: 'cat' })
-  .end(function(err, res){
+  .end((err, res) => {
   try {
     assert.equal('added Manny the cat', res.text);
     next();
@@ -459,12 +459,12 @@ it('POST multiple .send() calls', function(next){
   });
 });
 
-it('POST multiple .send() strings', function(next){
+it('POST multiple .send() strings', next => {
   request
   .post(uri + '/echo')
   .send('user[name]=tj')
   .send('user[email]=tj@vision-media.ca')
-  .end(function(err, res){
+  .end((err, res) => {
   try {
     assert.equal('application/x-www-form-urlencoded', res.header['content-type'].split(';')[0]);
     assert.equal(res.text, 'user[name]=tj&user[email]=tj@vision-media.ca')
@@ -473,10 +473,10 @@ it('POST multiple .send() strings', function(next){
   })
 });
 
-it('POST with no data', function(next){
+it('POST with no data', next => {
   request
     .post(uri + '/empty-body')
-    .send().end(function(err, res){
+    .send().end((err, res) => {
     try {
       assert.ifError(err);
       assert(res.noContent, 'response should be .noContent');
@@ -485,10 +485,10 @@ it('POST with no data', function(next){
     });
 });
 
-it('GET .type', function(next){
+it('GET .type', next => {
   request
   .get(uri + '/pets')
-  .end(function(err, res){
+  .end((err, res) => {
   try {
     assert.equal('application/json', res.type);
     next();
@@ -496,10 +496,10 @@ it('GET .type', function(next){
   });
 });
 
-it('GET Content-Type params', function(next){
+it('GET Content-Type params', next => {
   request
   .get(uri + '/text')
-  .end(function(err, res){
+  .end((err, res) => {
     try {
     assert.equal('utf-8', res.charset);
     next();
@@ -507,10 +507,10 @@ it('GET Content-Type params', function(next){
   });
 });
 
-it('GET json', function(next){
+it('GET json', next => {
   request
   .get(uri + '/pets')
-  .end(function(err, res){
+  .end((err, res) => {
     try {
     assert.deepEqual(res.body, ['tobi', 'loki', 'jane']);
     next();
@@ -518,11 +518,11 @@ it('GET json', function(next){
   });
 });
 
-it('GET json-seq', function(next){
+it('GET json-seq', next => {
   request
   .get(uri + '/json-seq')
   .buffer()
-  .end(function(err, res){
+  .end((err, res) => {
     try{
     assert.ifError(err);
     assert.deepEqual(res.text, '\x1e{"id":1}\n\x1e{"id":2}\n');
@@ -531,10 +531,10 @@ it('GET json-seq', function(next){
   });
 });
 
-it('GET x-www-form-urlencoded', function(next){
+it('GET x-www-form-urlencoded', next => {
   request
   .get(uri + '/foo')
-  .end(function(err, res){
+  .end((err, res) => {
     try {
     assert.deepEqual(res.body, { foo: 'bar' });
     next();
@@ -542,8 +542,8 @@ it('GET x-www-form-urlencoded', function(next){
   });
 });
 
-it('GET shorthand', function(next){
-  request.get(uri + '/foo', function(err, res){
+it('GET shorthand', next => {
+  request.get(uri + '/foo', (err, res) => {
     try {
     assert.equal('foo=bar', res.text);
     next();
@@ -551,8 +551,8 @@ it('GET shorthand', function(next){
   });
 });
 
-it('POST shorthand', function(next){
-  request.post(uri + '/user/0/pet', { pet: 'tobi' }, function(err, res){
+it('POST shorthand', next => {
+  request.post(uri + '/user/0/pet', { pet: 'tobi' }, (err, res) => {
     try {
     assert.equal('added pet "tobi"', res.text);
     next();
@@ -560,8 +560,8 @@ it('POST shorthand', function(next){
   });
 });
 
-it('POST shorthand without callback', function(next){
-  request.post(uri + '/user/0/pet', { pet: 'tobi' }).end(function(err, res){
+it('POST shorthand without callback', next => {
+  request.post(uri + '/user/0/pet', { pet: 'tobi' }).end((err, res) => {
     try {
     assert.equal('added pet "tobi"', res.text);
     next();
@@ -569,11 +569,11 @@ it('POST shorthand without callback', function(next){
   });
 });
 
-it('GET querystring object with array', function(next){
+it('GET querystring object with array', next => {
   request
   .get(uri + '/querystring')
   .query({ val: ['a', 'b', 'c'] })
-  .end(function(err, res){
+  .end((err, res) => {
     try {
     assert.deepEqual(res.body, { val: ['a', 'b', 'c'] });
     next();
@@ -581,11 +581,11 @@ it('GET querystring object with array', function(next){
   });
 });
 
-it('GET querystring object with array and primitives', function(next){
+it('GET querystring object with array and primitives', next => {
   request
   .get(uri + '/querystring')
   .query({ array: ['a', 'b', 'c'], string: 'foo', number: 10 })
-  .end(function(err, res){
+  .end((err, res) => {
     try {
     assert.deepEqual(res.body, { array: ['a', 'b', 'c'], string: 'foo', number: 10 });
     next();
@@ -593,11 +593,11 @@ it('GET querystring object with array and primitives', function(next){
   });
 });
 
-it('GET querystring object with two arrays', function(next){
+it('GET querystring object with two arrays', next => {
   request
   .get(uri + '/querystring')
   .query({ array1: ['a', 'b', 'c'], array2: [1, 2, 3]})
-  .end(function(err, res){
+  .end((err, res) => {
     try {
     assert.deepEqual(res.body, { array1: ['a', 'b', 'c'], array2: [1, 2, 3]});
     next();
@@ -605,11 +605,11 @@ it('GET querystring object with two arrays', function(next){
   });
 });
 
-it('GET querystring object', function(next){
+it('GET querystring object', next => {
   request
   .get(uri + '/querystring')
   .query({ search: 'Manny' })
-  .end(function(err, res){
+  .end((err, res) => {
     try {
     assert.deepEqual(res.body, { search: 'Manny' });
     next();
@@ -617,11 +617,11 @@ it('GET querystring object', function(next){
   });
 });
 
-it('GET querystring append original', function(next){
+it('GET querystring append original', next => {
   request
   .get(uri + '/querystring?search=Manny')
   .query({ range: '1..5' })
-  .end(function(err, res){
+  .end((err, res) => {
     try {
     assert.deepEqual(res.body, { search: 'Manny', range: '1..5' });
     next();
@@ -629,13 +629,13 @@ it('GET querystring append original', function(next){
   });
 });
 
-it('GET querystring multiple objects', function(next){
+it('GET querystring multiple objects', next => {
   request
   .get(uri + '/querystring')
   .query({ search: 'Manny' })
   .query({ range: '1..5' })
   .query({ order: 'desc' })
-  .end(function(err, res){
+  .end((err, res) => {
     try {
     assert.deepEqual(res.body, { search: 'Manny', range: '1..5', order: 'desc' });
     next();
@@ -643,13 +643,13 @@ it('GET querystring multiple objects', function(next){
   });
 });
 
-it('GET querystring with strings', function(next){
+it('GET querystring with strings', next => {
   request
   .get(uri + '/querystring')
   .query('search=Manny')
   .query('range=1..5')
   .query('order=desc')
-  .end(function(err, res){
+  .end((err, res) => {
     try {
     assert.deepEqual(res.body, { search: 'Manny', range: '1..5', order: 'desc' });
     next();
@@ -657,12 +657,12 @@ it('GET querystring with strings', function(next){
   });
 });
 
-it('GET querystring with strings and objects', function(next){
+it('GET querystring with strings and objects', next => {
   request
   .get(uri + '/querystring')
   .query('search=Manny')
   .query({ order: 'desc', range: '1..5' })
-  .end(function(err, res){
+  .end((err, res) => {
     try {
     assert.deepEqual(res.body, { search: 'Manny', range: '1..5', order: 'desc' });
     next();
@@ -670,9 +670,9 @@ it('GET querystring with strings and objects', function(next){
   });
 });
 
-it('GET shorthand payload goes to querystring', function(next){
+it('GET shorthand payload goes to querystring', next => {
   request
-  .get(uri + '/querystring', {foo: 'FOO', bar: 'BAR'}, function(err, res){
+  .get(uri + '/querystring', {foo: 'FOO', bar: 'BAR'}, (err, res) => {
     try {
     assert.deepEqual(res.body, { foo: 'FOO', bar: 'BAR' });
     next();
@@ -680,9 +680,9 @@ it('GET shorthand payload goes to querystring', function(next){
   });
 });
 
-it('HEAD shorthand payload goes to querystring', function(next){
+it('HEAD shorthand payload goes to querystring', next => {
   request
-  .head(uri + '/querystring-in-header', {foo: 'FOO', bar: 'BAR'}, function(err, res){
+  .head(uri + '/querystring-in-header', {foo: 'FOO', bar: 'BAR'}, (err, res) => {
     try {
     assert.deepEqual(JSON.parse(res.headers.query), { foo: 'FOO', bar: 'BAR' });
     next();
@@ -690,8 +690,8 @@ it('HEAD shorthand payload goes to querystring', function(next){
   });
 });
 
-it('request(method, url)', function(next){
-  request('GET', uri + '/foo').end(function(err, res){
+it('request(method, url)', next => {
+  request('GET', uri + '/foo').end((err, res) => {
     try {
     assert.equal('bar', res.body.foo);
     next();
@@ -699,8 +699,8 @@ it('request(method, url)', function(next){
   });
 });
 
-it('request(url)', function(next){
-  request(uri + '/foo').end(function(err, res){
+it('request(url)', next => {
+  request(uri + '/foo').end((err, res) => {
     try {
     assert.equal('bar', res.body.foo);
     next();
@@ -708,8 +708,8 @@ it('request(url)', function(next){
   });
 });
 
-it('request(url, fn)', function(next){
-  request(uri + '/foo', function(err, res){
+it('request(url, fn)', next => {
+  request(uri + '/foo', (err, res) => {
     try {
     assert.equal('bar', res.body.foo);
     next();
@@ -717,11 +717,11 @@ it('request(url, fn)', function(next){
   });
 });
 
-it('req.timeout(ms)', function(next){
-  var req = request
+it('req.timeout(ms)', next => {
+  const req = request
   .get(uri + '/delay/3000')
   .timeout(1000)
-  .end(function(err, res){
+  .end((err, res) => {
     try {
     assert(err, 'error missing');
     assert.equal(1000, err.timeout, 'err.timeout missing');
@@ -730,14 +730,14 @@ it('req.timeout(ms)', function(next){
     assert(req.timedout, true);
     next();
   } catch(e) { next(e); }
-  })
+  });
 })
 
-it('req.timeout(ms) with redirect', function(next) {
-  var req = request
+it('req.timeout(ms) with redirect', next => {
+  const req = request
   .get(uri + '/delay/const')
   .timeout(1000)
-  .end(function(err, res) {
+  .end((err, res) => {
     try {
     assert(err, 'error missing');
     assert.equal(1000, err.timeout, 'err.timeout missing');
@@ -750,10 +750,10 @@ it('req.timeout(ms) with redirect', function(next) {
 });
 
 
-it('request event', function(next){
+it('request event', next => {
   request
   .get(uri + '/foo')
-  .on('request', function(req){
+  .on('request', req => {
     try {
     assert.equal(uri + '/foo', req.url);
     next();
@@ -762,10 +762,10 @@ it('request event', function(next){
   .end();
 });
 
-it('response event', function(next){
+it('response event', next => {
   request
   .get(uri + '/foo')
-  .on('response', function(res){
+  .on('response', res => {
     try {
     assert.equal('bar', res.body.foo);
     next();
@@ -774,9 +774,9 @@ it('response event', function(next){
   .end();
 });
 
-it('response should set statusCode', function(next){
+it('response should set statusCode', next => {
   request
-    .get(uri + '/ok', function(err, res){
+    .get(uri + '/ok', (err, res) => {
       try {
       assert.strictEqual(res.statusCode, 200);
       next();
@@ -784,13 +784,13 @@ it('response should set statusCode', function(next){
     })
 });
 
-it('req.toJSON()', function(next){
+it('req.toJSON()', next => {
   request
   .get(uri + '/ok')
-  .end(function(err, res){
+  .end((err, res) => {
     try {
-    var j = (res.request || res.req).toJSON();
-    ['url', 'method', 'data', 'headers'].forEach(function(prop){
+    const j = (res.request || res.req).toJSON();
+    ['url', 'method', 'data', 'headers'].forEach(prop => {
       assert(j.hasOwnProperty(prop));
     });
     next();

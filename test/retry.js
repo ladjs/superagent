@@ -1,7 +1,7 @@
-var setup = require('./support/setup');
-var base = setup.uri;
-var assert = require('assert');
-var request = require('../');
+const setup = require('./support/setup');
+const base = setup.uri;
+const assert = require('assert');
+const request = require('../');
 
 function uniqid() {
   return Math.random() * 10000000;
@@ -10,11 +10,11 @@ function uniqid() {
 describe('.retry(count)', function(){
   this.timeout(15000);
 
-  it('should not retry if passed "0"', function(done){
+  it('should not retry if passed "0"', done => {
     request
     .get(base + '/error')
     .retry(0)
-    .end(function(err, res){
+    .end((err, res) => {
       try {
       assert(err, 'expected an error');
       assert.equal(undefined, err.retries, 'expected an error without .retries');
@@ -26,11 +26,11 @@ describe('.retry(count)', function(){
     });
   });
 
-  it('should not retry if passed an invalid number', function(done){
+  it('should not retry if passed an invalid number', done => {
     request
     .get(base + '/error')
     .retry(-2)
-    .end(function(err, res){
+    .end((err, res) => {
       try {
       assert(err, 'expected an error');
       assert.equal(undefined, err.retries, 'expected an error without .retries');
@@ -42,11 +42,11 @@ describe('.retry(count)', function(){
     });
   });
 
-  it('should not retry if passed undefined', function(done){
+  it('should not retry if passed undefined', done => {
     request
     .get(base + '/error')
     .retry(undefined)
-    .end(function(err, res){
+    .end((err, res) => {
       try {
       assert(err, 'expected an error');
       assert.equal(undefined, err.retries, 'expected an error without .retries');
@@ -58,11 +58,11 @@ describe('.retry(count)', function(){
     });
   });
 
-  it('should handle server error after repeat attempt', function(done){
+  it('should handle server error after repeat attempt', done => {
     request
     .get(base + '/error')
     .retry(2)
-    .end(function(err, res){
+    .end((err, res) => {
       try {
       assert(err, 'expected an error');
       assert.equal(2, err.retries, 'expected an error with .retries');
@@ -74,11 +74,11 @@ describe('.retry(count)', function(){
     });
   });
 
-  it('should retry if passed nothing', function(done){
+  it('should retry if passed nothing', done => {
     request
     .get(base + '/error')
     .retry()
-    .end(function(err, res){
+    .end((err, res) => {
       try {
       assert(err, 'expected an error');
       assert.equal(1, err.retries, 'expected an error with .retries');
@@ -90,11 +90,11 @@ describe('.retry(count)', function(){
     });
   });
 
-  it('should retry if passed "true"', function(done){
+  it('should retry if passed "true"', done => {
     request
     .get(base + '/error')
     .retry(true)
-    .end(function(err, res){
+    .end((err, res) => {
       try {
       assert(err, 'expected an error');
       assert.equal(1, err.retries, 'expected an error with .retries');
@@ -106,12 +106,12 @@ describe('.retry(count)', function(){
     });
   });
 
-  it('should handle successful request after repeat attempt from server error', function(done){
+  it('should handle successful request after repeat attempt from server error', done => {
     request
     .get(base + '/error/ok/' + uniqid())
     .query({qs:'present'})
     .retry(2)
-    .end(function(err, res){
+    .end((err, res) => {
       try {
       assert.ifError(err);
       assert(res.ok, 'response should be ok');
@@ -123,12 +123,12 @@ describe('.retry(count)', function(){
     });
   });
 
-  it('should handle server timeout error after repeat attempt', function(done) {
+  it('should handle server timeout error after repeat attempt', done => {
     request
     .get(base + '/delay/400')
     .timeout(200)
     .retry(2)
-    .end(function(err, res){
+    .end((err, res) => {
       try {
       assert(err, 'expected an error');
       assert.equal(2, err.retries, 'expected an error with .retries');
@@ -141,15 +141,15 @@ describe('.retry(count)', function(){
     });
   });
 
-  it('should handle successful request after repeat attempt from server timeout', function(done) {
-    var url = '/delay/600/ok/' + uniqid() + '?built=in';
+  it('should handle successful request after repeat attempt from server timeout', done => {
+    const url = '/delay/600/ok/' + uniqid() + '?built=in';
     request
     .get(base + url)
     .query("string=ified")
     .query({"json":"ed"})
     .timeout(300)
     .retry(2)
-    .end(function(err, res){
+    .end((err, res) => {
       try {
       assert.ifError(err);
       assert(res.ok, 'response should be ok');
@@ -161,25 +161,25 @@ describe('.retry(count)', function(){
     });
   });
 
-  it('should correctly abort a retry attempt', function(done) {
-    var aborted = false;
-    var req = request
+  it('should correctly abort a retry attempt', done => {
+    let aborted = false;
+    const req = request
     .get(base + '/delay/400')
     .timeout(200)
     .retry(2)
-    .end(function(err, res){
+    .end((err, res) => {
       try {
         assert(false, 'should not complete the request');
       } catch(e) { done(e); }
     });
 
-    req.on('abort', function() {
+    req.on('abort', () => {
       aborted = true;
     });
 
-    setTimeout(function() {
+    setTimeout(() => {
       req.abort();
-      setTimeout(function() {
+      setTimeout(() => {
         try {
         assert(aborted, 'should be aborted');
         done();
@@ -190,13 +190,13 @@ describe('.retry(count)', function(){
     }, 150);
   });
 
-  it('should correctly retain header fields', function(done) {
+  it('should correctly retain header fields', done => {
     request
     .get(base + '/error/ok/' + uniqid())
     .query({qs:'present'})
     .retry(2)
     .set('X-Foo', 'bar')
-    .end(function(err, res){
+    .end((err, res) => {
       try {
         assert.ifError(err);
         assert(res.body);
@@ -208,11 +208,11 @@ describe('.retry(count)', function(){
     });
   });
 
-  it('should not retry on 4xx responses', function(done) {
+  it('should not retry on 4xx responses', done => {
     request
     .get(base + '/bad-request')
     .retry(2)
-    .end(function(err, res){
+    .end((err, res) => {
       try {
       assert(err, 'expected an error');
       assert.equal(0, err.retries, 'expected an error with 0 .retries');
@@ -224,15 +224,15 @@ describe('.retry(count)', function(){
     });
   });
 
-  it('should execute callback on retry if passed', function(done) {
-    var callbackCallCount = 0;
+  it('should execute callback on retry if passed', done => {
+    let callbackCallCount = 0;
     function retryCallback(request) {
       callbackCallCount++;
     }
     request
     .get(base + '/error')
     .retry(2, retryCallback)
-    .end(function(err, res){
+    .end((err, res) => {
       try {
         assert(err, 'expected an error');
         assert.equal(2, err.retries, 'expected an error with .retries');

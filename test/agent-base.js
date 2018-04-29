@@ -1,27 +1,27 @@
-var setup = require('./support/setup');
-var base = setup.uri;
-var assert = require('assert');
-var request = require('../');
+const setup = require('./support/setup');
+const base = setup.uri;
+const assert = require('assert');
+const request = require('../');
 
-describe('Agent', function() {
-  it("should remember defaults", function() {
+describe('Agent', () => {
+  it("should remember defaults", () => {
     if ('undefined' === typeof Promise) {
       return;
     }
 
-    var called = 0;
-    var event_called = 0;
-    var agent = request.agent()
+    let called = 0;
+    let event_called = 0;
+    const agent = request.agent()
       .accept('json')
-      .use(function() {called++})
-      .once('request', function() {event_called++})
+      .use(() => {called++})
+      .once('request', () => {event_called++})
       .query({hello:"world"})
       .set("X-test", "testing");
     assert.equal(0, called);
     assert.equal(0, event_called);
 
     return agent.get(base + '/echo')
-    .then(function(res) {
+    .then(res => {
       assert.equal(1, called);
       assert.equal(1, event_called);
       assert.equal('application/json', res.headers.accept);
@@ -29,7 +29,7 @@ describe('Agent', function() {
 
       return agent.get(base + '/querystring');
     })
-    .then(function(res) {
+    .then(res => {
       assert.equal(2, called);
       assert.equal(2, event_called);
       assert.deepEqual({hello:"world"}, res.body);

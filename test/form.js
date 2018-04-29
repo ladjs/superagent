@@ -1,21 +1,21 @@
-var setup = require('./support/setup');
-var base = setup.uri;
-var should = require('should');
-var request = require('../');
+const setup = require('./support/setup');
+const base = setup.uri;
+const should = require('should');
+const request = require('../');
 
-var assert = require('assert');
+const assert = require('assert');
 if (!assert.deepStrictEqual) assert.deepStrictEqual = assert.deepEqual;
 
-var formDataSupported = setup.NODE || 'undefined' !== FormData;
+const formDataSupported = setup.NODE || 'undefined' !== FormData;
 
-describe('req.send(Object) as "form"', function(){
-  describe('with req.type() set to form', function(){
-    it('should send x-www-form-urlencoded data', function(done){
+describe('req.send(Object) as "form"', () => {
+  describe('with req.type() set to form', () => {
+    it('should send x-www-form-urlencoded data', done => {
       request
       .post(base + '/echo')
       .type('form')
       .send({ name: 'tobi' })
-      .end(function(err, res){
+      .end((err, res) => {
         res.header['content-type'].should.equal('application/x-www-form-urlencoded');
         res.text.should.equal('name=tobi');
         done();
@@ -23,14 +23,14 @@ describe('req.send(Object) as "form"', function(){
     })
   })
 
-  describe('when called several times', function(){
-    it('should merge the objects', function(done){
+  describe('when called several times', () => {
+    it('should merge the objects', done => {
       request
       .post(base + '/echo')
       .type('form')
       .send({ name: { first: 'tobi', last: 'holowaychuk' } })
       .send({ age: '1' })
-      .end(function(err, res){
+      .end((err, res) => {
         res.header['content-type'].should.equal('application/x-www-form-urlencoded');
         res.text.should.equal('name%5Bfirst%5D=tobi&name%5Blast%5D=holowaychuk&age=1');
         done();
@@ -39,19 +39,19 @@ describe('req.send(Object) as "form"', function(){
   })
 })
 
-describe('req.attach', function(){
-  it('ignores null file', function(done){
+describe('req.attach', () => {
+  it('ignores null file', done => {
     request
       .post('/echo')
       .attach('image', null)
-      .end(function(err, res){
+      .end((err, res) => {
         done();
       });
   });
 });
 
-describe('req.field', function(){
-  it('allow bools', function(done){
+describe('req.field', () => {
+  it('allow bools', done => {
     if (!formDataSupported) {
       return done();
     }
@@ -60,14 +60,14 @@ describe('req.field', function(){
       .post(base + '/formecho')
       .field('bools', true)
       .field('strings', 'true')
-      .end(function(err, res){
+      .end((err, res) => {
         assert.ifError(err);
         assert.deepStrictEqual(res.body, {bools:'true', strings:'true'});
         done();
       });
   });
 
-  it('allow objects', function(done){
+  it('allow objects', done => {
     if (!formDataSupported) {
       return done();
     }
@@ -75,14 +75,14 @@ describe('req.field', function(){
     request
       .post(base + '/formecho')
       .field({bools: true, strings: 'true'})
-      .end(function(err, res){
+      .end((err, res) => {
         assert.ifError(err);
         assert.deepStrictEqual(res.body, {bools:'true', strings:'true'});
         done();
       });
   });
 
-  it('works with arrays in objects', function(done){
+  it('works with arrays in objects', done => {
     if (!formDataSupported) {
       return done();
     }
@@ -90,14 +90,14 @@ describe('req.field', function(){
     request
       .post(base + '/formecho')
       .field({numbers: [1,2,3]})
-      .end(function(err, res){
+      .end((err, res) => {
         assert.ifError(err);
         assert.deepStrictEqual(res.body, {numbers:['1','2','3']});
         done();
       });
   });
 
-  it('works with arrays', function(done){
+  it('works with arrays', done => {
     if (!formDataSupported) {
       return done();
     }
@@ -105,36 +105,36 @@ describe('req.field', function(){
     request
       .post(base + '/formecho')
       .field('letters', ['a', 'b', 'c'])
-      .end(function(err, res){
+      .end((err, res) => {
         assert.ifError(err);
         assert.deepStrictEqual(res.body, {letters: ['a', 'b', 'c']});
         done();
       });
   });
 
-  it('throw when empty', function(){
-    should.throws(function(){
+  it('throw when empty', () => {
+    should.throws(() => {
       request
       .post(base + '/echo')
       .field()
     }, /name/);
 
-    should.throws(function(){
+    should.throws(() => {
       request
       .post(base + '/echo')
       .field('name')
     }, /val/);
   });
 
-  it('cannot be mixed with send()', function(){
-    assert.throws(function(){
+  it('cannot be mixed with send()', () => {
+    assert.throws(() => {
       request
       .post('/echo')
       .field('form', 'data')
       .send('hi');
     });
 
-    assert.throws(function(){
+    assert.throws(() => {
       request
       .post('/echo')
       .send('hi')

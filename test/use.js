@@ -1,14 +1,14 @@
-var setup = require('./support/setup');
-var uri = setup.uri;
+const setup = require('./support/setup');
+const uri = setup.uri;
 
-var assert = require('assert');
-var request = require('../');
+const assert = require('assert');
+const request = require('../');
 
 describe('request', function(){
   this.timeout(20000);
-  describe('use', function(){
-    it('should use plugin success', function(done){
-      var now = '' + Date.now();
+  describe('use', () => {
+    it('should use plugin success', done => {
+      const now = '' + Date.now();
       function uuid(req){
         req.set('X-UUID', now);
         return req;
@@ -21,7 +21,7 @@ describe('request', function(){
         .get('/echo')
         .use(uuid)
         .use(prefix)
-        .end(function(err, res){
+        .end((err, res) => {
           assert.strictEqual(res.statusCode, 200);
           assert.equal(res.get('X-UUID'), now);
           done();
@@ -30,27 +30,27 @@ describe('request', function(){
   });
 })
 
-describe('subclass', function() {
-  var OriginalRequest;
-  beforeEach(function(){
+describe('subclass', () => {
+  let OriginalRequest;
+  beforeEach(() => {
     OriginalRequest = request.Request;
   });
-  afterEach(function(){
+  afterEach(() => {
     request.Request = OriginalRequest;
   });
 
-  it('should be an instance of Request', function(){
-    var req = request.get('/');
+  it('should be an instance of Request', () => {
+    const req = request.get('/');
     assert(req instanceof request.Request);
   });
 
-  it('should use patched subclass', function(){
+  it('should use patched subclass', () => {
     assert(OriginalRequest);
 
-    var constructorCalled, sendCalled;
-    function NewRequest() {
+    let constructorCalled, sendCalled;
+    function NewRequest(...args) {
       constructorCalled = true;
-      OriginalRequest.apply(this, arguments);
+      OriginalRequest.apply(this, args);
     }
     NewRequest.prototype = Object.create(OriginalRequest.prototype);
     NewRequest.prototype.send = function() {
@@ -60,23 +60,23 @@ describe('subclass', function() {
 
     request.Request = NewRequest;
 
-    var req = request.get('/').send();
+    const req = request.get('/').send();
     assert(constructorCalled);
     assert(sendCalled);
     assert(req instanceof NewRequest);
     assert(req instanceof OriginalRequest);
   });
 
-  it('should use patched subclass in agent too', function(){
+  it('should use patched subclass in agent too', () => {
     if (!request.agent) return; // Node-only
 
-    function NewRequest() {
-      OriginalRequest.apply(this, arguments);
+    function NewRequest(...args) {
+      OriginalRequest.apply(this, args);
     }
     NewRequest.prototype = Object.create(OriginalRequest.prototype);
     request.Request = NewRequest;
 
-    var req = request.agent().del('/');
+    const req = request.agent().del('/');
     assert(req instanceof NewRequest);
     assert(req instanceof OriginalRequest);
   });

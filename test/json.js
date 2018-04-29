@@ -1,88 +1,88 @@
-var setup = require('./support/setup');
-var uri = setup.uri;
-var doesntWorkInBrowserYet = setup.NODE;
+const setup = require('./support/setup');
+const uri = setup.uri;
+const doesntWorkInBrowserYet = setup.NODE;
 
-var assert = require('assert');
-var request = require('../');
+const assert = require('assert');
+const request = require('../');
 
 describe('req.send(Object) as "json"', function(){
   this.timeout(20000);
 
-  it('should default to json', function(done){
+  it('should default to json', done => {
     request
     .post(uri + '/echo')
     .send({ name: 'tobi' })
-    .end(function(err, res){
+    .end((err, res) => {
       res.should.be.json();
       res.text.should.equal('{"name":"tobi"}');
       done();
     });
   })
 
-  it('should work with arrays', function(done){
+  it('should work with arrays', done => {
     request
     .post(uri + '/echo')
     .send([1,2,3])
-    .end(function(err, res){
+    .end((err, res) => {
       res.should.be.json();
       res.text.should.equal('[1,2,3]');
       done();
     });
   });
 
-  it('should work with value null', function(done){
+  it('should work with value null', done => {
     request
     .post(uri + '/echo')
     .type('json')
     .send('null')
-    .end(function(err, res){
+    .end((err, res) => {
       res.should.be.json();
       assert.strictEqual(res.body, null);
       done();
     });
   });
 
-  it('should work with value false', function(done){
+  it('should work with value false', done => {
     request
     .post(uri + '/echo')
     .type('json')
     .send('false')
-    .end(function(err, res){
+    .end((err, res) => {
       res.should.be.json();
       res.body.should.equal(false);
       done();
     });
   });
 
-  if (doesntWorkInBrowserYet) it('should work with value 0', function(done){ // fails in IE9
+  if (doesntWorkInBrowserYet) it('should work with value 0', done => { // fails in IE9
     request
     .post(uri + '/echo')
     .type('json')
     .send('0')
-    .end(function(err, res){
+    .end((err, res) => {
       res.should.be.json();
       res.body.should.equal(0);
       done();
     });
   });
 
-  it('should work with empty string value', function(done){
+  it('should work with empty string value', done => {
     request
     .post(uri + '/echo')
     .type('json')
     .send('""')
-    .end(function(err, res){
+    .end((err, res) => {
       res.should.be.json();
       res.body.should.equal("");
       done();
     });
   });
 
-  if (doesntWorkInBrowserYet) it('should work with GET', function(done){
+  if (doesntWorkInBrowserYet) it('should work with GET', done => {
     request
     .get(uri + '/echo')
     .send({ tobi: 'ferret' })
-    .end(function(err, res){
+    .end((err, res) => {
       try {
         res.should.be.json();
         res.text.should.equal('{"tobi":"ferret"}');
@@ -92,25 +92,25 @@ describe('req.send(Object) as "json"', function(){
     });
   });
 
-  it('should work with vendor MIME type', function(done){
+  it('should work with vendor MIME type', done => {
     request
     .post(uri + '/echo')
     .set('Content-Type', 'application/vnd.example+json')
     .send({ name: 'vendor' })
-    .end(function(err, res){
+    .end((err, res) => {
       res.text.should.equal('{"name":"vendor"}');
       ({"name":"vendor"}).should.eql(res.body);
       done();
     });
   });
 
-  describe('when called several times', function(){
-    it('should merge the objects', function(done){
+  describe('when called several times', () => {
+    it('should merge the objects', done => {
       request
       .post(uri + '/echo')
       .send({ name: 'tobi' })
       .send({ age: 1 })
-      .end(function(err, res){
+      .end((err, res) => {
         res.should.be.json();
         res.text.should.equal('{"name":"tobi","age":1}');
         ({"name":"tobi","age":1}).should.eql(res.body);
@@ -123,11 +123,11 @@ describe('req.send(Object) as "json"', function(){
 describe('res.body', function(){
   this.timeout(20000);
 
-  describe('application/json', function(){
-    it('should parse the body', function(done){
+  describe('application/json', () => {
+    it('should parse the body', done => {
       request
       .get(uri + '/json')
-      .end(function(err, res){
+      .end((err, res) => {
         res.text.should.equal('{"name":"manny"}');
         res.body.should.eql({ name: 'manny' });
         done();
@@ -135,11 +135,11 @@ describe('res.body', function(){
     })
   })
 
-  if (doesntWorkInBrowserYet) describe('HEAD requests', function(){
-    it('should not throw a parse error', function(done){
+  if (doesntWorkInBrowserYet) describe('HEAD requests', () => {
+    it('should not throw a parse error', done => {
       request
       .head(uri + '/json')
-      .end(function(err, res){
+      .end((err, res) => {
         try {
         assert.strictEqual(err, null);
         assert.strictEqual(res.text, undefined)
@@ -150,31 +150,31 @@ describe('res.body', function(){
     });
   });
 
-  describe('Invalid JSON response', function(){
-    it('should return the raw response', function(done){
+  describe('Invalid JSON response', () => {
+    it('should return the raw response', done => {
       request
       .get(uri + '/invalid-json')
-      .end(function(err, res){
+      .end((err, res) => {
         assert.deepEqual(err.rawResponse, ")]}', {'header':{'code':200,'text':'OK','version':'1.0'},'data':'some data'}");
         done();
       });
     });
 
-    it('should return the http status code', function(done){
+    it('should return the http status code', done => {
       request
       .get(uri + '/invalid-json-forbidden')
-      .end(function(err, res){
+      .end((err, res) => {
         assert.equal(err.statusCode, 403);
         done();
       });
     });
   });
 
-  if (doesntWorkInBrowserYet) describe('No content', function(){
-    it('should not throw a parse error', function(done){
+  if (doesntWorkInBrowserYet) describe('No content', () => {
+    it('should not throw a parse error', done => {
       request
       .get(uri + '/no-content')
-      .end(function(err, res){
+      .end((err, res) => {
         try {
         assert.strictEqual(err, null);
         assert.strictEqual(res.text, '');
@@ -185,11 +185,11 @@ describe('res.body', function(){
     });
   });
 
-  if (doesntWorkInBrowserYet) describe('application/json+hal', function(){
-    it('should parse the body', function(done){
+  if (doesntWorkInBrowserYet) describe('application/json+hal', () => {
+    it('should parse the body', done => {
       request
       .get(uri + '/json-hal')
-      .end(function(err, res){
+      .end((err, res) => {
         if (err) return done(err);
         res.text.should.equal('{"name":"hal 5000"}');
         res.body.should.eql({ name: 'hal 5000' });
@@ -198,11 +198,11 @@ describe('res.body', function(){
     })
   })
 
-  if (doesntWorkInBrowserYet) describe('vnd.collection+json', function(){
-    it('should parse the body', function(done){
+  if (doesntWorkInBrowserYet) describe('vnd.collection+json', () => {
+    it('should parse the body', done => {
       request
       .get(uri + '/collection-json')
-      .end(function(err, res){
+      .end((err, res) => {
         res.text.should.equal('{"name":"chewbacca"}');
         res.body.should.eql({ name: 'chewbacca' });
         done();
