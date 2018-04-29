@@ -8,7 +8,7 @@ describe('xdomain', function(){
   // use localtunnel.me and tunnel127.com alias instead
   it('should support req.withCredentials()', next => {
     request
-    .get('//' + window.location.host + '/xdomain')
+    .get(`//${window.location.host}/xdomain`)
     .withCredentials()
     .end((err, res) => {
       assert.equal(200, res.status);

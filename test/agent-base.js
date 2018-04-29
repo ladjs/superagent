@@ -20,14 +20,14 @@ describe('Agent', () => {
     assert.equal(0, called);
     assert.equal(0, event_called);
 
-    return agent.get(base + '/echo')
+    return agent.get(`${base}/echo`)
     .then(res => {
       assert.equal(1, called);
       assert.equal(1, event_called);
       assert.equal('application/json', res.headers.accept);
       assert.equal('testing', res.headers['x-test']);
 
-      return agent.get(base + '/querystring');
+      return agent.get(`${base}/querystring`);
     })
     .then(res => {
       assert.equal(2, called);

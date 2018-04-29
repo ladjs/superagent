@@ -5,17 +5,14 @@ const request = require('../../');
 function serialize(obj, res) {
   const val = request.serializeObject(obj);
   assert.equal(val, res
-    , JSON.stringify(obj) + ' to "' + res + '" serialization failed. got: '
-    + '"' + val + '"');
+    , `${JSON.stringify(obj)} to "${res}" serialization failed. got: "${val}"`);
 }
 
 function parse(str, obj) {
   const val = request.parseString(str);
   assert.deepEqual(val
     , obj
-    , '"' + str + '" to '
-    + JSON.stringify(obj) + ' parse failed. got: '
-    + JSON.stringify(val));
+    , `"${str}" to ${JSON.stringify(obj)} parse failed. got: ${JSON.stringify(val)}`);
 }
 
 describe('request.serializeObject()', () => {

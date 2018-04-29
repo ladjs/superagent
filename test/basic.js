@@ -11,7 +11,7 @@ describe('request', function(){
   describe('res.statusCode', () => {
     it('should set statusCode', done => {
       request
-      .get(uri + '/login', (err, res) => {
+      .get(`${uri}/login`, (err, res) => {
         try {
         assert.strictEqual(res.statusCode, 200);
         done();
@@ -23,7 +23,7 @@ describe('request', function(){
   describe('should allow the send shorthand', () => {
     it('with callback in the method call', done => {
       request
-      .get(uri + '/login', (err, res) => {
+      .get(`${uri}/login`, (err, res) => {
           assert.equal(res.status, 200);
           done();
       });
@@ -31,7 +31,7 @@ describe('request', function(){
 
     it('with data in the method call', done => {
       request
-      .post(uri + '/echo', { foo: 'bar' })
+      .post(`${uri}/echo`, { foo: 'bar' })
       .end((err, res) => {
         assert.equal('{"foo":"bar"}', res.text);
         done();
@@ -40,7 +40,7 @@ describe('request', function(){
 
     it('with callback and data in the method call', done => {
       request
-      .post(uri + '/echo', { foo: 'bar' }, (err, res) => {
+      .post(`${uri}/echo`, { foo: 'bar' }, (err, res) => {
         assert.equal('{"foo":"bar"}', res.text);
         done();
       });
@@ -50,7 +50,7 @@ describe('request', function(){
   describe('with a callback', () => {
     it('should invoke .end()', done => {
       request
-      .get(uri + '/login', (err, res) => {
+      .get(`${uri}/login`, (err, res) => {
         try {
         assert.equal(res.status, 200);
         done();
@@ -62,7 +62,7 @@ describe('request', function(){
   describe('.end()', () => {
     it('should issue a request', done => {
       request
-      .get(uri + '/login')
+      .get(`${uri}/login`)
       .end((err, res) => {
         try {
         assert.equal(res.status, 200);
@@ -76,7 +76,7 @@ describe('request', function(){
         return;
       }
 
-      return request.get(uri + '/login')
+      return request.get(`${uri}/login`)
       .then(res => res.status)
       .then()
       .then(status => {
@@ -89,7 +89,7 @@ describe('request', function(){
         return;
       }
 
-      const req = request.get(uri + '/unique');
+      const req = request.get(`${uri}/unique`);
 
       return Promise.all([req, req, req])
       .then(results => {
@@ -106,7 +106,7 @@ describe('request', function(){
       let calledErrorEvent = false;
       let calledOKHandler = false;
       request
-      .get(uri + '/error')
+      .get(`${uri}/error`)
       .ok(res => {
         assert.strictEqual(500, res.status);
         calledOKHandler = true;
@@ -129,7 +129,7 @@ describe('request', function(){
     it('should should be an Error object', done => {
       let calledErrorEvent = false;
       request
-      .get(uri + '/error')
+      .get(`${uri}/error`)
       .on('error', err => {
         assert.strictEqual(err.status, 500);
         calledErrorEvent = true;
@@ -140,7 +140,7 @@ describe('request', function(){
           res.error.message.should.equal('cannot GET /error (500)');
         }
         else {
-          res.error.message.should.equal('cannot GET ' + uri + '/error (500)');
+          res.error.message.should.equal(`cannot GET ${uri}/error (500)`);
         }
         assert.strictEqual(res.error.status, 500);
         assert(err, 'should have an error for 500');
@@ -157,7 +157,7 @@ describe('request', function(){
       }
 
       return request
-      .get(uri + '/error')
+      .get(`${uri}/error`)
       .then(() => {
         assert.fail();
       }, err => {
@@ -171,7 +171,7 @@ describe('request', function(){
       }
 
       return request
-      .get(uri + '/echo')
+      .get(`${uri}/echo`)
       .ok(() => false)
       .then(() => {
         assert.fail();
@@ -187,7 +187,7 @@ describe('request', function(){
       }
 
       return request
-      .get(uri + '/echo')
+      .get(`${uri}/echo`)
       .ok(() => {throw new Error('boom');})
       .then(() => {
         assert.fail();
@@ -201,7 +201,7 @@ describe('request', function(){
   describe('res.header', () => {
     it('should be an object', done => {
       request
-      .get(uri + '/login')
+      .get(`${uri}/login`)
       .end((err, res) => {
         try {
         assert.equal('Express', res.header['x-powered-by']);
@@ -223,7 +223,7 @@ describe('request', function(){
     it('should only set headers for ownProperties of header', done => {
       try {
         request
-          .get(uri + '/echo-headers')
+          .get(`${uri}/echo-headers`)
           .set('valid', 'ok')
           .end((err, res) => {
             if (!err && res.body && res.body.valid && !res.body.hasOwnProperty('invalid')) {
@@ -240,7 +240,7 @@ describe('request', function(){
   describe('res.charset', () => {
     it('should be set when present', done => {
       request
-      .get(uri + '/login')
+      .get(`${uri}/login`)
       .end((err, res) => {
         try {
         res.charset.should.equal('utf-8');
@@ -253,7 +253,7 @@ describe('request', function(){
   describe('res.statusType', () => {
     it('should provide the first digit', done => {
       request
-      .get(uri + '/login')
+      .get(`${uri}/login`)
       .end((err, res) => {
         try {
         assert(!err, 'should not have an error for success responses');
@@ -268,7 +268,7 @@ describe('request', function(){
   describe('res.type', () => {
     it('should provide the mime-type void of params', done => {
       request
-      .get(uri + '/login')
+      .get(`${uri}/login`)
       .end((err, res) => {
         try {
         res.type.should.equal('text/html');
@@ -282,7 +282,7 @@ describe('request', function(){
   describe('req.set(field, val)', () => {
     it('should set the header field', done => {
       request
-      .post(uri + '/echo')
+      .post(`${uri}/echo`)
       .set('X-Foo', 'bar')
       .set('X-Bar', 'baz')
       .end((err, res) => {
@@ -298,7 +298,7 @@ describe('request', function(){
   describe('req.set(obj)', () => {
     it('should set the header fields', done => {
       request
-      .post(uri + '/echo')
+      .post(`${uri}/echo`)
       .set({ 'X-Foo': 'bar', 'X-Bar': 'baz' })
       .end((err, res) => {
         try {
@@ -313,7 +313,7 @@ describe('request', function(){
   describe('req.type(str)', () => {
     it('should set the Content-Type', done => {
       request
-      .post(uri + '/echo')
+      .post(`${uri}/echo`)
       .type('text/x-foo')
       .end((err, res) => {
         try {
@@ -325,7 +325,7 @@ describe('request', function(){
 
     it('should map "json"', done => {
       request
-      .post(uri + '/echo')
+      .post(`${uri}/echo`)
       .type('json')
       .send('{"a": 1}')
       .end((err, res) => {
@@ -338,7 +338,7 @@ describe('request', function(){
 
     it('should map "html"', done => {
       request
-      .post(uri + '/echo')
+      .post(`${uri}/echo`)
       .type('html')
       .end((err, res) => {
         try {
@@ -352,7 +352,7 @@ describe('request', function(){
   describe('req.accept(str)', () => {
     it('should set Accept', done => {
       request
-      .get(uri + '/echo')
+      .get(`${uri}/echo`)
       .accept('text/x-foo')
       .end((err, res) => {
         try {
@@ -364,7 +364,7 @@ describe('request', function(){
 
     it('should map "json"', done => {
       request
-      .get(uri + '/echo')
+      .get(`${uri}/echo`)
       .accept('json')
       .end((err, res) => {
         try {
@@ -376,7 +376,7 @@ describe('request', function(){
 
     it('should map "xml"', done => {
       request
-      .get(uri + '/echo')
+      .get(`${uri}/echo`)
       .accept('xml')
       .end((err, res) => {
         try {
@@ -389,7 +389,7 @@ describe('request', function(){
 
     it('should map "html"', done => {
       request
-      .get(uri + '/echo')
+      .get(`${uri}/echo`)
       .accept('html')
       .end((err, res) => {
         try {
@@ -403,7 +403,7 @@ describe('request', function(){
   describe('req.send(str)', () => {
     it('should write the string', done => {
       request
-      .post(uri + '/echo')
+      .post(`${uri}/echo`)
       .type('json')
       .send('{"name":"tobi"}')
       .end((err, res) => {
@@ -418,7 +418,7 @@ describe('request', function(){
   describe('req.send(Object)', () => {
     it('should default to json', done => {
       request
-      .post(uri + '/echo')
+      .post(`${uri}/echo`)
       .send({ name: 'tobi' })
       .end((err, res) => {
         try {
@@ -432,7 +432,7 @@ describe('request', function(){
     describe('when called several times', () => {
       it('should merge the objects', done => {
         request
-        .post(uri + '/echo')
+        .post(`${uri}/echo`)
         .send({ name: 'tobi' })
         .send({ age: 1 })
         .end((err, res) => {
@@ -452,7 +452,7 @@ describe('request', function(){
   describe('.end(fn)', () => {
     it('should check arity', done => {
       request
-      .post(uri + '/echo')
+      .post(`${uri}/echo`)
       .send({ name: 'tobi' })
       .end((err, res) => {
         try {
@@ -464,7 +464,7 @@ describe('request', function(){
     })
 
     it('should emit request', done => {
-      const req = request.post(uri + '/echo');
+      const req = request.post(`${uri}/echo`);
       req.on('request', request => {
         assert.equal(req, request);
         done();
@@ -474,7 +474,7 @@ describe('request', function(){
 
     it('should emit response', done => {
       request
-      .post(uri + '/echo')
+      .post(`${uri}/echo`)
       .send({ name: 'tobi' })
       .on('response', res => {
         res.text.should.equal('{"name":"tobi"}');
@@ -491,7 +491,7 @@ describe('request', function(){
       }
 
       request
-      .post(uri + '/echo')
+      .post(`${uri}/echo`)
       .send({ name: 'tobi' })
       .then(res => {
         res.text.should.equal('{"name":"tobi"}');
@@ -505,7 +505,7 @@ describe('request', function(){
       }
 
       request
-      .get(uri + '/error')
+      .get(`${uri}/error`)
       .then(null, err => {
         assert.equal(err.status, 500);
         assert.equal(err.response.text, 'boom');
@@ -521,7 +521,7 @@ describe('request', function(){
       }
 
       request
-      .get(uri + '/error')
+      .get(`${uri}/error`)
       .catch(err => {
         assert.equal(err.status, 500);
         assert.equal(err.response.text, 'boom');
@@ -533,7 +533,7 @@ describe('request', function(){
   describe('.abort()', () => {
     it('should abort the request', done => {
       const req = request
-      .get(uri + '/delay/3000')
+      .get(`${uri}/delay/3000`)
       .end((err, res) => {
         try {
         assert(false, 'should not complete the request');
@@ -552,7 +552,7 @@ describe('request', function(){
 
     it('should allow chaining .abort() several times', done => {
       const req = request
-      .get(uri + '/delay/3000')
+      .get(`${uri}/delay/3000`)
       .end((err, res) => {
         try {
         assert(false, 'should not complete the request');
@@ -569,7 +569,7 @@ describe('request', function(){
 
     it('should not allow abort then end', done => {
       request
-      .get(uri + '/delay/3000')
+      .get(`${uri}/delay/3000`)
       .abort()
       .end((err, res) => {
         done(err ? undefined : Error("Expected abort error"));
@@ -580,7 +580,7 @@ describe('request', function(){
   describe('req.toJSON()', () => {
     it('should describe the request', done => {
       const req = request
-      .post(uri + '/echo')
+      .post(`${uri}/echo`)
       .send({ foo: 'baz' })
       .end((err, res) => {
         try {
@@ -596,7 +596,7 @@ describe('request', function(){
 
   describe('req.options()', () => {
     it('should allow request body', done => {
-      request.options(uri + '/options/echo/body')
+      request.options(`${uri}/options/echo/body`)
       .send({ foo: 'baz' })
       .end((err, res) => {
         try {
@@ -611,7 +611,7 @@ describe('request', function(){
   describe('req.sortQuery()', () => {
     it('nop with no querystring', done => {
       request
-      .get(uri + '/url')
+      .get(`${uri}/url`)
       .sortQuery()
       .end((err, res) => {
         try {
@@ -623,7 +623,7 @@ describe('request', function(){
 
     it('should sort the request querystring', done => {
       request
-      .get(uri + '/url')
+      .get(`${uri}/url`)
       .query('search=Manny')
       .query('order=desc')
       .sortQuery()
@@ -637,7 +637,7 @@ describe('request', function(){
 
     it('should allow disabling sorting', done => {
       request
-      .get(uri + '/url')
+      .get(`${uri}/url`)
       .query('search=Manny')
       .query('order=desc')
       .sortQuery() // take default of true
@@ -652,7 +652,7 @@ describe('request', function(){
 
     it('should sort the request querystring using customized function', done => {
       request
-      .get(uri + '/url')
+      .get(`${uri}/url`)
       .query('name=Nick')
       .query('search=Manny')
       .query('order=desc')

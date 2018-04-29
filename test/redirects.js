@@ -10,7 +10,7 @@ describe('request', function(){
   describe('on redirect', () => {
     it('should retain header fields', done => {
       request
-      .get(base + '/header')
+      .get(`${base}/header`)
       .set('X-Foo', 'bar')
       .end((err, res) => {
         try {
@@ -25,7 +25,7 @@ describe('request', function(){
 
     it('should preserve timeout across redirects', done => {
       request
-      .get(base + '/movies/random')
+      .get(`${base}/movies/random`)
       .timeout(250)
       .end((err, res) => {
         try {
@@ -41,7 +41,7 @@ describe('request', function(){
     it('should successfully redirect after retry on error', done => {
       const id = Math.random() * 1000000 * Date.now();
       request
-      .get(base + '/error/redirect/' + id)
+      .get(`${base}/error/redirect/${id}`)
       .retry(2)
       .end((err, res) => {
         assert(res.ok, 'response should be ok');
@@ -53,7 +53,7 @@ describe('request', function(){
     it('should preserve retries across redirects', done => {
       const id = Math.random() * 1000000 * Date.now();
       request
-      .get(base + '/error/redirect-error' + id)
+      .get(`${base}/error/redirect-error${id}`)
       .retry(2)
       .end((err, res) => {
         assert(err, 'expected an error');
@@ -68,7 +68,7 @@ describe('request', function(){
   describe('on 303', () => {
     it('should redirect with same method', done => {
       request
-      .put(base + '/redirect-303')
+      .put(`${base}/redirect-303`)
       .send({msg: "hello"})
       .redirects(1)
       .on('redirect', res => {
@@ -90,7 +90,7 @@ describe('request', function(){
       if (isMSIE) return done(); // IE9 broken
 
       request
-      .put(base + '/redirect-307')
+      .put(`${base}/redirect-307`)
       .send({msg: "hello"})
       .redirects(1)
       .on('redirect', res => {
@@ -112,7 +112,7 @@ describe('request', function(){
       if (isMSIE) return done(); // IE9 broken
 
       request
-      .put(base + '/redirect-308')
+      .put(`${base}/redirect-308`)
       .send({msg: "hello"})
       .redirects(1)
       .on('redirect', res => {

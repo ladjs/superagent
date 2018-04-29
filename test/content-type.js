@@ -9,7 +9,7 @@ describe('req.set("Content-Type", contentType)', function(){
 
   it('should work with just the contentType component', done => {
     request
-    .post(uri + '/echo')
+    .post(`${uri}/echo`)
     .set('Content-Type', 'application/json')
     .send({ name: 'tobi' })
     .end((err, res) => {
@@ -20,7 +20,7 @@ describe('req.set("Content-Type", contentType)', function(){
 
   it('should work with the charset component', done => {
     request
-    .post(uri + '/echo')
+    .post(`${uri}/echo`)
     .set('Content-Type', 'application/json; charset=utf-8')
     .send({ name: 'tobi' })
     .end((err, res) => {

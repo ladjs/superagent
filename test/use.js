@@ -8,7 +8,7 @@ describe('request', function(){
   this.timeout(20000);
   describe('use', () => {
     it('should use plugin success', done => {
-      const now = '' + Date.now();
+      const now = `${Date.now()}`;
       function uuid(req){
         req.set('X-UUID', now);
         return req;

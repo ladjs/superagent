@@ -9,7 +9,7 @@ describe('.timeout(ms)', function(){
   describe('when timeout is exceeded', () => {
     it('should error', done => {
       request
-      .get(base + '/delay/500')
+      .get(`${base}/delay/500`)
       .timeout(150)
       .end((err, res) => {
         assert(err, 'expected an error');
@@ -21,7 +21,7 @@ describe('.timeout(ms)', function(){
 
     it('should handle gzip timeout', done => {
       request
-      .get(base + '/delay/zip')
+      .get(`${base}/delay/zip`)
       .timeout(150)
       .end((err, res) => {
         assert(err, 'expected an error');
@@ -33,7 +33,7 @@ describe('.timeout(ms)', function(){
 
     it('should handle buffer timeout', done => {
       request
-      .get(base + '/delay/json')
+      .get(`${base}/delay/json`)
       .buffer(true)
       .timeout(150)
       .end((err, res) => {
@@ -46,7 +46,7 @@ describe('.timeout(ms)', function(){
 
     it('should error on deadline', done => {
       request
-      .get(base + '/delay/500')
+      .get(`${base}/delay/500`)
       .timeout({deadline: 150})
       .end((err, res) => {
         assert(err, 'expected an error');
@@ -58,7 +58,7 @@ describe('.timeout(ms)', function(){
 
     it('should support setting individual options', done => {
       request
-      .get(base + '/delay/500')
+      .get(`${base}/delay/500`)
       .timeout({deadline: 10})
       .timeout({response: 99999})
       .end((err, res) => {
@@ -71,7 +71,7 @@ describe('.timeout(ms)', function(){
 
     it('should error on response', done => {
       request
-      .get(base + '/delay/500')
+      .get(`${base}/delay/500`)
       .timeout({response: 150})
       .end((err, res) => {
         assert(err, 'expected an error');
@@ -84,11 +84,11 @@ describe('.timeout(ms)', function(){
 
     it('should accept slow body with fast response', done => {
       request
-        .get(base + '/delay/slowbody')
+        .get(`${base}/delay/slowbody`)
         .timeout({response: 1000})
         .on('progress', () => {
           // This only makes the test faster without relying on arbitrary timeouts
-          request.get(base + '/delay/slowbody/finish').end();
+          request.get(`${base}/delay/slowbody/finish`).end();
         })
         .end(done);
     });

@@ -12,7 +12,7 @@ describe('req.send(Object) as "form"', () => {
   describe('with req.type() set to form', () => {
     it('should send x-www-form-urlencoded data', done => {
       request
-      .post(base + '/echo')
+      .post(`${base}/echo`)
       .type('form')
       .send({ name: 'tobi' })
       .end((err, res) => {
@@ -26,7 +26,7 @@ describe('req.send(Object) as "form"', () => {
   describe('when called several times', () => {
     it('should merge the objects', done => {
       request
-      .post(base + '/echo')
+      .post(`${base}/echo`)
       .type('form')
       .send({ name: { first: 'tobi', last: 'holowaychuk' } })
       .send({ age: '1' })
@@ -57,7 +57,7 @@ describe('req.field', () => {
     }
 
     request
-      .post(base + '/formecho')
+      .post(`${base}/formecho`)
       .field('bools', true)
       .field('strings', 'true')
       .end((err, res) => {
@@ -73,7 +73,7 @@ describe('req.field', () => {
     }
 
     request
-      .post(base + '/formecho')
+      .post(`${base}/formecho`)
       .field({bools: true, strings: 'true'})
       .end((err, res) => {
         assert.ifError(err);
@@ -88,7 +88,7 @@ describe('req.field', () => {
     }
 
     request
-      .post(base + '/formecho')
+      .post(`${base}/formecho`)
       .field({numbers: [1,2,3]})
       .end((err, res) => {
         assert.ifError(err);
@@ -103,7 +103,7 @@ describe('req.field', () => {
     }
 
     request
-      .post(base + '/formecho')
+      .post(`${base}/formecho`)
       .field('letters', ['a', 'b', 'c'])
       .end((err, res) => {
         assert.ifError(err);
@@ -115,13 +115,13 @@ describe('req.field', () => {
   it('throw when empty', () => {
     should.throws(() => {
       request
-      .post(base + '/echo')
+      .post(`${base}/echo`)
       .field()
     }, /name/);
 
     should.throws(() => {
       request
-      .post(base + '/echo')
+      .post(`${base}/echo`)
       .field('name')
     }, /val/);
   });

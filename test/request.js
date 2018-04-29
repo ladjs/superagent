@@ -7,7 +7,7 @@ describe('request', function() {
   this.timeout(20000);
 
 it('Request inheritance', () => {
-  assert(request.get(uri + '/') instanceof request.Request);
+  assert(request.get(`${uri}/`) instanceof request.Request);
 });
 
 it('request() simple GET without callback', next => {
@@ -16,7 +16,7 @@ it('request() simple GET without callback', next => {
 });
 
 it('request() simple GET', next => {
-  request('GET', uri + '/ok').end((err, res) => {
+  request('GET', `${uri}/ok`).end((err, res) => {
     try {
     assert(res instanceof request.Response, 'respond with Response');
     assert(res.ok, 'response should be ok');
@@ -27,7 +27,7 @@ it('request() simple GET', next => {
 });
 
 it('request() simple HEAD', next => {
-  request.head(uri + '/ok').end((err, res) => {
+  request.head(`${uri}/ok`).end((err, res) => {
     try {
     assert(res instanceof request.Response, 'respond with Response');
     assert(res.ok, 'response should be ok');
@@ -39,7 +39,7 @@ it('request() simple HEAD', next => {
 
 
 it('request() GET 5xx', next => {
-  request('GET', uri + '/error').end((err, res) => {
+  request('GET', `${uri}/error`).end((err, res) => {
     try {
     assert(err);
     assert.equal(err.message, 'Internal Server Error');
@@ -53,7 +53,7 @@ it('request() GET 5xx', next => {
 });
 
 it('request() GET 4xx', next => {
-  request('GET', uri + '/notfound').end((err, res) => {
+  request('GET', `${uri}/notfound`).end((err, res) => {
     try {
     assert(err);
     assert.equal(err.message, 'Not Found');
@@ -67,7 +67,7 @@ it('request() GET 4xx', next => {
 });
 
 it('request() GET 404 Not Found', next => {
-  request('GET', uri + '/notfound').end((err, res) => {
+  request('GET', `${uri}/notfound`).end((err, res) => {
     try {
     assert(err);
     assert(res.notFound, 'response should be .notFound');
@@ -77,7 +77,7 @@ it('request() GET 404 Not Found', next => {
 });
 
 it('request() GET 400 Bad Request', next => {
-  request('GET', uri + '/bad-request').end((err, res) => {
+  request('GET', `${uri}/bad-request`).end((err, res) => {
     try {
     assert(err);
     assert(res.badRequest, 'response should be .badRequest');
@@ -87,7 +87,7 @@ it('request() GET 400 Bad Request', next => {
 });
 
 it('request() GET 401 Bad Request', next => {
-  request('GET', uri + '/unauthorized').end((err, res) => {
+  request('GET', `${uri}/unauthorized`).end((err, res) => {
     try {
     assert(err);
     assert(res.unauthorized, 'response should be .unauthorized');
@@ -97,7 +97,7 @@ it('request() GET 401 Bad Request', next => {
 });
 
 it('request() GET 406 Not Acceptable', next => {
-  request('GET', uri + '/not-acceptable').end((err, res) => {
+  request('GET', `${uri}/not-acceptable`).end((err, res) => {
     try {
     assert(err);
     assert(res.notAcceptable, 'response should be .notAcceptable');
@@ -107,7 +107,7 @@ it('request() GET 406 Not Acceptable', next => {
 });
 
 it('request() GET 204 No Content', next => {
-  request('GET', uri + '/no-content').end((err, res) => {
+  request('GET', `${uri}/no-content`).end((err, res) => {
     try {
     assert.ifError(err);
     assert(res.noContent, 'response should be .noContent');
@@ -117,7 +117,7 @@ it('request() GET 204 No Content', next => {
 });
 
 it('request() DELETE 204 No Content', next => {
-  request('DELETE', uri + '/no-content').end((err, res) => {
+  request('DELETE', `${uri}/no-content`).end((err, res) => {
     try {
     assert.ifError(err);
     assert(res.noContent, 'response should be .noContent');
@@ -127,7 +127,7 @@ it('request() DELETE 204 No Content', next => {
 });
 
 it('request() header parsing', next => {
-  request('GET', uri + '/notfound').end((err, res) => {
+  request('GET', `${uri}/notfound`).end((err, res) => {
     try {
     assert(err);
     assert.equal('text/html; charset=utf-8', res.header['content-type']);
@@ -138,7 +138,7 @@ it('request() header parsing', next => {
 });
 
 it('request() .status', next => {
-  request('GET', uri + '/notfound').end((err, res) => {
+  request('GET', `${uri}/notfound`).end((err, res) => {
     try {
     assert(err);
     assert.equal(404, res.status, 'response .status');
@@ -149,7 +149,7 @@ it('request() .status', next => {
 });
 
 it('get()', next => {
-  request.get( uri + '/notfound').end((err, res) => {
+  request.get( `${uri}/notfound`).end((err, res) => {
     try {
     assert(err);
     assert.equal(404, res.status, 'response .status');
@@ -161,7 +161,7 @@ it('get()', next => {
 
 
 it('put()', next => {
-  request.put(uri + '/user/12').end((err, res) => {
+  request.put(`${uri}/user/12`).end((err, res) => {
     try {
     assert.equal('updated', res.text, 'response text');
     next();
@@ -170,7 +170,7 @@ it('put()', next => {
 });
 
 it('put().send()', next => {
-  request.put(uri + '/user/13/body').send({user:"new"}).end((err, res) => {
+  request.put(`${uri}/user/13/body`).send({user:"new"}).end((err, res) => {
     try {
     assert.equal('received new', res.text, 'response text');
     next();
@@ -179,7 +179,7 @@ it('put().send()', next => {
 });
 
 it('post()', next => {
-  request.post(uri + '/user').end((err, res) => {
+  request.post(`${uri}/user`).end((err, res) => {
     try {
     assert.equal('created', res.text, 'response text');
     next();
@@ -188,7 +188,7 @@ it('post()', next => {
 });
 
 it('del()', next => {
-  request.del(uri + '/user/12').end((err, res) => {
+  request.del(`${uri}/user/12`).end((err, res) => {
     try {
     assert.equal('deleted', res.text, 'response text');
     next();
@@ -197,7 +197,7 @@ it('del()', next => {
 });
 
 it('delete()', next => {
-  request['delete'](uri + '/user/12').end((err, res) => {
+  request['delete'](`${uri}/user/12`).end((err, res) => {
     try {
     assert.equal('deleted', res.text, 'response text');
     next();
@@ -206,7 +206,7 @@ it('delete()', next => {
 });
 
 it('post() data', next => {
-  request.post(uri + '/todo/item')
+  request.post(`${uri}/todo/item`)
   .type('application/octet-stream')
   .send('tobi')
   .end((err, res) => {
@@ -219,7 +219,7 @@ it('post() data', next => {
 
 it('request .type()', next => {
   request
-  .post(uri + '/user/12/pet')
+  .post(`${uri}/user/12/pet`)
   .type('urlencoded')
   .send('pet=tobi')
   .end((err, res) => {
@@ -232,7 +232,7 @@ it('request .type()', next => {
 
 it('request .type() with alias', next => {
   request
-  .post(uri + '/user/12/pet')
+  .post(`${uri}/user/12/pet`)
   .type('application/x-www-form-urlencoded')
   .send('pet=tobi')
   .end((err, res) => {
@@ -244,18 +244,18 @@ it('request .type() with alias', next => {
 });
 
 it('request .get() with no data or callback', next => {
-  request.get(uri + '/echo-header/content-type');
+  request.get(`${uri}/echo-header/content-type`);
   next();
 });
 
 it('request .send() with no data only', next => {
-  request.post(uri + '/user/5/pet').type('urlencoded').send('pet=tobi');
+  request.post(`${uri}/user/5/pet`).type('urlencoded').send('pet=tobi');
   next();
 });
 
 it('request .send() with callback only', next => {
   request
-  .get(uri + '/echo-header/accept')
+  .get(`${uri}/echo-header/accept`)
   .set('Accept', 'foo/bar')
   .end((err, res) => {
     try {
@@ -267,7 +267,7 @@ it('request .send() with callback only', next => {
 
 it('request .accept() with json', next => {
   request
-  .get(uri + '/echo-header/accept')
+  .get(`${uri}/echo-header/accept`)
   .accept('json')
   .end((err, res) => {
     try {
@@ -279,7 +279,7 @@ it('request .accept() with json', next => {
 
 it('request .accept() with application/json', next => {
   request
-  .get(uri + '/echo-header/accept')
+  .get(`${uri}/echo-header/accept`)
   .accept('application/json')
   .end((err, res) => {
     try {
@@ -291,7 +291,7 @@ it('request .accept() with application/json', next => {
 
 it('request .accept() with xml', next => {
   request
-  .get(uri + '/echo-header/accept')
+  .get(`${uri}/echo-header/accept`)
   .accept('xml')
   .end((err, res) => {
     try {
@@ -304,7 +304,7 @@ it('request .accept() with xml', next => {
 
 it('request .accept() with application/xml', next => {
   request
-  .get(uri + '/echo-header/accept')
+  .get(`${uri}/echo-header/accept`)
   .accept('application/xml')
   .end((err, res) => {
   try {
@@ -319,7 +319,7 @@ it('request .accept() with application/xml', next => {
 //        but I'm not 100% sure why.  Newer IEs are OK.
 it('request .end()', next => {
   request
-  .get(uri + '/echo-header/content-type')
+  .get(`${uri}/echo-header/content-type`)
   .set('Content-Type', 'text/plain')
   .send('wahoo')
   .end((err, res) => {
@@ -332,7 +332,7 @@ it('request .end()', next => {
 
 it('request .send()', next => {
   request
-  .get(uri + '/echo-header/content-type')
+  .get(`${uri}/echo-header/content-type`)
   .set('Content-Type', 'text/plain')
   .send('wahoo')
   .end((err, res) => {
@@ -345,7 +345,7 @@ it('request .send()', next => {
 
 it('request .set()', next => {
   request
-  .get(uri + '/echo-header/content-type')
+  .get(`${uri}/echo-header/content-type`)
   .set('Content-Type', 'text/plain')
   .send('wahoo')
   .end((err, res) => {
@@ -358,7 +358,7 @@ it('request .set()', next => {
 
 it('request .set(object)', next => {
   request
-  .get(uri + '/echo-header/content-type')
+  .get(`${uri}/echo-header/content-type`)
   .set({ 'Content-Type': 'text/plain' })
   .send('wahoo')
   .end((err, res) => {
@@ -371,7 +371,7 @@ it('request .set(object)', next => {
 
 it('POST urlencoded', next => {
   request
-  .post(uri + '/pet')
+  .post(`${uri}/pet`)
   .type('urlencoded')
   .send({ name: 'Manny', species: 'cat' })
   .end((err, res) => {
@@ -384,7 +384,7 @@ it('POST urlencoded', next => {
 
 it('POST json', next => {
   request
-  .post(uri + '/pet')
+  .post(`${uri}/pet`)
   .type('json')
   .send({ name: 'Manny', species: 'cat' })
   .end((err, res) => {
@@ -397,7 +397,7 @@ it('POST json', next => {
 
 it('POST json array', next => {
   request
-  .post(uri + '/echo')
+  .post(`${uri}/echo`)
   .send([1,2,3])
   .end((err, res) => {
   try {
@@ -410,7 +410,7 @@ it('POST json array', next => {
 
 it('POST json default', next => {
   request
-  .post(uri + '/pet')
+  .post(`${uri}/pet`)
   .send({ name: 'Manny', species: 'cat' })
   .end((err, res) => {
   try {
@@ -422,7 +422,7 @@ it('POST json default', next => {
 
 it('POST json contentType charset', next => {
   request
-  .post(uri + '/echo')
+  .post(`${uri}/echo`)
   .set('Content-Type', 'application/json; charset=UTF-8')
   .send({ data: ['data1', 'data2'] })
   .end((err, res) => {
@@ -435,7 +435,7 @@ it('POST json contentType charset', next => {
 
 it('POST json contentType vendor', next => {
   request
-  .post(uri + '/echo')
+  .post(`${uri}/echo`)
   .set('Content-Type', 'application/vnd.example+json')
   .send({ data: ['data1', 'data2'] })
   .end((err, res) => {
@@ -448,7 +448,7 @@ it('POST json contentType vendor', next => {
 
 it('POST multiple .send() calls', next => {
   request
-  .post(uri + '/pet')
+  .post(`${uri}/pet`)
   .send({ name: 'Manny' })
   .send({ species: 'cat' })
   .end((err, res) => {
@@ -461,7 +461,7 @@ it('POST multiple .send() calls', next => {
 
 it('POST multiple .send() strings', next => {
   request
-  .post(uri + '/echo')
+  .post(`${uri}/echo`)
   .send('user[name]=tj')
   .send('user[email]=tj@vision-media.ca')
   .end((err, res) => {
@@ -475,7 +475,7 @@ it('POST multiple .send() strings', next => {
 
 it('POST with no data', next => {
   request
-    .post(uri + '/empty-body')
+    .post(`${uri}/empty-body`)
     .send().end((err, res) => {
     try {
       assert.ifError(err);
@@ -487,7 +487,7 @@ it('POST with no data', next => {
 
 it('GET .type', next => {
   request
-  .get(uri + '/pets')
+  .get(`${uri}/pets`)
   .end((err, res) => {
   try {
     assert.equal('application/json', res.type);
@@ -498,7 +498,7 @@ it('GET .type', next => {
 
 it('GET Content-Type params', next => {
   request
-  .get(uri + '/text')
+  .get(`${uri}/text`)
   .end((err, res) => {
     try {
     assert.equal('utf-8', res.charset);
@@ -509,7 +509,7 @@ it('GET Content-Type params', next => {
 
 it('GET json', next => {
   request
-  .get(uri + '/pets')
+  .get(`${uri}/pets`)
   .end((err, res) => {
     try {
     assert.deepEqual(res.body, ['tobi', 'loki', 'jane']);
@@ -520,7 +520,7 @@ it('GET json', next => {
 
 it('GET json-seq', next => {
   request
-  .get(uri + '/json-seq')
+  .get(`${uri}/json-seq`)
   .buffer()
   .end((err, res) => {
     try{
@@ -533,7 +533,7 @@ it('GET json-seq', next => {
 
 it('GET x-www-form-urlencoded', next => {
   request
-  .get(uri + '/foo')
+  .get(`${uri}/foo`)
   .end((err, res) => {
     try {
     assert.deepEqual(res.body, { foo: 'bar' });
@@ -543,7 +543,7 @@ it('GET x-www-form-urlencoded', next => {
 });
 
 it('GET shorthand', next => {
-  request.get(uri + '/foo', (err, res) => {
+  request.get(`${uri}/foo`, (err, res) => {
     try {
     assert.equal('foo=bar', res.text);
     next();
@@ -552,7 +552,7 @@ it('GET shorthand', next => {
 });
 
 it('POST shorthand', next => {
-  request.post(uri + '/user/0/pet', { pet: 'tobi' }, (err, res) => {
+  request.post(`${uri}/user/0/pet`, { pet: 'tobi' }, (err, res) => {
     try {
     assert.equal('added pet "tobi"', res.text);
     next();
@@ -561,7 +561,7 @@ it('POST shorthand', next => {
 });
 
 it('POST shorthand without callback', next => {
-  request.post(uri + '/user/0/pet', { pet: 'tobi' }).end((err, res) => {
+  request.post(`${uri}/user/0/pet`, { pet: 'tobi' }).end((err, res) => {
     try {
     assert.equal('added pet "tobi"', res.text);
     next();
@@ -571,7 +571,7 @@ it('POST shorthand without callback', next => {
 
 it('GET querystring object with array', next => {
   request
-  .get(uri + '/querystring')
+  .get(`${uri}/querystring`)
   .query({ val: ['a', 'b', 'c'] })
   .end((err, res) => {
     try {
@@ -583,7 +583,7 @@ it('GET querystring object with array', next => {
 
 it('GET querystring object with array and primitives', next => {
   request
-  .get(uri + '/querystring')
+  .get(`${uri}/querystring`)
   .query({ array: ['a', 'b', 'c'], string: 'foo', number: 10 })
   .end((err, res) => {
     try {
@@ -595,7 +595,7 @@ it('GET querystring object with array and primitives', next => {
 
 it('GET querystring object with two arrays', next => {
   request
-  .get(uri + '/querystring')
+  .get(`${uri}/querystring`)
   .query({ array1: ['a', 'b', 'c'], array2: [1, 2, 3]})
   .end((err, res) => {
     try {
@@ -607,7 +607,7 @@ it('GET querystring object with two arrays', next => {
 
 it('GET querystring object', next => {
   request
-  .get(uri + '/querystring')
+  .get(`${uri}/querystring`)
   .query({ search: 'Manny' })
   .end((err, res) => {
     try {
@@ -619,7 +619,7 @@ it('GET querystring object', next => {
 
 it('GET querystring append original', next => {
   request
-  .get(uri + '/querystring?search=Manny')
+  .get(`${uri}/querystring?search=Manny`)
   .query({ range: '1..5' })
   .end((err, res) => {
     try {
@@ -631,7 +631,7 @@ it('GET querystring append original', next => {
 
 it('GET querystring multiple objects', next => {
   request
-  .get(uri + '/querystring')
+  .get(`${uri}/querystring`)
   .query({ search: 'Manny' })
   .query({ range: '1..5' })
   .query({ order: 'desc' })
@@ -645,7 +645,7 @@ it('GET querystring multiple objects', next => {
 
 it('GET querystring with strings', next => {
   request
-  .get(uri + '/querystring')
+  .get(`${uri}/querystring`)
   .query('search=Manny')
   .query('range=1..5')
   .query('order=desc')
@@ -659,7 +659,7 @@ it('GET querystring with strings', next => {
 
 it('GET querystring with strings and objects', next => {
   request
-  .get(uri + '/querystring')
+  .get(`${uri}/querystring`)
   .query('search=Manny')
   .query({ order: 'desc', range: '1..5' })
   .end((err, res) => {
@@ -672,7 +672,7 @@ it('GET querystring with strings and objects', next => {
 
 it('GET shorthand payload goes to querystring', next => {
   request
-  .get(uri + '/querystring', {foo: 'FOO', bar: 'BAR'}, (err, res) => {
+  .get(`${uri}/querystring`, {foo: 'FOO', bar: 'BAR'}, (err, res) => {
     try {
     assert.deepEqual(res.body, { foo: 'FOO', bar: 'BAR' });
     next();
@@ -682,7 +682,7 @@ it('GET shorthand payload goes to querystring', next => {
 
 it('HEAD shorthand payload goes to querystring', next => {
   request
-  .head(uri + '/querystring-in-header', {foo: 'FOO', bar: 'BAR'}, (err, res) => {
+  .head(`${uri}/querystring-in-header`, {foo: 'FOO', bar: 'BAR'}, (err, res) => {
     try {
     assert.deepEqual(JSON.parse(res.headers.query), { foo: 'FOO', bar: 'BAR' });
     next();
@@ -691,7 +691,7 @@ it('HEAD shorthand payload goes to querystring', next => {
 });
 
 it('request(method, url)', next => {
-  request('GET', uri + '/foo').end((err, res) => {
+  request('GET', `${uri}/foo`).end((err, res) => {
     try {
     assert.equal('bar', res.body.foo);
     next();
@@ -700,7 +700,7 @@ it('request(method, url)', next => {
 });
 
 it('request(url)', next => {
-  request(uri + '/foo').end((err, res) => {
+  request(`${uri}/foo`).end((err, res) => {
     try {
     assert.equal('bar', res.body.foo);
     next();
@@ -709,7 +709,7 @@ it('request(url)', next => {
 });
 
 it('request(url, fn)', next => {
-  request(uri + '/foo', (err, res) => {
+  request(`${uri}/foo`, (err, res) => {
     try {
     assert.equal('bar', res.body.foo);
     next();
@@ -719,7 +719,7 @@ it('request(url, fn)', next => {
 
 it('req.timeout(ms)', next => {
   const req = request
-  .get(uri + '/delay/3000')
+  .get(`${uri}/delay/3000`)
   .timeout(1000)
   .end((err, res) => {
     try {
@@ -735,7 +735,7 @@ it('req.timeout(ms)', next => {
 
 it('req.timeout(ms) with redirect', next => {
   const req = request
-  .get(uri + '/delay/const')
+  .get(`${uri}/delay/const`)
   .timeout(1000)
   .end((err, res) => {
     try {
@@ -752,10 +752,10 @@ it('req.timeout(ms) with redirect', next => {
 
 it('request event', next => {
   request
-  .get(uri + '/foo')
+  .get(`${uri}/foo`)
   .on('request', req => {
     try {
-    assert.equal(uri + '/foo', req.url);
+    assert.equal(`${uri}/foo`, req.url);
     next();
     } catch(e) { next(e); }
   })
@@ -764,7 +764,7 @@ it('request event', next => {
 
 it('response event', next => {
   request
-  .get(uri + '/foo')
+  .get(`${uri}/foo`)
   .on('response', res => {
     try {
     assert.equal('bar', res.body.foo);
@@ -776,7 +776,7 @@ it('response event', next => {
 
 it('response should set statusCode', next => {
   request
-    .get(uri + '/ok', (err, res) => {
+    .get(`${uri}/ok`, (err, res) => {
       try {
       assert.strictEqual(res.statusCode, 200);
       next();
@@ -786,7 +786,7 @@ it('response should set statusCode', next => {
 
 it('req.toJSON()', next => {
   request
-  .get(uri + '/ok')
+  .get(`${uri}/ok`)
   .end((err, res) => {
     try {
     const j = (res.request || res.req).toJSON();

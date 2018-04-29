@@ -64,7 +64,7 @@ it('defaults attached files to original file names', next => {
     .post('/echo')
     .attach('image', file)
     .end((err, res) => {
-      const regx = new RegExp('filename="' + file.name + '"');
+      const regx = new RegExp(`filename="${file.name}"`);
       assert.notEqual(res.text.match(regx), null);
       next();
     });
@@ -293,7 +293,7 @@ if ('FormData' in window) {
 it('parse should take precedence over default parse', done => {
   request
   .get('/foo')
-  .parse((res, text) => 'customText: ' + res.status)
+  .parse((res, text) => `customText: ${res.status}`)
   .end((err, res) => {
     assert(res.ok);
     assert(res.body === 'customText: 200');

@@ -23,7 +23,7 @@ app.all('/echo', (req, res) => {
 
 let uniq = 0;
 app.all('/unique', (req, res) => {
-  res.send('never the same ' + (uniq++));
+  res.send(`never the same ${uniq++}`);
 });
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -135,7 +135,7 @@ app.put('/user/:id', (req, res) => {
 });
 
 app.put('/user/:id/body', (req, res) => {
-  res.send("received " + req.body.user);
+  res.send(`received ${req.body.user}`);
 });
 
 app.patch('/user/:id', (req, res) => {
@@ -143,7 +143,7 @@ app.patch('/user/:id', (req, res) => {
 });
 
 app.post('/user/:id/pet', (req, res) => {
-  res.send('added pet "' + req.body.pet + '"');
+  res.send(`added pet "${req.body.pet}"`);
 });
 
 app.post('/user', (req, res) => {
@@ -158,7 +158,7 @@ app.post('/todo/item', (req, res) => {
   let buf = '';
   req.on('data', chunk => { buf += chunk; });
   req.on('end', () => {
-    res.send('added "' + buf + '"');
+    res.send(`added "${buf}"`);
   });
 });
 
@@ -239,7 +239,7 @@ app.get('/echo-headers', (req, res) => {
 });
 
 app.post('/pet', (req, res) => {
-  res.send('added ' + req.body.name + ' the ' + req.body.species);
+  res.send(`added ${req.body.name} the ${req.body.species}`);
 });
 
 app.get('/pets', (req, res) => {
@@ -372,7 +372,7 @@ app.put('/redirect-308', (req, res) => {
 });
 
 app.all('/reply-method', (req, res) => {
-  res.send('method=' + req.method.toLowerCase());
+  res.send(`method=${req.method.toLowerCase()}`);
 });
 
 app.get('/tobi', (req, res) => {
@@ -413,7 +413,7 @@ app.get('/manny', (req, res) => {
 });
 
 function serveImageWithType(res, type) {
-  const img = fs.readFileSync(__dirname + '/../node/fixtures/test.png');
+  const img = fs.readFileSync(`${__dirname}/../node/fixtures/test.png`);
   res.writeHead(200, {'Content-Type': type });
   res.end(img, 'binary');
 }
@@ -431,11 +431,11 @@ app.get('/chunked-json', (req, res) => {
   let chunk = 0;
   const interval = setInterval(() => {
     chunk++;
-    if(chunk === 1) res.write('{ "name_' + chunk + '": "');
-    if(chunk > 1) res.write('value_' + chunk + '", "name_' + chunk + '": "');
+    if(chunk === 1) res.write(`{ "name_${chunk}": "`);
+    if(chunk > 1) res.write(`value_${chunk}", "name_${chunk}": "`);
     if(chunk === 10) {
       clearInterval(interval);
-      res.write('value_' + chunk + '"}');
+      res.write(`value_${chunk}"}`);
       res.end();
     }
   },10);
@@ -445,7 +445,7 @@ app.get('/if-mod', (req, res) => {
   if (req.header('if-modified-since')) {
     res.status(304).end();
   } else {
-    res.send('' + Date.now());
+    res.send(`${Date.now()}`);
   }
 });
 
@@ -474,7 +474,7 @@ app.get('/delay/:ms/ok/:id', (req, res) => {
       res.sendStatus(200);
     }, ms);
   } else {
-    res.send('ok = ' + req.url);
+    res.send(`ok = ${req.url}`);
     delete called[id];
   }
 });
