@@ -540,7 +540,7 @@ describe('request', function(){
         try {
         assert(false, 'should not complete the request');
         } catch(e) { done(e); }
-    });
+      });
 
       req.on('error', function(error){
         done(error);
@@ -567,6 +567,15 @@ describe('request', function(){
       setTimeout(function() {
         req.abort().abort().abort();
       }, 1000);
+    })
+
+    it('should not allow abort then end', function(done){
+      request
+      .get(uri + '/delay/3000')
+      .abort()
+      .end(function(err, res){
+        done(err ? undefined : Error("Expected abort error"));
+      });
     })
   })
 
