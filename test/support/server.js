@@ -351,10 +351,15 @@ app.options('/options/echo/body', bodyParser.json(), (req, res) => {
 app.get('/cookie-redirect', (req, res) => {
   res.set("Set-Cookie", "replaced=yes");
   res.append("Set-Cookie", "from-redir=1", true);
-  res.redirect(303, '/cookie-redirect-2');
+  res.redirect(303, '/show-cookies');
 });
 
-app.get('/cookie-redirect-2', (req, res) => {
+app.get('/set-cookie', (req, res) => {
+  res.cookie('persist', '123');
+  res.send('ok');
+});
+
+app.get('/show-cookies', (req, res) => {
   res.set('content-type', 'text/plain');
   res.send(req.headers.cookie);
 });
