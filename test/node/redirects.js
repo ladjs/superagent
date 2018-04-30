@@ -44,6 +44,28 @@ describe("request", () => {
       });
     })
 
+    it("should have previously set cookie for subsquent requests when agent is used", done => {
+      const agent = request.agent();
+      agent
+      .get(`${base}/set-cookie`)
+      .end((err) => {
+        assert.ifError(err);
+        agent
+        .get(`${base}/show-cookies`)
+        .set({'Cookie': 'orig=1'})
+        .end((err, res) => {
+          try {
+            assert.ifError(err);
+            assert(/orig=1/.test(res.text), "orig=1/.test");
+            assert(/persist=123/.test(res.text), "persist=123");
+            done();
+          } catch(err) {
+            done(err);
+          }
+        });
+      });
+    })
+
     it("should follow Location", done => {
       const redirects = [];
 
