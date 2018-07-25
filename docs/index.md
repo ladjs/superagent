@@ -8,7 +8,7 @@ SuperAgent is light-weight progressive ajax API crafted for flexibility, readabi
        .send({ name: 'Manny', species: 'cat' })
        .set('X-API-Key', 'foobar')
        .set('Accept', 'application/json')
-       .then(function(res) {
+       .then(res => {
           alert('yay got ' + JSON.stringify(res.body));
        });
 
@@ -22,10 +22,10 @@ A request can be initiated by invoking the appropriate method on the `request` o
 
      request
        .get('/search')
-       .then(function(res) {
+       .then(res => {
           // res.body, res.headers, res.status
        })
-       .catch(function(err) {
+       .catch(err => {
           // err.message, err.response
        });
 
@@ -33,7 +33,7 @@ HTTP method may also be passed as a string:
 
     request('GET', '/search').then(success, failure);
 
-Old-style callbacks are also supported. *Instead of* `.then()` you can call `.end()`:
+Old-style callbacks are also supported, but not recommended. *Instead of* `.then()` you can call `.end()`:
 
     request('GET', '/search').end(function(err, res){
       if (res.ok) {}
@@ -43,7 +43,7 @@ Absolute URLs can be used. In web browsers absolute URLs work only if the server
 
      request
        .get('http://example.com/search')
-       .then(function(res) {
+       .then(res => {
 
        });
 
@@ -61,7 +61,7 @@ __DELETE__, __HEAD__, __PATCH__, __POST__, and __PUT__ requests can also be used
 
     request
       .head('/favicon.ico')
-      .then(function(res) {
+      .then(res => {
 
       });
 
@@ -69,7 +69,7 @@ __DELETE__ can be also called as `.del()` for compatibility with old IE where `d
 
 The HTTP method defaults to __GET__, so if you wish, the following is valid:
 
-     request('/search', function(err, res){
+     request('/search', (err, res) => {
 
      });
 
@@ -99,7 +99,7 @@ The `.query()` method accepts objects, which when used with the __GET__ method w
        .query({ query: 'Manny' })
        .query({ range: '1..5' })
        .query({ order: 'desc' })
-       .then(function(res) {
+       .then(res => {
 
        });
 
@@ -108,7 +108,7 @@ Or as a single object:
     request
       .get('/search')
       .query({ query: 'Manny', range: '1..5', order: 'desc' })
-      .then(function(res) {
+      .then(res => {
 
       });
 
@@ -117,7 +117,7 @@ The `.query()` method accepts strings as well:
       request
         .get('/querystring')
         .query('search=Manny&range=1..5')
-        .then(function(res) {
+        .then(res => {
 
         });
 
@@ -127,7 +127,7 @@ Or joined:
         .get('/querystring')
         .query('search=Manny')
         .query('range=1..5')
-        .then(function(res) {
+        .then(res => {
 
         });
 
@@ -138,7 +138,7 @@ You can also use the `.query()` method for HEAD requests. The following will pro
       request
         .head('/users')
         .query({ email: 'joe@smith.com' })
-        .then(function(res) {
+        .then(res => {
 
         });
 
@@ -216,8 +216,8 @@ request.serialize['application/xml'] = function (obj) {
     return 'string generated from obj';
 };
 
-//going forward, all requests with a Content-type of
-//'application/xml' will be automatically serialized
+// going forward, all requests with a Content-type of
+// 'application/xml' will be automatically serialized
 ```
 If you want to send the payload in a custom format, you can replace
 the built-in serialization with the `.serialize()` method on a per-request basis:
@@ -226,7 +226,7 @@ the built-in serialization with the `.serialize()` method on a per-request basis
 request
     .post('/user')
     .send({foo: 'bar'})
-    .serialize(function serializer(obj) {
+    .serialize(obj => {
         return 'string generated from obj';
     });
 ```
@@ -286,9 +286,7 @@ By default the query string is not assembled in any particular order. An asciibe
  request.get('/user')
    .query('name=Nick')
    .query('search=Manny')
-   .sortQuery(function(a, b){
-     return a.length - b.length;
-   })
+   .sortQuery((a, b) => a.length - b.length)
    .then(callback)
 ```
 
@@ -383,7 +381,7 @@ In browsers, you may use `.responseType('blob')` to request handling of binary r
 ```js
 req.get('/binary.data')
   .responseType('blob')
-  .end(function (error, res) {
+  .then(res => {
     // res.body will be a browser native Blob type here
   });
 ```
@@ -611,7 +609,7 @@ The `.withCredentials()` method enables the ability to send cookies from the ori
     request
       .get('http://api.example.com:4001/')
       .withCredentials()
-      .then(function(res) {
+      .then(res => {
         assert.equal(200, res.status);
         assert.equal('tobi', res.text);
       })
@@ -623,7 +621,7 @@ Your callback function will always be passed two arguments: error and response. 
     request
      .post('/upload')
      .attach('image', 'path/to/tobi.png')
-     .then(function(res) {
+     .then(res => {
 
      });
 
@@ -633,7 +631,7 @@ An "error" event is also emitted, with you can listen for:
       .post('/upload')
       .attach('image', 'path/to/tobi.png')
       .on('error', handle)
-      .then(function(res) {
+      .then(res => {
 
       });
 
@@ -673,7 +671,7 @@ SuperAgent fires `progress` events on upload and download of large files.
           loaded: // bytes downloaded or uploaded so far
         } */
       })
-      .end()
+      .then()
 
 ## Promise and Generator support
 
