@@ -20,6 +20,7 @@ describe("req.parse(fn)", () => {
   it("should be the only parser", () =>
     request
       .get(`${base}/image`)
+      .buffer(false)
       .parse((res, fn) => {
         res.on("data", () => {});
       })
