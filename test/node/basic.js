@@ -263,7 +263,7 @@ describe("[node] request", () => {
           res.body.should.eql({});
           let buf = "";
           res.setEncoding("utf8");
-          res.buffered.should.be.false;
+          assert(!res.buffered);
           res.on("data", chunk => {
             buf += chunk;
           });
