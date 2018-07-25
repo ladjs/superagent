@@ -2,11 +2,12 @@
 
 ## Breaking changes
 
- * Node.js v4 has reached it's end of life, so we no longer support it. It's v6+ or later.
+ * Node.js v4 has reached it's end of life, so we no longer support it. It's v6+ or later. We recommend Node.js 10.
  * We now use ES6 in the browser code, too.
     * If you're using Browserify or Webpack to package code for Internet Explorer, you will also have to use Babel.
     * The pre-built node_modules/superagent.js is still ES5-compatible.
  * `.end(…)` returns `undefined` instead of the request. If you need the request object after calling `.end()` (and you probably don't), save it in a variable and call `request.end(…)`. Consider not using `.end()` at all, and migrating to promises by calling `.then()` instead.
+ * In Node, responses with unknown MIME type are buffered by default. To get old behavior, if you use custom *unbuffered* parsers, add `.buffer(false)` to requests or set `superagent.buffer[yourMimeType] = false`.
  * Invalid uses of `.pipe()` throw.
 
 ## Minor changes

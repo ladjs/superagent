@@ -98,20 +98,17 @@ describe("req.buffer['someMimeType']", () => {
                 done();
             })
     });
-    it('should fallback to default handling for that mimetype when undefined', done => {
+    it('should fallback to default handling for that mimetype when undefined', () => {
         const type = 'application/bazzz';
         const send = 'woooooo';
-        request
+        return request
             .post(`${base}/echo`)
             .type(type)
             .send(send)
-            .end((err, res) => {
-                assert.equal(null, res.text);
-                assert.ifError(err);
+            .then(res => {
                 assert.equal(res.type, type);
-                assert(!res.buffered);
-                res.body.should.eql({});
-                done();
+                assert.equal(send, res.body.toString());
+                assert(res.buffered);
             })
     })
 });

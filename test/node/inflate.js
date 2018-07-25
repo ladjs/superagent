@@ -2,10 +2,10 @@
 require("should");
 require("should-http");
 
-const request = require("../../"),
-  assert = require("assert"),
-  express = require("express"),
-  zlib = require("zlib");
+const request = require("../../");
+const assert = require("assert");
+const express = require("express");
+const zlib = require("zlib");
 
 const app = express(),
   subject = "some long long long long string";
@@ -124,6 +124,17 @@ describe("zlib", () => {
   });
 
   describe("without encoding set", () => {
+    it("should buffer if asked", () => {
+      return request.get(`${base}/binary`)
+      .buffer(true)
+      .then(res => {
+        res.should.have.status(200);
+        assert(res.headers["content-length"]);
+        assert(res.body.byteLength);
+        assert.equal(subject, res.body.toString());
+      });
+    });
+
     it("should emit buffers", done => {
       request.get(`${base}/binary`).end((err, res) => {
         res.should.have.status(200);

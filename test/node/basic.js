@@ -252,25 +252,15 @@ describe("[node] request", () => {
   });
 
   describe("with a content type other than application/json or text/*", () => {
-    it("should disable buffering", done => {
-      request
+    it("should still use buffering", () => {
+      return request
         .post(`${base}/echo`)
         .type("application/x-dog")
         .send("hello this is dog")
-        .end((err, res) => {
-          assert.ifError(err)
+        .then(res => {
           assert.equal(null, res.text);
-          res.body.should.eql({});
-          let buf = "";
-          res.setEncoding("utf8");
-          assert(!res.buffered);
-          res.on("data", chunk => {
-            buf += chunk;
-          });
-          res.on("end", () => {
-            buf.should.equal("hello this is dog");
-            done();
-          });
+          assert.equal(res.body.toString(), "hello this is dog");
+          res.buffered.should.be.true;
         });
     });
   });
