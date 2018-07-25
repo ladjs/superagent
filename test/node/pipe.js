@@ -45,6 +45,20 @@ describe("request pipe", () => {
     stream.pipe(req);
   });
 
+  it("end() stops piping", done => {
+    const stream = fs.createWriteStream(destPath);
+    request.get(base)
+      .end((err, res) => {
+        try {
+          res.pipe(stream);
+          return done(Error("Did not prevent nonsense pipe"));
+        } catch(_e) {
+          /* expected error */
+        }
+        done()
+      });
+  });
+
   it("should act as a readable stream", done => {
     const stream = fs.createWriteStream(destPath);
 
