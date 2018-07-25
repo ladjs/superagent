@@ -106,8 +106,8 @@ it('GET invalid json', next => {
 it('GET querystring empty objects', next => {
   const req = request
   .get('/querystring')
-  .query({})
-  .end((err, res) => {
+  .query({});
+  req.end((err, res) => {
     assert.deepEqual(req._query, []);
     assert.deepEqual(res.body, {});
     next();
@@ -207,8 +207,8 @@ it('progress event listener on xhr object registered when some on the request', 
   const req = request
   .get('/foo')
   .on('progress', data => {
-  })
-  .end();
+  });
+  req.end();
 
   if (req.xhr.upload) { // Only run assertion on capable browsers
     assert.notEqual(null, req.xhr.upload.onprogress);
@@ -217,8 +217,8 @@ it('progress event listener on xhr object registered when some on the request', 
 
 it('no progress event listener on xhr object when none registered on request', () => {
   const req = request
-  .get('/foo')
-  .end();
+  .get('/foo');
+  req.end();
 
   if (req.xhr.upload) { // Only run assertion on capable browsers
     assert.strictEqual(null, req.xhr.upload.onprogress);

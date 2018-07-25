@@ -720,8 +720,8 @@ it('request(url, fn)', next => {
 it('req.timeout(ms)', next => {
   const req = request
   .get(`${uri}/delay/3000`)
-  .timeout(1000)
-  .end((err, res) => {
+  .timeout(1000);
+  req.end((err, res) => {
     try {
     assert(err, 'error missing');
     assert.equal(1000, err.timeout, 'err.timeout missing');
@@ -736,8 +736,8 @@ it('req.timeout(ms)', next => {
 it('req.timeout(ms) with redirect', next => {
   const req = request
   .get(`${uri}/delay/const`)
-  .timeout(1000)
-  .end((err, res) => {
+  .timeout(1000);
+  req.end((err, res) => {
     try {
     assert(err, 'error missing');
     assert.equal(1000, err.timeout, 'err.timeout missing');

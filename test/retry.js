@@ -166,8 +166,8 @@ describe('.retry(count)', function(){
     const req = request
     .get(`${base}/delay/400`)
     .timeout(200)
-    .retry(2)
-    .end((err, res) => {
+    .retry(2);
+    req.end((err, res) => {
       try {
         assert(false, 'should not complete the request');
       } catch(e) { done(e); }

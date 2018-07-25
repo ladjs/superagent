@@ -49,8 +49,8 @@ describe("request.get", () => {
     it("should follow Location with a GET request", done => {
       const req = request
         .get(`${base}/test-301`)
-        .redirects(1)
-        .end((err, res) => {
+        .redirects(1);
+      req.end((err, res) => {
           req.req._headers.host.should.eql(
             `localhost:${server2.address().port}`
           );
@@ -64,8 +64,8 @@ describe("request.get", () => {
     it("should follow Location with a GET request", done => {
       const req = request
         .get(`${base}/test-302`)
-        .redirects(1)
-        .end((err, res) => {
+        .redirects(1);
+      req.end((err, res) => {
           req.req._headers.host.should.eql(
             `localhost:${server2.address().port}`
           );
@@ -79,8 +79,8 @@ describe("request.get", () => {
     it("should follow Location with a GET request", done => {
       const req = request
         .get(`${base}/test-303`)
-        .redirects(1)
-        .end((err, res) => {
+        .redirects(1);
+      req.end((err, res) => {
           req.req._headers.host.should.eql(
             `localhost:${server2.address().port}`
           );
@@ -94,8 +94,8 @@ describe("request.get", () => {
     it("should follow Location with a GET request", done => {
       const req = request
         .get(`${base}/test-307`)
-        .redirects(1)
-        .end((err, res) => {
+        .redirects(1);
+      req.end((err, res) => {
           req.req._headers.host.should.eql(
             `localhost:${server2.address().port}`
           );
@@ -109,8 +109,8 @@ describe("request.get", () => {
     it("should follow Location with a GET request", done => {
       const req = request
         .get(`${base}/test-308`)
-        .redirects(1)
-        .end((err, res) => {
+        .redirects(1);
+      req.end((err, res) => {
           req.req._headers.host.should.eql(
             `localhost:${server2.address().port}`
           );
@@ -127,8 +127,8 @@ describe("request.post", () => {
     it("should follow Location with a GET request", done => {
       const req = request
         .post(`${base}/test-301`)
-        .redirects(1)
-        .end((err, res) => {
+        .redirects(1);
+      req.end((err, res) => {
           req.req._headers.host.should.eql(
             `localhost:${server2.address().port}`
           );
@@ -142,8 +142,8 @@ describe("request.post", () => {
     it("should follow Location with a GET request", done => {
       const req = request
         .post(`${base}/test-302`)
-        .redirects(1)
-        .end((err, res) => {
+        .redirects(1);
+      req.end((err, res) => {
           req.req._headers.host.should.eql(
             `localhost:${server2.address().port}`
           );
@@ -157,8 +157,8 @@ describe("request.post", () => {
     it("should follow Location with a GET request", done => {
       const req = request
         .post(`${base}/test-303`)
-        .redirects(1)
-        .end((err, res) => {
+        .redirects(1);
+      req.end((err, res) => {
           req.req._headers.host.should.eql(
             `localhost:${server2.address().port}`
           );
@@ -172,8 +172,8 @@ describe("request.post", () => {
     it("should follow Location with a POST request", done => {
       const req = request
         .post(`${base}/test-307`)
-        .redirects(1)
-        .end((err, res) => {
+        .redirects(1);
+      req.end((err, res) => {
           req.req._headers.host.should.eql(
             `localhost:${server2.address().port}`
           );
@@ -187,8 +187,8 @@ describe("request.post", () => {
     it("should follow Location with a POST request", done => {
       const req = request
         .post(`${base}/test-308`)
-        .redirects(1)
-        .end((err, res) => {
+        .redirects(1);
+      req.end((err, res) => {
           req.req._headers.host.should.eql(
             `localhost:${server2.address().port}`
           );
