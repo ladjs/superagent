@@ -27,7 +27,6 @@
     "component-emitter": "^1.2.0",
     "cookiejar": "^2.1.2",
     "debug": "^3.1.0",
-    "extend": "^3.0.0",
     "form-data": "^2.3.2",
     "formidable": "^1.2.0",
     "methods": "^1.1.1",
