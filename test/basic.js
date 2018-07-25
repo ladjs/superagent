@@ -456,7 +456,7 @@ describe('request', function(){
       .send({ name: 'tobi' })
       .end((err, res) => {
         try {
-        assert.equal(null, err);
+        assert.ifError(err)
         res.text.should.equal('{"name":"tobi"}');
         done();
         } catch(e) { done(e); }
@@ -494,6 +494,7 @@ describe('request', function(){
       .post(`${uri}/echo`)
       .send({ name: 'tobi' })
       .then(res => {
+        res.type.should.equal('application/json');
         res.text.should.equal('{"name":"tobi"}');
         done();
       })

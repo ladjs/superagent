@@ -187,8 +187,8 @@ app.get('/delay/slowbody', (req, res) => {
   // Send lots of garbage data to overflow all buffers along the way,
   // so that the browser gets some data before the request is done
   const initialDataSent = new Promise(resolve => {
-    res.write(new Buffer(4000), () => {
-      res.write(new Buffer(16000));
+    res.write(new Buffer.alloc(4000), () => {
+      res.write(new Buffer.alloc(16000));
       resolve();
     });
   });

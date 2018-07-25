@@ -265,7 +265,7 @@
 .post(uri + '/echo')
 .send({ name: 'tobi' })
 .end(function(err, res){
-  assert.equal(null, err);
+  assert.ifError(err)
   res.text.should.equal('{&quot;name&quot;:&quot;tobi&quot;}');
   done();
 });</code></pre></dd>
@@ -662,7 +662,7 @@ request
 .get('http://localhost:5000/custom')
 .buffer()
 .end(function(err, res){
-  assert.equal(null, err);
+  assert.ifError(err)
   assert.equal('custom stuff', res.text);
   assert(res.buffered);
   done();
@@ -679,7 +679,7 @@ request
 .send('hello this is dog')
 .buffer(false)
 .end(function(err, res){
-  assert.equal(null, err);
+  assert.ifError(err)
   assert.equal(null, res.text);
   res.body.should.eql({});
   var buf = '';
@@ -734,7 +734,7 @@ done();</code></pre></dd>
 .type('application/x-dog')
 .send('hello this is dog')
 .end(function(err, res){
-  assert.equal(null, err);
+  assert.ifError(err)
   assert.equal(null, res.text);
   res.body.should.eql({});
   var buf = '';
@@ -761,7 +761,7 @@ request
 .send(img)
 .buffer(false)
 .end(function(err, res){
-  assert.equal(null, err);
+  assert.ifError(err)
   assert(!res.buffered);
   assert.equal(res.header['content-length'], Buffer.byteLength(img));
   done();
@@ -774,7 +774,7 @@ request
 .send(img)
 .buffer(true)
 .end(function(err, res){
-  assert.equal(null, err);
+  assert.ifError(err)
   assert(res.buffered);
   assert.equal(res.header['content-length'], img.length);
   done();

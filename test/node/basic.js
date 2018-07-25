@@ -132,7 +132,7 @@ describe("[node] request", () => {
         .get(`${base}/custom`)
         .buffer()
         .end((err, res) => {
-          assert.equal(null, err);
+          assert.ifError(err)
           assert.equal("custom stuff", res.text);
           assert(res.buffered);
           done();
@@ -149,7 +149,7 @@ describe("[node] request", () => {
             .buffer()
             .end((err, res) => {
                 delete request.buffer[type];
-                assert.equal(null, err);
+                assert.ifError(err)
                 assert.equal(res.type, type);
                 assert.equal(send, res.text);
                 assert(res.buffered);
@@ -166,7 +166,7 @@ describe("[node] request", () => {
         .send("hello this is dog")
         .buffer(false)
         .end((err, res) => {
-          assert.equal(null, err);
+          assert.ifError(err)
           assert.equal(null, res.text);
           res.body.should.eql({});
           let buf = "";
@@ -191,7 +191,7 @@ describe("[node] request", () => {
               .buffer(false)
               .end((err, res) => {
                   delete request.buffer[type];
-                  assert.equal(null, err);
+                  assert.ifError(err)
                   assert.equal(null, res.text);
                   assert.equal(res.type, type);
                   assert(!res.buffered);
@@ -215,7 +215,7 @@ describe("[node] request", () => {
         .get(`${base}/custom`)
         .withCredentials()
         .end((err, res) => {
-          assert.equal(null, err);
+          assert.ifError(err)
           done();
         });
     });
@@ -258,7 +258,7 @@ describe("[node] request", () => {
         .type("application/x-dog")
         .send("hello this is dog")
         .end((err, res) => {
-          assert.equal(null, err);
+          assert.ifError(err)
           assert.equal(null, res.text);
           res.body.should.eql({});
           let buf = "";
@@ -286,7 +286,7 @@ describe("[node] request", () => {
         .send(img)
         .buffer(false)
         .end((err, res) => {
-          assert.equal(null, err);
+          assert.ifError(err)
           assert(!res.buffered);
           assert.equal(res.header["content-length"], Buffer.byteLength(img));
           done();
@@ -301,7 +301,7 @@ describe("[node] request", () => {
         .send(img)
         .buffer(true)
         .end((err, res) => {
-          assert.equal(null, err);
+          assert.ifError(err)
           assert(res.buffered);
           assert.equal(res.header["content-length"], img.length);
           done();
