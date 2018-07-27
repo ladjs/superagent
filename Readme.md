@@ -63,7 +63,7 @@ Existing plugins:
  * [superagent-mock](https://github.com/M6Web/superagent-mock) - simulate HTTP calls by returning data fixtures based on the requested URL
  * [superagent-mocker](https://github.com/shuvalov-anton/superagent-mocker) — simulate REST API
  * [superagent-cache](https://github.com/jpodwys/superagent-cache) - A global SuperAgent patch with built-in, flexible caching
-  * [superagent-cache-plugin](https://github.com/jpodwys/superagent-cache-plugin) - A SuperAgent plugin with built-in, flexible caching
+ * [superagent-cache-plugin](https://github.com/jpodwys/superagent-cache-plugin) - A SuperAgent plugin with built-in, flexible caching
  * [superagent-jsonapify](https://github.com/alex94puchades/superagent-jsonapify) - A lightweight [json-api](http://jsonapi.org/format/) client addon for superagent
  * [superagent-serializer](https://github.com/zzarcon/superagent-serializer) - Converts server payload into different cases
  * [superagent-httpbackend](https://www.npmjs.com/package/superagent-httpbackend) - stub out requests using AngularJS' $httpBackend syntax
@@ -79,15 +79,19 @@ For SuperAgent extensions such as couchdb and oauth visit the [wiki](https://git
 
 Our breaking changes are mostly in rarely used functionality and from stricter error handling.
 
+* [3.x to 4.x](https://github.com/visionmedia/superagent/releases/tag/v4.0.0-alpha.1):
+  - Ensure you're running Node 6 or later. We've dropped support for Node 4.
+  - We've started using ES6 and for compatibility with Internet Explorer you may need to use Babel.
+  - We suggest migrating from `.end()` callbacks to `.then()` or `await`.
 * [2.x to 3.x](https://github.com/visionmedia/superagent/releases/tag/v3.0.0):
-  - Ensure you're running Node 4 or later. We dropped support for Node 0.x.
+  - Ensure you're running Node 4 or later. We've dropped support for Node 0.x.
   - Test code that calls `.send()` multiple times. Invalid calls to `.send()` will now throw instead of sending garbage.
 * [1.x to 2.x](https://github.com/visionmedia/superagent/releases/tag/v2.0.0):
   - If you use `.parse()` in the *browser* version, rename it to `.serialize()`.
   - If you rely on `undefined` in query-string values being sent literally as the text "undefined", switch to checking for missing value instead. `?key=undefined` is now `?key` (without a value).
   - If you use `.then()` in Internet Explorer, ensure that you have a polyfill that adds a global `Promise` object.
 * 0.x to 1.x:
-  - Use `.end(function(err, res){})`. 1-argument version is no longer supported.
+  - Instead of 1-argument callback `.end(function(res){})` use `.then(res => {})`.
 
 ## Running node tests
 

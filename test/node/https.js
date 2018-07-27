@@ -63,6 +63,7 @@ describe("https", () => {
           .get(testEndpoint)
           .ca(ca)
           .end((err, res) => {
+            assert.ifError(err);
             assert(res.ok);
             assert.strictEqual("Safe and secure!", res.text);
             done();
@@ -74,9 +75,11 @@ describe("https", () => {
       it("should be able to make multiple requests without redefining the certificate", done => {
         const agent = request.agent({ ca });
         agent.get(testEndpoint).end((err, res) => {
+          assert.ifError(err);
           assert(res.ok);
           assert.strictEqual("Safe and secure!", res.text);
           agent.get(url.parse(testEndpoint)).end((err, res) => {
+            assert.ifError(err);
             assert(res.ok);
             assert.strictEqual("Safe and secure!", res.text);
             done();
