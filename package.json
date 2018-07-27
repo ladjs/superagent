@@ -43,7 +43,7 @@
     "body-parser": "^1.18.2",
     "browserify": "^16.2.0",
     "cookie-parser": "^1.4.3",
-    "express": "^4.16.3",
+    "express": "git+https://github.com/sogaani/express.git#initial-support-http2",
     "express-session": "^1.15.6",
     "marked": "^0.3.19",
     "mocha": "^3.5.3",
