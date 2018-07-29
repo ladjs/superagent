@@ -3,6 +3,10 @@ const request = require("../../"),
   express = require("express"),
   app = express(),
   fs = require("fs");
+let http = require('http');
+if (process.env.EXPOSE_HTTP2) {
+  http = require('http2');
+}
 
 app.get("/", (req, res) => {
   fs.createReadStream("test/node/fixtures/user.json").pipe(res);
@@ -11,7 +15,8 @@ app.get("/", (req, res) => {
 let base = "http://localhost";
 let server;
 before(function listen(done) {
-  server = app.listen(0, function listening() {
+  server = http.createServer(app);
+  server = server.listen(0, function listening() {
     base += `:${server.address().port}`;
     done();
   });
@@ -29,7 +34,9 @@ describe("response", () => {
       res.on("end", () => {
         trackEndEvent++;
         trackEndEvent.should.equal(1);
-        trackCloseEvent.should.equal(0); // close should not have been called
+        if (!process.env.EXPOSE_HTTP2) {
+          trackCloseEvent.should.equal(0); // close should not have been called
+        }
         done();
       });
 

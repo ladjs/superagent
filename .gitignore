@@ -9,3 +9,4 @@ components
 test/node/fixtures/tmp.json
 .idea
 superagent.js
+package-lock.json

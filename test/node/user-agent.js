@@ -6,7 +6,7 @@ const base = setup.uri;
 
 describe("req.get()", () => {
   it("should set a default user-agent", () =>
-    request.get(`${base}/ua`).then(res => {
+    request.put(`${base}/ua`).then(res => {
       assert(res.headers);
       assert(res.headers["user-agent"]);
       assert(
@@ -18,7 +18,7 @@ describe("req.get()", () => {
 
   it("should be able to override user-agent", () =>
     request
-      .get(`${base}/ua`)
+      .put(`${base}/ua`)
       .set("User-Agent", "foo/bar")
       .then(res => {
         assert(res.headers);
@@ -27,7 +27,7 @@ describe("req.get()", () => {
 
   it("should be able to wipe user-agent", () =>
     request
-      .get(`${base}/ua`)
+      .put(`${base}/ua`)
       .unset("User-Agent")
       .then(res => {
         assert(res.headers);

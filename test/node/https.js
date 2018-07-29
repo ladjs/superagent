@@ -12,6 +12,10 @@ const key = fs.readFileSync(`${__dirname}/fixtures/key.pem`);
 const pfx = fs.readFileSync(`${__dirname}/fixtures/cert.pfx`);
 const cert = fs.readFileSync(`${__dirname}/fixtures/cert.pem`);
 const passpfx = fs.readFileSync(`${__dirname}/fixtures/passcert.pfx`);
+let http2;
+if(process.env.EXPOSE_HTTP2){
+  http2 = require('http2');
+}
 let server;
 
 app.get("/", (req, res) => {
@@ -26,13 +30,23 @@ let testEndpoint;
 describe("https", () => {
   describe("certificate authority", () => {
     before(function listen(done) {
-      server = https.createServer(
-        {
-          key,
-          cert,
-        },
-        app
-      );
+      if(process.env.EXPOSE_HTTP2){
+        server = http2.createSecureServer(
+          {
+            key,
+            cert,
+          },
+          app
+        );
+      }else{
+        server = https.createServer(
+          {
+            key,
+            cert,
+          },
+          app
+        );
+      }
       server.listen(0, function listening() {
         testEndpoint = `${base}:${server.address().port}`;
         done();
@@ -74,16 +88,29 @@ describe("https", () => {
 
   describe.skip("client certificates", () => {
     before(function listen(done) {
-      server = https.createServer(
-        {
-          ca,
-          key,
-          cert,
-          requestCert: true,
-          rejectUnauthorized: true,
-        },
-        app
-      );
+      if(process.env.EXPOSE_HTTP2){
+        server = http2.createSecureServer(
+          {
+            ca,
+            key,
+            cert,
+            requestCert: true,
+            rejectUnauthorized: true,
+          },
+          app
+        );
+      }else{
+        server = https.createServer(
+          {
+            ca,
+            key,
+            cert,
+            requestCert: true,
+            rejectUnauthorized: true,
+          },
+          app
+        );
+      }
       server.listen(0, function listening() {
         testEndpoint = `${base}:${server.address().port}`;
         done();

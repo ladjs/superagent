@@ -6,6 +6,10 @@ const request = require("../../");
 const assert = require("assert");
 const express = require("express");
 const zlib = require("zlib");
+let http = require('http');
+if(process.env.EXPOSE_HTTP2){
+  http = require('http2');
+}
 
 const app = express(),
   subject = "some long long long long string";
@@ -14,7 +18,8 @@ let base = "http://localhost";
 let server;
 
 before(function listen(done) {
-  server = app.listen(0, function listening() {
+  server = http.createServer(app);
+  server = server.listen(0, function listening() {
     base += `:${server.address().port}`;
     done();
   });

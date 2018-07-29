@@ -4,6 +4,31 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const basicAuth = require('basic-auth-connect');
 const fs = require('fs');
+let http = require('http');
+let isPseudoHeader;
+
+if(process.env.EXPOSE_HTTP2){
+  http = require('http2');
+  const {
+    HTTP2_HEADER_AUTHORITY,
+    HTTP2_HEADER_METHOD,
+    HTTP2_HEADER_PATH,
+    HTTP2_HEADER_SCHEME,
+    HTTP2_HEADER_STATUS,
+  } = http.constants;
+  isPseudoHeader = function(name) {
+    switch (name) {
+      case HTTP2_HEADER_STATUS:    // :status
+      case HTTP2_HEADER_METHOD:    // :method
+      case HTTP2_HEADER_PATH:      // :path
+      case HTTP2_HEADER_AUTHORITY: // :authority
+      case HTTP2_HEADER_SCHEME:    // :scheme
+        return true;
+      default:
+        return false;
+    }
+  }
+}
 
 const app = express();
 
@@ -17,7 +42,15 @@ app.all('/url', (req, res) => {
 });
 
 app.all('/echo', (req, res) => {
-  res.writeHead(200, req.headers);
+  let headers = req.headers;
+  if(process.env.EXPOSE_HTTP2){
+    Object.keys(headers).forEach(function(name) {
+      if(isPseudoHeader(name)){
+        delete headers[name];
+      }
+    });
+  }
+  res.writeHead(200, headers);
   req.pipe(res);
 });
 
@@ -230,7 +263,7 @@ app.get('/querystring-in-header', (req, res) => {
   res.send();
 });
 
-app.get('/echo-header/:field', (req, res) => {
+app.all('/echo-header/:field', (req, res) => {
   res.send(req.headers[req.params.field]);
 });
 
@@ -409,7 +442,15 @@ app.get('/bad-redirect', (req, res) => {
 });
 
 app.all('/ua', (req, res) => {
-  res.writeHead(200, req.headers);
+  let headers = req.headers;
+  if(process.env.EXPOSE_HTTP2){
+    Object.keys(headers).forEach(function(name) {
+      if(isPseudoHeader(name)){
+        delete headers[name];
+      }
+    });
+  }
+  res.writeHead(200, headers);
   req.pipe(res);
 });
 
@@ -506,4 +547,5 @@ app.get('/error/redirect-error:id', (req, res) => {
   }
 });
 
-app.listen(process.env.ZUUL_PORT);
+let server = http.createServer(app);
+server.listen(process.env.ZUUL_PORT);

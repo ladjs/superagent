@@ -8,6 +8,7 @@ const fs = require("fs");
 const EventEmitter = require("events").EventEmitter;
 const StringDecoder = require("string_decoder").StringDecoder;
 const url = require("url");
+const doesntWorkInHttp2 = !process.env.EXPOSE_HTTP2;
 
 describe("[node] request", () => {
   describe("with an url", () => {
@@ -299,7 +300,7 @@ describe("[node] request", () => {
     });
   });
 
-  it("should send body with .get().send()", next => {
+  if(doesntWorkInHttp2) it("should send body with .get().send()", next => {
     request
       .get(`${base}/echo`)
       .set("Content-Type", "text/plain")

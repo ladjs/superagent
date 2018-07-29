@@ -5,11 +5,16 @@ const request = require("../../"),
   app = express(),
   app2 = express(),
   should = require("should");
+let http = require('http');
+if (process.env.EXPOSE_HTTP2) {
+  http = require('http2');
+}
 
 let base = "http://localhost";
 let server;
 before(function listen(done) {
-  server = app.listen(0, function listening() {
+  server = http.createServer(app);
+  server = server.listen(0, function listening() {
     base += `:${server.address().port}`;
     done();
   });
@@ -18,7 +23,8 @@ before(function listen(done) {
 let base2 = "http://localhost";
 let server2;
 before(function listen(done) {
-  server2 = app2.listen(0, function listening() {
+  server2 = http.createServer(app2);
+  server2 = server2.listen(0, function listening() {
     base2 += `:${server2.address().port}`;
     done();
   });
@@ -51,13 +57,13 @@ describe("request.get", () => {
         .get(`${base}/test-301`)
         .redirects(1);
       req.end((err, res) => {
-          req.req._headers.host.should.eql(
-            `localhost:${server2.address().port}`
-          );
-          res.status.should.eql(200);
-          res.text.should.eql("GET");
-          done();
-        });
+        req.req._headers.host.should.eql(
+          `localhost:${server2.address().port}`
+        );
+        res.status.should.eql(200);
+        res.text.should.eql("GET");
+        done();
+      });
     });
   });
   describe("on 302 redirect", () => {
@@ -66,13 +72,13 @@ describe("request.get", () => {
         .get(`${base}/test-302`)
         .redirects(1);
       req.end((err, res) => {
-          req.req._headers.host.should.eql(
-            `localhost:${server2.address().port}`
-          );
-          res.status.should.eql(200);
-          res.text.should.eql("GET");
-          done();
-        });
+        req.req._headers.host.should.eql(
+          `localhost:${server2.address().port}`
+        );
+        res.status.should.eql(200);
+        res.text.should.eql("GET");
+        done();
+      });
     });
   });
   describe("on 303 redirect", () => {
@@ -81,13 +87,13 @@ describe("request.get", () => {
         .get(`${base}/test-303`)
         .redirects(1);
       req.end((err, res) => {
-          req.req._headers.host.should.eql(
-            `localhost:${server2.address().port}`
-          );
-          res.status.should.eql(200);
-          res.text.should.eql("GET");
-          done();
-        });
+        req.req._headers.host.should.eql(
+          `localhost:${server2.address().port}`
+        );
+        res.status.should.eql(200);
+        res.text.should.eql("GET");
+        done();
+      });
     });
   });
   describe("on 307 redirect", () => {
@@ -96,13 +102,13 @@ describe("request.get", () => {
         .get(`${base}/test-307`)
         .redirects(1);
       req.end((err, res) => {
-          req.req._headers.host.should.eql(
-            `localhost:${server2.address().port}`
-          );
-          res.status.should.eql(200);
-          res.text.should.eql("GET");
-          done();
-        });
+        req.req._headers.host.should.eql(
+          `localhost:${server2.address().port}`
+        );
+        res.status.should.eql(200);
+        res.text.should.eql("GET");
+        done();
+      });
     });
   });
   describe("on 308 redirect", () => {
@@ -111,13 +117,13 @@ describe("request.get", () => {
         .get(`${base}/test-308`)
         .redirects(1);
       req.end((err, res) => {
-          req.req._headers.host.should.eql(
-            `localhost:${server2.address().port}`
-          );
-          res.status.should.eql(200);
-          res.text.should.eql("GET");
-          done();
-        });
+        req.req._headers.host.should.eql(
+          `localhost:${server2.address().port}`
+        );
+        res.status.should.eql(200);
+        res.text.should.eql("GET");
+        done();
+      });
     });
   });
 });
@@ -129,13 +135,13 @@ describe("request.post", () => {
         .post(`${base}/test-301`)
         .redirects(1);
       req.end((err, res) => {
-          req.req._headers.host.should.eql(
-            `localhost:${server2.address().port}`
-          );
-          res.status.should.eql(200);
-          res.text.should.eql("GET");
-          done();
-        });
+        req.req._headers.host.should.eql(
+          `localhost:${server2.address().port}`
+        );
+        res.status.should.eql(200);
+        res.text.should.eql("GET");
+        done();
+      });
     });
   });
   describe("on 302 redirect", () => {
@@ -144,13 +150,13 @@ describe("request.post", () => {
         .post(`${base}/test-302`)
         .redirects(1);
       req.end((err, res) => {
-          req.req._headers.host.should.eql(
-            `localhost:${server2.address().port}`
-          );
-          res.status.should.eql(200);
-          res.text.should.eql("GET");
-          done();
-        });
+        req.req._headers.host.should.eql(
+          `localhost:${server2.address().port}`
+        );
+        res.status.should.eql(200);
+        res.text.should.eql("GET");
+        done();
+      });
     });
   });
   describe("on 303 redirect", () => {
@@ -159,13 +165,13 @@ describe("request.post", () => {
         .post(`${base}/test-303`)
         .redirects(1);
       req.end((err, res) => {
-          req.req._headers.host.should.eql(
-            `localhost:${server2.address().port}`
-          );
-          res.status.should.eql(200);
-          res.text.should.eql("GET");
-          done();
-        });
+        req.req._headers.host.should.eql(
+          `localhost:${server2.address().port}`
+        );
+        res.status.should.eql(200);
+        res.text.should.eql("GET");
+        done();
+      });
     });
   });
   describe("on 307 redirect", () => {
@@ -174,13 +180,13 @@ describe("request.post", () => {
         .post(`${base}/test-307`)
         .redirects(1);
       req.end((err, res) => {
-          req.req._headers.host.should.eql(
-            `localhost:${server2.address().port}`
-          );
-          res.status.should.eql(200);
-          res.text.should.eql("POST");
-          done();
-        });
+        req.req._headers.host.should.eql(
+          `localhost:${server2.address().port}`
+        );
+        res.status.should.eql(200);
+        res.text.should.eql("POST");
+        done();
+      });
     });
   });
   describe("on 308 redirect", () => {
@@ -189,13 +195,13 @@ describe("request.post", () => {
         .post(`${base}/test-308`)
         .redirects(1);
       req.end((err, res) => {
-          req.req._headers.host.should.eql(
-            `localhost:${server2.address().port}`
-          );
-          res.status.should.eql(200);
-          res.text.should.eql("POST");
-          done();
-        });
+        req.req._headers.host.should.eql(
+          `localhost:${server2.address().port}`
+        );
+        res.status.should.eql(200);
+        res.text.should.eql("POST");
+        done();
+      });
     });
   });
 });

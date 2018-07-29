@@ -4,6 +4,11 @@ const request = require("../../"),
   app = express(),
   fs = require("fs"),
   bodyParser = require("body-parser");
+let http = require('http');
+
+if (process.env.EXPOSE_HTTP2){
+  http = require('http2');
+}
 
 app.use(bodyParser.json());
 
@@ -12,13 +17,19 @@ app.get("/", (req, res) => {
 });
 
 app.post("/", (req, res) => {
-  res.send(req.body);
+  if (process.env.EXPOSE_HTTP2){
+    res.set('content-type', 'application/json');
+    req.pipe(res);
+  } else {
+    res.send(req.body);
+  }
 });
 
 let base = "http://localhost";
 let server;
 before(function listen(done) {
-  server = app.listen(0, function listening() {
+  server = http.createServer(app);
+  server.listen(0, function listening() {
     base += `:${server.address().port}`;
     done();
   });
@@ -67,7 +78,7 @@ describe("request pipe", () => {
     req.type("json");
 
     req.on("response", res => {
-      res.should.have.status(200);
+      res.status.should.eql(200);
       responseCalled = true;
     });
     stream.on("finish", () => {

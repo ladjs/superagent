@@ -1,6 +1,7 @@
 const setup = require('./support/setup');
 const uri = setup.uri;
 const doesntWorkInBrowserYet = setup.NODE;
+const doesntWorkInHttp2 = !process.env.EXPOSE_HTTP2;
 
 const assert = require('assert');
 const request = require('../');
@@ -78,7 +79,7 @@ describe('req.send(Object) as "json"', function(){
     });
   });
 
-  if (doesntWorkInBrowserYet) it('should work with GET', done => {
+  if (doesntWorkInBrowserYet && doesntWorkInHttp2) it('should work with GET', done => {
     request
     .get(`${uri}/echo`)
     .send({ tobi: 'ferret' })
