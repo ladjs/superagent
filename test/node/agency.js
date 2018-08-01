@@ -4,13 +4,13 @@ require("should-http");
 
 const express = require("express");
 const app = express();
-const request = require("../../");
+const request = require("../support/client");
 const assert = require("assert");
 const should = require("should");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 let http = require('http');
-if(process.env.EXPOSE_HTTP2){
+if(process.env.HTTP2_TEST){
   http = require('http2');
 }
 

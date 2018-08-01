@@ -2,12 +2,12 @@
 require("should");
 require("should-http");
 
-const request = require("../../");
+const request = require("../support/client");
 const assert = require("assert");
 const express = require("express");
 const zlib = require("zlib");
 let http = require('http');
-if(process.env.EXPOSE_HTTP2){
+if(process.env.HTTP2_TEST){
   http = require('http2');
 }
 

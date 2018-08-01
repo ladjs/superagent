@@ -1,9 +1,9 @@
 "use strict";
 const assert = require("assert");
-const request = require("../../");
+const request = require("../support/client");
 const setup = require("../support/setup");
 const base = setup.uri;
-const doesntWorkInHttp2 = !process.env.EXPOSE_HTTP2;
+const doesntWorkInHttp2 = !process.env.HTTP2_TEST;
 
 describe("req.parse(fn)", () => {
   it("should take precedence over default parsers", done => {

@@ -1,10 +1,10 @@
 "use strict";
-const request = require("../.."),
+const request = require("../support/client"),
   express = require("express"),
   assert = require("assert"),
   app = express();
 let http = require('http');
-if (process.env.EXPOSE_HTTP2) {
+if (process.env.HTTP2_TEST) {
   http = require('http2');
 }
 

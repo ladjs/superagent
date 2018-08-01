@@ -1,6 +1,6 @@
 "use strict";
 
-const request = require("../../");
+const request = require("../support/client");
 const setup = require("../support/setup");
 const base = setup.uri;
 const assert = require("assert");
@@ -8,7 +8,7 @@ const fs = require("fs");
 const EventEmitter = require("events").EventEmitter;
 const StringDecoder = require("string_decoder").StringDecoder;
 const url = require("url");
-const doesntWorkInHttp2 = !process.env.EXPOSE_HTTP2;
+const doesntWorkInHttp2 = !process.env.HTTP2_TEST;
 
 describe("[node] request", () => {
   describe("with an url", () => {

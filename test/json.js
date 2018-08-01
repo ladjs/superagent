@@ -1,10 +1,10 @@
 const setup = require('./support/setup');
 const uri = setup.uri;
 const doesntWorkInBrowserYet = setup.NODE;
-const doesntWorkInHttp2 = !process.env.EXPOSE_HTTP2;
+const doesntWorkInHttp2 = !process.env.HTTP2_TEST;
 
 const assert = require('assert');
-const request = require('../');
+const request = require('./support/client');
 
 describe('req.send(Object) as "json"', function(){
   this.timeout(20000);

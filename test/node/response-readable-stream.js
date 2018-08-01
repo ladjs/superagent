@@ -1,10 +1,10 @@
 "use strict";
-const request = require("../../"),
+const request = require("../support/client"),
   express = require("express"),
   app = express(),
   fs = require("fs");
 let http = require('http');
-if (process.env.EXPOSE_HTTP2) {
+if (process.env.HTTP2_TEST) {
   http = require('http2');
 }
 
@@ -34,7 +34,7 @@ describe("response", () => {
       res.on("end", () => {
         trackEndEvent++;
         trackEndEvent.should.equal(1);
-        if (!process.env.EXPOSE_HTTP2) {
+        if (!process.env.HTTP2_TEST) {
           trackCloseEvent.should.equal(0); // close should not have been called
         }
         done();

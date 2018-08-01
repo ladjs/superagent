@@ -1,7 +1,7 @@
 const setup = require('./support/setup');
 const base = setup.uri;
 const assert = require('assert');
-const request = require('../');
+const request = require('./support/client');
 
 describe('.timeout(ms)', function(){
   this.timeout(15000);

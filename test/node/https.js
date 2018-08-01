@@ -1,6 +1,6 @@
 "use strict";
 
-const request = require("../..");
+const request = require("../support/client");
 const express = require("express");
 const assert = require("assert");
 const app = express();
@@ -13,7 +13,7 @@ const pfx = fs.readFileSync(`${__dirname}/fixtures/cert.pfx`);
 const cert = fs.readFileSync(`${__dirname}/fixtures/cert.pem`);
 const passpfx = fs.readFileSync(`${__dirname}/fixtures/passcert.pfx`);
 let http2;
-if(process.env.EXPOSE_HTTP2){
+if(process.env.HTTP2_TEST){
   http2 = require('http2');
 }
 let server;
@@ -30,7 +30,7 @@ let testEndpoint;
 describe("https", () => {
   describe("certificate authority", () => {
     before(function listen(done) {
-      if(process.env.EXPOSE_HTTP2){
+      if(process.env.HTTP2_TEST){
         server = http2.createSecureServer(
           {
             key,
@@ -88,7 +88,7 @@ describe("https", () => {
 
   describe.skip("client certificates", () => {
     before(function listen(done) {
-      if(process.env.EXPOSE_HTTP2){
+      if(process.env.HTTP2_TEST){
         server = http2.createSecureServer(
           {
             ca,

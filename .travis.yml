@@ -15,9 +15,9 @@ matrix:
     - node_js: "9"
       env: BROWSER=1
     - node_js: "9"
-      env: EXPOSE_HTTP2=1
+      env: HTTP2_TEST=1
     - node_js: "8"
-      env: EXPOSE_HTTP2=1
+      env: HTTP2_TEST=1
 
 before_install:
-  - "test -z $(echo $EXPOSE_HTTP2) || npm install --only=dev https://github.com/sogaani/express.git#initial-support-http2"
+  - "test -z $(echo $HTTP2_TEST) || npm install --only=dev https://github.com/sogaani/express.git#initial-support-http2"

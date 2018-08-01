@@ -17,7 +17,7 @@ test-node:
 		$(NODETESTS)
 
 test-node-http2:
-	@NODE_ENV=test EXPOSE_HTTP2=1 NODE_TLS_REJECT_UNAUTHORIZED=0 node ./node_modules/.bin/mocha \
+	@NODE_ENV=test HTTP2_TEST=1 NODE_TLS_REJECT_UNAUTHORIZED=0 node ./node_modules/.bin/mocha \
 		--require should \
 		--trace-warnings \
 		--reporter $(REPORTER) \

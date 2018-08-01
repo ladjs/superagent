@@ -1,7 +1,7 @@
 const setup = require('./support/setup');
 const base = setup.uri;
 const should = require('should');
-const request = require('../');
+const request = require('./support/client');
 
 const assert = require('assert');
 if (!assert.deepStrictEqual) assert.deepStrictEqual = assert.deepEqual;

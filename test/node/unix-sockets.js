@@ -1,5 +1,5 @@
 "use strict";
-const request = require("../../");
+const request = require("../support/client");
 const express = require("express");
 const assert = require("assert");
 const app = express();
@@ -14,7 +14,7 @@ const httpsSockPath = [os.tmpdir(), "superagent-https.sock"].join("/");
 let httpServer;
 let httpsServer;
 
-if (process.env.EXPOSE_HTTP2) {
+if (process.env.HTTP2_TEST) {
   http = https = require('http2');
 }
 
@@ -78,7 +78,7 @@ describe("[unix-sockets] https", () => {
       // try unlink if sock file exists
       fs.unlinkSync(httpsSockPath);
     }
-    if (process.env.EXPOSE_HTTP2) {
+    if (process.env.HTTP2_TEST) {
       httpsServer = https.createSecureServer({ key, cert }, app);
     } else {
       httpsServer = https.createServer({ key, cert }, app);

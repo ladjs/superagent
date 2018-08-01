@@ -1,6 +1,6 @@
 
 const assert = require('assert');
-const request = require('../../');
+const request = require('../support/client');
 
 describe('request', function() {
   this.timeout(20000);

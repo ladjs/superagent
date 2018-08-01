@@ -1,5 +1,5 @@
 const assert = require('assert');
-const request = require('../../');
+const request = require('../support/client');
 
 describe('xdomain', function(){
   this.timeout(20000);

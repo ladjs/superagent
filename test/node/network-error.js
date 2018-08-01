@@ -1,5 +1,5 @@
 "use strict";
-const request = require("../.."),
+const request = require("../support/client"),
   express = require("express"),
   assert = require("assert"),
   net = require("net");

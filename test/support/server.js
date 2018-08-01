@@ -7,7 +7,7 @@ const fs = require('fs');
 let http = require('http');
 let isPseudoHeader;
 
-if(process.env.EXPOSE_HTTP2){
+if(process.env.HTTP2_TEST){
   http = require('http2');
   const {
     HTTP2_HEADER_AUTHORITY,
@@ -43,7 +43,7 @@ app.all('/url', (req, res) => {
 
 app.all('/echo', (req, res) => {
   let headers = req.headers;
-  if(process.env.EXPOSE_HTTP2){
+  if(process.env.HTTP2_TEST){
     Object.keys(headers).forEach(function(name) {
       if(isPseudoHeader(name)){
         delete headers[name];
@@ -443,7 +443,7 @@ app.get('/bad-redirect', (req, res) => {
 
 app.all('/ua', (req, res) => {
   let headers = req.headers;
-  if(process.env.EXPOSE_HTTP2){
+  if(process.env.HTTP2_TEST){
     Object.keys(headers).forEach(function(name) {
       if(isPseudoHeader(name)){
         delete headers[name];

@@ -1,12 +1,12 @@
 "use strict";
-const request = require("../../"),
+const request = require("../support/client"),
   express = require("express"),
   app = express(),
   fs = require("fs"),
   bodyParser = require("body-parser");
 let http = require('http');
 
-if (process.env.EXPOSE_HTTP2){
+if (process.env.HTTP2_TEST){
   http = require('http2');
 }
 
@@ -17,7 +17,7 @@ app.get("/", (req, res) => {
 });
 
 app.post("/", (req, res) => {
-  if (process.env.EXPOSE_HTTP2){
+  if (process.env.HTTP2_TEST){
     // body-parser does not support http2 yet.
     // This section can be remove after body-parser supporting http2.
     res.set('content-type', 'application/json');
