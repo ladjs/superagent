@@ -105,7 +105,6 @@ describe("[unix-sockets] https", () => {
         .get(`${base}/request/path`)
         .ca(cert)
         .end((err, res) => {
-          console.log(err);
           assert(res.ok);
           assert.strictEqual("request path ok!", res.text);
           done();

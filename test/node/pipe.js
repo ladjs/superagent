@@ -18,6 +18,8 @@ app.get("/", (req, res) => {
 
 app.post("/", (req, res) => {
   if (process.env.EXPOSE_HTTP2){
+    // body-parser does not support http2 yet.
+    // This section can be remove after body-parser supporting http2.
     res.set('content-type', 'application/json');
     req.pipe(res);
   } else {
