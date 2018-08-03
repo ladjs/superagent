@@ -73,27 +73,14 @@ The HTTP method defaults to __GET__, so if you wish, the following is valid:
 
      });
 
-## Enable http2
+## Using HTTP/2
 
-Superagent can be enabled http2 by http2 field:
-
-    const request = require('superagent');
-    request.http2 =true;
-    request
-      .get('http://example.com/search')
-      .then(res => {
-
-      });
-
-A request can be enabled http2 by http2 method:
+To make a request using HTTP/2 protocol only (with no HTTP/1.x fallback), use the `.http2()` method. Currently we do not have auto-detection of HTTP/2-capable servers. This feature is experimental.
 
     const request = require('superagent');
-    request
-      .get('http://example.com/search')
-      .http2()
-      .then(res => {
-
-      });
+    const res = await request
+      .get('https://example.com/h2')
+      .http2();
 
 ## Setting header fields
 
