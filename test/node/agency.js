@@ -4,11 +4,15 @@ require("should-http");
 
 const express = require("express");
 const app = express();
-const request = require("../../");
+const request = require("../support/client");
 const assert = require("assert");
 const should = require("should");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
+let http = require('http');
+if(process.env.HTTP2_TEST){
+  http = require('http2');
+}
 
 app.use(cookieParser());
 app.use(
@@ -60,7 +64,8 @@ app.get("/simple", (req, res) => {
 let base = "http://localhost";
 let server;
 before(function listen(done) {
-  server = app.listen(0, function listening() {
+  server = http.createServer(app);
+  server = server.listen(0, function listening() {
     base += `:${server.address().port}`;
     done();
   });

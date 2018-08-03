@@ -1,5 +1,5 @@
 
-// var request = require('../../')
+// var request = require('../support/client')
 //   , express = require('express')
 //   , assert = require('assert')
 //   , app = express()

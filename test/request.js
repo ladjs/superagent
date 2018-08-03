@@ -1,7 +1,7 @@
 const setup = require('./support/setup');
 const uri = setup.uri;
 const assert = require('assert');
-const request = require('../');
+const request = require('./support/client');
 
 describe('request', function() {
   this.timeout(20000);
@@ -319,7 +319,7 @@ it('request .accept() with application/xml', next => {
 //        but I'm not 100% sure why.  Newer IEs are OK.
 it('request .end()', next => {
   request
-  .get(`${uri}/echo-header/content-type`)
+  .put(`${uri}/echo-header/content-type`)
   .set('Content-Type', 'text/plain')
   .send('wahoo')
   .end((err, res) => {
@@ -332,7 +332,7 @@ it('request .end()', next => {
 
 it('request .send()', next => {
   request
-  .get(`${uri}/echo-header/content-type`)
+  .put(`${uri}/echo-header/content-type`)
   .set('Content-Type', 'text/plain')
   .send('wahoo')
   .end((err, res) => {
@@ -345,7 +345,7 @@ it('request .send()', next => {
 
 it('request .set()', next => {
   request
-  .get(`${uri}/echo-header/content-type`)
+  .put(`${uri}/echo-header/content-type`)
   .set('Content-Type', 'text/plain')
   .send('wahoo')
   .end((err, res) => {
@@ -358,7 +358,7 @@ it('request .set()', next => {
 
 it('request .set(object)', next => {
   request
-  .get(`${uri}/echo-header/content-type`)
+  .put(`${uri}/echo-header/content-type`)
   .set({ 'Content-Type': 'text/plain' })
   .send('wahoo')
   .end((err, res) => {

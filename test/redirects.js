@@ -3,7 +3,7 @@ const base = setup.uri;
 const isMSIE = !setup.NODE && /Trident\//.test(navigator.userAgent);
 
 const assert = require('assert');
-const request = require('../');
+const request = require('./support/client');
 
 describe('request', function(){
   this.timeout(20000);

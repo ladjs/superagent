@@ -1,8 +1,9 @@
 "use strict";
 const assert = require("assert");
-const request = require("../../");
+const request = require("../support/client");
 const setup = require("../support/setup");
 const base = setup.uri;
+const doesntWorkInHttp2 = !process.env.HTTP2_TEST;
 
 describe("req.parse(fn)", () => {
   it("should take precedence over default parsers", done => {
@@ -56,14 +57,14 @@ describe("req.parse(fn)", () => {
       .end();
   });
 
-  it("should not emit error on chunked json", done => {
+  if(doesntWorkInHttp2) it("should not emit error on chunked json", done => {
     request.get(`${base}/chunked-json`).end(err => {
       assert(!err);
       done();
     });
   });
 
-  it("should not emit error on aborted chunked json", done => {
+  if(doesntWorkInHttp2) it("should not emit error on aborted chunked json", done => {
     const req = request.get(`${base}/chunked-json`);
     req.end(err => {
       assert.ifError(err);
@@ -75,7 +76,7 @@ describe("req.parse(fn)", () => {
     }, 50);
   });
 
-  it("should not reject promise on aborted chunked json", () => {
+  if(doesntWorkInHttp2) it("should not reject promise on aborted chunked json", () => {
     const req = request.get(`${base}/chunked-json`);
     setTimeout(() => {
       req.abort();

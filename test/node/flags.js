@@ -1,6 +1,6 @@
 "use strict";
 
-const request = require("../../");
+const request = require("../support/client");
 const setup = require("../support/setup");
 const base = setup.uri;
 const assert = require("assert");

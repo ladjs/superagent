@@ -1,6 +1,6 @@
 const assert = require('assert');
 
-const request = require('../../');
+const request = require('../support/client');
 
 function serialize(obj, res) {
   const val = request.serializeObject(obj);

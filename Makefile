@@ -9,7 +9,15 @@ test:
 	@if [ "x$(BROWSER)" = "x" ]; then make test-node; else make test-browser; fi
 
 test-node:
-	@NODE_ENV=test NODE_TLS_REJECT_UNAUTHORIZED=0 ./node_modules/.bin/mocha \
+	@NODE_ENV=test NODE_TLS_REJECT_UNAUTHORIZED=0 node ./node_modules/.bin/mocha \
+		--require should \
+		--trace-warnings \
+		--reporter $(REPORTER) \
+		--timeout 5000 \
+		$(NODETESTS)
+
+test-node-http2:
+	@NODE_ENV=test HTTP2_TEST=1 NODE_TLS_REJECT_UNAUTHORIZED=0 node ./node_modules/.bin/mocha \
 		--require should \
 		--trace-warnings \
 		--reporter $(REPORTER) \

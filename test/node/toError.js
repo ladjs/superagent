@@ -1,8 +1,12 @@
 "use strict";
-const request = require("../.."),
+const request = require("../support/client"),
   express = require("express"),
   assert = require("assert"),
   app = express();
+let http = require('http');
+if (process.env.HTTP2_TEST) {
+  http = require('http2');
+}
 
 app.get("/", (req, res) => {
   res.status(400).send("invalid json");
@@ -11,7 +15,8 @@ app.get("/", (req, res) => {
 let base = "http://localhost";
 let server;
 before(function listen(done) {
-  server = app.listen(0, function listening() {
+  server = http.createServer(app);
+  server = server.listen(0, function listening() {
     base += `:${server.address().port}`;
     done();
   });

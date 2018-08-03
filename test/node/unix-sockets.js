@@ -1,10 +1,10 @@
 "use strict";
-const request = require("../../");
+const request = require("../support/client");
 const express = require("express");
 const assert = require("assert");
 const app = express();
-const http = require("http");
-const https = require("https");
+let http = require("http");
+let https = require("https");
 const os = require("os");
 const fs = require("fs");
 const key = fs.readFileSync(`${__dirname}/fixtures/key.pem`);
@@ -13,6 +13,10 @@ const httpSockPath = [os.tmpdir(), "superagent-http.sock"].join("/");
 const httpsSockPath = [os.tmpdir(), "superagent-https.sock"].join("/");
 let httpServer;
 let httpsServer;
+
+if (process.env.HTTP2_TEST) {
+  http = https = require('http2');
+}
 
 app.get("/", (req, res) => {
   res.send("root ok!");
@@ -56,8 +60,11 @@ describe("[unix-sockets] http", () => {
     });
   });
 
-  after(done => {
-    httpServer.close(done);
+  after(() => {
+    if (typeof httpServer.close === 'function') {
+      httpServer.close();
+    } else
+      httpServer.destroy();
   });
 });
 
@@ -71,7 +78,11 @@ describe("[unix-sockets] https", () => {
       // try unlink if sock file exists
       fs.unlinkSync(httpsSockPath);
     }
-    httpsServer = https.createServer({ key, cert }, app);
+    if (process.env.HTTP2_TEST) {
+      httpsServer = https.createSecureServer({ key, cert }, app);
+    } else {
+      httpsServer = https.createServer({ key, cert }, app);
+    }
     httpsServer.listen(httpsSockPath, done);
   });
 

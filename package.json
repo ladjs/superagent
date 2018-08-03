@@ -4,7 +4,8 @@
   "description": "elegant & feature rich browser / node HTTP with a fluent API",
   "scripts": {
     "prepare": "make all",
-    "test": "make test"
+    "test": "make test",
+    "test-http2": "make test-node-http2"
   },
   "keywords": [
     "http",

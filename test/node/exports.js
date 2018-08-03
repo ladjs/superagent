@@ -1,9 +1,9 @@
 "use strict";
-const request = require("../../");
+const request = require("../support/client");
 
 describe("exports", () => {
   it("should expose .protocols", () => {
-    Object.keys(request.protocols).should.eql(["http:", "https:"]);
+    Object.keys(request.protocols).should.eql(["http:", "https:", "http2:"]);
   });
 
   it("should expose .serialize", () => {

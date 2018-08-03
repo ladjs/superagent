@@ -1,9 +1,13 @@
 "use strict";
-const request = require("../.."),
+const request = require("../support/client"),
   express = require("express"),
   assert = require("assert"),
   fs = require("fs"),
   app = express();
+let http = require('http');
+if (process.env.HTTP2_TEST) {
+  http = require('http2');
+}
 
 app.get("/raw-query", (req, res) => {
   res.status(200).send(req.url.substr(req.url.indexOf('?') + 1));
@@ -28,7 +32,8 @@ app.put("/", (req, res) => {
 let base = "http://localhost";
 let server;
 before(function listen(done) {
-  server = app.listen(0, function listening() {
+  server = http.createServer(app);
+  server = server.listen(0, function listening() {
     base += `:${server.address().port}`;
     done();
   });
