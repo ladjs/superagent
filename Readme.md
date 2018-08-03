@@ -66,7 +66,6 @@ Existing plugins:
   * [superagent-cache-plugin](https://github.com/jpodwys/superagent-cache-plugin) - A SuperAgent plugin with built-in, flexible caching
  * [superagent-jsonapify](https://github.com/alex94puchades/superagent-jsonapify) - A lightweight [json-api](http://jsonapi.org/format/) client addon for superagent
  * [superagent-serializer](https://github.com/zzarcon/superagent-serializer) - Converts server payload into different cases
- * [superagent-use](https://github.com/koenpunt/superagent-use) - A client addon to apply plugins to all requests.
  * [superagent-httpbackend](https://www.npmjs.com/package/superagent-httpbackend) - stub out requests using AngularJS' $httpBackend syntax
  * [superagent-throttle](https://github.com/leviwheatcroft/superagent-throttle) - queues and intelligently throttles requests
  * [superagent-charset](https://github.com/magicdawn/superagent-charset) - add charset support for node's SuperAgent
