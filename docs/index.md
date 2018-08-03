@@ -14,7 +14,7 @@ SuperAgent is light-weight progressive ajax API crafted for flexibility, readabi
 
 ## Test documentation
 
-The following [test documentation](docs/test.html) was generated with [Mocha's](http://mochajs.org/) "doc" reporter, and directly reflects the test suite. This provides an additional source of documentation.
+The following [test documentation](docs/test.html) was generated with [Mocha's](https://mochajs.org/) "doc" reporter, and directly reflects the test suite. This provides an additional source of documentation.
 
 ## Request basics
 
@@ -42,12 +42,12 @@ Old-style callbacks are also supported, but not recommended. *Instead of* `.then
 Absolute URLs can be used. In web browsers absolute URLs work only if the server implements [CORS](#cors).
 
      request
-       .get('http://example.com/search')
+       .get('https://example.com/search')
        .then(res => {
 
        });
 
-The __Node__ client supports making requests to [Unix Domain Sockets](http://en.wikipedia.org/wiki/Unix_domain_socket):
+The __Node__ client supports making requests to [Unix Domain Sockets](https://en.wikipedia.org/wiki/Unix_domain_socket):
 
      // pattern: https?+unix://SOCKET_PATH/REQUEST_PATH
      //          Use `%2F` as `/` in SOCKET_PATH
@@ -259,7 +259,7 @@ When given the `.retry()` method, SuperAgent will automatically retry requests, 
 This method has two optional arguments: number of retries (default 3) and a callback. It calls `callback(err, res)` before each retry. The callback may return `true`/`false` to control whether the request sould be retried (but the maximum number of retries is always applied).
 
      request
-       .get('http://example.com/search')
+       .get('https://example.com/search')
        .retry(2) // or:
        .retry(2, callback)
        .then(finished);
@@ -629,7 +629,7 @@ For security reasons, browsers will block cross-origin requests unless the serve
 The `.withCredentials()` method enables the ability to send cookies from the origin, however only when `Access-Control-Allow-Origin` is _not_ a wildcard ("*"), and `Access-Control-Allow-Credentials` is "true".
 
     request
-      .get('http://api.example.com:4001/')
+      .get('https://api.example.com:4001/')
       .withCredentials()
       .then(res => {
         assert.equal(200, res.status);
@@ -718,4 +718,4 @@ If want to use WebPack to compile code for Node.JS, you *must* specify [node tar
 
 ### Using browser version in electron
 
-[Electron](http://electron.atom.io/) developers report if you would prefer to use the browser version of SuperAgent instead of the Node version, you can `require('superagent/superagent')`. Your requests will now show up in the Chrome developer tools Network tab. Note this environment is not covered by automated test suite and not officially supported.
+[Electron](https://electron.atom.io/) developers report if you would prefer to use the browser version of SuperAgent instead of the Node version, you can `require('superagent/superagent')`. Your requests will now show up in the Chrome developer tools Network tab. Note this environment is not covered by automated test suite and not officially supported.
