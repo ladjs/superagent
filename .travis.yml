@@ -14,8 +14,6 @@ matrix:
   include:
     - node_js: "9"
       env: BROWSER=1
-    - node_js: "9"
-      env: HTTP2_TEST=1
     - node_js: "10"
       env: HTTP2_TEST=1
 
