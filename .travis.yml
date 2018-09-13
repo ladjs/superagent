@@ -1,7 +1,7 @@
 sudo: false
 language: node_js
 node_js:
-  - "9"
+  - "10"
   - "8"
   - "6"
 
@@ -16,7 +16,7 @@ matrix:
       env: BROWSER=1
     - node_js: "9"
       env: HTTP2_TEST=1
-    - node_js: "8"
+    - node_js: "10"
       env: HTTP2_TEST=1
 
 before_install:
