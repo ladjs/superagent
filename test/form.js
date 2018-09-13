@@ -50,7 +50,8 @@ describe('req.attach', () => {
   });
 });
 
-describe('req.field', () => {
+describe('req.field', function() {
+  this.timeout(5000)
   it('allow bools', done => {
     if (!formDataSupported) {
       return done();
@@ -141,5 +142,4 @@ describe('req.field', () => {
       .field('form', 'data');
     });
   });
-
 });
