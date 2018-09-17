@@ -17,7 +17,3 @@ matrix:
   include:
     - node_js: "10"
       env: HTTP2_TEST=1
-
-before_install:
-  - "test -z $(echo $HTTP2_TEST) || npm install https://github.com/sogaani/express.git#initial-support-http2"
-  - "rm -f package-lock.json npm-shrinkwrap.json"

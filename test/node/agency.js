@@ -2,7 +2,7 @@
 
 require("should-http");
 
-const express = require("express");
+const express = require("../support/express");
 const app = express();
 const request = require("../support/client");
 const assert = require("assert");
