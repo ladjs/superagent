@@ -1,6 +1,6 @@
 "use strict";
 const request = require("../support/client"),
-  express = require("express"),
+  express = require("../support/express"),
   assert = require("assert"),
   fs = require("fs"),
   app = express();

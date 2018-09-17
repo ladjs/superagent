@@ -1,7 +1,7 @@
 "use strict";
 
 const request = require("../support/client");
-const express = require("express");
+const express = require("../support/express");;
 const assert = require("assert");
 const app = express();
 const url = require("url");

@@ -4,7 +4,7 @@ require("should-http");
 
 const request = require("../support/client");
 const assert = require("assert");
-const express = require("express");
+const express = require("../support/express");
 const zlib = require("zlib");
 let http = require('http');
 if(process.env.HTTP2_TEST){

@@ -1,6 +1,6 @@
 "use strict";
 const request = require("../support/client");
-const express = require("express");
+const express = require("../support/express");
 const assert = require("assert");
 const app = express();
 let http = require("http");
