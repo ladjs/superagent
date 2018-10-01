@@ -58,9 +58,9 @@ exports.unzip = (req, res) => {
   // override `on` to capture data listeners
   const _on = res.on;
   res.on = function(type, fn) {
-    if ('data' == type || 'end' == type) {
+    if (type == 'data' || type == 'end') {
       stream.on(type, fn.bind(res));
-    } else if ('error' == type) {
+    } else if (type == 'error') {
       stream.on(type, fn.bind(res));
       _on.call(res, type, fn);
     } else {

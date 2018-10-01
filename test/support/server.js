@@ -5,29 +5,30 @@ const cookieParser = require('cookie-parser');
 const basicAuth = require('basic-auth-connect');
 const fs = require('fs');
 let http = require('http');
+
 let isPseudoHeader;
 
-if(process.env.HTTP2_TEST){
+if (process.env.HTTP2_TEST) {
   http = require('http2');
   const {
     HTTP2_HEADER_AUTHORITY,
     HTTP2_HEADER_METHOD,
     HTTP2_HEADER_PATH,
     HTTP2_HEADER_SCHEME,
-    HTTP2_HEADER_STATUS,
+    HTTP2_HEADER_STATUS
   } = http.constants;
   isPseudoHeader = function(name) {
     switch (name) {
-      case HTTP2_HEADER_STATUS:    // :status
-      case HTTP2_HEADER_METHOD:    // :method
-      case HTTP2_HEADER_PATH:      // :path
+      case HTTP2_HEADER_STATUS: // :status
+      case HTTP2_HEADER_METHOD: // :method
+      case HTTP2_HEADER_PATH: // :path
       case HTTP2_HEADER_AUTHORITY: // :authority
-      case HTTP2_HEADER_SCHEME:    // :scheme
+      case HTTP2_HEADER_SCHEME: // :scheme
         return true;
       default:
         return false;
     }
-  }
+  };
 }
 
 const app = express();
@@ -42,10 +43,10 @@ app.all('/url', (req, res) => {
 });
 
 app.all('/echo', (req, res) => {
-  let headers = req.headers;
-  if(process.env.HTTP2_TEST){
-    Object.keys(headers).forEach(function(name) {
-      if(isPseudoHeader(name)){
+  const headers = req.headers;
+  if (process.env.HTTP2_TEST) {
+    Object.keys(headers).forEach(name => {
+      if (isPseudoHeader(name)) {
         delete headers[name];
       }
     });
@@ -63,8 +64,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(multer().none());
 
 app.all('/formecho', (req, res) => {
-  if (!/application\/x-www-form-urlencoded|multipart\/form-data/.test(req.headers['content-type'])) {
-    return res.status(400).end("wrong type");
+  if (
+    !/application\/x-www-form-urlencoded|multipart\/form-data/.test(
+      req.headers['content-type']
+    )
+  ) {
+    return res.status(400).end('wrong type');
   }
   res.json(req.body);
 });
@@ -78,7 +83,7 @@ app.use('/xdomain', (req, res, next) => {
   res.set('Access-Control-Allow-Credentials', 'true');
   res.set('Access-Control-Allow-Methods', 'POST');
   res.set('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type');
-  if ('OPTIONS' == req.method) return res.send(200);
+  if (req.method == 'OPTIONS') return res.send(200);
   next();
 });
 
@@ -149,7 +154,10 @@ app.get('/movie/4', (req, res) => {
 });
 
 app.get('/links', (req, res) => {
-  res.header('Link', '<https://api.github.com/repos/visionmedia/mocha/issues?page=2>; rel="next"');
+  res.header(
+    'Link',
+    '<https://api.github.com/repos/visionmedia/mocha/issues?page=2>; rel="next"'
+  );
   res.end();
 });
 
@@ -189,7 +197,9 @@ app.delete('/user/:id', (req, res) => {
 
 app.post('/todo/item', (req, res) => {
   let buf = '';
-  req.on('data', chunk => { buf += chunk; });
+  req.on('data', chunk => {
+    buf += chunk;
+  });
   req.on('end', () => {
     res.send(`added "${buf}"`);
   });
@@ -200,14 +210,17 @@ app.get('/delay/const', (req, res) => {
 });
 
 app.get('/delay/zip', (req, res) => {
-  res.writeHead(200, {"Content-Type":"text/plain", "Content-Encoding":"gzip"});
+  res.writeHead(200, {
+    'Content-Type': 'text/plain',
+    'Content-Encoding': 'gzip'
+  });
   setTimeout(() => {
     res.end();
   }, 10000);
 });
 
 app.get('/delay/json', (req, res) => {
-  res.writeHead(200, {"Content-Type":"application/json"});
+  res.writeHead(200, { 'Content-Type': 'application/json' });
   setTimeout(() => {
     res.end();
   }, 10000);
@@ -215,7 +228,7 @@ app.get('/delay/json', (req, res) => {
 
 let slowBodyCallback;
 app.get('/delay/slowbody', (req, res) => {
-  res.writeHead(200, {"Content-Type":"application/octet-stream"});
+  res.writeHead(200, { 'Content-Type': 'application/octet-stream' });
 
   // Send lots of garbage data to overflow all buffers along the way,
   // so that the browser gets some data before the request is done
@@ -228,7 +241,9 @@ app.get('/delay/slowbody', (req, res) => {
 
   // Make sure sending of request body takes over 1s,
   // so that the test can't pass by accident.
-  const minimumTime = new Promise(resolve => {setTimeout(resolve, 1001)});
+  const minimumTime = new Promise(resolve => {
+    setTimeout(resolve, 1001);
+  });
 
   new Promise(resolve => {
     // Waiting full 10 seconds for the test would be too annoying,
@@ -236,10 +251,10 @@ app.get('/delay/slowbody', (req, res) => {
     slowBodyCallback = resolve;
     setTimeout(resolve, 10000);
   })
-  .then(() => Promise.all([initialDataSent, minimumTime]))
-  .then(() => {
-    res.end('bye');
-  });
+    .then(() => Promise.all([initialDataSent, minimumTime]))
+    .then(() => {
+      res.end('bye');
+    });
 });
 
 app.get('/delay/slowbody/finish', (req, res) => {
@@ -280,22 +295,26 @@ app.get('/pets', (req, res) => {
 });
 
 app.get('/json-seq', (req, res) => {
-  res.set('content-type', 'application/json-seq').send('\x1e{"id":1}\n\x1e{"id":2}\n');
+  res
+    .set('content-type', 'application/json-seq')
+    .send('\u001E{"id":1}\n\u001E{"id":2}\n');
 });
 
 app.get('/invalid-json', (req, res) => {
   res.set('content-type', 'application/json');
   // sample invalid json taken from https://github.com/swagger-api/swagger-ui/issues/1354
-  res.send(")]}', {'header':{'code':200,'text':'OK','version':'1.0'},'data':'some data'}");
+  res.send(
+    ")]}', {'header':{'code':200,'text':'OK','version':'1.0'},'data':'some data'}"
+  );
 });
 
 app.get('/invalid-json-forbidden', (req, res) => {
   res.set('content-type', 'application/json');
-  res.status(403).send("Forbidden");
+  res.status(403).send('Forbidden');
 });
 
 app.get('/text', (req, res) => {
-  res.send("just some text");
+  res.send('just some text');
 });
 
 app.get('/basic-auth', basicAuth('tobi', 'learnboost'), (req, res) => {
@@ -307,7 +326,13 @@ app.get('/basic-auth/again', basicAuth('tobi', ''), (req, res) => {
 });
 
 app.post('/auth', basicAuth('foo', 'bar'), (req, res) => {
-  const auth = req.headers.authorization, parts = auth.split(' '), credentials = new Buffer(parts[1], 'base64').toString().split(':'), user = credentials[0], pass = credentials[1];
+  const auth = req.headers.authorization;
+  const parts = auth.split(' ');
+  const credentials = Buffer.from(parts[1], 'base64')
+    .toString()
+    .split(':');
+  const user = credentials[0];
+  const pass = credentials[1];
 
   res.send({ user, pass });
 });
@@ -353,18 +378,18 @@ app.get('/arraybuffer', (req, res) => {
 
 app.get('/arraybuffer-unauthorized', (req, res) => {
   res.set('Content-Type', 'application/json');
-  res.status(401).send('{"message":"Authorization has been denied for this request."}');
+  res
+    .status(401)
+    .send('{"message":"Authorization has been denied for this request."}');
 });
 
 app.post('/empty-body', bodyParser.text(), (req, res) => {
   if (typeof req.body === 'object' && Object.keys(req.body).length === 0) {
     res.sendStatus(204);
-  }
-  else {
+  } else {
     res.sendStatus(400);
   }
 });
-
 
 app.get('/collection-json', (req, res) => {
   res.set('content-type', 'application/vnd.collection+json');
@@ -374,7 +399,9 @@ app.get('/collection-json', (req, res) => {
 app.get('/invalid-json', (req, res) => {
   res.set('content-type', 'application/json');
   // sample invalid json taken from https://github.com/swagger-api/swagger-ui/issues/1354
-  res.send(")]}', {'header':{'code':200,'text':'OK','version':'1.0'},'data':'some data'}");
+  res.send(
+    ")]}', {'header':{'code':200,'text':'OK','version':'1.0'},'data':'some data'}"
+  );
 });
 
 app.options('/options/echo/body', bodyParser.json(), (req, res) => {
@@ -382,8 +409,8 @@ app.options('/options/echo/body', bodyParser.json(), (req, res) => {
 });
 
 app.get('/cookie-redirect', (req, res) => {
-  res.set("Set-Cookie", "replaced=yes");
-  res.append("Set-Cookie", "from-redir=1", true);
+  res.set('Set-Cookie', 'replaced=yes');
+  res.append('Set-Cookie', 'from-redir=1', true);
   res.redirect(303, '/show-cookies');
 });
 
@@ -442,10 +469,10 @@ app.get('/bad-redirect', (req, res) => {
 });
 
 app.all('/ua', (req, res) => {
-  let headers = req.headers;
-  if(process.env.HTTP2_TEST){
-    Object.keys(headers).forEach(function(name) {
-      if(isPseudoHeader(name)){
+  const headers = req.headers;
+  if (process.env.HTTP2_TEST) {
+    Object.keys(headers).forEach(name => {
+      if (isPseudoHeader(name)) {
         delete headers[name];
       }
     });
@@ -455,12 +482,12 @@ app.all('/ua', (req, res) => {
 });
 
 app.get('/manny', (req, res) => {
-  res.status(200).json({name:"manny"});
+  res.status(200).json({ name: 'manny' });
 });
 
 function serveImageWithType(res, type) {
   const img = fs.readFileSync(`${__dirname}/../node/fixtures/test.png`);
-  res.writeHead(200, {'Content-Type': type });
+  res.writeHead(200, { 'Content-Type': type });
   res.end(img, 'binary');
 }
 app.get('/image', (req, res) => {
@@ -477,14 +504,14 @@ app.get('/chunked-json', (req, res) => {
   let chunk = 0;
   const interval = setInterval(() => {
     chunk++;
-    if(chunk === 1) res.write(`{ "name_${chunk}": "`);
-    if(chunk > 1) res.write(`value_${chunk}", "name_${chunk}": "`);
-    if(chunk === 10) {
+    if (chunk === 1) res.write(`{ "name_${chunk}": "`);
+    if (chunk > 1) res.write(`value_${chunk}", "name_${chunk}": "`);
+    if (chunk === 10) {
       clearInterval(interval);
       res.write(`value_${chunk}"}`);
       res.end();
     }
-  },10);
+  }, 10);
 });
 
 app.get('/if-mod', (req, res) => {
@@ -498,7 +525,7 @@ app.get('/if-mod', (req, res) => {
 const called = {};
 app.get('/error/ok/:id', (req, res) => {
   if (req.query.qs != 'present') {
-    return res.status(400).end("query string lost");
+    return res.status(400).end('query string lost');
   }
 
   const id = req.params.id;
@@ -547,5 +574,5 @@ app.get('/error/redirect-error:id', (req, res) => {
   }
 });
 
-let server = http.createServer(app);
+const server = http.createServer(app);
 server.listen(process.env.ZUUL_PORT);

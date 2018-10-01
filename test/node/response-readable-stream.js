@@ -1,18 +1,22 @@
-"use strict";
-const request = require("../support/client"),
-  express = require("../support/express"),
-  app = express(),
-  fs = require("fs");
+'use strict';
+const request = require('../support/client');
+
+const express = require('../support/express');
+
+const app = express();
+
+const fs = require('fs');
 let http = require('http');
+
 if (process.env.HTTP2_TEST) {
   http = require('http2');
 }
 
-app.get("/", (req, res) => {
-  fs.createReadStream("test/node/fixtures/user.json").pipe(res);
+app.get('/', (req, res) => {
+  fs.createReadStream('test/node/fixtures/user.json').pipe(res);
 });
 
-let base = "http://localhost";
+let base = 'http://localhost';
 let server;
 before(function listen(done) {
   server = http.createServer(app);
@@ -22,8 +26,8 @@ before(function listen(done) {
   });
 });
 
-describe("response", () => {
-  it("should act as a readable stream", done => {
+describe('response', () => {
+  it('should act as a readable stream', done => {
     const req = request.get(base).buffer(false);
 
     req.end((err, res) => {
@@ -31,7 +35,7 @@ describe("response", () => {
       let trackEndEvent = 0;
       let trackCloseEvent = 0;
 
-      res.on("end", () => {
+      res.on('end', () => {
         trackEndEvent++;
         trackEndEvent.should.equal(1);
         if (!process.env.HTTP2_TEST) {
@@ -40,7 +44,7 @@ describe("response", () => {
         done();
       });
 
-      res.on("close", () => {
+      res.on('close', () => {
         trackCloseEvent++;
       });
 

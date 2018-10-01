@@ -1,43 +1,51 @@
 const setup = require('./support/setup');
+
 const base = setup.uri;
 const should = require('should');
 const request = require('./support/client');
 
 const assert = require('assert');
+
 if (!assert.deepStrictEqual) assert.deepStrictEqual = assert.deepEqual;
 
-const formDataSupported = setup.NODE || 'undefined' !== FormData;
+const formDataSupported = setup.NODE || FormData !== 'undefined';
 
 describe('req.send(Object) as "form"', () => {
   describe('with req.type() set to form', () => {
     it('should send x-www-form-urlencoded data', done => {
       request
-      .post(`${base}/echo`)
-      .type('form')
-      .send({ name: 'tobi' })
-      .end((err, res) => {
-        res.header['content-type'].should.equal('application/x-www-form-urlencoded');
-        res.text.should.equal('name=tobi');
-        done();
-      });
-    })
-  })
+        .post(`${base}/echo`)
+        .type('form')
+        .send({ name: 'tobi' })
+        .end((err, res) => {
+          res.header['content-type'].should.equal(
+            'application/x-www-form-urlencoded'
+          );
+          res.text.should.equal('name=tobi');
+          done();
+        });
+    });
+  });
 
   describe('when called several times', () => {
     it('should merge the objects', done => {
       request
-      .post(`${base}/echo`)
-      .type('form')
-      .send({ name: { first: 'tobi', last: 'holowaychuk' } })
-      .send({ age: '1' })
-      .end((err, res) => {
-        res.header['content-type'].should.equal('application/x-www-form-urlencoded');
-        res.text.should.equal('name%5Bfirst%5D=tobi&name%5Blast%5D=holowaychuk&age=1');
-        done();
-      });
-    })
-  })
-})
+        .post(`${base}/echo`)
+        .type('form')
+        .send({ name: { first: 'tobi', last: 'holowaychuk' } })
+        .send({ age: '1' })
+        .end((err, res) => {
+          res.header['content-type'].should.equal(
+            'application/x-www-form-urlencoded'
+          );
+          res.text.should.equal(
+            'name%5Bfirst%5D=tobi&name%5Blast%5D=holowaychuk&age=1'
+          );
+          done();
+        });
+    });
+  });
+});
 
 describe('req.attach', () => {
   it('ignores null file', done => {
@@ -51,7 +59,7 @@ describe('req.attach', () => {
 });
 
 describe('req.field', function() {
-  this.timeout(5000)
+  this.timeout(5000);
   it('allow bools', done => {
     if (!formDataSupported) {
       return done();
@@ -63,7 +71,7 @@ describe('req.field', function() {
       .field('strings', 'true')
       .end((err, res) => {
         assert.ifError(err);
-        assert.deepStrictEqual(res.body, {bools:'true', strings:'true'});
+        assert.deepStrictEqual(res.body, { bools: 'true', strings: 'true' });
         done();
       });
   });
@@ -75,10 +83,10 @@ describe('req.field', function() {
 
     request
       .post(`${base}/formecho`)
-      .field({bools: true, strings: 'true'})
+      .field({ bools: true, strings: 'true' })
       .end((err, res) => {
         assert.ifError(err);
-        assert.deepStrictEqual(res.body, {bools:'true', strings:'true'});
+        assert.deepStrictEqual(res.body, { bools: 'true', strings: 'true' });
         done();
       });
   });
@@ -90,10 +98,10 @@ describe('req.field', function() {
 
     request
       .post(`${base}/formecho`)
-      .field({numbers: [1,2,3]})
+      .field({ numbers: [1, 2, 3] })
       .end((err, res) => {
         assert.ifError(err);
-        assert.deepStrictEqual(res.body, {numbers:['1','2','3']});
+        assert.deepStrictEqual(res.body, { numbers: ['1', '2', '3'] });
         done();
       });
   });
@@ -108,38 +116,34 @@ describe('req.field', function() {
       .field('letters', ['a', 'b', 'c'])
       .end((err, res) => {
         assert.ifError(err);
-        assert.deepStrictEqual(res.body, {letters: ['a', 'b', 'c']});
+        assert.deepStrictEqual(res.body, { letters: ['a', 'b', 'c'] });
         done();
       });
   });
 
   it('throw when empty', () => {
     should.throws(() => {
-      request
-      .post(`${base}/echo`)
-      .field()
+      request.post(`${base}/echo`).field();
     }, /name/);
 
     should.throws(() => {
-      request
-      .post(`${base}/echo`)
-      .field('name')
+      request.post(`${base}/echo`).field('name');
     }, /val/);
   });
 
   it('cannot be mixed with send()', () => {
     assert.throws(() => {
       request
-      .post('/echo')
-      .field('form', 'data')
-      .send('hi');
+        .post('/echo')
+        .field('form', 'data')
+        .send('hi');
     });
 
     assert.throws(() => {
       request
-      .post('/echo')
-      .send('hi')
-      .field('form', 'data');
+        .post('/echo')
+        .send('hi')
+        .field('form', 'data');
     });
   });
 });

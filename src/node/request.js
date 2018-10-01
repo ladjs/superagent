@@ -4,42 +4,42 @@
  * Module dependencies.
  */
 
-const debug = require('debug')('superagent');
-const formidable = require('formidable');
-const FormData = require('form-data');
-const Response = require('./response');
 const parse = require('url').parse;
 const format = require('url').format;
 const resolve = require('url').resolve;
-let methods = require('methods');
 const Stream = require('stream');
-const utils = require('../utils');
-const unzip = require('./unzip').unzip;
-const mime = require('mime');
 const https = require('https');
 const http = require('http');
 const fs = require('fs');
-const qs = require('qs');
 const zlib = require('zlib');
 const util = require('util');
+const qs = require('qs');
+const mime = require('mime');
+let methods = require('methods');
+const FormData = require('form-data');
+const formidable = require('formidable');
+const debug = require('debug')('superagent');
+const CookieJar = require('cookiejar');
+const utils = require('../utils');
 const pkg = require('../../package.json');
 const RequestBase = require('../request-base');
-const CookieJar = require('cookiejar');
+const unzip = require('./unzip').unzip;
+const Response = require('./response');
+
 let http2;
 try {
   http2 = require('./http2wrapper');
   console.warn('superagent: Enable experimental feature http2');
-} catch (_) {
-}
+} catch (_) {}
 
 function request(method, url) {
   // callback
-  if ('function' == typeof url) {
+  if (typeof url === 'function') {
     return new exports.Request('GET', method).end(url);
   }
 
   // url first
-  if (1 == arguments.length) {
+  if (arguments.length == 1) {
     return new exports.Request('GET', method);
   }
 
@@ -63,7 +63,7 @@ exports.agent = require('./agent');
  * Noop.
  */
 
-function noop(){};
+function noop() {}
 
 /**
  * Expose `Response`.
@@ -75,9 +75,12 @@ exports.Response = Response;
  * Define "form" mime type.
  */
 
-mime.define({
-  'application/x-www-form-urlencoded': ['form', 'urlencoded', 'form-data']
-}, true);
+mime.define(
+  {
+    'application/x-www-form-urlencoded': ['form', 'urlencoded', 'form-data']
+  },
+  true
+);
 
 /**
  * Protocol map.
@@ -86,7 +89,7 @@ mime.define({
 exports.protocols = {
   'http:': http,
   'https:': https,
-  'http2:': http2,
+  'http2:': http2
 };
 
 /**
@@ -100,7 +103,7 @@ exports.protocols = {
 
 exports.serialize = {
   'application/x-www-form-urlencoded': qs.stringify,
-  'application/json': JSON.stringify,
+  'application/json': JSON.stringify
 };
 
 /**
@@ -113,7 +116,6 @@ exports.serialize = {
  */
 
 exports.parse = require('./parsers');
-
 
 /**
  * Default buffering map. Can be used to set certain
@@ -131,10 +133,12 @@ exports.buffer = {};
  */
 function _initHeaders(req) {
   const ua = `node-superagent/${pkg.version}`;
-  req._header = { // coerces header names to lowercase
+  req._header = {
+    // coerces header names to lowercase
     'user-agent': ua
   };
-  req.header = { // preserves header name case
+  req.header = {
+    // preserves header name case
     'User-Agent': ua
   };
 }
@@ -149,8 +153,8 @@ function _initHeaders(req) {
 
 function Request(method, url) {
   Stream.call(this);
-  if ('string' != typeof url) url = format(url);
-  this._enableHttp2 = !!process.env.HTTP2_TEST; // internal only
+  if (typeof url !== 'string') url = format(url);
+  this._enableHttp2 = Boolean(process.env.HTTP2_TEST); // internal only
   this._agent = false;
   this._formData = null;
   this.method = method;
@@ -204,13 +208,13 @@ RequestBase(Request.prototype);
  * @api public
  */
 
-Request.prototype.http2 = function(bool){
-  if (exports.protocols['http2:'] === undefined){
+Request.prototype.http2 = function(bool) {
+  if (exports.protocols['http2:'] === undefined) {
     throw new Error('superagent: does not support http2');
   }
   this._enableHttp2 = bool === undefined ? true : bool;
   return this;
-}
+};
 
 /**
  * Queue the given `file` as an attachment to the specified `field`,
@@ -237,18 +241,18 @@ Request.prototype.http2 = function(bool){
  * @api public
  */
 
-Request.prototype.attach = function(field, file, options){
+Request.prototype.attach = function(field, file, options) {
   if (file) {
     if (this._data) {
-      throw Error("superagent can't mix .send() and .attach()");
+      throw new Error("superagent can't mix .send() and .attach()");
     }
 
     let o = options || {};
-    if ('string' == typeof options) {
+    if (typeof options === 'string') {
       o = { filename: options };
     }
 
-    if ('string' == typeof file) {
+    if (typeof file === 'string') {
       if (!o.filename) o.filename = file;
       debug('creating `fs.ReadStream` instance for file: %s', file);
       file = fs.createReadStream(file);
@@ -281,7 +285,7 @@ Request.prototype._getFormData = function() {
  * @api public
  */
 
-Request.prototype.agent = function(agent){
+Request.prototype.agent = function(agent) {
   if (!arguments.length) return this._agent;
   this._agent = agent;
   return this;
@@ -339,10 +343,8 @@ Request.prototype.type = function(type) {
  * @api public
  */
 
-Request.prototype.accept = function(type){
-  return this.set('Accept', ~type.indexOf('/')
-    ? type
-    : mime.getType(type));
+Request.prototype.accept = function(type) {
+  return this.set('Accept', ~type.indexOf('/') ? type : mime.getType(type));
 };
 
 /**
@@ -359,8 +361,8 @@ Request.prototype.accept = function(type){
  * @api public
  */
 
-Request.prototype.query = function(val){
-  if ('string' == typeof val) {
+Request.prototype.query = function(val) {
+  if (typeof val === 'string') {
     this._query.push(val);
   } else {
     Object.assign(this.qs, val);
@@ -377,7 +379,7 @@ Request.prototype.query = function(val){
  * @api public
  */
 
-Request.prototype.write = function(data, encoding){
+Request.prototype.write = function(data, encoding) {
   const req = this.request();
   if (!this._streamRequest) {
     this._streamRequest = true;
@@ -394,14 +396,14 @@ Request.prototype.write = function(data, encoding){
  * @api public
  */
 
-Request.prototype.pipe = function(stream, options){
+Request.prototype.pipe = function(stream, options) {
   this.piped = true; // HACK...
   this.buffer(false);
   this.end();
   return this._pipeContinue(stream, options);
 };
 
-Request.prototype._pipeContinue = function(stream, options){
+Request.prototype._pipeContinue = function(stream, options) {
   this.req.once('response', res => {
     // redirect
     const redirect = isRedirect(res.statusCode);
@@ -416,15 +418,22 @@ Request.prototype._pipeContinue = function(stream, options){
     if (this._shouldUnzip(res)) {
       const unzipObj = zlib.createUnzip();
       unzipObj.on('error', err => {
-        if (err && err.code === 'Z_BUF_ERROR') { // unexpected end of file is ignored by browsers and curl
+        if (err && err.code === 'Z_BUF_ERROR') {
+          // unexpected end of file is ignored by browsers and curl
           stream.emit('end');
           return;
         }
         stream.emit('error', err);
       });
-      res.pipe(unzipObj).pipe(stream, options);
+      res.pipe(unzipObj).pipe(
+        stream,
+        options
+      );
     } else {
-      res.pipe(stream, options);
+      res.pipe(
+        stream,
+        options
+      );
     }
     res.once('end', () => {
       this.emit('end');
@@ -441,8 +450,8 @@ Request.prototype._pipeContinue = function(stream, options){
  * @api public
  */
 
-Request.prototype.buffer = function(val){
-  this._buffer = (false !== val);
+Request.prototype.buffer = function(val) {
+  this._buffer = val !== false;
   return this;
 };
 
@@ -454,7 +463,7 @@ Request.prototype.buffer = function(val){
  * @api private
  */
 
-Request.prototype._redirect = function(res){
+Request.prototype._redirect = function(res) {
   let url = res.headers.location;
   if (!url) {
     return this.callback(new Error('No location header for redirect'), res);
@@ -474,15 +483,13 @@ Request.prototype._redirect = function(res){
   const changesOrigin = parse(url).host !== parse(this.url).host;
 
   // implementation of 302 following defacto standard
-  if (res.statusCode == 301 || res.statusCode == 302){
+  if (res.statusCode == 301 || res.statusCode == 302) {
     // strip Content-* related fields
     // in case of POST etc
     headers = utils.cleanHeader(this.req._headers, changesOrigin);
 
     // force GET
-    this.method = 'HEAD' == this.method
-      ? 'HEAD'
-      : 'GET';
+    this.method = this.method == 'HEAD' ? 'HEAD' : 'GET';
 
     // clear data
     this._data = null;
@@ -538,9 +545,10 @@ Request.prototype._redirect = function(res){
  * @api public
  */
 
-Request.prototype.auth = function(user, pass, options){
-  if (1 === arguments.length) pass = '';
-  if (typeof pass === 'object' && pass !== null) { // pass is optional and can be replaced with options
+Request.prototype.auth = function(user, pass, options) {
+  if (arguments.length === 1) pass = '';
+  if (typeof pass === 'object' && pass !== null) {
+    // pass is optional and can be replaced with options
     options = pass;
     pass = '';
   }
@@ -561,7 +569,7 @@ Request.prototype.auth = function(user, pass, options){
  * @api public
  */
 
-Request.prototype.ca = function(cert){
+Request.prototype.ca = function(cert) {
   this._ca = cert;
   return this;
 };
@@ -574,7 +582,7 @@ Request.prototype.ca = function(cert){
  * @api public
  */
 
-Request.prototype.key = function(cert){
+Request.prototype.key = function(cert) {
   this._key = cert;
   return this;
 };
@@ -605,7 +613,7 @@ Request.prototype.pfx = function(cert) {
  * @api public
  */
 
-Request.prototype.cert = function(cert){
+Request.prototype.cert = function(cert) {
   this._cert = cert;
   return this;
 };
@@ -617,7 +625,7 @@ Request.prototype.cert = function(cert){
  * @api private
  */
 
-Request.prototype.request = function(){
+Request.prototype.request = function() {
   if (this.req) return this.req;
 
   const options = {};
@@ -625,7 +633,7 @@ Request.prototype.request = function(){
   try {
     const query = qs.stringify(this.qs, {
       indices: false,
-      strictNullHandling: true,
+      strictNullHandling: true
     });
     if (query) {
       this.qs = {};
@@ -643,21 +651,21 @@ Request.prototype.request = function(){
   // Note: this'll only find backticks entered in req.query(String)
   // calls, because qs.stringify unconditionally encodes backticks.
   let queryStringBackticks;
-  if(url.indexOf('`') > -1) {
-    const queryStartIndex = url.indexOf("?");
+  if (url.indexOf('`') > -1) {
+    const queryStartIndex = url.indexOf('?');
 
-    if(queryStartIndex !== -1) {
+    if (queryStartIndex !== -1) {
       const queryString = url.substr(queryStartIndex + 1);
       queryStringBackticks = queryString.match(/`|\%60/g);
     }
   }
 
   // default to http://
-  if (0 != url.indexOf('http')) url = `http://${url}`;
+  if (url.indexOf('http') != 0) url = `http://${url}`;
   url = parse(url);
 
   // See https://github.com/visionmedia/superagent/issues/1367
-  if(queryStringBackticks) {
+  if (queryStringBackticks) {
     let i = 0;
     url.query = url.query.replace(/\%60/g, () => queryStringBackticks[i++]);
     url.search = `?${url.query}`;
@@ -688,12 +696,14 @@ Request.prototype.request = function(){
   options.agent = this._agent;
 
   // Allows request.get('https://1.2.3.4/').set('Host', 'example.com')
-  if (this._header['host']) {
-    options.servername = this._header['host'].replace(/:[0-9]+$/,'');
+  if (this._header.host) {
+    options.servername = this._header.host.replace(/:\d+$/, '');
   }
 
   // initiate request
-  const mod = this._enableHttp2 ? exports.protocols['http2:'].setProtocol(url.protocol) : exports.protocols[url.protocol];
+  const mod = this._enableHttp2
+    ? exports.protocols['http2:'].setProtocol(url.protocol)
+    : exports.protocols[url.protocol];
 
   // request
   const req = (this.req = mod.request(options));
@@ -701,14 +711,16 @@ Request.prototype.request = function(){
   // set tcp no delay
   req.setNoDelay(true);
 
-  if ('HEAD' != options.method) {
+  if (options.method != 'HEAD') {
     req.setHeader('Accept-Encoding', 'gzip, deflate');
   }
   this.protocol = url.protocol;
   this.host = url.host;
 
   // expose events
-  req.once('drain', () => { this.emit('drain'); });
+  req.once('drain', () => {
+    this.emit('drain');
+  });
 
   req.on('error', err => {
     // flag abortion here for out timeouts
@@ -733,18 +745,20 @@ Request.prototype.request = function(){
     this.auth(this.username, this.password);
   }
   for (const key in this.header) {
-    if (this.header.hasOwnProperty(key))
-      req.setHeader(key, this.header[key]);
+    if (this.header.hasOwnProperty(key)) req.setHeader(key, this.header[key]);
   }
 
   // add cookies
   if (this.cookies) {
-    if(this._header.hasOwnProperty('cookie')) {
+    if (this._header.hasOwnProperty('cookie')) {
       // merge
       const tmpJar = new CookieJar.CookieJar();
       tmpJar.setCookies(this._header.cookie.split(';'));
       tmpJar.setCookies(this.cookies.split(';'));
-      req.setHeader('Cookie',tmpJar.getCookies(CookieJar.CookieAccessInfo.All).toValueString());
+      req.setHeader(
+        'Cookie',
+        tmpJar.getCookies(CookieJar.CookieAccessInfo.All).toValueString()
+      );
     } else {
       req.setHeader('Cookie', this.cookies);
     }
@@ -762,7 +776,7 @@ Request.prototype.request = function(){
  * @api private
  */
 
-Request.prototype.callback = function(err, res){
+Request.prototype.callback = function(err, res) {
   if (this._shouldRetry(err, res)) {
     return this._retry();
   }
@@ -813,8 +827,10 @@ Request.prototype.callback = function(err, res){
  * @api private
  */
 Request.prototype._isHost = function _isHost(obj) {
-  return Buffer.isBuffer(obj) || obj instanceof Stream || obj instanceof FormData;
-}
+  return (
+    Buffer.isBuffer(obj) || obj instanceof Stream || obj instanceof FormData
+  );
+};
 
 /**
  * Initiate request, invoking callback `fn(err, res)`
@@ -835,8 +851,10 @@ Request.prototype._emitResponse = function(body, files) {
   response.files = files;
   if (this._endCalled) {
     response.pipe = function() {
-      throw Error("end() has already been called, so it's too late to start piping");
-    }
+      throw new Error(
+        "end() has already been called, so it's too late to start piping"
+      );
+    };
   }
   this.emit('response', response);
   return response;
@@ -847,7 +865,7 @@ Request.prototype.end = function(fn) {
   debug('%s %s', this.method, this.url);
 
   if (this._endCalled) {
-    throw Error(
+    throw new Error(
       '.end() was called twice. This is not supported in superagent'
     );
   }
@@ -860,7 +878,10 @@ Request.prototype.end = function(fn) {
 };
 
 Request.prototype._end = function() {
-  if (this._aborted) return this.callback(Error("The request has been aborted even before .end() was called"));
+  if (this._aborted)
+    return this.callback(
+      new Error('The request has been aborted even before .end() was called')
+    );
 
   let data = this._data;
   const req = this.req;
@@ -869,9 +890,9 @@ Request.prototype._end = function() {
   this._setTimeouts();
 
   // body
-  if ('HEAD' != method && !req._headerSent) {
+  if (method != 'HEAD' && !req._headerSent) {
     // serialize stuff
-    if ('string' != typeof data) {
+    if (typeof data !== 'string') {
       let contentType = req.getHeader('Content-Type');
       // Parse out just the content type from the header (ignore the charset)
       if (contentType) contentType = contentType.split(';')[0];
@@ -884,7 +905,10 @@ Request.prototype._end = function() {
 
     // content-length
     if (data && !req.getHeader('Content-Length')) {
-      req.setHeader('Content-Length', Buffer.isBuffer(data) ? data.length : Buffer.byteLength(data));
+      req.setHeader(
+        'Content-Length',
+        Buffer.isBuffer(data) ? data.length : Buffer.byteLength(data)
+      );
     }
   }
 
@@ -903,7 +927,7 @@ Request.prototype._end = function() {
     const max = this._maxRedirects;
     const mime = utils.type(res.headers['content-type'] || '') || 'text/plain';
     const type = mime.split('/')[0];
-    const multipart = 'multipart' == type;
+    const multipart = type == 'multipart';
     const redirect = isRedirect(res.statusCode);
     const responseType = this._responseType;
 
@@ -914,7 +938,7 @@ Request.prototype._end = function() {
       return this._redirect(res);
     }
 
-    if ('HEAD' == this.method) {
+    if (this.method == 'HEAD') {
       this.emit('end');
       this.callback(null, this._emitResponse());
       return;
@@ -926,14 +950,16 @@ Request.prototype._end = function() {
     }
 
     let buffer = this._buffer;
-    if (buffer === undefined && mime in exports.buffer){
-      buffer = !!exports.buffer[mime];
+    if (buffer === undefined && mime in exports.buffer) {
+      buffer = Boolean(exports.buffer[mime]);
     }
 
     let parser = this._parser;
     if (undefined === buffer) {
       if (parser) {
-        console.warn("A custom superagent parser has been set, but buffering strategy for the parser hasn't been configured. Call `req.buffer(true or false)` or set `superagent.buffer[mime] = true or false`");
+        console.warn(
+          "A custom superagent parser has been set, but buffering strategy for the parser hasn't been configured. Call `req.buffer(true or false)` or set `superagent.buffer[mime] = true or false`"
+        );
         buffer = true;
       }
     }
@@ -951,14 +977,14 @@ Request.prototype._end = function() {
         buffer = true; // For backwards-compatibility buffering default is ad-hoc MIME-dependent
       } else if (exports.parse[mime]) {
         parser = exports.parse[mime];
-      } else if ('text' == type) {
+      } else if (type == 'text') {
         parser = exports.parse.text;
-        buffer = (buffer !== false);
+        buffer = buffer !== false;
 
         // everyone wants their own white-labeled json
       } else if (isJSON(mime)) {
         parser = exports.parse['application/json'];
-        buffer = (buffer !== false);
+        buffer = buffer !== false;
       } else if (buffer) {
         parser = exports.parse.text;
       } else if (undefined === buffer) {
@@ -981,8 +1007,8 @@ Request.prototype._end = function() {
         responseBytesLeft -= buf.byteLength || buf.length;
         if (responseBytesLeft < 0) {
           // This will propagate through error event
-          const err = Error("Maximum response size reached");
-          err.code = "ETOOLARGE";
+          const err = new Error('Maximum response size reached');
+          err.code = 'ETOOLARGE';
           // Parsers aren't required to observe error event,
           // so would incorrectly report success
           parserHandlesEnd = false;
@@ -1063,14 +1089,14 @@ Request.prototype._end = function() {
         direction: 'upload',
         lengthComputable,
         loaded,
-        total,
+        total
       });
       cb(null, chunk);
     };
     return progress;
   };
 
-  const bufferToChunks = (buffer) => {
+  const bufferToChunks = buffer => {
     const chunkSize = 16 * 1024; // default highWaterMark value
     const chunking = new Stream.Readable();
     const totalLength = buffer.length;
@@ -1090,12 +1116,11 @@ Request.prototype._end = function() {
     chunking.push(null); // no more data
 
     return chunking;
-  }
+  };
 
   // if a FormData instance got created, then we send that as the request body
   const formData = this._formData;
   if (formData) {
-
     // set headers
     const headers = formData.getHeaders();
     for (const i in headers) {
@@ -1108,14 +1133,16 @@ Request.prototype._end = function() {
       // TODO: Add chunked encoding when no length (if err)
 
       debug('got FormData Content-Length: %s', length);
-      if ('number' == typeof length) {
+      if (typeof length === 'number') {
         req.setHeader('Content-Length', length);
       }
 
       formData.pipe(getProgressMonitor()).pipe(req);
     });
   } else if (Buffer.isBuffer(data)) {
-    bufferToChunks(data).pipe(getProgressMonitor()).pipe(req);
+    bufferToChunks(data)
+      .pipe(getProgressMonitor())
+      .pipe(req);
   } else {
     req.end(data);
   }
@@ -1131,7 +1158,7 @@ Request.prototype._shouldUnzip = res => {
   }
 
   // header content is a string, and distinction between 0 and no information is crucial
-  if ('0' === res.headers['content-length']) {
+  if (res.headers['content-length'] === '0') {
     // We know that the body is empty (unfortunately, this check does not cover chunked encoding)
     return false;
   }
@@ -1150,12 +1177,12 @@ if (methods.indexOf('del') == -1) {
 }
 methods.forEach(method => {
   const name = method;
-  method = 'del' == method ? 'delete' : method;
+  method = method == 'del' ? 'delete' : method;
 
   method = method.toUpperCase();
   request[name] = (url, data, fn) => {
     const req = request(method, url);
-    if ('function' == typeof data) (fn = data), (data = null);
+    if (typeof data === 'function') (fn = data), (data = null);
     if (data) {
       if (method === 'GET' || method === 'HEAD') {
         req.query(data);
@@ -1181,13 +1208,13 @@ function isText(mime) {
   const type = parts[0];
   const subtype = parts[1];
 
-  return 'text' == type || 'x-www-form-urlencoded' == subtype;
+  return type == 'text' || subtype == 'x-www-form-urlencoded';
 }
 
 function isImageOrVideo(mime) {
   const type = mime.split('/')[0];
 
-  return 'image' == type || 'video' == type;
+  return type == 'image' || type == 'video';
 }
 
 /**

@@ -61,28 +61,28 @@ ResponseBase.prototype.get = function(field) {
  * @api private
  */
 
-ResponseBase.prototype._setHeaderProperties = function(header){
-    // TODO: moar!
-    // TODO: make this a util
+ResponseBase.prototype._setHeaderProperties = function(header) {
+  // TODO: moar!
+  // TODO: make this a util
 
-    // content-type
-    const ct = header['content-type'] || '';
-    this.type = utils.type(ct);
+  // content-type
+  const ct = header['content-type'] || '';
+  this.type = utils.type(ct);
 
-    // params
-    const params = utils.params(ct);
-    for (const key in params) this[key] = params[key];
+  // params
+  const params = utils.params(ct);
+  for (const key in params) this[key] = params[key];
 
-    this.links = {};
+  this.links = {};
 
-    // links
-    try {
-        if (header.link) {
-            this.links = utils.parseLinks(header.link);
-        }
-    } catch (err) {
-        // ignore
+  // links
+  try {
+    if (header.link) {
+      this.links = utils.parseLinks(header.link);
     }
+  } catch (err) {
+    // ignore
+  }
 };
 
 /**
@@ -106,31 +106,29 @@ ResponseBase.prototype._setHeaderProperties = function(header){
  * @api private
  */
 
-ResponseBase.prototype._setStatusProperties = function(status){
-    const type = status / 100 | 0;
+ResponseBase.prototype._setStatusProperties = function(status) {
+  const type = (status / 100) | 0;
 
-    // status / class
-    this.status = this.statusCode = status;
-    this.statusType = type;
+  // status / class
+  this.status = this.statusCode = status;
+  this.statusType = type;
 
-    // basics
-    this.info = 1 == type;
-    this.ok = 2 == type;
-    this.redirect = 3 == type;
-    this.clientError = 4 == type;
-    this.serverError = 5 == type;
-    this.error = (4 == type || 5 == type)
-        ? this.toError()
-        : false;
+  // basics
+  this.info = type == 1;
+  this.ok = type == 2;
+  this.redirect = type == 3;
+  this.clientError = type == 4;
+  this.serverError = type == 5;
+  this.error = type == 4 || type == 5 ? this.toError() : false;
 
-    // sugar
-    this.created = 201 == status;
-    this.accepted = 202 == status;
-    this.noContent = 204 == status;
-    this.badRequest = 400 == status;
-    this.unauthorized = 401 == status;
-    this.notAcceptable = 406 == status;
-    this.forbidden = 403 == status;
-    this.notFound = 404 == status;
-    this.unprocessableEntity = 422 == status;
+  // sugar
+  this.created = status == 201;
+  this.accepted = status == 202;
+  this.noContent = status == 204;
+  this.badRequest = status == 400;
+  this.unauthorized = status == 401;
+  this.notAcceptable = status == 406;
+  this.forbidden = status == 403;
+  this.notFound = status == 404;
+  this.unprocessableEntity = status == 422;
 };

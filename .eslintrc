@@ -1,0 +1,6 @@
+{
+  "env": { "browser": true" },
+  "plugins": ["compat"],
+  "rules": { "compat/compat": "error" },
+  "settings": { "polyfills": [ "promises" ] }
+}

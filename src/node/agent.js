@@ -7,9 +7,9 @@
 const CookieJar = require('cookiejar').CookieJar;
 const CookieAccess = require('cookiejar').CookieAccessInfo;
 const parse = require('url').parse;
-const request = require('../..');
+const methods = require('methods');
+const request = require('./request');
 const AgentBase = require('../agent-base');
-let methods = require('methods');
 
 /**
  * Expose `Agent`.
@@ -31,10 +31,18 @@ function Agent(options) {
   this.jar = new CookieJar();
 
   if (options) {
-    if (options.ca) {this.ca(options.ca);}
-    if (options.key) {this.key(options.key);}
-    if (options.pfx) {this.pfx(options.pfx);}
-    if (options.cert) {this.cert(options.cert);}
+    if (options.ca) {
+      this.ca(options.ca);
+    }
+    if (options.key) {
+      this.key(options.key);
+    }
+    if (options.pfx) {
+      this.pfx(options.pfx);
+    }
+    if (options.cert) {
+      this.cert(options.cert);
+    }
   }
 }
 
@@ -65,7 +73,7 @@ Agent.prototype._attachCookies = function(req) {
   const access = CookieAccess(
     url.hostname,
     url.pathname,
-    'https:' == url.protocol
+    url.protocol == 'https:'
   );
   const cookies = this.jar.getCookies(access).toValueString();
   req.cookies = cookies;
@@ -89,4 +97,4 @@ methods.forEach(name => {
   };
 });
 
-Agent.prototype.del = Agent.prototype['delete'];
+Agent.prototype.del = Agent.prototype.delete;

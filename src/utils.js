@@ -18,14 +18,15 @@ exports.type = str => str.split(/ *; */).shift();
  * @api private
  */
 
-exports.params = str => str.split(/ *; */).reduce((obj, str) => {
-  const parts = str.split(/ *= */);
-  const key = parts.shift();
-  const val = parts.shift();
+exports.params = str =>
+  str.split(/ *; */).reduce((obj, str) => {
+    const parts = str.split(/ *= */);
+    const key = parts.shift();
+    const val = parts.shift();
 
-  if (key && val) obj[key] = val;
-  return obj;
-}, {});
+    if (key && val) obj[key] = val;
+    return obj;
+  }, {});
 
 /**
  * Parse Link header fields.
@@ -35,13 +36,14 @@ exports.params = str => str.split(/ *; */).reduce((obj, str) => {
  * @api private
  */
 
-exports.parseLinks = str => str.split(/ *, */).reduce((obj, str) => {
-  const parts = str.split(/ *; */);
-  const url = parts[0].slice(1, -1);
-  const rel = parts[1].split(/ *= */)[1].slice(1, -1);
-  obj[rel] = url;
-  return obj;
-}, {});
+exports.parseLinks = str =>
+  str.split(/ *, */).reduce((obj, str) => {
+    const parts = str.split(/ *; */);
+    const url = parts[0].slice(1, -1);
+    const rel = parts[1].split(/ *= */)[1].slice(1, -1);
+    obj[rel] = url;
+    return obj;
+  }, {});
 
 /**
  * Strip content related fields from `header`.
@@ -55,11 +57,11 @@ exports.cleanHeader = (header, changesOrigin) => {
   delete header['content-type'];
   delete header['content-length'];
   delete header['transfer-encoding'];
-  delete header['host'];
+  delete header.host;
   // secuirty
   if (changesOrigin) {
-    delete header['authorization'];
-    delete header['cookie'];
+    delete header.authorization;
+    delete header.cookie;
   }
   return header;
 };

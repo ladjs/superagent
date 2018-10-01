@@ -12,14 +12,15 @@
  * @api private
  */
 
-var Buffer = require('safe-buffer').Buffer
-var contentType = require('content-type');
-var mime = require('send').mime;
-var etag = require('etag');
-var proxyaddr = require('proxy-addr');
-var qs = require('qs');
-var querystring = require('querystring');
-var isHttp2Supported = true;
+const Buffer = require('safe-buffer').Buffer;
+const contentType = require('content-type');
+const mime = require('send').mime;
+const etag = require('etag');
+const proxyaddr = require('proxy-addr');
+const qs = require('qs');
+const querystring = require('querystring');
+
+let isHttp2Supported = true;
 
 /**
  * Test for http2 support
@@ -39,7 +40,7 @@ try {
  * @api private
  */
 
-exports.etag = createETagGenerator({ weak: false })
+exports.etag = createETagGenerator({ weak: false });
 
 /**
  * Return weak ETag for `body`.
@@ -50,7 +51,7 @@ exports.etag = createETagGenerator({ weak: false })
  * @api private
  */
 
-exports.wetag = createETagGenerator({ weak: true })
+exports.wetag = createETagGenerator({ weak: true });
 
 /**
  * Normalize the given `type`, for example "html" becomes "text/html".
@@ -60,7 +61,7 @@ exports.wetag = createETagGenerator({ weak: true })
  * @api private
  */
 
-exports.normalizeType = function(type){
+exports.normalizeType = function(type) {
   return ~type.indexOf('/')
     ? acceptParams(type)
     : { value: mime.lookup(type), params: {} };
@@ -74,10 +75,10 @@ exports.normalizeType = function(type){
  * @api private
  */
 
-exports.normalizeTypes = function(types){
-  var ret = [];
+exports.normalizeTypes = function(types) {
+  const ret = [];
 
-  for (var i = 0; i < types.length; ++i) {
+  for (let i = 0; i < types.length; ++i) {
     ret.push(exports.normalizeType(types[i]));
   }
 
@@ -95,12 +96,12 @@ exports.normalizeTypes = function(types){
  */
 
 function acceptParams(str, index) {
-  var parts = str.split(/ *; */);
-  var ret = { value: parts[0], quality: 1, params: {}, originalIndex: index };
+  const parts = str.split(/ *; */);
+  const ret = { value: parts[0], quality: 1, params: {}, originalIndex: index };
 
-  for (var i = 1; i < parts.length; ++i) {
-    var pms = parts[i].split(/ *= */);
-    if ('q' === pms[0]) {
+  for (let i = 1; i < parts.length; ++i) {
+    const pms = parts[i].split(/ *= */);
+    if (pms[0] === 'q') {
       ret.quality = parseFloat(pms[1]);
     } else {
       ret.params[pms[0]] = pms[1];
@@ -119,7 +120,7 @@ function acceptParams(str, index) {
  */
 
 exports.compileETag = function(val) {
-  var fn;
+  let fn;
 
   if (typeof val === 'function') {
     return val;
@@ -142,7 +143,7 @@ exports.compileETag = function(val) {
   }
 
   return fn;
-}
+};
 
 /**
  * Compile "query parser" value to function.
@@ -153,7 +154,7 @@ exports.compileETag = function(val) {
  */
 
 exports.compileQueryParser = function compileQueryParser(val) {
-  var fn;
+  let fn;
 
   if (typeof val === 'function') {
     return val;
@@ -176,7 +177,7 @@ exports.compileQueryParser = function compileQueryParser(val) {
   }
 
   return fn;
-}
+};
 
 /**
  * Compile "proxy trust" value to function.
@@ -191,12 +192,16 @@ exports.compileTrust = function(val) {
 
   if (val === true) {
     // Support plain true/false
-    return function(){ return true };
+    return function() {
+      return true;
+    };
   }
 
   if (typeof val === 'number') {
     // Support trusting hop count
-    return function(a, i){ return i < val };
+    return function(a, i) {
+      return i < val;
+    };
   }
 
   if (typeof val === 'string') {
@@ -205,7 +210,7 @@ exports.compileTrust = function(val) {
   }
 
   return proxyaddr.compile(val || []);
-}
+};
 
 /**
  * Flag for http2 support
@@ -226,7 +231,7 @@ exports.setCharset = function setCharset(type, charset) {
   }
 
   // parse type
-  var parsed = contentType.parse(type);
+  const parsed = contentType.parse(type);
 
   // set charset
   parsed.parameters.charset = charset;
@@ -244,14 +249,12 @@ exports.setCharset = function setCharset(type, charset) {
  * @private
  */
 
-function createETagGenerator (options) {
-  return function generateETag (body, encoding) {
-    var buf = !Buffer.isBuffer(body)
-      ? Buffer.from(body, encoding)
-      : body
+function createETagGenerator(options) {
+  return function generateETag(body, encoding) {
+    const buf = !Buffer.isBuffer(body) ? Buffer.from(body, encoding) : body;
 
-    return etag(buf, options)
-  }
+    return etag(buf, options);
+  };
 }
 
 /**

@@ -3,12 +3,17 @@
  */
 
 let root;
-if (typeof window !== 'undefined') { // Browser window
+if (typeof window !== 'undefined') {
+  // Browser window
   root = window;
-} else if (typeof self !== 'undefined') { // Web Worker
+} else if (typeof self !== 'undefined') {
+  // Web Worker
   root = self;
-} else { // Other environments
-  console.warn("Using browser-only version of superagent in non-browser environment");
+} else {
+  // Other environments
+  console.warn(
+    'Using browser-only version of superagent in non-browser environment'
+  );
   root = this;
 }
 
@@ -22,25 +27,25 @@ const Agent = require('./agent-base');
  * Noop.
  */
 
-function noop(){};
+function noop() {}
 
 /**
  * Expose `request`.
  */
 
-const request = exports = module.exports = function(method, url) {
+const request = (exports = module.exports = function(method, url) {
   // callback
-  if ('function' == typeof url) {
+  if (typeof url === 'function') {
     return new exports.Request('GET', method).end(url);
   }
 
   // url first
-  if (1 == arguments.length) {
+  if (arguments.length == 1) {
     return new exports.Request('GET', method);
   }
 
   return new exports.Request(method, url);
-};
+});
 
 exports.Request = Request;
 
@@ -49,17 +54,26 @@ exports.Request = Request;
  */
 
 request.getXHR = () => {
-  if (root.XMLHttpRequest
-      && (!root.location || 'file:' != root.location.protocol
-          || !root.ActiveXObject)) {
-    return new XMLHttpRequest;
-  } else {
-    try { return new ActiveXObject('Microsoft.XMLHTTP'); } catch(e) {}
-    try { return new ActiveXObject('Msxml2.XMLHTTP.6.0'); } catch(e) {}
-    try { return new ActiveXObject('Msxml2.XMLHTTP.3.0'); } catch(e) {}
-    try { return new ActiveXObject('Msxml2.XMLHTTP'); } catch(e) {}
+  if (
+    root.XMLHttpRequest &&
+    (!root.location || root.location.protocol != 'file:' || !root.ActiveXObject)
+  ) {
+    return new XMLHttpRequest();
   }
-  throw Error("Browser-only version of superagent could not find XHR");
+  try {
+    return new ActiveXObject('Microsoft.XMLHTTP');
+  } catch (e) {}
+  try {
+    return new ActiveXObject('Msxml2.XMLHTTP.6.0');
+  } catch (e) {}
+  try {
+    return new ActiveXObject('Msxml2.XMLHTTP.3.0');
+  } catch (e) {}
+  try {
+    return new ActiveXObject('Msxml2.XMLHTTP');
+  } catch (e) {}
+
+  throw new Error('Browser-only version of superagent could not find XHR');
 };
 
 /**
@@ -70,9 +84,7 @@ request.getXHR = () => {
  * @api private
  */
 
-const trim = ''.trim
-  ? s => s.trim()
-  : s => s.replace(/(^\s*|\s*$)/g, '');
+const trim = ''.trim ? s => s.trim() : s => s.replace(/(^\s*|\s*$)/g, '');
 
 /**
  * Serialize the given `obj`.
@@ -107,12 +119,11 @@ function pushEncodedKeyValuePair(pairs, key, val) {
         pushEncodedKeyValuePair(pairs, key, v);
       });
     } else if (isObject(val)) {
-      for(const subkey in val) {
+      for (const subkey in val) {
         pushEncodedKeyValuePair(pairs, `${key}[${subkey}]`, val[subkey]);
       }
     } else {
-      pairs.push(encodeURIComponent(key)
-        + '=' + encodeURIComponent(val));
+      pairs.push(encodeURIComponent(key) + '=' + encodeURIComponent(val));
     }
   } else if (val === null) {
     pairs.push(encodeURIComponent(key));
@@ -126,12 +137,12 @@ function pushEncodedKeyValuePair(pairs, key, val) {
 request.serializeObject = serialize;
 
 /**
-  * Parse the given x-www-form-urlencoded `str`.
-  *
-  * @param {String} str
-  * @return {Object}
-  * @api private
-  */
+ * Parse the given x-www-form-urlencoded `str`.
+ *
+ * @param {String} str
+ * @return {Object}
+ * @api private
+ */
 
 function parseString(str) {
   const obj = {};
@@ -145,8 +156,9 @@ function parseString(str) {
     if (pos == -1) {
       obj[decodeURIComponent(pair)] = '';
     } else {
-      obj[decodeURIComponent(pair.slice(0, pos))] =
-        decodeURIComponent(pair.slice(pos + 1));
+      obj[decodeURIComponent(pair.slice(0, pos))] = decodeURIComponent(
+        pair.slice(pos + 1)
+      );
     }
   }
 
@@ -171,7 +183,7 @@ request.types = {
   json: 'application/json',
   xml: 'text/xml',
   urlencoded: 'application/x-www-form-urlencoded',
-  'form': 'application/x-www-form-urlencoded',
+  form: 'application/x-www-form-urlencoded',
   'form-data': 'application/x-www-form-urlencoded'
 };
 
@@ -190,13 +202,13 @@ request.serialize = {
 };
 
 /**
-  * Default parsers.
-  *
-  *     superagent.parse['application/xml'] = function(str){
-  *       return { object parsed from str };
-  *     };
-  *
-  */
+ * Default parsers.
+ *
+ *     superagent.parse['application/xml'] = function(str){
+ *       return { object parsed from str };
+ *     };
+ *
+ */
 
 request.parse = {
   'application/x-www-form-urlencoded': parseString,
@@ -223,7 +235,8 @@ function parseHeader(str) {
   for (let i = 0, len = lines.length; i < len; ++i) {
     line = lines[i];
     index = line.indexOf(':');
-    if (index === -1) { // could be empty line, just skip it
+    if (index === -1) {
+      // could be empty line, just skip it
       continue;
     }
     field = line.slice(0, index).toLowerCase();
@@ -298,9 +311,12 @@ function Response(req) {
   this.req = req;
   this.xhr = this.req.xhr;
   // responseText is accessible only if responseType is '' or 'text' and on older browsers
-  this.text = ((this.req.method !='HEAD' && (this.xhr.responseType === '' || this.xhr.responseType === 'text')) || typeof this.xhr.responseType === 'undefined')
-     ? this.xhr.responseText
-     : null;
+  this.text =
+    (this.req.method != 'HEAD' &&
+      (this.xhr.responseType === '' || this.xhr.responseType === 'text')) ||
+    typeof this.xhr.responseType === 'undefined'
+      ? this.xhr.responseText
+      : null;
   this.statusText = this.req.xhr.statusText;
   let status = this.xhr.status;
   // handle IE9 bug: http://stackoverflow.com/questions/10046972/msie-returns-status-code-of-1223-for-ajax-request
@@ -315,12 +331,13 @@ function Response(req) {
   this.header['content-type'] = this.xhr.getResponseHeader('content-type');
   this._setHeaderProperties(this.header);
 
-  if (null === this.text && req._responseType) {
+  if (this.text === null && req._responseType) {
     this.body = this.xhr.response;
   } else {
-    this.body = this.req.method != 'HEAD'
-      ? this._parseBody(this.text ? this.text : this.xhr.response)
-      : null;
+    this.body =
+      this.req.method != 'HEAD'
+        ? this._parseBody(this.text ? this.text : this.xhr.response)
+        : null;
   }
 }
 
@@ -357,7 +374,7 @@ Response.prototype._parseBody = function(str) {
  * @api public
  */
 
-Response.prototype.toError = function(){
+Response.prototype.toError = function() {
   const req = this.req;
   const method = req.method;
   const url = req.url;
@@ -398,14 +415,17 @@ function Request(method, url) {
 
     try {
       res = new Response(self);
-    } catch(e) {
+    } catch (e) {
       err = new Error('Parser is unable to parse the response');
       err.parse = true;
       err.original = e;
       // issue #675: return the raw response if the response parsing fails
       if (self.xhr) {
         // ie9 doesn't have 'response' property
-        err.rawResponse = typeof self.xhr.responseType == 'undefined' ? self.xhr.responseText : self.xhr.response;
+        err.rawResponse =
+          typeof self.xhr.responseType === 'undefined'
+            ? self.xhr.responseText
+            : self.xhr.response;
         // issue #876: return the http status code if the response parsing fails
         err.status = self.xhr.status ? self.xhr.status : null;
         err.statusCode = err.status; // backwards-compat only
@@ -424,7 +444,7 @@ function Request(method, url) {
       if (!self._isResponseOK(res)) {
         new_err = new Error(res.statusText || 'Unsuccessful HTTP response');
       }
-    } catch(custom_err) {
+    } catch (custom_err) {
       new_err = custom_err; // ok() callback can throw
     }
 
@@ -469,7 +489,7 @@ RequestBase(Request.prototype);
  * @api public
  */
 
-Request.prototype.type = function(type){
+Request.prototype.type = function(type) {
   this.set('Content-Type', request.types[type] || type);
   return this;
 };
@@ -494,7 +514,7 @@ Request.prototype.type = function(type){
  * @api public
  */
 
-Request.prototype.accept = function(type){
+Request.prototype.accept = function(type) {
   this.set('Accept', request.types[type] || type);
   return this;
 };
@@ -509,20 +529,21 @@ Request.prototype.accept = function(type){
  * @api public
  */
 
-Request.prototype.auth = function(user, pass, options){
-  if (1 === arguments.length) pass = '';
-  if (typeof pass === 'object' && pass !== null) { // pass is optional and can be replaced with options
+Request.prototype.auth = function(user, pass, options) {
+  if (arguments.length === 1) pass = '';
+  if (typeof pass === 'object' && pass !== null) {
+    // pass is optional and can be replaced with options
     options = pass;
     pass = '';
   }
   if (!options) {
     options = {
-      type: 'function' === typeof btoa ? 'basic' : 'auto',
+      type: typeof btoa === 'function' ? 'basic' : 'auto'
     };
   }
 
   const encoder = string => {
-    if ('function' === typeof btoa) {
+    if (typeof btoa === 'function') {
       return btoa(string);
     }
     throw new Error('Cannot use basic auth, btoa is not a function');
@@ -545,8 +566,8 @@ Request.prototype.auth = function(user, pass, options){
  * @api public
  */
 
-Request.prototype.query = function(val){
-  if ('string' != typeof val) val = serialize(val);
+Request.prototype.query = function(val) {
+  if (typeof val !== 'string') val = serialize(val);
   if (val) this._query.push(val);
   return this;
 };
@@ -568,10 +589,10 @@ Request.prototype.query = function(val){
  * @api public
  */
 
-Request.prototype.attach = function(field, file, options){
+Request.prototype.attach = function(field, file, options) {
   if (file) {
     if (this._data) {
-      throw Error("superagent can't mix .send() and .attach()");
+      throw new Error("superagent can't mix .send() and .attach()");
     }
 
     this._getFormData().append(field, file, options || file.name);
@@ -579,7 +600,7 @@ Request.prototype.attach = function(field, file, options){
   return this;
 };
 
-Request.prototype._getFormData = function(){
+Request.prototype._getFormData = function() {
   if (!this._formData) {
     this._formData = new root.FormData();
   }
@@ -595,7 +616,7 @@ Request.prototype._getFormData = function(){
  * @api private
  */
 
-Request.prototype.callback = function(err, res){
+Request.prototype.callback = function(err, res) {
   if (this._shouldRetry(err, res)) {
     return this._retry();
   }
@@ -617,8 +638,10 @@ Request.prototype.callback = function(err, res){
  * @api private
  */
 
-Request.prototype.crossDomainError = function(){
-  const err = new Error('Request has been terminated\nPossible causes: the network is offline, Origin is not allowed by Access-Control-Allow-Origin, the page is being unloaded, etc.');
+Request.prototype.crossDomainError = function() {
+  const err = new Error(
+    'Request has been terminated\nPossible causes: the network is offline, Origin is not allowed by Access-Control-Allow-Origin, the page is being unloaded, etc.'
+  );
   err.crossDomain = true;
 
   err.status = this.status;
@@ -629,14 +652,16 @@ Request.prototype.crossDomainError = function(){
 };
 
 // This only warns, because the request is still likely to work
-Request.prototype.buffer = Request.prototype.ca = Request.prototype.agent = function(){
-  console.warn("This is not supported in browser version of superagent");
+Request.prototype.buffer = Request.prototype.ca = Request.prototype.agent = function() {
+  console.warn('This is not supported in browser version of superagent');
   return this;
 };
 
 // This throws, because it can't send/receive data as expected
 Request.prototype.pipe = Request.prototype.write = () => {
-  throw Error("Streaming is not supported in browser version of superagent");
+  throw new Error(
+    'Streaming is not supported in browser version of superagent'
+  );
 };
 
 /**
@@ -649,8 +674,13 @@ Request.prototype.pipe = Request.prototype.write = () => {
  */
 Request.prototype._isHost = function _isHost(obj) {
   // Native objects stringify to [object File], [object Blob], [object FormData], etc.
-  return obj && 'object' === typeof obj && !Array.isArray(obj) && Object.prototype.toString.call(obj) !== '[object Object]';
-}
+  return (
+    obj &&
+    typeof obj === 'object' &&
+    !Array.isArray(obj) &&
+    Object.prototype.toString.call(obj) !== '[object Object]'
+  );
+};
 
 /**
  * Initiate request, invoking callback `fn(res)`
@@ -661,9 +691,11 @@ Request.prototype._isHost = function _isHost(obj) {
  * @api public
  */
 
-Request.prototype.end = function(fn){
+Request.prototype.end = function(fn) {
   if (this._endCalled) {
-    console.warn("Warning: .end() was called twice. This is not supported in superagent");
+    console.warn(
+      'Warning: .end() was called twice. This is not supported in superagent'
+    );
   }
   this._endCalled = true;
 
@@ -677,7 +709,10 @@ Request.prototype.end = function(fn){
 };
 
 Request.prototype._end = function() {
-  if (this._aborted) return this.callback(Error("The request has been aborted even before .end() was called"));
+  if (this._aborted)
+    return this.callback(
+      new Error('The request has been aborted even before .end() was called')
+    );
 
   const self = this;
   const xhr = (this.xhr = request.getXHR());
@@ -691,14 +726,18 @@ Request.prototype._end = function() {
     if (readyState >= 2 && self._responseTimeoutTimer) {
       clearTimeout(self._responseTimeoutTimer);
     }
-    if (4 != readyState) {
+    if (readyState != 4) {
       return;
     }
 
     // In IE9, reads to any property (e.g. status) off of an aborted XHR will
     // result in the error "Could not complete the operation due to error c00c023f"
     let status;
-    try { status = xhr.status } catch(e) { status = 0; }
+    try {
+      status = xhr.status;
+    } catch (e) {
+      status = 0;
+    }
 
     if (!status) {
       if (self.timedout || self._aborted) return;
@@ -710,18 +749,21 @@ Request.prototype._end = function() {
   // progress
   const handleProgress = (direction, e) => {
     if (e.total > 0) {
-      e.percent = e.loaded / e.total * 100;
+      e.percent = (e.loaded / e.total) * 100;
     }
     e.direction = direction;
     self.emit('progress', e);
   };
   if (this.hasListeners('progress')) {
     try {
-      xhr.onprogress = handleProgress.bind(null, 'download');
+      xhr.addEventListener('progress', handleProgress.bind(null, 'download'));
       if (xhr.upload) {
-        xhr.upload.onprogress = handleProgress.bind(null, 'upload');
+        xhr.upload.addEventListener(
+          'progress',
+          handleProgress.bind(null, 'upload')
+        );
       }
-    } catch(e) {
+    } catch (e) {
       // Accessing xhr.upload fails in IE from a web worker, so just pretend it doesn't exist.
       // Reported here:
       // https://connect.microsoft.com/IE/feedback/details/837245/xmlhttprequest-upload-throws-invalid-argument-when-used-from-web-worker-context
@@ -744,10 +786,18 @@ Request.prototype._end = function() {
   if (this._withCredentials) xhr.withCredentials = true;
 
   // body
-  if (!this._formData && 'GET' != this.method && 'HEAD' != this.method && 'string' != typeof data && !this._isHost(data)) {
+  if (
+    !this._formData &&
+    this.method != 'GET' &&
+    this.method != 'HEAD' &&
+    typeof data !== 'string' &&
+    !this._isHost(data)
+  ) {
     // serialize stuff
     const contentType = this._header['content-type'];
-    let serialize = this._serializer || request.serialize[contentType ? contentType.split(';')[0] : ''];
+    let serialize =
+      this._serializer ||
+      request.serialize[contentType ? contentType.split(';')[0] : ''];
     if (!serialize && isJSON(contentType)) {
       serialize = request.serialize['application/json'];
     }
@@ -756,7 +806,7 @@ Request.prototype._end = function() {
 
   // set header fields
   for (const field in this.header) {
-    if (null == this.header[field]) continue;
+    if (this.header[field] == null) continue;
 
     if (this.header.hasOwnProperty(field))
       xhr.setRequestHeader(field, this.header[field]);
@@ -776,7 +826,7 @@ Request.prototype._end = function() {
 
 request.agent = () => new Agent();
 
-["GET", "POST", "OPTIONS", "PATCH", "PUT", "DELETE"].forEach(method => {
+['GET', 'POST', 'OPTIONS', 'PATCH', 'PUT', 'DELETE'].forEach(method => {
   Agent.prototype[method.toLowerCase()] = function(url, fn) {
     const req = new request.Request(method, url);
     this._setDefaults(req);
@@ -787,7 +837,7 @@ request.agent = () => new Agent();
   };
 });
 
-Agent.prototype.del = Agent.prototype['delete'];
+Agent.prototype.del = Agent.prototype.delete;
 
 /**
  * GET `url` with optional callback `fn(res)`.
@@ -801,7 +851,7 @@ Agent.prototype.del = Agent.prototype['delete'];
 
 request.get = (url, data, fn) => {
   const req = request('GET', url);
-  if ('function' == typeof data) (fn = data), (data = null);
+  if (typeof data === 'function') (fn = data), (data = null);
   if (data) req.query(data);
   if (fn) req.end(fn);
   return req;
@@ -819,7 +869,7 @@ request.get = (url, data, fn) => {
 
 request.head = (url, data, fn) => {
   const req = request('HEAD', url);
-  if ('function' == typeof data) (fn = data), (data = null);
+  if (typeof data === 'function') (fn = data), (data = null);
   if (data) req.query(data);
   if (fn) req.end(fn);
   return req;
@@ -837,7 +887,7 @@ request.head = (url, data, fn) => {
 
 request.options = (url, data, fn) => {
   const req = request('OPTIONS', url);
-  if ('function' == typeof data) (fn = data), (data = null);
+  if (typeof data === 'function') (fn = data), (data = null);
   if (data) req.send(data);
   if (fn) req.end(fn);
   return req;
@@ -855,14 +905,14 @@ request.options = (url, data, fn) => {
 
 function del(url, data, fn) {
   const req = request('DELETE', url);
-  if ('function' == typeof data) (fn = data), (data = null);
+  if (typeof data === 'function') (fn = data), (data = null);
   if (data) req.send(data);
   if (fn) req.end(fn);
   return req;
 }
 
-request['del'] = del;
-request['delete'] = del;
+request.del = del;
+request.delete = del;
 
 /**
  * PATCH `url` with optional `data` and callback `fn(res)`.
@@ -876,7 +926,7 @@ request['delete'] = del;
 
 request.patch = (url, data, fn) => {
   const req = request('PATCH', url);
-  if ('function' == typeof data) (fn = data), (data = null);
+  if (typeof data === 'function') (fn = data), (data = null);
   if (data) req.send(data);
   if (fn) req.end(fn);
   return req;
@@ -894,7 +944,7 @@ request.patch = (url, data, fn) => {
 
 request.post = (url, data, fn) => {
   const req = request('POST', url);
-  if ('function' == typeof data) (fn = data), (data = null);
+  if (typeof data === 'function') (fn = data), (data = null);
   if (data) req.send(data);
   if (fn) req.end(fn);
   return req;
@@ -912,7 +962,7 @@ request.post = (url, data, fn) => {
 
 request.put = (url, data, fn) => {
   const req = request('PUT', url);
-  if ('function' == typeof data) (fn = data), (data = null);
+  if (typeof data === 'function') (fn = data), (data = null);
   if (data) req.send(data);
   if (fn) req.end(fn);
   return req;

@@ -3,8 +3,6 @@ NODETESTS ?= test/*.js test/node/*.js
 BROWSERTESTS ?= test/*.js test/client/*.js
 REPORTER = spec
 
-all: superagent.js
-
 test:
 	@if [ "x$(BROWSER)" = "x" ]; then make test-node; else make test-browser; fi
 
@@ -36,12 +34,6 @@ test-browser-local:
 lib-cov:
 	jscoverage lib lib-cov
 
-superagent.js: lib/node/*.js lib/node/parsers/*.js
-	@./node_modules/.bin/browserify \
-		-t [ babelify --presets [ "babel-preset-es2015" --loose true ] ]  \
-		--standalone superagent \
-		--outfile superagent.js .
-
 test-server:
 	@node test/server
 
@@ -60,7 +52,4 @@ test-docs: docs/head.html docs/tail.html
 		| cat docs/head.html - docs/tail.html \
 		> docs/test.html
 
-clean:
-	rm -fr superagent.js components
-
-.PHONY: test-cov test docs test-docs clean test-browser-local
+.PHONY: test-cov test docs test-docs test-browser-local

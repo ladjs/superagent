@@ -5,3 +5,5 @@ examples
 lib-cov
 coverage.html
 bower.json
+.nyc_output
+coverage

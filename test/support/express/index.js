@@ -1,7 +1,8 @@
 const express = require('express');
+
 let http2Req;
 let http2Res;
-if(process.env.HTTP2_TEST){
+if (process.env.HTTP2_TEST) {
   const http2 = require('http2');
   const reqDecorator = require('./requestDecorator');
   const resDecorator = require('./responseDecorator');
@@ -9,9 +10,9 @@ if(process.env.HTTP2_TEST){
   http2Res = resDecorator(Object.create(http2.Http2ServerResponse.prototype));
 }
 
-function createApp(){
+function createApp() {
   const app = express();
-  if(process.env.HTTP2_TEST){
+  if (process.env.HTTP2_TEST) {
     app.request = Object.create(http2Req, {
       app: { configurable: true, enumerable: true, writable: true, value: app }
     });
