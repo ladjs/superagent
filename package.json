@@ -100,7 +100,7 @@
     "zuul": "^3.12.0"
   },
   "engines": {
-    "node": ">=6.4"
+    "node": ">=8.8.1"
   },
   "files": [
     "lib",
@@ -226,7 +226,9 @@
       "handle-callback-err": "off",
       "import/order": "off",
       "no-unused-vars": "off",
-      "block-scoped-var": "off"
+      "block-scoped-var": "off",
+      "promise/prefer-await-to-then": "off",
+      "prefer-object-spread": "off"
     },
     "overrides": [
       {

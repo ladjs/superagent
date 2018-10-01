@@ -96,7 +96,7 @@ If you are using [browserify][], [webpack][], [rollup][], or another bundler, th
 
 ## Supported Platforms
 
-* Node: v6.4+
+* Node: v8.8.1+ (we use the core `http2` package)
 
 * Browsers (see [.browserslistrc](.browserslistrc)):
 
@@ -223,7 +223,7 @@ Our breaking changes are mostly in rarely used functionality and from stricter e
 [MIT](LICENSE) © [TJ Holowaychuk](http://tjholowaychuk.com)
 
 
-## 
+##
 
 [npm]: https://www.npmjs.com/
 
