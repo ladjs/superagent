@@ -2,7 +2,7 @@
   "presets": [
     ["@babel/env", {
       "targets": {
-        "node": "6.4.0",
+        "node": "8.8.1",
         "browsers": [ "> 1%", "last 2 versions", "ie >= 9" ]
       }
     }]
