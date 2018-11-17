@@ -1,6 +1,6 @@
 {
   "name": "superagent",
-  "version": "4.0.0-beta.5",
+  "version": "4.0.0",
   "description": "elegant & feature rich browser / node HTTP with a fluent API",
   "scripts": {
     "prepare": "make all",
