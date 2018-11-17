@@ -2,7 +2,7 @@
 
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/shtylman-superagent.svg)](https://saucelabs.com/u/shtylman-superagent)
 
-SuperAgent is a small progressive __client-side__ HTTP request library, and __Node.js__ module with the same API, sporting many high-level HTTP client features. View the [docs](https://visionmedia.github.io/superagent/).
+SuperAgent is a small progressive __client-side__ and __Node.js__ HTTP request library, sporting many high-level HTTP client features. View the [docs](https://visionmedia.github.io/superagent/).
 
 ![super agent](http://f.cl.ly/items/3d282n3A0h0Z0K2w0q2a/Screenshot.png)
 
@@ -17,14 +17,11 @@ $ npm install superagent
 Works with [browserify](https://github.com/substack/node-browserify) and [webpack](https://github.com/visionmedia/superagent/wiki/SuperAgent-for-Webpack).
 
 ```js
-request
+const res = await request
   .post('/api/pet')
   .send({ name: 'Manny', species: 'cat' }) // sends a JSON post body
   .set('X-API-Key', 'foobar')
-  .set('accept', 'json')
-  .end((err, res) => {
-    // Calling the end function will send the request
-  });
+  .set('accept', 'json');
 ```
 
 ## Supported browsers and Node versions
@@ -35,7 +32,7 @@ Tested browsers:
 - Latest Android, iPhone
 - IE10 through latest. IE9 with polyfills. Even though IE9 is supported, a polyfill for `window.FormData` is required for `.field()`.
 
-Node 6 or later is required.
+Node 6 or later is required. For older browsers ES6-to-ES5 translation (like Babel) is required.
 
 ## Plugins
 
