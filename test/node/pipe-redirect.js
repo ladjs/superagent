@@ -16,6 +16,9 @@ describe("pipe on redirect", () => {
     const redirects = [];
     const req = request.get(base).on("redirect", res => {
       redirects.push(res.headers.location);
+    })
+    .connect({
+      'inapplicable': 'should be ignored',
     });
     stream.on("finish", () => {
       redirects.should.eql(["/movies", "/movies/all", "/movies/all/0"]);

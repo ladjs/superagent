@@ -3,14 +3,13 @@ const request = require("../support/client"),
   express = require("../support/express"),
   app = express();
 let http = require('http');
+let assert = require('assert');
 
-if (process.env.HTTP2_TEST) {
-  http = require('http2');
-}
-
-let base = "http://localhost";
-let server;
 describe("request.get().set()", () => {
+  if (process.env.HTTP2_TEST) {
+    return; // request object doesn't look the same
+  }
+  let server;
 
   after(function exitServer() {
     if (typeof server.close === 'function') {
@@ -22,20 +21,25 @@ describe("request.get().set()", () => {
 
   it("should set host header after get()", done => {
     app.get("/", (req, res) => {
-      req.hostname.should.equal('example.com');
+      assert.equal(req.hostname, 'example.com');
       res.end();
     });
 
     server = http.createServer(app);
     server.listen(0, function listening() {
-      base += `:${server.address().port}`;
 
       request
-        .get(base)
+        .get(`http://localhost:${server.address().port}`)
         .set('host', 'example.com')
-        .end(() => {
-          done();
-        });
+        .then(() => {
+          return request
+            .get(`http://example.com:${server.address().port}`)
+            .connect({
+              "example.com": "localhost",
+              "*": "fail",
+            });
+        })
+        .then(() => done(), done);
     });
   });
 });

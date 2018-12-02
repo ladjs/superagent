@@ -2,6 +2,7 @@
 const setup = require("../support/setup");
 const base = setup.uri;
 
+const URL = require("url");
 const assert = require("assert");
 const request = require("../support/client");
 
@@ -87,6 +88,28 @@ describe("request", () => {
           } catch (err) {
             done(err);
           }
+        });
+    });
+
+    it("should follow Location with IP override", () => {
+      const redirects = [];
+      const url = URL.parse(base);
+      return request
+        .get(`http://redir.example.com:${url.port || '80'}${url.pathname}`)
+        .connect({
+          '*': url.hostname,
+        })
+        .on("redirect", res => {
+          redirects.push(res.headers.location);
+        })
+        .then(res => {
+          const arr = [
+            "/movies",
+            "/movies/all",
+            "/movies/all/0",
+          ];
+          redirects.should.eql(arr);
+          res.text.should.equal("first movie page");
         });
     });
 

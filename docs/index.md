@@ -676,6 +676,22 @@ SuperAgent fires `progress` events on upload and download of large files.
       })
       .then()
 
+## Forcing specific connection IP address
+
+It's possible to ignore DNS resolution and direct all requests to a specific IP address using `.connect()` method. For example, this request will go to localhost instead of `example.com`:
+
+    const res = await request.get("http://example.com").connect("127.0.0.1");
+
+Because the request may be redirected, it's possible to specify multiple hostnames and multiple IPs, as well as a special `*` as the fallback (note: other wildcards are not supported). The requests will keep their `Host` header with the original value. `.connect(undefined)` turns off the feature.
+
+    const res = await request.get("http://redir.example.com:555")
+      .connect({
+        "redir.example.com": "127.0.0.1", // redir.example.com:555 will use 127.0.0.1:555
+        "www.example.com": false, // don't override this one; use DNS as normal
+        "*": "proxy.example.com", // all other requests will go to this host
+      });
+
+
 ## Promise and Generator support
 
 SuperAgent's request is a "thenable" object that's compatible with JavaScript promises and the `async`/`await` syntax.
