@@ -49,13 +49,15 @@ Absolute URLs can be used. In web browsers absolute URLs work only if the server
 
 The __Node__ client supports making requests to [Unix Domain Sockets](https://en.wikipedia.org/wiki/Unix_domain_socket):
 
-     // pattern: https?+unix://SOCKET_PATH/REQUEST_PATH
-     //          Use `%2F` as `/` in SOCKET_PATH
-     request
-       .get('http+unix://%2Fabsolute%2Fpath%2Fto%2Funix.sock/search')
-       .then(res => {
-
-       });
+    // pattern: https?+unix://SOCKET_PATH/REQUEST_PATH
+    //          Use `%2F` as `/` in SOCKET_PATH
+    try {
+      const res = await request
+        .get('http+unix://%2Fabsolute%2Fpath%2Fto%2Funix.sock/search');
+      // res.body, res.headers, res.status
+    } catch(err) {
+      // err.message, err.response
+    }
 
 __DELETE__, __HEAD__, __PATCH__, __POST__, and __PUT__ requests can also be used, simply change the method name:
 
@@ -150,19 +152,20 @@ A typical JSON __POST__ request might look a little like the following, where we
         .set('Content-Type', 'application/json')
         .send('{"name":"tj","pet":"tobi"}')
         .then(callback)
+        .catch(errorCallback)
 
 Since JSON is undoubtedly the most common, it's the _default_! The following example is equivalent to the previous.
 
       request.post('/user')
         .send({ name: 'tj', pet: 'tobi' })
-        .then(callback)
+        .then(callback, errorCallback)
 
 Or using multiple `.send()` calls:
 
       request.post('/user')
         .send({ name: 'tj' })
         .send({ pet: 'tobi' })
-        .then(callback)
+        .then(callback, errorCallback)
 
 By default sending strings will set the `Content-Type` to `application/x-www-form-urlencoded`,
   multiple calls will be concatenated with `&`, here resulting in `name=tj&pet=tobi`:
@@ -170,7 +173,7 @@ By default sending strings will set the `Content-Type` to `application/x-www-for
       request.post('/user')
         .send('name=tj')
         .send('pet=tobi')
-        .then(callback);
+        .then(callback, errorCallback);
 
 SuperAgent formats are extensible, however by default "json" and "form" are supported. To send the data as `application/x-www-form-urlencoded` simply invoke `.type()` with "form", where the default is "json". This request will __POST__ the body "name=tj&pet=tobi".
 
@@ -178,13 +181,13 @@ SuperAgent formats are extensible, however by default "json" and "form" are supp
         .type('form')
         .send({ name: 'tj' })
         .send({ pet: 'tobi' })
-        .then(callback)
+        .then(callback, errorCallback)
 
 Sending a [`FormData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData/FormData) object is also supported. The following example will __POST__ the content of the HTML form identified by id="myForm":
 
       request.post('/user')
         .send(new FormData(document.getElementById('myForm')))
-        .then(callback)
+        .then(callback, errorCallback)
 
 ## Setting the `Content-Type`
 
@@ -241,6 +244,7 @@ This method has two optional arguments: number of retries (default 3) and a call
        .retry(2) // or:
        .retry(2, callback)
        .then(finished);
+       .catch(failed);
 
 Use `.retry()` only with requests that are *idempotent* (i.e. multiple requests reaching the server won't cause undesirable side effects like duplicate purchases).
 
@@ -484,10 +488,7 @@ By default only `Basic` auth is used. In browser you can add `{type:'auto'}` to 
 
 By default up to 5 redirects will be followed, however you may specify this with the `res.redirects(n)` method:
 
-    request
-      .get('/some.png')
-      .redirects(2)
-      .then(callback);
+    const response = await request.get('/some.png').redirects(2);
 
 ## Agents for global state
 
@@ -675,7 +676,9 @@ SuperAgent fires `progress` events on upload and download of large files.
 
 ## Promise and Generator support
 
-SuperAgent's request is a "thenable" object that's compatible with JavaScript promises and `async`/`await` syntax.
+SuperAgent's request is a "thenable" object that's compatible with JavaScript promises and the `async`/`await` syntax.
+
+    const res = await request.get(url);
 
 If you're using promises, **do not** call `.end()` or `.pipe()`. Any use of `.then()` or `await` disables all other ways of using the request.
 
