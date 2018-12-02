@@ -88,9 +88,23 @@ describe("https", () => {
       it("should reject unauthorized response", () => {
         return request
           .get(testEndpoint)
+          .trustLocalhost(false)
           .then(() => {
             throw Error("Allows MITM")
           }, () => {});
+      });
+
+      it("should trust localhost unauthorized response", () => {
+        return request
+          .get(testEndpoint)
+          .trustLocalhost(true)
+      });
+
+      it("should trust overriden localhost unauthorized response", () => {
+        return request
+          .get(`https://example.com:${server.address().port}`)
+          .connect("127.0.0.1")
+          .trustLocalhost()
       });
     });
 
