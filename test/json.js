@@ -105,6 +105,18 @@ describe('req.send(Object) as "json"', function(){
     });
   });
 
+  it('should work with merge-patch MIME type', done => {
+    request
+    .post(`${uri}/echo`)
+    .set('Content-Type', 'application/merge-patch+json')
+    .send({ name: 'vendor' })
+    .end((err, res) => {
+      res.text.should.equal('{"name":"vendor"}');
+      ({"name":"vendor"}).should.eql(res.body);
+      done();
+    });
+  });
+
   describe('when called several times', () => {
     it('should merge the objects', done => {
       request
