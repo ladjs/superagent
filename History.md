@@ -1,4 +1,9 @@
-# 4.0.0
+# 4.1.0-beta (2018-12-02)
+
+ * `.connect()` IP/DNS override option (Kornel)
+ * `.trustLocalhost()` option for allowing broken HTTPS on `localhost`
+
+# 4.0.0  (2018-11-17)
 
 ## Breaking changes
 
