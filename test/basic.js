@@ -550,6 +550,17 @@ describe('request', function(){
         req.abort();
       }, 500);
     })
+    it('should abort the promise', () => {
+      const req = request.get(`${uri}/delay/3000`);
+      setTimeout(() => {
+        req.abort();
+      }, 10);
+      return req.then(() => {
+        assert.fail('should not complete the request');
+      }, err => {
+        assert.equal("ABORTED", err.code);
+      });
+    })
 
     it('should allow chaining .abort() several times', done => {
       const req = request

@@ -59,7 +59,7 @@ describe("req.parse(fn)", () => {
 
   if(doesntWorkInHttp2) it("should not emit error on chunked json", done => {
     request.get(`${base}/chunked-json`).end(err => {
-      assert(!err);
+      assert.ifError(err);
       done();
     });
   });
@@ -74,13 +74,5 @@ describe("req.parse(fn)", () => {
     setTimeout(() => {
       req.abort();
     }, 50);
-  });
-
-  if(doesntWorkInHttp2) it("should not reject promise on aborted chunked json", () => {
-    const req = request.get(`${base}/chunked-json`);
-    setTimeout(() => {
-      req.abort();
-    }, 50);
-    return req;
   });
 });
