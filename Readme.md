@@ -1,6 +1,4 @@
-# SuperAgent [![Build Status](https://travis-ci.org/visionmedia/superagent.svg?branch=master)](https://travis-ci.org/visionmedia/superagent)
-
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/shtylman-superagent.svg)](https://saucelabs.com/u/shtylman-superagent)
+# SuperAgent [![Build Status](https://travis-ci.org/visionmedia/superagent.svg?branch=master)](https://travis-ci.org/visionmedia/superagent) [![passively maintained.](https://img.shields.io/badge/maintenance-passively--maintained-yellowgreen.svg) ![Maintainers Wanted](https://img.shields.io/badge/maintainers-wanted-red.svg)](https://github.com/visionmedia/superagent/issues/1450)
 
 SuperAgent is a small progressive __client-side__ and __Node.js__ HTTP request library, sporting many high-level HTTP client features. View the [docs](https://visionmedia.github.io/superagent/).
 
