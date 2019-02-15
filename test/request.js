@@ -569,6 +569,19 @@ it('POST shorthand without callback', next => {
   });
 });
 
+it('GET should not send the content-length header', next => {
+  request
+    .get(`${uri}/content-length`)
+    .send({foo: 'bar'})
+    .then((res) => {
+      try {
+        assert(!res.badRequest);
+        next();
+      } catch(e) { next(e); }
+    })
+    .catch(next);
+});
+
 it('GET querystring object with array', next => {
   request
   .get(`${uri}/querystring`)
