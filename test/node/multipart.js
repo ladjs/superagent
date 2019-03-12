@@ -73,31 +73,49 @@ describe("Multipart", () => {
     });
 
     describe("when a file does not exist", () => {
-      it("should emit an error", done => {
+      it("should fail the request with an error", done => {
         const req = request.post(`${base}/echo`);
 
         req.attach("name", "foo");
         req.attach("name2", "bar");
         req.attach("name3", "baz");
 
-        req.on("error", err => {
+        req.end((err, res) => {
+          assert.ok(!!err, "Request should have failed.");
+          err.code.should.equal("ENOENT");
           err.message.should.containEql("ENOENT");
           err.path.should.equal("foo");
           done();
         });
-
-        req.end((err, res) => {
-          if (err) return done(err);
-          assert(0, "end() was called");
-        });
       });
 
       it("promise should fail", () => {
-        request.post('nevermind')
-        .field({a:1,b:2})
-        .attach('c', 'does-not-exist.txt')
-        .then(() => assert.fail("It should not allow this"))
-        .catch(() => true);
+        return request.post(`${base}/echo`)
+          .field({a:1,b:2})
+          .attach('c', 'does-not-exist.txt')
+          .then(
+            res => assert.fail("It should not allow this"),
+            err => {
+              err.code.should.equal("ENOENT");
+              err.path.should.equal("does-not-exist.txt");
+            });
+      });
+
+      it("should report ECONNREFUSED via the callback", done => {
+        request.post('http://127.0.0.1:1') // nobody is listening there
+          .attach("name", "file-does-not-exist")
+          .end((err, res) => {
+            assert.ok(!!err, "Request should have failed");
+            err.code.should.equal("ECONNREFUSED");
+            done();
+          });
+      });
+      it("should report ECONNREFUSED via Promise", () => {
+        return request.post('http://127.0.0.1:1') // nobody is listening there
+          .attach("name", "file-does-not-exist")
+          .then(
+            res => assert.fail("Request should have failed"),
+            err => err.code.should.equal("ECONNREFUSED"));
       });
     });
   });
@@ -143,13 +161,11 @@ describe("Multipart", () => {
       request
         .post(`${base}/echo`)
         .attach("filedata", "test/node/fixtures/non-existent-file.ext")
-        .on("error", err => {
+        .end((err, res) => {
+          assert.ok(!!err, "Request should have failed.");
           err.code.should.equal("ENOENT");
           err.path.should.equal("test/node/fixtures/non-existent-file.ext");
           done();
-        })
-        .end((err, res) => {
-          done(new Error("Request should have been aborted earlier!"));
         });
     });
   });
