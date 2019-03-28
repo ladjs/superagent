@@ -1,7 +1,0 @@
-{
-  "name": "superagent",
-  "main": "lib/client.js",
-  "dependencies": {
-    "emitter": "component-emitter#^1.1.2"
-  }
-}
