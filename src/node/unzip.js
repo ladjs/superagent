@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-const StringDecoder = require('string_decoder').StringDecoder;
+const { StringDecoder } = require('string_decoder');
 const Stream = require('stream');
 const zlib = require('zlib');
 
@@ -30,6 +30,7 @@ exports.unzip = (req, res) => {
       stream.emit('end');
       return;
     }
+
     stream.emit('error', err);
   });
 
@@ -45,7 +46,7 @@ exports.unzip = (req, res) => {
   unzip.on('data', buf => {
     if (decoder) {
       const str = decoder.write(buf);
-      if (str.length) stream.emit('data', str);
+      if (str.length > 0) stream.emit('data', str);
     } else {
       stream.emit('data', buf);
     }
@@ -58,14 +59,15 @@ exports.unzip = (req, res) => {
   // override `on` to capture data listeners
   const _on = res.on;
   res.on = function(type, fn) {
-    if ('data' == type || 'end' == type) {
+    if (type === 'data' || type === 'end') {
       stream.on(type, fn.bind(res));
-    } else if ('error' == type) {
+    } else if (type === 'error') {
       stream.on(type, fn.bind(res));
       _on.call(res, type, fn);
     } else {
       _on.call(res, type, fn);
     }
+
     return this;
   };
 };

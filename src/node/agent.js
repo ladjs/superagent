@@ -4,12 +4,13 @@
  * Module dependencies.
  */
 
-const CookieJar = require('cookiejar').CookieJar;
-const CookieAccess = require('cookiejar').CookieAccessInfo;
-const parse = require('url').parse;
+// eslint-disable-next-line node/no-deprecated-api
+const { parse } = require('url');
+const { CookieJar } = require('cookiejar');
+const { CookieAccessInfo } = require('cookiejar');
+const methods = require('methods');
 const request = require('../..');
 const AgentBase = require('../agent-base');
-let methods = require('methods');
 
 /**
  * Expose `Agent`.
@@ -27,14 +28,26 @@ function Agent(options) {
   if (!(this instanceof Agent)) {
     return new Agent(options);
   }
+
   AgentBase.call(this);
   this.jar = new CookieJar();
 
   if (options) {
-    if (options.ca) {this.ca(options.ca);}
-    if (options.key) {this.key(options.key);}
-    if (options.pfx) {this.pfx(options.pfx);}
-    if (options.cert) {this.cert(options.cert);}
+    if (options.ca) {
+      this.ca(options.ca);
+    }
+
+    if (options.key) {
+      this.key(options.key);
+    }
+
+    if (options.pfx) {
+      this.pfx(options.pfx);
+    }
+
+    if (options.cert) {
+      this.cert(options.cert);
+    }
   }
 }
 
@@ -62,10 +75,10 @@ Agent.prototype._saveCookies = function(res) {
 
 Agent.prototype._attachCookies = function(req) {
   const url = parse(req.url);
-  const access = CookieAccess(
+  const access = new CookieAccessInfo(
     url.hostname,
     url.pathname,
-    'https:' == url.protocol
+    url.protocol === 'https:'
   );
   const cookies = this.jar.getCookies(access).toValueString();
   req.cookies = cookies;
@@ -85,8 +98,9 @@ methods.forEach(name => {
     if (fn) {
       req.end(fn);
     }
+
     return req;
   };
 });
 
-Agent.prototype.del = Agent.prototype['delete'];
+Agent.prototype.del = Agent.prototype.delete;

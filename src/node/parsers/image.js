@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = (res, fn) => {
   const data = []; // Binary data needs binary storage
 

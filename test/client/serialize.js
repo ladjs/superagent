@@ -4,15 +4,22 @@ const request = require('../support/client');
 
 function serialize(obj, res) {
   const val = request.serializeObject(obj);
-  assert.equal(val, res
-    , `${JSON.stringify(obj)} to "${res}" serialization failed. got: "${val}"`);
+  assert.equal(
+    val,
+    res,
+    `${JSON.stringify(obj)} to "${res}" serialization failed. got: "${val}"`
+  );
 }
 
 function parse(str, obj) {
   const val = request.parseString(str);
-  assert.deepEqual(val
-    , obj
-    , `"${str}" to ${JSON.stringify(obj)} parse failed. got: ${JSON.stringify(val)}`);
+  assert.deepEqual(
+    val,
+    obj,
+    `"${str}" to ${JSON.stringify(obj)} parse failed. got: ${JSON.stringify(
+      val
+    )}`
+  );
 }
 
 describe('request.serializeObject()', () => {
@@ -27,7 +34,7 @@ describe('request.serializeObject()', () => {
     serialize({ name: 'tj', age: 24 }, 'name=tj&age=24');
     serialize({ name: '&tj&' }, 'name=%26tj%26');
     serialize({ '&name&': 'tj' }, '%26name%26=tj');
-    serialize({ hello: "`test`" }, "hello=%60test%60");
+    serialize({ hello: '`test`' }, 'hello=%60test%60');
   });
 });
 
@@ -38,12 +45,12 @@ describe('request.parseString()', () => {
     parse('redirect=/&ok', { redirect: '/', ok: '' });
     parse('%26name=tj', { '&name': 'tj' });
     parse('name=tj%26', { name: 'tj&' });
-    parse("%60", { "`": "" });
+    parse('%60', { '`': '' });
   });
 });
 
 describe('Merging objects', () => {
-  it('Don\'t mix FormData and JSON', () => {
+  it("Don't mix FormData and JSON", () => {
     if (!window.FormData) {
       // Skip test if FormData is not supported by browser
       return;
@@ -56,26 +63,26 @@ describe('Merging objects', () => {
       request
         .post('/echo')
         .send(data)
-        .send({allowed:false})
+        .send({ allowed: false });
     });
   });
 
-  it('Don\'t mix Blob and JSON', () => {
+  it("Don't mix Blob and JSON", () => {
     if (!window.Blob) {
       return;
     }
 
     request
       .post('/echo')
-      .send(new Blob(["will be cleared"]))
+      .send(new Blob(['will be cleared']))
       .send(false)
-      .send({allowed:true});
+      .send({ allowed: true });
 
     assert.throws(() => {
       request
         .post('/echo')
-        .send(new Blob(["hello"]))
-        .send({allowed:false})
+        .send(new Blob(['hello']))
+        .send({ allowed: false });
     });
   });
 });

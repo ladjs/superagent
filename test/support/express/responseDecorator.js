@@ -12,25 +12,26 @@
  * @private
  */
 
-var Buffer = require('safe-buffer').Buffer
-var contentDisposition = require('content-disposition');
-var encodeUrl = require('encodeurl');
-var escapeHtml = require('escape-html');
-var onFinished = require('on-finished');
-var path = require('path');
-var pathIsAbsolute = require('path-is-absolute');
-var statuses = require('statuses')
-var merge = require('utils-merge');
-var sign = require('cookie-signature').sign;
-var normalizeType = require('./utils').normalizeType;
-var normalizeTypes = require('./utils').normalizeTypes;
-var setCharset = require('./utils').setCharset;
-var cookie = require('cookie');
-var send = require('send');
-var extname = path.extname;
-var mime = send.mime;
-var resolve = path.resolve;
-var vary = require('vary');
+const { Buffer } = require('safe-buffer');
+const contentDisposition = require('content-disposition');
+const encodeUrl = require('encodeurl');
+const escapeHtml = require('escape-html');
+const onFinished = require('on-finished');
+const path = require('path');
+const pathIsAbsolute = require('path-is-absolute');
+const statuses = require('statuses');
+const merge = require('utils-merge');
+const { sign } = require('cookie-signature');
+const { normalizeType } = require('./utils');
+const { normalizeTypes } = require('./utils');
+const { setCharset } = require('./utils');
+const cookie = require('cookie');
+const send = require('send');
+
+const { extname } = path;
+const { mime } = send;
+const { resolve } = path;
+const vary = require('vary');
 /**
  * Module exports.
  * @public
@@ -44,7 +45,7 @@ function setMethods(res) {
    * @private
    */
 
-  var charsetRegExp = /;\s*charset\s*=/;
+  const charsetRegExp = /;\s*charset\s*=/;
 
   /**
    * Set status `code`.
@@ -74,12 +75,18 @@ function setMethods(res) {
    * @public
    */
 
-  res.links = function (links) {
-    var link = this.get('Link') || '';
+  res.links = function(links) {
+    let link = this.get('Link') || '';
     if (link) link += ', ';
-    return this.set('Link', link + Object.keys(links).map(function (rel) {
-      return '<' + links[rel] + '>; rel="' + rel + '"';
-    }).join(', '));
+    return this.set(
+      'Link',
+      link +
+        Object.keys(links)
+          .map(rel => {
+            return '<' + links[rel] + '>; rel="' + rel + '"';
+          })
+          .join(', ')
+    );
   };
 
   /**
@@ -96,13 +103,13 @@ function setMethods(res) {
    */
 
   res.send = function send(body) {
-    var chunk = body;
-    var encoding;
-    var req = this.req;
-    var type;
+    let chunk = body;
+    let encoding;
+    const { req } = this;
+    let type;
 
     // settings
-    var app = this.app;
+    const { app } = this;
 
     switch (typeof chunk) {
       // string defaulting to html
@@ -110,6 +117,7 @@ function setMethods(res) {
         if (!this.get('Content-Type')) {
           this.type('html');
         }
+
         break;
       case 'boolean':
       case 'number':
@@ -123,6 +131,7 @@ function setMethods(res) {
         } else {
           return this.json(chunk);
         }
+
         break;
     }
 
@@ -138,30 +147,30 @@ function setMethods(res) {
     }
 
     // determine if ETag should be generated
-    var etagFn = app.get('etag fn')
-    var generateETag = !this.get('ETag') && typeof etagFn === 'function'
+    const etagFn = app.get('etag fn');
+    const generateETag = !this.get('ETag') && typeof etagFn === 'function';
 
     // populate Content-Length
-    var len
+    let len;
     if (chunk !== undefined) {
       if (Buffer.isBuffer(chunk)) {
         // get length of Buffer
-        len = chunk.length
+        len = chunk.length;
       } else if (!generateETag && chunk.length < 1000) {
         // just calculate length when no ETag + small chunk
-        len = Buffer.byteLength(chunk, encoding)
+        len = Buffer.byteLength(chunk, encoding);
       } else {
         // convert chunk to Buffer and calculate
-        chunk = Buffer.from(chunk, encoding)
+        chunk = Buffer.from(chunk, encoding);
         encoding = undefined;
-        len = chunk.length
+        len = chunk.length;
       }
 
       this.set('Content-Length', len);
     }
 
     // populate ETag
-    var etag;
+    let etag;
     if (generateETag && len !== undefined) {
       if ((etag = etagFn(chunk, encoding))) {
         this.set('ETag', etag);
@@ -172,7 +181,7 @@ function setMethods(res) {
     if (req.fresh) this.statusCode = 304;
 
     // strip irrelevant headers
-    if (204 === this.statusCode || 304 === this.statusCode) {
+    if (this.statusCode === 204 || this.statusCode === 304) {
       this.removeHeader('Content-Type');
       this.removeHeader('Content-Length');
       this.removeHeader('Transfer-Encoding');
@@ -204,11 +213,11 @@ function setMethods(res) {
 
   res.json = function json(obj) {
     // settings
-    var app = this.app;
-    var escape = app.get('json escape')
-    var replacer = app.get('json replacer');
-    var spaces = app.get('json spaces');
-    var body = stringify(obj, replacer, spaces, escape)
+    const { app } = this;
+    const escape = app.get('json escape');
+    const replacer = app.get('json replacer');
+    const spaces = app.get('json spaces');
+    const body = stringify(obj, replacer, spaces, escape);
 
     // content-type
     if (!this.get('Content-Type')) {
@@ -232,12 +241,12 @@ function setMethods(res) {
 
   res.jsonp = function jsonp(obj) {
     // settings
-    var app = this.app;
-    var escape = app.get('json escape')
-    var replacer = app.get('json replacer');
-    var spaces = app.get('json spaces');
-    var body = stringify(obj, replacer, spaces, escape)
-    var callback = this.req.query[app.get('jsonp callback name')];
+    const { app } = this;
+    const escape = app.get('json escape');
+    const replacer = app.get('json replacer');
+    const spaces = app.get('json spaces');
+    let body = stringify(obj, replacer, spaces, escape);
+    let callback = this.req.query[app.get('jsonp callback name')];
 
     // content-type
     if (!this.get('Content-Type')) {
@@ -259,13 +268,18 @@ function setMethods(res) {
       callback = callback.replace(/[^\[\]\w$.]/g, '');
 
       // replace chars not allowed in JavaScript that are in JSON
-      body = body
-        .replace(/\u2028/g, '\\u2028')
-        .replace(/\u2029/g, '\\u2029');
+      body = body.replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029');
 
       // the /**/ is a specific security mitigation for "Rosetta Flash JSONP abuse"
       // the typeof check is just to reduce client error noise
-      body = '/**/ typeof ' + callback + ' === \'function\' && ' + callback + '(' + body + ');';
+      body =
+        '/**/ typeof ' +
+        callback +
+        " === 'function' && " +
+        callback +
+        '(' +
+        body +
+        ');';
     }
 
     return this.send(body);
@@ -287,7 +301,7 @@ function setMethods(res) {
    */
 
   res.sendStatus = function sendStatus(statusCode) {
-    var body = statuses[statusCode] || String(statusCode)
+    const body = statuses[statusCode] || String(statusCode);
 
     this.statusCode = statusCode;
     this.type('txt');
@@ -337,11 +351,11 @@ function setMethods(res) {
    */
 
   res.sendFile = function sendFile(path, options, callback) {
-    var done = callback;
-    var req = this.req;
-    var res = this;
-    var next = req.next;
-    var opts = options || {};
+    let done = callback;
+    const { req } = this;
+    const res = this;
+    const { next } = req;
+    let opts = options || {};
 
     if (!path) {
       throw new TypeError('path argument is required to res.sendFile');
@@ -354,15 +368,17 @@ function setMethods(res) {
     }
 
     if (!opts.root && !pathIsAbsolute(path)) {
-      throw new TypeError('path must be absolute or specify root to res.sendFile');
+      throw new TypeError(
+        'path must be absolute or specify root to res.sendFile'
+      );
     }
 
     // create file stream
-    var pathname = encodeURI(path);
-    var file = send(req, pathname, opts);
+    const pathname = encodeURI(path);
+    const file = send(req, pathname, opts);
 
     // transfer
-    sendfile(res, file, opts, function (err) {
+    sendfile(res, file, opts, err => {
       if (done) return done(err);
       if (err && err.code === 'EISDIR') return next();
 
@@ -391,46 +407,46 @@ function setMethods(res) {
    * @public
    */
 
-  res.download = function download (path, filename, options, callback) {
-    var done = callback;
-    var name = filename;
-    var opts = options || null
+  res.download = function download(path, filename, options, callback) {
+    let done = callback;
+    let name = filename;
+    let opts = options || null;
 
     // support function as second or third arg
     if (typeof filename === 'function') {
       done = filename;
       name = null;
-      opts = null
+      opts = null;
     } else if (typeof options === 'function') {
-      done = options
-      opts = null
+      done = options;
+      opts = null;
     }
 
     // set Content-Disposition when file is sent
-    var headers = {
+    const headers = {
       'Content-Disposition': contentDisposition(name || path)
     };
 
     // merge user-provided headers
     if (opts && opts.headers) {
-      var keys = Object.keys(opts.headers)
-      for (var i = 0; i < keys.length; i++) {
-        var key = keys[i]
+      const keys = Object.keys(opts.headers);
+      for (let i = 0; i < keys.length; i++) {
+        const key = keys[i];
         if (key.toLowerCase() !== 'content-disposition') {
-          headers[key] = opts.headers[key]
+          headers[key] = opts.headers[key];
         }
       }
     }
 
     // merge user-provided options
-    opts = Object.create(opts)
-    opts.headers = headers
+    opts = Object.create(opts);
+    opts.headers = headers;
 
     // Resolve the full path for sendFile
-    var fullPath = resolve(path);
+    const fullPath = resolve(path);
 
     // send file
-    return this.sendFile(fullPath, opts, done)
+    return this.sendFile(fullPath, opts, done);
   };
 
   /**
@@ -450,14 +466,11 @@ function setMethods(res) {
    * @public
    */
 
-  res.contentType =
-    res.type = function contentType(type) {
-      var ct = type.indexOf('/') === -1
-        ? mime.lookup(type)
-        : type;
+  res.contentType = res.type = function contentType(type) {
+    const ct = type.indexOf('/') === -1 ? mime.lookup(type) : type;
 
-      return this.set('Content-Type', ct);
-    };
+    return this.set('Content-Type', ct);
+  };
 
   /**
    * Respond to the Acceptable formats using an `obj`
@@ -516,19 +529,17 @@ function setMethods(res) {
    * @public
    */
 
-  res.format = function (obj) {
-    var req = this.req;
-    var next = req.next;
+  res.format = function(obj) {
+    const { req } = this;
+    const { next } = req;
 
-    var fn = obj.default;
+    const fn = obj.default;
     if (fn) delete obj.default;
-    var keys = Object.keys(obj);
+    const keys = Object.keys(obj);
 
-    var key = keys.length > 0
-      ? req.accepts(keys)
-      : false;
+    const key = keys.length > 0 ? req.accepts(keys) : false;
 
-    this.vary("Accept");
+    this.vary('Accept');
 
     if (key) {
       this.set('Content-Type', normalizeType(key).value);
@@ -536,9 +547,11 @@ function setMethods(res) {
     } else if (fn) {
       fn();
     } else {
-      var err = new Error('Not Acceptable');
+      const err = new Error('Not Acceptable');
       err.status = err.statusCode = 406;
-      err.types = normalizeTypes(keys).map(function (o) { return o.value });
+      err.types = normalizeTypes(keys).map(o => {
+        return o.value;
+      });
       next(err);
     }
 
@@ -579,14 +592,16 @@ function setMethods(res) {
    */
 
   res.append = function append(field, val) {
-    var prev = this.get(field);
-    var value = val;
+    const prev = this.get(field);
+    let value = val;
 
     if (prev) {
       // concat the new and prev vals
-      value = Array.isArray(prev) ? prev.concat(val)
-        : Array.isArray(val) ? [prev].concat(val)
-          : [prev, val];
+      value = Array.isArray(prev)
+        ? prev.concat(val)
+        : Array.isArray(val)
+        ? [prev].concat(val)
+        : [prev, val];
     }
 
     return this.set(field, value);
@@ -610,32 +625,31 @@ function setMethods(res) {
    * @public
    */
 
-  res.set =
-    res.header = function header(field, val) {
-      if (arguments.length === 2) {
-        var value = Array.isArray(val)
-          ? val.map(String)
-          : String(val);
+  res.set = res.header = function header(field, val) {
+    if (arguments.length === 2) {
+      let value = Array.isArray(val) ? val.map(String) : String(val);
 
-        // add charset to content-type
-        if (field.toLowerCase() === 'content-type') {
-          if (Array.isArray(value)) {
-            throw new TypeError('Content-Type cannot be set to an Array');
-          }
-          if (!charsetRegExp.test(value)) {
-            var charset = mime.charsets.lookup(value.split(';')[0]);
-            if (charset) value += '; charset=' + charset.toLowerCase();
-          }
+      // add charset to content-type
+      if (field.toLowerCase() === 'content-type') {
+        if (Array.isArray(value)) {
+          throw new TypeError('Content-Type cannot be set to an Array');
         }
 
-        this.setHeader(field, value);
-      } else {
-        for (var key in field) {
-          this.set(key, field[key]);
+        if (!charsetRegExp.test(value)) {
+          const charset = mime.charsets.lookup(value.split(';')[0]);
+          if (charset) value += '; charset=' + charset.toLowerCase();
         }
       }
-      return this;
-    };
+
+      this.setHeader(field, value);
+    } else {
+      for (const key in field) {
+        this.set(key, field[key]);
+      }
+    }
+
+    return this;
+  };
 
   /**
    * Get value for header `field`.
@@ -645,7 +659,7 @@ function setMethods(res) {
    * @public
    */
 
-  res.get = function (field) {
+  res.get = function(field) {
     return this.getHeader(field);
   };
 
@@ -659,7 +673,7 @@ function setMethods(res) {
    */
 
   res.clearCookie = function clearCookie(name, options) {
-    var opts = merge({ expires: new Date(1), path: '/' }, options);
+    const opts = merge({ expires: new Date(1), path: '/' }, options);
 
     return this.cookie(name, '', opts);
   };
@@ -688,18 +702,17 @@ function setMethods(res) {
    * @public
    */
 
-  res.cookie = function (name, value, options) {
-    var opts = merge({}, options);
-    var secret = this.req.secret;
-    var signed = opts.signed;
+  res.cookie = function(name, value, options) {
+    const opts = merge({}, options);
+    const { secret } = this.req;
+    const { signed } = opts;
 
     if (signed && !secret) {
       throw new Error('cookieParser("secret") required for signed cookies');
     }
 
-    var val = typeof value === 'object'
-      ? 'j:' + JSON.stringify(value)
-      : String(value);
+    let val =
+      typeof value === 'object' ? 'j:' + JSON.stringify(value) : String(value);
 
     if (signed) {
       val = 's:' + sign(val, secret);
@@ -737,7 +750,7 @@ function setMethods(res) {
    */
 
   res.location = function location(url) {
-    var loc = url;
+    let loc = url;
 
     // "back" is an alias for the referrer
     if (url === 'back') {
@@ -767,14 +780,14 @@ function setMethods(res) {
    */
 
   res.redirect = function redirect(url) {
-    var address = url;
-    var body;
-    var status = 302;
+    let address = url;
+    let body;
+    let status = 302;
 
     // allow status / url
     if (arguments.length === 2) {
-      status = arguments[0]
-      address = arguments[1]
+      status = arguments[0];
+      address = arguments[1];
     }
 
     // Set location header
@@ -782,16 +795,23 @@ function setMethods(res) {
 
     // Support text/{plain,html} by default
     this.format({
-      text: function () {
-        body = statuses[status] + '. Redirecting to ' + address
+      text() {
+        body = statuses[status] + '. Redirecting to ' + address;
       },
 
-      html: function () {
-        var u = escapeHtml(address);
-        body = '<p>' + statuses[status] + '. Redirecting to <a href="' + u + '">' + u + '</a></p>'
+      html() {
+        const u = escapeHtml(address);
+        body =
+          '<p>' +
+          statuses[status] +
+          '. Redirecting to <a href="' +
+          u +
+          '">' +
+          u +
+          '</a></p>';
       },
 
-      default: function () {
+      default() {
         body = '';
       }
     });
@@ -816,7 +836,7 @@ function setMethods(res) {
    * @public
    */
 
-  res.vary = function(field){
+  res.vary = function(field) {
     vary(this, field);
 
     return this;
@@ -836,11 +856,11 @@ function setMethods(res) {
    */
 
   res.render = function render(view, options, callback) {
-    var app = this.req.app;
-    var done = callback;
-    var opts = options || {};
-    var req = this.req;
-    var self = this;
+    const { app } = this.req;
+    let done = callback;
+    let opts = options || {};
+    const { req } = this;
+    const self = this;
 
     // support callback function as second arg
     if (typeof options === 'function') {
@@ -852,10 +872,12 @@ function setMethods(res) {
     opts._locals = self.locals;
 
     // default callback to respond
-    done = done || function (err, str) {
-      if (err) return req.next(err);
-      self.send(str);
-    };
+    done =
+      done ||
+      function(err, str) {
+        if (err) return req.next(err);
+        self.send(str);
+      };
 
     // render
     app.render(view, opts, done);
@@ -863,15 +885,15 @@ function setMethods(res) {
 
   // pipe the send file stream
   function sendfile(res, file, options, callback) {
-    var done = false;
-    var streaming;
+    let done = false;
+    let streaming;
 
     // request aborted
     function onaborted() {
       if (done) return;
       done = true;
 
-      var err = new Error('Request aborted');
+      const err = new Error('Request aborted');
       err.code = 'ECONNABORTED';
       callback(err);
     }
@@ -881,7 +903,7 @@ function setMethods(res) {
       if (done) return;
       done = true;
 
-      var err = new Error('EISDIR, read');
+      const err = new Error('EISDIR, read');
       err.code = 'EISDIR';
       callback(err);
     }
@@ -911,7 +933,7 @@ function setMethods(res) {
       if (err) return onerror(err);
       if (done) return;
 
-      setImmediate(function () {
+      setImmediate(() => {
         if (streaming !== false && !done) {
           onaborted();
           return;
@@ -937,11 +959,11 @@ function setMethods(res) {
     if (options.headers) {
       // set headers on successful transfer
       file.on('headers', function headers(res) {
-        var obj = options.headers;
-        var keys = Object.keys(obj);
+        const obj = options.headers;
+        const keys = Object.keys(obj);
 
-        for (var i = 0; i < keys.length; i++) {
-          var k = keys[i];
+        for (let i = 0; i < keys.length; i++) {
+          const k = keys[i];
           res.setHeader(k, obj[k]);
         }
       });
@@ -968,27 +990,28 @@ function setMethods(res) {
  * @private
  */
 
-function stringify (value, replacer, spaces, escape) {
+function stringify(value, replacer, spaces, escape) {
   // v8 checks arguments.length for optimizing simple call
   // https://bugs.chromium.org/p/v8/issues/detail?id=4730
-  var json = replacer || spaces
-    ? JSON.stringify(value, replacer, spaces)
-    : JSON.stringify(value);
+  let json =
+    replacer || spaces
+      ? JSON.stringify(value, replacer, spaces)
+      : JSON.stringify(value);
 
   if (escape) {
-    json = json.replace(/[<>&]/g, function (c) {
+    json = json.replace(/[<>&]/g, c => {
       switch (c.charCodeAt(0)) {
         case 0x3c:
-          return '\\u003c'
+          return '\\u003c';
         case 0x3e:
-          return '\\u003e'
+          return '\\u003e';
         case 0x26:
-          return '\\u0026'
+          return '\\u0026';
         default:
-          return c
+          return c;
       }
-    })
+    });
   }
 
-  return json
+  return json;
 }
