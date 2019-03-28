@@ -499,7 +499,7 @@ RequestBase.prototype.withCredentials = function(on) {
 };
 
 /**
- * Set the max redirects to `n`. Does noting in browser XHR implementation.
+ * Set the max redirects to `n`. Does nothing in browser XHR implementation.
  *
  * @param {Number} n
  * @return {Request} for chaining
