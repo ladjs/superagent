@@ -201,6 +201,7 @@ Existing plugins:
 * [superagent-throttle](https://github.com/leviwheatcroft/superagent-throttle) - queues and intelligently throttles requests
 * [superagent-charset](https://github.com/magicdawn/superagent-charset) - add charset support for node's SuperAgent
 * [superagent-verbose-errors](https://github.com/jcoreio/superagent-verbose-errors) - include response body in error messages for failed requests
+* [superagent-declare](https://github.com/damoclark/superagent-declare) - A simple [declarative](https://en.wikipedia.org/wiki/Declarative_programming) API for SuperAgent
 
 Please prefix your plugin with `superagent-*` so that it can easily be found by others.
 
@@ -246,7 +247,7 @@ Our breaking changes are mostly in rarely used functionality and from stricter e
 [MIT](LICENSE) © TJ Holowaychuk
 
 
-## 
+##
 
 [npm]: https://www.npmjs.com/
 
