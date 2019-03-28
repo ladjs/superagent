@@ -4,7 +4,8 @@
     "node/no-deprecated-api": "off",
     "no-console": "off",
     "no-unused-vars": "off",
-    "no-empty": "off"
+    "no-empty": "off",
+    "node/no-unsupported-features/node-builtins": "off"
   },
   "overrides": [
     {

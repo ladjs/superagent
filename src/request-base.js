@@ -260,12 +260,10 @@ RequestBase.prototype.then = function(resolve, reject) {
     });
   }
 
-  // eslint-disable-next-line promise/prefer-await-to-then
   return this._fullfilledPromise.then(resolve, reject);
 };
 
 RequestBase.prototype.catch = function(cb) {
-  // eslint-disable-next-line promise/prefer-await-to-then
   return this.then(undefined, cb);
 };
 

@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Module dependencies.
  */
@@ -19,6 +17,8 @@ const FormData = require('form-data');
 const formidable = require('formidable');
 const debug = require('debug')('superagent');
 const CookieJar = require('cookiejar');
+const semver = require('semver');
+
 const utils = require('../utils');
 const pkg = require('../../package.json');
 const RequestBase = require('../request-base');
@@ -26,9 +26,8 @@ const { unzip } = require('./unzip');
 const Response = require('./response');
 
 let http2;
-try {
-  http2 = require('./http2wrapper');
-} catch (_) {}
+
+if (semver.gte(process.version, 'v10.10.0')) http2 = require('./http2wrapper');
 
 function request(method, url) {
   // callback

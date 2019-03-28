@@ -83,8 +83,7 @@ Browser-ready versions of this module are available via [jsdelivr][], [unpkg][],
 This is the solution for you if you're just using `<script>` tags everywhere!
 
 ```html
-<!-- https://github.com/Financial-Times/polyfill-service/issues/1944 -->
-<script src="https://polyfill.io/v3/polyfill.min.js?features=Array.from%2CPromise%2CSymbol%2CObject.setPrototypeOf"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=Array.from%2CPromise%2CSymbol%2CObject.setPrototypeOf%2CObject.getOwnPropertySymbols"></script>
 <script src="https://cdn.jsdelivr.net/npm/superagent"></script>
 <!-- if you wish to use unpkg.com instead: -->
 <!-- <script src="https://unpkg.com/superagent"></script> -->

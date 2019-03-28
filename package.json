@@ -30,7 +30,8 @@
     "methods": "^1.1.2",
     "mime": "^2.4.0",
     "qs": "^6.7.0",
-    "readable-stream": "^3.2.0"
+    "readable-stream": "^3.2.0",
+    "semver": "^6.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
@@ -72,7 +73,7 @@
     "zuul": "^3.12.0"
   },
   "engines": {
-    "node": ">= 8.8.1"
+    "node": ">= 6.4.0"
   },
   "homepage": "https://github.com/visionmedia/superagent",
   "husky": {

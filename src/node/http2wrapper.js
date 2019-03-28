@@ -1,12 +1,15 @@
-'use strict';
-
-const http2 = require('http2');
 const Stream = require('stream');
 const util = require('util');
 const net = require('net');
 const tls = require('tls');
 // eslint-disable-next-line node/no-deprecated-api
 const { parse } = require('url');
+const semver = require('semver');
+
+let http2;
+if (semver.gte(process.version, 'v10.10.0')) http2 = require('http2');
+else
+  throw new Error('superagent: this version of Node.js does not support http2');
 
 const {
   HTTP2_HEADER_PATH,
