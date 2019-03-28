@@ -247,7 +247,7 @@ Our breaking changes are mostly in rarely used functionality and from stricter e
 [MIT](LICENSE) © TJ Holowaychuk
 
 
-##
+## 
 
 [npm]: https://www.npmjs.com/
 
