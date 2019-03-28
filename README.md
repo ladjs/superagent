@@ -189,7 +189,6 @@ For SuperAgent extensions such as couchdb and oauth visit the [wiki](https://git
 Our breaking changes are mostly in rarely used functionality and from stricter error handling.
 
 * [4.x to 5.x](https://github.com/visionmedia/superagent/releases/tag/v5.0.0):
-  * Ensure you're running Node 8.8.1 or later.
   * We've implemented the build setup of [Lass](https://lass.js.org) to simplify our stack and linting
   * Browserified build size has been reduced from 48KB to 19KB (via `tinyify` and the latest version of Babel using `@babel/preset-env` and `.browserslistrc`)
   * Linting support has been added using `caniuse-lite` and `eslint-plugin-compat`
@@ -224,7 +223,7 @@ Our breaking changes are mostly in rarely used functionality and from stricter e
 [MIT](LICENSE) © TJ Holowaychuk
 
 
-## 
+##
 
 [npm]: https://www.npmjs.com/
 
