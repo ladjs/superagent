@@ -30,14 +30,16 @@ module.exports = Response;
 
 function Response(req) {
   Stream.call(this);
-  const res = (this.res = req.res);
+  this.res = req.res;
+  const { res } = this;
   this.request = req;
   this.req = req.req;
   this.text = res.text;
-  this.body = res.body !== undefined ? res.body : {};
+  this.body = res.body === undefined ? {} : res.body;
   this.files = res.files || {};
   this.buffered = req._resBuffered;
-  this.header = this.headers = res.headers;
+  this.headers = res.headers;
+  this.header = this.headers;
   this._setStatusProperties(res.statusCode);
   this._setHeaderProperties(this.header);
   this.setEncoding = res.setEncoding.bind(res);
@@ -52,13 +54,14 @@ function Response(req) {
  */
 
 util.inherits(Response, Stream);
+// eslint-disable-next-line new-cap
 ResponseBase(Response.prototype);
 
 /**
  * Implements methods of a `ReadableStream`
  */
 
-Response.prototype.destroy = function(err){
+Response.prototype.destroy = function(err) {
   this.res.destroy(err);
 };
 
@@ -66,7 +69,7 @@ Response.prototype.destroy = function(err){
  * Pause.
  */
 
-Response.prototype.pause = function(){
+Response.prototype.pause = function() {
   this.res.pause();
 };
 
@@ -74,7 +77,7 @@ Response.prototype.pause = function(){
  * Resume.
  */
 
-Response.prototype.resume = function(){
+Response.prototype.resume = function() {
   this.res.resume();
 };
 
@@ -86,9 +89,9 @@ Response.prototype.resume = function(){
  */
 
 Response.prototype.toError = function() {
-  const req = this.req;
-  const method = req.method;
-  const path = req.path;
+  const { req } = this;
+  const { method } = req;
+  const { path } = req;
 
   const msg = `cannot ${method} ${path} (${this.status})`;
   const err = new Error(msg);
@@ -100,9 +103,8 @@ Response.prototype.toError = function() {
   return err;
 };
 
-
-Response.prototype.setStatusProperties = function(status){
-  console.warn("In superagent 2.x setStatusProperties is a private method");
+Response.prototype.setStatusProperties = function(status) {
+  console.warn('In superagent 2.x setStatusProperties is a private method');
   return this._setStatusProperties(status);
 };
 
@@ -118,6 +120,6 @@ Response.prototype.toJSON = function() {
     req: this.request.toJSON(),
     header: this.header,
     status: this.status,
-    text: this.text,
+    text: this.text
   };
 };

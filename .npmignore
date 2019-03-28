@@ -5,3 +5,8 @@ examples
 lib-cov
 coverage.html
 bower.json
+coverage
+src
+.travis.yml
+.nojekyll
+.nyc_output

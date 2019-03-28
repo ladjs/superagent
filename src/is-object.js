@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Check if `obj` is an object.
  *
@@ -9,7 +7,7 @@
  */
 
 function isObject(obj) {
-  return null !== obj && 'object' === typeof obj;
+  return obj !== null && typeof obj === 'object';
 }
 
 module.exports = isObject;

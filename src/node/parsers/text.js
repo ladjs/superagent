@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = (res, fn) => {
   res.text = '';
   res.setEncoding('utf8');
