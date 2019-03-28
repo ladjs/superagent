@@ -17,22 +17,6 @@ if (typeof window !== 'undefined') {
   root = self;
 }
 
-// Array.from() is not supported in IE 10
-// eslint-disable-next-line import/no-unassigned-import
-require('core-js/features/array/from');
-
-// Symbol is not supported in IE 10
-// eslint-disable-next-line import/no-unassigned-import
-require('core-js/features/symbol');
-
-// Object.getOwnPropertySymbols() is not supported in IE 10
-// eslint-disable-next-line import/no-unassigned-import
-require('core-js/features/object/get-own-property-symbols');
-
-// Object.setPrototypeOf() is not supported in IE 10
-// eslint-disable-next-line import/no-unassigned-import
-require('core-js/features/object/set-prototype-of');
-
 const Emitter = require('component-emitter');
 const RequestBase = require('./request-base');
 const isObject = require('./is-object');

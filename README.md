@@ -46,6 +46,7 @@ yarn add superagent
 ```js
 const superagent = require('superagent');
 
+// callback
 superagent
   .post('/api/pet')
   .send({ name: 'Manny', species: 'cat' }) // sends a JSON post body
@@ -54,6 +55,19 @@ superagent
   .end((err, res) => {
     // Calling the end function will send the request
   });
+
+// promise with then/catch
+superagent.post('/api/pet').then(console.log).catch(console.error);
+
+// promise with async/await
+(async () => {
+  try {
+    const res = await superagent.post('/api/pet');
+    console.log(res);
+  } catch (err) {
+    console.error(err);
+  }
+})();
 ```
 
 ### Browser
@@ -69,6 +83,8 @@ Browser-ready versions of this module are available via [jsdelivr][], [unpkg][],
 This is the solution for you if you're just using `<script>` tags everywhere!
 
 ```html
+<!-- https://github.com/Financial-Times/polyfill-service/issues/1944 -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=Array.from%2CPromise%2CSymbol%2CObject.setPrototypeOf"></script>
 <script src="https://cdn.jsdelivr.net/npm/superagent"></script>
 <!-- if you wish to use unpkg.com instead: -->
 <!-- <script src="https://unpkg.com/superagent"></script> -->
@@ -141,7 +157,14 @@ If you are using [browserify][], [webpack][], [rollup][], or another bundler, th
 
 ### Required Browser Features
 
-* IE9 requires a polyfill for `window.FormData` (we recommend [formdata-polyfill][])
+We recommend using <https://polyfill.io> (specifically with the bundle mentioned in [VanillaJS](#vanillajs) above):
+
+```html
+<script src="https://polyfill.io/v3/polyfill.min.js?features=Array.from%2CPromise%2CSymbol%2CObject.setPrototypeOf"></script>
+```
+
+* IE 9-10 requires a polyfill for `Promise`, `Array.from`, `Symbol`, `Object.getOwnPropertySymbols`, and `Object.setPrototypeOf`
+* IE 9 requires a polyfill for `window.FormData` (we recommend [formdata-polyfill][])
 
 
 ## Plugins
@@ -223,7 +246,7 @@ Our breaking changes are mostly in rarely used functionality and from stricter e
 [MIT](LICENSE) © TJ Holowaychuk
 
 
-##
+## 
 
 [npm]: https://www.npmjs.com/
 

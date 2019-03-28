@@ -24,7 +24,6 @@
   "dependencies": {
     "component-emitter": "^1.2.1",
     "cookiejar": "^2.1.2",
-    "core-js": "^3.0.0",
     "debug": "^4.1.1",
     "form-data": "^2.3.3",
     "formidable": "^1.2.1",
