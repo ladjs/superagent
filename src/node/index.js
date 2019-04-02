@@ -972,7 +972,11 @@ Request.prototype._end = function() {
     }
 
     // content-length
-    if (methodsWithBody.includes(method) && data && !req.getHeader('Content-Length')) {
+    if (
+      methodsWithBody.includes(method) &&
+      data &&
+      !req.getHeader('Content-Length')
+    ) {
       req.setHeader(
         'Content-Length',
         Buffer.isBuffer(data) ? data.length : Buffer.byteLength(data)

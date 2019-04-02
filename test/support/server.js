@@ -579,10 +579,10 @@ app.get('/error/redirect-error:id', (req, res) => {
 });
 
 app.get('/content-length', (req, res) => {
-  const headers = req.headers;
+  const { headers } = req;
   if (
-    headers.hasOwnProperty('content-length')
-    && headers['content-length'] > 0
+    headers.hasOwnProperty('content-length') &&
+    headers['content-length'] > 0
   ) {
     res.status(400).send('bad request');
   } else {

@@ -175,12 +175,14 @@ describe('request', function() {
   it('GET should not send the content-length header', next => {
     request
       .get(`${uri}/content-length`)
-      .send({foo: 'bar'})
-      .then((res) => {
+      .send({ foo: 'bar' })
+      .then(res => {
         try {
           assert(!res.badRequest);
           next();
-        } catch(e) { next(e); }
+        } catch (err) {
+          next(err);
+        }
       })
       .catch(next);
   });
