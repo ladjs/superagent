@@ -172,6 +172,21 @@ describe('request', function() {
     });
   });
 
+  it('GET should not send the content-length header', next => {
+    request
+      .get(`${uri}/content-length`)
+      .send({ foo: 'bar' })
+      .then(res => {
+        try {
+          assert(!res.badRequest);
+          next();
+        } catch (err) {
+          next(err);
+        }
+      })
+      .catch(next);
+  });
+
   it('get()', next => {
     request.get(`${uri}/notfound`).end((err, res) => {
       try {
