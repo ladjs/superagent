@@ -578,17 +578,5 @@ app.get('/error/redirect-error:id', (req, res) => {
   }
 });
 
-app.get('/content-length', (req, res) => {
-  const { headers } = req;
-  if (
-    headers.hasOwnProperty('content-length') &&
-    headers['content-length'] > 0
-  ) {
-    res.status(400).send('bad request');
-  } else {
-    res.status(200).send('ok');
-  }
-});
-
 const server = http.createServer(app);
 server.listen(process.env.ZUUL_PORT);

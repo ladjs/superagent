@@ -951,7 +951,6 @@ Request.prototype._end = function() {
   let data = this._data;
   const { req } = this;
   const { method } = this;
-  const methodsWithBody = ['PUT', 'POST', 'PATCH'];
 
   this._setTimeouts();
 
@@ -971,11 +970,7 @@ Request.prototype._end = function() {
     }
 
     // content-length
-    if (
-      methodsWithBody.includes(method) &&
-      data &&
-      !req.getHeader('Content-Length')
-    ) {
+    if (data && !req.getHeader('Content-Length')) {
       req.setHeader(
         'Content-Length',
         Buffer.isBuffer(data) ? data.length : Buffer.byteLength(data)
