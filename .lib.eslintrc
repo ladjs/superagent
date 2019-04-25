@@ -1,16 +1,20 @@
 {
   "extends": ["eslint:recommended", "plugin:node/recommended"],
+  "env": {
+    "node": true,
+    "browser": true
+  },
   "rules": {
     "node/no-deprecated-api": "off",
     "no-console": "off",
     "no-unused-vars": "off",
     "no-empty": "off",
-    "node/no-unsupported-features/node-builtins": "off"
+    "node/no-unsupported-features/node-builtins": "off",
+    "no-func-assign": "off"
   },
   "overrides": [
     {
       "files": [ "lib/client.js" ],
-      "env": { "browser": true },
       "globals": {
         "ActiveXObject": "readable"
       }

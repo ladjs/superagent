@@ -16,7 +16,8 @@
     "no-undef": "off",
     "no-unused-vars": "off",
     "no-useless-escape": "off",
-    "no-cond-assign": "off"
+    "no-cond-assign": "off",
+    "no-redeclare": "off"
   },
   "globals": {
     "regeneratorRuntime": "writable"
