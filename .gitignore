@@ -15,3 +15,4 @@ coverage
 .nyc_output
 lib
 dist
+*.swp
