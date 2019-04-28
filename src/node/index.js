@@ -423,10 +423,13 @@ Request.prototype.pipe = function(stream, options) {
 Request.prototype._pipeContinue = function(stream, options) {
   this.req.once('response', res => {
     // redirect
-    if (isRedirect(res.statusCode) && this._redirects++ != this._maxRedirects) {
+    if (
+      isRedirect(res.statusCode) &&
+      this._redirects++ !== this._maxRedirects
+    ) {
       return this._redirect(res) === this
         ? this._pipeContinue(stream, options)
-        : void 0;
+        : undefined;
     }
 
     this.res = res;
