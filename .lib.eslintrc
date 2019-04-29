@@ -1,7 +1,6 @@
 {
   "extends": ["eslint:recommended", "plugin:node/recommended"],
   "env": {
-    "node": true,
     "browser": true
   },
   "rules": {

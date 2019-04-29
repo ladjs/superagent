@@ -1,7 +1,7 @@
 {
   "extends": ["eslint:recommended"],
   "env": {
-    "node": true,
+    "node": false,
     "browser": true,
     "amd": true,
     "es6": true
