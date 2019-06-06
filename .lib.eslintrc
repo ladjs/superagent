@@ -9,7 +9,8 @@
     "no-unused-vars": "off",
     "no-empty": "off",
     "node/no-unsupported-features/node-builtins": "off",
-    "no-func-assign": "off"
+    "no-func-assign": "off",
+    "no-global-assign": ["error", {"exceptions": ["exports"]}]
   },
   "overrides": [
     {
