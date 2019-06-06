@@ -125,21 +125,23 @@ function serialize(obj) {
  */
 
 function pushEncodedKeyValuePair(pairs, key, val) {
-  if (val !== null) {
-    if (Array.isArray(val)) {
-      val.forEach(v => {
-        pushEncodedKeyValuePair(pairs, key, v);
-      });
-    } else if (isObject(val)) {
-      for (const subkey in val) {
-        if (Object.prototype.hasOwnProperty.call(val, subkey))
-          pushEncodedKeyValuePair(pairs, `${key}[${subkey}]`, val[subkey]);
-      }
-    } else {
-      pairs.push(encodeURIComponent(key) + '=' + encodeURIComponent(val));
-    }
-  } else if (val === null) {
+  if (val === undefined) return;
+  if (val === null) {
     pairs.push(encodeURIComponent(key));
+    return;
+  }
+
+  if (Array.isArray(val)) {
+    val.forEach(v => {
+      pushEncodedKeyValuePair(pairs, key, v);
+    });
+  } else if (isObject(val)) {
+    for (const subkey in val) {
+      if (Object.prototype.hasOwnProperty.call(val, subkey))
+        pushEncodedKeyValuePair(pairs, `${key}[${subkey}]`, val[subkey]);
+    }
+  } else {
+    pairs.push(encodeURIComponent(key) + '=' + encodeURIComponent(val));
   }
 }
 
