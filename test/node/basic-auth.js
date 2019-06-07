@@ -32,14 +32,16 @@ describe('Basic auth', () => {
   });
 
   describe('req.auth(user + ":" + pass)', () => {
-    it('should set authorization', done => {
-      request
-        .get(`${base}/basic-auth/again`)
-        .auth('tobi')
-        .end((err, res) => {
-          res.status.should.eql(200);
-          done();
-        });
-    });
+    it('should set authorization', () =>
+      Promise.all([
+        request
+          .get(`${base}/basic-auth/again`)
+          .auth('tobi')
+          .then(res => res.status.should.eql(200)),
+        request
+          .get(`${base}/basic-auth/again`)
+          .auth('tobi', undefined)
+          .then(res => res.status.should.eql(200))
+      ]));
   });
 });

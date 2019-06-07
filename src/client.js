@@ -553,7 +553,7 @@ Request.prototype.accept = function(type) {
  */
 
 Request.prototype.auth = function(user, pass, options) {
-  if (arguments.length === 1) pass = '';
+  if (pass === undefined) pass = '';
   if (typeof pass === 'object' && pass !== null) {
     // pass is optional and can be replaced with options
     options = pass;
