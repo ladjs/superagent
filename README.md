@@ -72,7 +72,7 @@ superagent.post('/api/pet').then(console.log).catch(console.error);
 
 ### Browser
 
-**The browser-ready, minified version of `superagent` is only 19 KB!**
+**The browser-ready, minified version of `superagent` is only 20KB!**
 
 Browser-ready versions of this module are available via [jsdelivr][], [unpkg][], and also in the `node_modules/superagent/dist` folder in downloads of the `superagent` package.
 
@@ -83,7 +83,7 @@ Browser-ready versions of this module are available via [jsdelivr][], [unpkg][],
 This is the solution for you if you're just using `<script>` tags everywhere!
 
 ```html
-<script src="https://polyfill.io/v3/polyfill.min.js?features=Array.from%2CPromise%2CSymbol%2CObject.setPrototypeOf%2CObject.getOwnPropertySymbols"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=Array.from,Promise,Symbol,Object.setPrototypeOf,Object.getOwnPropertySymbols"></script>
 <script src="https://cdn.jsdelivr.net/npm/superagent"></script>
 <!-- if you wish to use unpkg.com instead: -->
 <!-- <script src="https://unpkg.com/superagent"></script> -->
@@ -159,7 +159,7 @@ If you are using [browserify][], [webpack][], [rollup][], or another bundler, th
 We recommend using <https://polyfill.io> (specifically with the bundle mentioned in [VanillaJS](#vanillajs) above):
 
 ```html
-<script src="https://polyfill.io/v3/polyfill.min.js?features=Array.from%2CPromise%2CSymbol%2CObject.setPrototypeOf%2CObject.getOwnPropertySymbols"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=Array.from,Promise,Symbol,Object.setPrototypeOf,Object.getOwnPropertySymbols"></script>
 ```
 
 * IE 9-10 requires a polyfill for `Promise`, `Array.from`, `Symbol`, `Object.getOwnPropertySymbols`, and `Object.setPrototypeOf`
@@ -213,7 +213,7 @@ Our breaking changes are mostly in rarely used functionality and from stricter e
 
 * [4.x to 5.x](https://github.com/visionmedia/superagent/releases/tag/v5.0.0):
   * We've implemented the build setup of [Lass](https://lass.js.org) to simplify our stack and linting
-  * Browserified build size has been reduced from 48KB to 19KB (via `tinyify` and the latest version of Babel using `@babel/preset-env` and `.browserslistrc`)
+  * Browserified build size has been reduced from 48KB to 20KB (via `tinyify` and the latest version of Babel using `@babel/preset-env` and `.browserslistrc`)
   * Linting support has been added using `caniuse-lite` and `eslint-plugin-compat`
   * We can now target what versions of Node we wish to support more easily using `.babelrc`
 * [3.x to 4.x](https://github.com/visionmedia/superagent/releases/tag/v4.0.0-alpha.1):
@@ -246,7 +246,7 @@ Our breaking changes are mostly in rarely used functionality and from stricter e
 [MIT](LICENSE) © TJ Holowaychuk
 
 
-##
+## 
 
 [npm]: https://www.npmjs.com/
 

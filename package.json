@@ -29,7 +29,7 @@
     "form-data": "^2.3.3",
     "formidable": "^1.2.1",
     "methods": "^1.1.2",
-    "mime": "^2.4.3",
+    "mime": "^2.4.4",
     "qs": "^6.7.0",
     "readable-stream": "^3.4.0",
     "semver": "^6.1.1"
@@ -57,7 +57,7 @@
     "express-session": "^1.16.1",
     "fixpack": "^2.3.1",
     "husky": "^2.4.0",
-    "lint-staged": "^8.1.7",
+    "lint-staged": "^8.2.0",
     "marked": "^0.6.2",
     "mocha": "3.5.3",
     "multer": "^1.4.1",
@@ -148,14 +148,14 @@
     "url": "git://github.com/visionmedia/superagent.git"
   },
   "scripts": {
-    "browserify": "browserify src/node/index.js -o dist/superagent.js -s superagent -d -t [ babelify --configFile ./.dist.babelrc ]",
+    "browserify": "browserify src/node/index.js -o dist/superagent.js -s superagent -g [ babelify --configFile ./.dist.babelrc ]",
     "build": "npm run build:clean && npm run build:lib && npm run build:dist",
     "build:clean": "rimraf lib dist",
     "build:dist": "npm run browserify && npm run minify",
     "build:lib": "babel --config-file ./.lib.babelrc src --out-dir lib",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "lint": "xo && remark . -qfo && eslint -c .lib.eslintrc lib && eslint -c .dist.eslintrc dist",
-    "minify": "cross-env NODE_ENV=production browserify src/node/index.js -o dist/superagent.min.js -s superagent -t [ babelify --configFile ./.dist.babelrc ] -p tinyify",
+    "minify": "cross-env NODE_ENV=production browserify src/node/index.js -o dist/superagent.min.js -s superagent -g [ babelify --configFile ./.dist.babelrc ] -p tinyify",
     "nyc": "cross-env NODE_ENV=test nyc ava",
     "test": "npm run build && npm run lint && make test",
     "test-http2": "npm run build && npm run lint && make test-node-http2"
