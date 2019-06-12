@@ -72,7 +72,7 @@ superagent.post('/api/pet').then(console.log).catch(console.error);
 
 ### Browser
 
-**The browser-ready, minified version of `superagent` is only 20KB!**
+**The browser-ready, minified version of `superagent` is only 6 KB (minified and gzipped)!**
 
 Browser-ready versions of this module are available via [jsdelivr][], [unpkg][], and also in the `node_modules/superagent/dist` folder in downloads of the `superagent` package.
 
@@ -213,7 +213,7 @@ Our breaking changes are mostly in rarely used functionality and from stricter e
 
 * [4.x to 5.x](https://github.com/visionmedia/superagent/releases/tag/v5.0.0):
   * We've implemented the build setup of [Lass](https://lass.js.org) to simplify our stack and linting
-  * Browserified build size has been reduced from 48KB to 20KB (via `tinyify` and the latest version of Babel using `@babel/preset-env` and `.browserslistrc`)
+  * Unminified browserified build size has been reduced from 48KB to 20KB (via `tinyify` and the latest version of Babel using `@babel/preset-env` and `.browserslistrc`)
   * Linting support has been added using `caniuse-lite` and `eslint-plugin-compat`
   * We can now target what versions of Node we wish to support more easily using `.babelrc`
 * [3.x to 4.x](https://github.com/visionmedia/superagent/releases/tag/v4.0.0-alpha.1):
