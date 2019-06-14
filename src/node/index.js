@@ -18,6 +18,7 @@ const formidable = require('formidable');
 const debug = require('debug')('superagent');
 const CookieJar = require('cookiejar');
 const semver = require('semver');
+const safeStringify = require('fast-safe-stringify');
 
 const utils = require('../utils');
 const pkg = require('../../package.json');
@@ -102,7 +103,7 @@ exports.protocols = {
 
 exports.serialize = {
   'application/x-www-form-urlencoded': qs.stringify,
-  'application/json': JSON.stringify
+  'application/json': safeStringify
 };
 
 /**
