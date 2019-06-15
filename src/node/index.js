@@ -21,7 +21,6 @@ const semver = require('semver');
 const safeStringify = require('fast-safe-stringify');
 
 const utils = require('../utils');
-const pkg = require('../../package.json');
 const RequestBase = require('../request-base');
 const { unzip } = require('./unzip');
 const Response = require('./response');
@@ -132,14 +131,11 @@ exports.buffer = {};
  * @api private
  */
 function _initHeaders(req) {
-  const ua = `node-superagent/${pkg.version}`;
   req._header = {
     // coerces header names to lowercase
-    'user-agent': ua
   };
   req.header = {
     // preserves header name case
-    'User-Agent': ua
   };
 }
 
