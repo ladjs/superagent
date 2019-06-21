@@ -1,3 +1,7 @@
+# This HISTORY log is deprecated
+
+Please see [GitHub releases page](https://github.com/visionmedia/superagent/releases) for the current changelog.
+
 # 4.1.0 (2018-12-26)
 
  * `.connect()` IP/DNS override option (Kornel)
