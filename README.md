@@ -7,7 +7,7 @@
 [![made with lass](https://img.shields.io/badge/made_with-lass-95CC28.svg)](https://lass.js.org)
 [![license](https://img.shields.io/github/license/visionmedia/superagent.svg)](LICENSE)
 
-> Small progressive client-side HTTP request library, and Node.js module with the same API, sporting many high-level HTTP client features
+> Small progressive client-side HTTP request library, and Node.js module with the same API, supporting many high-level HTTP client features
 
 
 ## Table of Contents
