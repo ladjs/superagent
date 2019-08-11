@@ -498,7 +498,7 @@ Request.prototype._redirect = function(res) {
   // this is required for Node v0.10+
   res.resume();
 
-  let headers = this.req._headers;
+  let headers = this.req.getHeaders ? this.req.getHeaders() : this.req._headers;
 
   const changesOrigin = parse(url).host !== parse(this.url).host;
 
