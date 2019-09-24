@@ -10,6 +10,7 @@ test-node:
 	@NODE_ENV=test ./node_modules/.bin/mocha \
 		--require should \
 		--trace-warnings \
+		--throw-deprecation \
 		--reporter $(REPORTER) \
 		--timeout 5000 \
 		$(NODETESTS)
@@ -18,6 +19,7 @@ test-node-http2:
 	@NODE_ENV=test HTTP2_TEST=1 node ./node_modules/.bin/mocha \
 		--require should \
 		--trace-warnings \
+		--throw-deprecation \
 		--reporter $(REPORTER) \
 		--timeout 5000 \
 		$(NODETESTS)
