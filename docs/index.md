@@ -237,7 +237,7 @@ request
 
 When given the `.retry()` method, SuperAgent will automatically retry requests, if they fail in a way that is transient or could be due to a flaky Internet connection.
 
-This method has two optional arguments: number of retries (default 3) and a callback. It calls `callback(err, res)` before each retry. The callback may return `true`/`false` to control whether the request sould be retried (but the maximum number of retries is always applied).
+This method has two optional arguments: number of retries (default 1) and a callback. It calls `callback(err, res)` before each retry. The callback may return `true`/`false` to control whether the request sould be retried (but the maximum number of retries is always applied).
 
      request
        .get('https://example.com/search')
