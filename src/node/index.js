@@ -643,6 +643,19 @@ Request.prototype.cert = function(cert) {
 };
 
 /**
+ * Do not reject expired or invalid TLS certs.
+ * sets `rejectUnauthorized=true`. Be warned that this allows MITM attacks.
+ *
+ * @return {Request} for chaining
+ * @api public
+ */
+
+Request.prototype.disableTLSCerts = function() {
+  this._disableTLSCerts = true;
+  return this;
+};
+
+/**
  * Return an http[s] request.
  *
  * @return {OutgoingMessage}
@@ -743,6 +756,7 @@ Request.prototype.request = function() {
   options.cert = this._cert;
   options.passphrase = this._passphrase;
   options.agent = this._agent;
+  options.rejectUnauthorized = !this._disableTLSCerts;
 
   // Allows request.get('https://1.2.3.4/').set('Host', 'example.com')
   if (this._header.host) {

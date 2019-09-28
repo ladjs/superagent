@@ -23,7 +23,8 @@ function Agent() {
   'ca',
   'key',
   'pfx',
-  'cert'
+  'cert',
+  'disableTLSCerts'
 ].forEach(fn => {
   // Default setting for all requests from this agent
   Agent.prototype[fn] = function(...args) {
