@@ -263,6 +263,7 @@ describe('request', function() {
       request.get(`${uri}/login`).end((err, res) => {
         try {
           res.charset.should.equal('utf-8');
+          res.typeParams.charset.should.equal('utf-8');
           done();
         } catch (err2) {
           done(err2);
@@ -292,11 +293,29 @@ describe('request', function() {
         try {
           res.type.should.equal('text/html');
           res.charset.should.equal('utf-8');
+          res.typeParams.charset.should.equal('utf-8');
           done();
         } catch (err2) {
           done(err2);
         }
       });
+    });
+
+    it('type handling should avoid polluting the res object', done => {
+      request
+        .put(`${uri}/echo`)
+        .set('Content-Type', 'text/plain; foo=bar')
+        .send('wahoo')
+        .end((err, res) => {
+          try {
+            res.type.should.equal('text/plain');
+            res.should.not.have.property('charset');
+            res.typeParams.foo.should.equal('bar');
+            done();
+          } catch (err2) {
+            done(err2);
+          }
+        });
     });
   });
 

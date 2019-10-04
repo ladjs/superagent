@@ -53,9 +53,12 @@ ResponseBase.prototype.get = function(field) {
  * Set header related properties:
  *
  *   - `.type` the content type without params
+ *   - `.charset` the charset param
+ *   - `.typeParams` all params, including the charset.
  *
  * A response of "Content-Type: text/plain; charset=utf-8"
- * will provide you with a `.type` of "text/plain".
+ * will provide you with a `.type` of "text/plain" and a `.charset`
+ * of "utf-8".
  *
  * @param {Object} header
  * @api private
@@ -70,10 +73,9 @@ ResponseBase.prototype._setHeaderProperties = function(header) {
   this.type = utils.type(ct);
 
   // params
-  const params = utils.params(ct);
-  for (const key in params) {
-    if (Object.prototype.hasOwnProperty.call(params, key))
-      this[key] = params[key];
+  this.typeParams = utils.params(ct);
+  if ('charset' in this.typeParams) {
+    this.charset = this.typeParams.charset;
   }
 
   this.links = {};

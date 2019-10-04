@@ -410,7 +410,7 @@ The `res.header` contains an object of parsed header fields, lowercasing field n
 
 ### Response Content-Type
 
-The Content-Type response header is special-cased, providing `res.type`, which is void of the charset (if any). For example the Content-Type of "text/html; charset=utf8" will provide "text/html" as `res.type`, and the `res.charset` property would then contain "utf8".
+The Content-Type response header is special-cased, providing `res.type`, which is void of the charset (if any). For example the Content-Type of "text/html; charset=utf8" will provide "text/html" as `res.type`, and the `res.charset` property would then contain "utf8". All type parameters are also available in `res.typeParams`.
 
 ### Response status
 

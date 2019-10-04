@@ -593,6 +593,7 @@ describe('request', function() {
     request.get(`${uri}/text`).end((err, res) => {
       try {
         assert.equal('utf-8', res.charset);
+        assert.equal('utf-8', res.typeParams.charset);
         next();
       } catch (err2) {
         next(err2);

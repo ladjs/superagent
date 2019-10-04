@@ -15,8 +15,10 @@ describe('utils.type(str)', () => {
 describe('utils.params(str)', () => {
   it('should return the field parameters', () => {
     const obj = utils.params('application/json; charset=utf-8; foo  = bar');
-    obj.charset.should.equal('utf-8');
-    obj.foo.should.equal('bar');
+    obj.should.deepEqual({
+      charset: 'utf-8',
+      foo: 'bar'
+    });
 
     utils.params('application/json').should.eql({});
   });
