@@ -647,7 +647,7 @@ Request.prototype._getFormData = function() {
  */
 
 Request.prototype.callback = async function(err, res) {
-  if (await this._shouldRetry(err, res)) {
+  if (err !== null && await this._shouldRetry(err, res)) {
     return this._retry();
   }
 
