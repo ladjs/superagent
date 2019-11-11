@@ -18,7 +18,8 @@
     "no-useless-escape": "off",
     "no-cond-assign": "off",
     "no-redeclare": "off",
-    "node/no-exports-assign": "off"
+    "no-fallthrough": "off",
+    "no-constant-condition": "off"
   },
   "globals": {
     "regeneratorRuntime": "writable"

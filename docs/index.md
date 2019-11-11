@@ -246,6 +246,15 @@ This method has two optional arguments: number of retries (default 1) and a call
        .then(finished);
        .catch(failed);
 
+The callback supplied can be async if you need to await any data or to create a delay before retrying. This code will retry 10 times, with a 3 second delay between each retry. To add a delay:
+
+         .retry(10, async function(err, res) {
+          let delay = 3000; // ms
+          log.error(`Request failed, retrying in ${delay / 1000} seconds ...`);
+          await new Promise(resolve => setTimeout(() => resolve(), delay));
+          return true;
+        })
+
 Use `.retry()` only with requests that are *idempotent* (i.e. multiple requests reaching the server won't cause undesirable side effects like duplicate purchases).
 
 ## Setting Accept

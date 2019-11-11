@@ -11,7 +11,8 @@
     "node/no-unsupported-features/node-builtins": "off",
     "no-func-assign": "off",
     "no-global-assign": ["error", {"exceptions": ["exports"]}],
-    "node/no-exports-assign": "off"
+    "no-fallthrough": "off",
+    "no-constant-condition": "off"
   },
   "overrides": [
     {
