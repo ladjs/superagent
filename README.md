@@ -201,6 +201,7 @@ Existing plugins:
 * [superagent-charset](https://github.com/magicdawn/superagent-charset) - add charset support for node's SuperAgent
 * [superagent-verbose-errors](https://github.com/jcoreio/superagent-verbose-errors) - include response body in error messages for failed requests
 * [superagent-declare](https://github.com/damoclark/superagent-declare) - A simple [declarative](https://en.wikipedia.org/wiki/Declarative_programming) API for SuperAgent
+* [superagent-node-http-timings](https://github.com/webuniverseio/superagent-node-http-timings) - measure http timings in node.js
 
 Please prefix your plugin with `superagent-*` so that it can easily be found by others.
 
