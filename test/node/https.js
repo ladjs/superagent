@@ -102,6 +102,15 @@ describe('https', () => {
           );
       });
 
+      it('should not reject unauthorized response', () => {
+        return request
+          .get(testEndpoint)
+          .disableTLSCerts()
+          .then(({ status }) => {
+            assert.strictEqual(status, 200);
+          });
+      });
+
       it('should trust localhost unauthorized response', () => {
         return request.get(testEndpoint).trustLocalhost(true);
       });

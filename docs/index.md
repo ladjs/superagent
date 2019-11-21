@@ -302,6 +302,7 @@ In Node.js SuperAgent supports methods to configure HTTPS requests:
 - `.cert()`: Set the client certificate chain(s)
 - `.key()`: Set the client private key(s)
 - `.pfx()`: Set the client PFX or PKCS12 encoded private key and certificate chain
+- `.disableTLSCerts()`: Does not reject expired or invalid TLS certs. Sets internally `rejectUnauthorized=true`. *Be warned, this method allows MITM attacks.*
 
 For more information, see Node.js [https.request docs](https://nodejs.org/api/https.html#https_https_request_options_callback).
 

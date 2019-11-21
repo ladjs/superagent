@@ -46,6 +46,10 @@ function Agent(options) {
     if (options.cert) {
       this.cert(options.cert);
     }
+
+    if (options.rejectUnauthorized === false) {
+      this.disableTLSCerts();
+    }
   }
 }
 
