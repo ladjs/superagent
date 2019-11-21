@@ -444,15 +444,9 @@ Request.prototype._pipeContinue = function(stream, options) {
 
         stream.emit('error', err);
       });
-      res.pipe(unzipObj).pipe(
-        stream,
-        options
-      );
+      res.pipe(unzipObj).pipe(stream, options);
     } else {
-      res.pipe(
-        stream,
-        options
-      );
+      res.pipe(stream, options);
     }
 
     res.once('end', () => {

@@ -183,10 +183,7 @@ Request.prototype.write = function(data, encoding) {
 
 Request.prototype.pipe = function(stream, options) {
   const frame = this.getFrame();
-  return frame.pipe(
-    stream,
-    options
-  );
+  return frame.pipe(stream, options);
 };
 
 Request.prototype.end = function(data) {
