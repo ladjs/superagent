@@ -492,7 +492,7 @@ Request.prototype._redirect = function(res) {
   // this is required for Node v0.10+
   res.resume();
 
-  let headers = this.req._headers;
+  let headers = this.req.getHeaders ? this.req.getHeaders() : this.req._headers;
 
   const changesOrigin = parse(url).host !== parse(this.url).host;
 
@@ -500,7 +500,7 @@ Request.prototype._redirect = function(res) {
   if (res.statusCode === 301 || res.statusCode === 302) {
     // strip Content-* related fields
     // in case of POST etc
-    headers = utils.cleanHeader(this.req._headers, changesOrigin);
+    headers = utils.cleanHeader(headers, changesOrigin);
 
     // force GET
     this.method = this.method === 'HEAD' ? 'HEAD' : 'GET';
@@ -513,7 +513,7 @@ Request.prototype._redirect = function(res) {
   if (res.statusCode === 303) {
     // strip Content-* related fields
     // in case of POST etc
-    headers = utils.cleanHeader(this.req._headers, changesOrigin);
+    headers = utils.cleanHeader(headers, changesOrigin);
 
     // force method
     this.method = 'GET';
