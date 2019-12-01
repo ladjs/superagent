@@ -18,8 +18,8 @@ describe('request', function() {
             assert(res.body);
             res.body.should.have.property('x-foo', 'bar');
             done();
-          } catch (err2) {
-            done(err2);
+          } catch (err_) {
+            done(err_);
           }
         });
     });
@@ -33,8 +33,8 @@ describe('request', function() {
             assert(err instanceof Error, 'expected an error');
             err.should.have.property('timeout', 250);
             done();
-          } catch (err2) {
-            done(err2);
+          } catch (err_) {
+            done(err_);
           }
         });
     });

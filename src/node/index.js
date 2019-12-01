@@ -328,7 +328,7 @@ Request.prototype.agent = function(agent) {
 Request.prototype.type = function(type) {
   return this.set(
     'Content-Type',
-    type.indexOf('/') === -1 ? mime.getType(type) : type
+    type.includes('/') ? type : mime.getType(type)
   );
 };
 
@@ -353,10 +353,7 @@ Request.prototype.type = function(type) {
  */
 
 Request.prototype.accept = function(type) {
-  return this.set(
-    'Accept',
-    type.indexOf('/') === -1 ? mime.getType(type) : type
-  );
+  return this.set('Accept', type.includes('/') ? type : mime.getType(type));
 };
 
 /**
@@ -684,11 +681,11 @@ Request.prototype.request = function() {
   // Note: this'll only find backticks entered in req.query(String)
   // calls, because qs.stringify unconditionally encodes backticks.
   let queryStringBackticks;
-  if (url.indexOf('`') > -1) {
+  if (url.includes('`')) {
     const queryStartIndex = url.indexOf('?');
 
     if (queryStartIndex !== -1) {
-      const queryString = url.substr(queryStartIndex + 1);
+      const queryString = url.slice(queryStartIndex + 1);
       queryStringBackticks = queryString.match(/`|%60/g);
     }
   }
@@ -867,8 +864,8 @@ Request.prototype.callback = function(err, res) {
         err = new Error(msg);
         err.status = res ? res.status : undefined;
       }
-    } catch (err2) {
-      err = err2;
+    } catch (err_) {
+      err = err_;
     }
   }
 
@@ -1245,7 +1242,6 @@ Request.prototype._shouldUnzip = res => {
   return /^\s*(?:deflate|gzip)\s*$/.test(res.headers['content-encoding']);
 };
 
-// eslint-disable-next-line valid-jsdoc
 /**
  * Overrides DNS for selected hostnames. Takes object mapping hostnames to IP addresses.
  *
@@ -1277,7 +1273,7 @@ Request.prototype.trustLocalhost = function(toggle) {
 };
 
 // generate HTTP verb methods
-if (methods.indexOf('del') === -1) {
+if (!methods.includes('del')) {
   // create a copy so we don't cause conflicts with
   // other packages using the methods package and
   // npm 3.x
@@ -1355,5 +1351,5 @@ function isJSON(mime) {
  */
 
 function isRedirect(code) {
-  return [301, 302, 303, 305, 307, 308].indexOf(code) !== -1;
+  return [301, 302, 303, 305, 307, 308].includes(code);
 }

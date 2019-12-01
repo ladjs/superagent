@@ -9,8 +9,8 @@ module.exports = function(res, fn) {
     let err;
     try {
       body = res.text && JSON.parse(res.text);
-    } catch (err2) {
-      err = err2;
+    } catch (err_) {
+      err = err_;
       // issue #675: return the raw response if the response parsing fails
       err.rawResponse = res.text || null;
       // issue #876: return the http status code if the response parsing fails

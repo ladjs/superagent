@@ -126,8 +126,7 @@ Request.prototype.getFrame = function() {
 Request.prototype.mapToHttpHeader = function(headers) {
   const keys = Object.keys(headers);
   const http2Headers = {};
-  for (let i = 0; i < keys.length; i++) {
-    let key = keys[i];
+  for (let key of keys) {
     let value = headers[key];
     key = key.toLowerCase();
     switch (key) {
@@ -147,8 +146,7 @@ Request.prototype.mapToHttpHeader = function(headers) {
 Request.prototype.mapToHttp2Header = function(headers) {
   const keys = Object.keys(headers);
   const http2Headers = {};
-  for (let i = 0; i < keys.length; i++) {
-    let key = keys[i];
+  for (let key of keys) {
     let value = headers[key];
     key = key.toLowerCase();
     switch (key) {

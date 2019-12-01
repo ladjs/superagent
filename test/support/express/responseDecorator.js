@@ -430,8 +430,7 @@ function setMethods(res) {
     // merge user-provided headers
     if (opts && opts.headers) {
       const keys = Object.keys(opts.headers);
-      for (let i = 0; i < keys.length; i++) {
-        const key = keys[i];
+      for (const key of keys) {
         if (key.toLowerCase() !== 'content-disposition') {
           headers[key] = opts.headers[key];
         }
@@ -467,7 +466,7 @@ function setMethods(res) {
    */
 
   res.contentType = res.type = function contentType(type) {
-    const ct = type.indexOf('/') === -1 ? mime.lookup(type) : type;
+    const ct = !type.includes('/') ? mime.lookup(type) : type;
 
     return this.set('Content-Type', ct);
   };
@@ -962,8 +961,7 @@ function setMethods(res) {
         const obj = options.headers;
         const keys = Object.keys(obj);
 
-        for (let i = 0; i < keys.length; i++) {
-          const k = keys[i];
+        for (const k of keys) {
           res.setHeader(k, obj[k]);
         }
       });

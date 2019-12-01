@@ -291,7 +291,7 @@ function setMethods(req) {
     const header = this.get('X-Forwarded-Proto') || proto;
     const index = header.indexOf(',');
 
-    return index !== -1 ? header.substring(0, index).trim() : header.trim();
+    return index !== -1 ? header.slice(0, index).trim() : header.trim();
   });
 
   /**
@@ -426,7 +426,7 @@ function setMethods(req) {
     const offset = host[0] === '[' ? host.indexOf(']') + 1 : 0;
     const index = host.indexOf(':', offset);
 
-    return index !== -1 ? host.substring(0, index) : host;
+    return index !== -1 ? host.slice(0, index) : host;
   });
 
   /**

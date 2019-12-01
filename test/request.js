@@ -23,8 +23,8 @@ describe('request', function() {
         assert(res.ok, 'response should be ok');
         assert(res.text, 'res.text');
         next();
-      } catch (err2) {
-        next(err2);
+      } catch (err_) {
+        next(err_);
       }
     });
   });
@@ -36,8 +36,8 @@ describe('request', function() {
         assert(res.ok, 'response should be ok');
         assert(!res.text, 'res.text');
         next();
-      } catch (err2) {
-        next(err2);
+      } catch (err_) {
+        next(err_);
       }
     });
   });
@@ -52,8 +52,8 @@ describe('request', function() {
         assert(!res.clientError, 'response should not be a client error');
         assert(res.serverError, 'response should be a server error');
         next();
-      } catch (err2) {
-        next(err2);
+      } catch (err_) {
+        next(err_);
       }
     });
   });
@@ -68,8 +68,8 @@ describe('request', function() {
         assert(res.clientError, 'response should be a client error');
         assert(!res.serverError, 'response should not be a server error');
         next();
-      } catch (err2) {
-        next(err2);
+      } catch (err_) {
+        next(err_);
       }
     });
   });
@@ -80,8 +80,8 @@ describe('request', function() {
         assert(err);
         assert(res.notFound, 'response should be .notFound');
         next();
-      } catch (err2) {
-        next(err2);
+      } catch (err_) {
+        next(err_);
       }
     });
   });
@@ -92,8 +92,8 @@ describe('request', function() {
         assert(err);
         assert(res.badRequest, 'response should be .badRequest');
         next();
-      } catch (err2) {
-        next(err2);
+      } catch (err_) {
+        next(err_);
       }
     });
   });
@@ -104,8 +104,8 @@ describe('request', function() {
         assert(err);
         assert(res.unauthorized, 'response should be .unauthorized');
         next();
-      } catch (err2) {
-        next(err2);
+      } catch (err_) {
+        next(err_);
       }
     });
   });
@@ -116,8 +116,8 @@ describe('request', function() {
         assert(err);
         assert(res.notAcceptable, 'response should be .notAcceptable');
         next();
-      } catch (err2) {
-        next(err2);
+      } catch (err_) {
+        next(err_);
       }
     });
   });
@@ -128,8 +128,8 @@ describe('request', function() {
         assert.ifError(err);
         assert(res.noContent, 'response should be .noContent');
         next();
-      } catch (err2) {
-        next(err2);
+      } catch (err_) {
+        next(err_);
       }
     });
   });
@@ -140,8 +140,8 @@ describe('request', function() {
         assert.ifError(err);
         assert(res.noContent, 'response should be .noContent');
         next();
-      } catch (err2) {
-        next(err2);
+      } catch (err_) {
+        next(err_);
       }
     });
   });
@@ -153,8 +153,8 @@ describe('request', function() {
         assert.equal('text/html; charset=utf-8', res.header['content-type']);
         assert.equal('Express', res.header['x-powered-by']);
         next();
-      } catch (err2) {
-        next(err2);
+      } catch (err_) {
+        next(err_);
       }
     });
   });
@@ -166,8 +166,8 @@ describe('request', function() {
         assert.equal(404, res.status, 'response .status');
         assert.equal(4, res.statusType, 'response .statusType');
         next();
-      } catch (err2) {
-        next(err2);
+      } catch (err_) {
+        next(err_);
       }
     });
   });
@@ -179,8 +179,8 @@ describe('request', function() {
         assert.equal(404, res.status, 'response .status');
         assert.equal(4, res.statusType, 'response .statusType');
         next();
-      } catch (err2) {
-        next(err2);
+      } catch (err_) {
+        next(err_);
       }
     });
   });
@@ -190,8 +190,8 @@ describe('request', function() {
       try {
         assert.equal('updated', res.text, 'response text');
         next();
-      } catch (err2) {
-        next(err2);
+      } catch (err_) {
+        next(err_);
       }
     });
   });
@@ -204,8 +204,8 @@ describe('request', function() {
         try {
           assert.equal('received new', res.text, 'response text');
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       });
   });
@@ -215,8 +215,8 @@ describe('request', function() {
       try {
         assert.equal('created', res.text, 'response text');
         next();
-      } catch (err2) {
-        next(err2);
+      } catch (err_) {
+        next(err_);
       }
     });
   });
@@ -226,8 +226,8 @@ describe('request', function() {
       try {
         assert.equal('deleted', res.text, 'response text');
         next();
-      } catch (err2) {
-        next(err2);
+      } catch (err_) {
+        next(err_);
       }
     });
   });
@@ -237,8 +237,8 @@ describe('request', function() {
       try {
         assert.equal('deleted', res.text, 'response text');
         next();
-      } catch (err2) {
-        next(err2);
+      } catch (err_) {
+        next(err_);
       }
     });
   });
@@ -252,8 +252,8 @@ describe('request', function() {
         try {
           assert.equal('added "tobi"', res.text, 'response text');
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       });
   });
@@ -267,8 +267,8 @@ describe('request', function() {
         try {
           assert.equal('added pet "tobi"', res.text, 'response text');
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       });
   });
@@ -282,8 +282,8 @@ describe('request', function() {
         try {
           assert.equal('added pet "tobi"', res.text, 'response text');
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       });
   });
@@ -309,8 +309,8 @@ describe('request', function() {
         try {
           assert.equal('foo/bar', res.text);
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       });
   });
@@ -323,8 +323,8 @@ describe('request', function() {
         try {
           assert.equal('application/json', res.text);
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       });
   });
@@ -337,8 +337,8 @@ describe('request', function() {
         try {
           assert.equal('application/json', res.text);
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       });
   });
@@ -352,8 +352,8 @@ describe('request', function() {
           // We can't depend on mime module to be consistent with this
           assert(res.text == 'application/xml' || res.text == 'text/xml');
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       });
   });
@@ -366,8 +366,8 @@ describe('request', function() {
         try {
           assert.equal('application/xml', res.text);
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       });
   });
@@ -383,8 +383,8 @@ describe('request', function() {
         try {
           assert.equal('text/plain', res.text);
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       });
   });
@@ -398,8 +398,8 @@ describe('request', function() {
         try {
           assert.equal('text/plain', res.text);
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       });
   });
@@ -413,8 +413,8 @@ describe('request', function() {
         try {
           assert.equal('text/plain', res.text);
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       });
   });
@@ -428,8 +428,8 @@ describe('request', function() {
         try {
           assert.equal('text/plain', res.text);
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       });
   });
@@ -443,8 +443,8 @@ describe('request', function() {
         try {
           assert.equal('added Manny the cat', res.text);
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       });
   });
@@ -458,8 +458,8 @@ describe('request', function() {
         try {
           assert.equal('added Manny the cat', res.text);
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       });
   });
@@ -476,8 +476,8 @@ describe('request', function() {
           );
           assert.equal('[1,2,3]', res.text);
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       });
   });
@@ -490,8 +490,8 @@ describe('request', function() {
         try {
           assert.equal('added Manny the cat', res.text);
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       });
   });
@@ -505,8 +505,8 @@ describe('request', function() {
         try {
           assert.equal('{"data":["data1","data2"]}', res.text);
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       });
   });
@@ -520,8 +520,8 @@ describe('request', function() {
         try {
           assert.equal('{"data":["data1","data2"]}', res.text);
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       });
   });
@@ -535,8 +535,8 @@ describe('request', function() {
         try {
           assert.equal('added Manny the cat', res.text);
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       });
   });
@@ -557,8 +557,8 @@ describe('request', function() {
             'user[name]=tj&user[email]=tj@vision-media.ca'
           );
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       });
   });
@@ -572,8 +572,8 @@ describe('request', function() {
           assert.ifError(err);
           assert(res.noContent, 'response should be .noContent');
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       });
   });
@@ -583,8 +583,8 @@ describe('request', function() {
       try {
         assert.equal('application/json', res.type);
         next();
-      } catch (err2) {
-        next(err2);
+      } catch (err_) {
+        next(err_);
       }
     });
   });
@@ -594,8 +594,8 @@ describe('request', function() {
       try {
         assert.equal('utf-8', res.charset);
         next();
-      } catch (err2) {
-        next(err2);
+      } catch (err_) {
+        next(err_);
       }
     });
   });
@@ -605,8 +605,8 @@ describe('request', function() {
       try {
         assert.deepEqual(res.body, ['tobi', 'loki', 'jane']);
         next();
-      } catch (err2) {
-        next(err2);
+      } catch (err_) {
+        next(err_);
       }
     });
   });
@@ -620,8 +620,8 @@ describe('request', function() {
           assert.ifError(err);
           assert.deepEqual(res.text, '\u001E{"id":1}\n\u001E{"id":2}\n');
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       });
   });
@@ -631,8 +631,8 @@ describe('request', function() {
       try {
         assert.deepEqual(res.body, { foo: 'bar' });
         next();
-      } catch (err2) {
-        next(err2);
+      } catch (err_) {
+        next(err_);
       }
     });
   });
@@ -642,8 +642,8 @@ describe('request', function() {
       try {
         assert.equal('foo=bar', res.text);
         next();
-      } catch (err2) {
-        next(err2);
+      } catch (err_) {
+        next(err_);
       }
     });
   });
@@ -653,8 +653,8 @@ describe('request', function() {
       try {
         assert.equal('added pet "tobi"', res.text);
         next();
-      } catch (err2) {
-        next(err2);
+      } catch (err_) {
+        next(err_);
       }
     });
   });
@@ -664,8 +664,8 @@ describe('request', function() {
       try {
         assert.equal('added pet "tobi"', res.text);
         next();
-      } catch (err2) {
-        next(err2);
+      } catch (err_) {
+        next(err_);
       }
     });
   });
@@ -678,8 +678,8 @@ describe('request', function() {
         try {
           assert.deepEqual(res.body, { val: ['a', 'b', 'c'] });
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       });
   });
@@ -696,8 +696,8 @@ describe('request', function() {
             number: 10
           });
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       });
   });
@@ -713,8 +713,8 @@ describe('request', function() {
             array2: [1, 2, 3]
           });
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       });
   });
@@ -727,8 +727,8 @@ describe('request', function() {
         try {
           assert.deepEqual(res.body, { search: 'Manny' });
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       });
   });
@@ -741,8 +741,8 @@ describe('request', function() {
         try {
           assert.deepEqual(res.body, { search: 'Manny', range: '1..5' });
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       });
   });
@@ -761,8 +761,8 @@ describe('request', function() {
             order: 'desc'
           });
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       });
   });
@@ -781,8 +781,8 @@ describe('request', function() {
             order: 'desc'
           });
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       });
   });
@@ -800,8 +800,8 @@ describe('request', function() {
             order: 'desc'
           });
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       });
   });
@@ -814,8 +814,8 @@ describe('request', function() {
         try {
           assert.deepEqual(res.body, { foo: 'FOO', bar: 'BAR' });
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       }
     );
@@ -832,8 +832,8 @@ describe('request', function() {
             bar: 'BAR'
           });
           next();
-        } catch (err2) {
-          next(err2);
+        } catch (err_) {
+          next(err_);
         }
       }
     );
@@ -844,8 +844,8 @@ describe('request', function() {
       try {
         assert.equal('bar', res.body.foo);
         next();
-      } catch (err2) {
-        next(err2);
+      } catch (err_) {
+        next(err_);
       }
     });
   });
@@ -855,8 +855,8 @@ describe('request', function() {
       try {
         assert.equal('bar', res.body.foo);
         next();
-      } catch (err2) {
-        next(err2);
+      } catch (err_) {
+        next(err_);
       }
     });
   });
@@ -866,8 +866,8 @@ describe('request', function() {
       try {
         assert.equal('bar', res.body.foo);
         next();
-      } catch (err2) {
-        next(err2);
+      } catch (err_) {
+        next(err_);
       }
     });
   });
@@ -886,8 +886,8 @@ describe('request', function() {
         assert.equal(null, res);
         assert(req.timedout, true);
         next();
-      } catch (err2) {
-        next(err2);
+      } catch (err_) {
+        next(err_);
       }
     });
   });
@@ -906,8 +906,8 @@ describe('request', function() {
         assert.equal(null, res);
         assert(req.timedout, true);
         next();
-      } catch (err2) {
-        next(err2);
+      } catch (err_) {
+        next(err_);
       }
     });
   });
@@ -945,8 +945,8 @@ describe('request', function() {
       try {
         assert.strictEqual(res.statusCode, 200);
         next();
-      } catch (err2) {
-        next(err2);
+      } catch (err_) {
+        next(err_);
       }
     });
   });
@@ -959,8 +959,8 @@ describe('request', function() {
           assert(j.hasOwnProperty(prop));
         });
         next();
-      } catch (err2) {
-        next(err2);
+      } catch (err_) {
+        next(err_);
       }
     });
   });

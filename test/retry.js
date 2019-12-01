@@ -25,8 +25,8 @@ describe('.retry(count)', function() {
           );
           assert.equal(500, err.status, 'expected an error status of 500');
           done();
-        } catch (err2) {
-          done(err2);
+        } catch (err_) {
+          done(err_);
         }
       });
   });
@@ -45,8 +45,8 @@ describe('.retry(count)', function() {
           );
           assert.equal(500, err.status, 'expected an error status of 500');
           done();
-        } catch (err2) {
-          done(err2);
+        } catch (err_) {
+          done(err_);
         }
       });
   });
@@ -65,8 +65,8 @@ describe('.retry(count)', function() {
           );
           assert.equal(500, err.status, 'expected an error status of 500');
           done();
-        } catch (err2) {
-          done(err2);
+        } catch (err_) {
+          done(err_);
         }
       });
   });
@@ -81,8 +81,8 @@ describe('.retry(count)', function() {
           assert.equal(2, err.retries, 'expected an error with .retries');
           assert.equal(500, err.status, 'expected an error status of 500');
           done();
-        } catch (err2) {
-          done(err2);
+        } catch (err_) {
+          done(err_);
         }
       });
   });
@@ -97,8 +97,8 @@ describe('.retry(count)', function() {
           assert.equal(1, err.retries, 'expected an error with .retries');
           assert.equal(500, err.status, 'expected an error status of 500');
           done();
-        } catch (err2) {
-          done(err2);
+        } catch (err_) {
+          done(err_);
         }
       });
   });
@@ -113,8 +113,8 @@ describe('.retry(count)', function() {
           assert.equal(1, err.retries, 'expected an error with .retries');
           assert.equal(500, err.status, 'expected an error status of 500');
           done();
-        } catch (err2) {
-          done(err2);
+        } catch (err_) {
+          done(err_);
         }
       });
   });
@@ -130,8 +130,8 @@ describe('.retry(count)', function() {
           assert(res.ok, 'response should be ok');
           assert(res.text, 'res.text');
           done();
-        } catch (err2) {
-          done(err2);
+        } catch (err_) {
+          done(err_);
         }
       });
   });
@@ -152,8 +152,8 @@ describe('.retry(count)', function() {
           );
           assert.equal('ECONNABORTED', err.code, 'expected abort error code');
           done();
-        } catch (err2) {
-          done(err2);
+        } catch (err_) {
+          done(err_);
         }
       });
   });
@@ -172,8 +172,8 @@ describe('.retry(count)', function() {
           assert(res.ok, 'response should be ok');
           assert.equal(res.text, `ok = ${url}&string=ified&json=ed`);
           done();
-        } catch (err2) {
-          done(err2);
+        } catch (err_) {
+          done(err_);
         }
       });
   });
@@ -187,8 +187,8 @@ describe('.retry(count)', function() {
     req.end((err, res) => {
       try {
         assert(false, 'should not complete the request');
-      } catch (err2) {
-        done(err2);
+      } catch (err_) {
+        done(err_);
       }
     });
 
@@ -221,8 +221,8 @@ describe('.retry(count)', function() {
           assert(res.body);
           res.body.should.have.property('x-foo', 'bar');
           done();
-        } catch (err2) {
-          done(err2);
+        } catch (err_) {
+          done(err_);
         }
       });
   });
@@ -237,8 +237,8 @@ describe('.retry(count)', function() {
           assert.equal(0, err.retries, 'expected an error with 0 .retries');
           assert.equal(400, err.status, 'expected an error status of 400');
           done();
-        } catch (err2) {
-          done(err2);
+        } catch (err_) {
+          done(err_);
         }
       });
   });
@@ -263,8 +263,8 @@ describe('.retry(count)', function() {
             'expected the callback to be called on each retry'
           );
           done();
-        } catch (err2) {
-          done(err2);
+        } catch (err_) {
+          done(err_);
         }
       });
   });

@@ -21,8 +21,8 @@ describe('request', () => {
             assert(/replaced=yes/.test(res.text), 'replaced=yes/.test');
             assert(/from-redir=1/.test(res.text), 'from-redir=1');
             done();
-          } catch (err2) {
-            done(err2);
+          } catch (err_) {
+            done(err_);
           }
         });
     });
@@ -39,8 +39,8 @@ describe('request', () => {
             assert(!/replaced=yes/.test(res.text), '!/replaced=yes');
             assert(!/from-redir/.test(res.text), '!/from-redir');
             done();
-          } catch (err2) {
-            done(err2);
+          } catch (err_) {
+            done(err_);
           }
         });
     });
@@ -58,8 +58,8 @@ describe('request', () => {
               assert(/orig=1/.test(res.text), 'orig=1/.test');
               assert(/persist=123/.test(res.text), 'persist=123');
               done();
-            } catch (err2) {
-              done(err2);
+            } catch (err_) {
+              done(err_);
             }
           });
       });
@@ -79,8 +79,8 @@ describe('request', () => {
             redirects.should.eql(arr);
             res.text.should.equal('first movie page');
             done();
-          } catch (err2) {
-            done(err2);
+          } catch (err_) {
+            done(err_);
           }
         });
     });
@@ -136,8 +136,8 @@ describe('request', () => {
             redirects.should.eql(arr);
             assert(!res.text);
             done();
-          } catch (err2) {
-            done(err2);
+          } catch (err_) {
+            done(err_);
           }
         });
     });
@@ -158,8 +158,8 @@ describe('request', () => {
             res.body.should.not.have.property('content-length');
             res.body.should.not.have.property('transfer-encoding');
             done();
-          } catch (err2) {
-            done(err2);
+          } catch (err_) {
+            done(err_);
           }
         });
     });
@@ -173,8 +173,8 @@ describe('request', () => {
             assert(res.body);
             res.body.should.have.property('cookie', 'foo=bar;');
             done();
-          } catch (err2) {
-            done(err2);
+          } catch (err_) {
+            done(err_);
           }
         });
     });
@@ -201,8 +201,8 @@ describe('request', () => {
             query.should.eql(['{"foo":"bar"}', '{}', '{}']);
             res.headers.query.should.eql('{}');
             done();
-          } catch (err2) {
-            done(err2);
+          } catch (err_) {
+            done(err_);
           }
         });
     });
@@ -212,8 +212,8 @@ describe('request', () => {
         try {
           err.message.should.equal('No location header for redirect');
           done();
-        } catch (err2) {
-          done(err2);
+        } catch (err_) {
+          done(err_);
         }
       });
     });
@@ -232,8 +232,8 @@ describe('request', () => {
               redirects.should.eql(['tobi']);
               res.text.should.equal('tobi');
               done();
-            } catch (err2) {
-              done(err2);
+            } catch (err_) {
+              done(err_);
             }
           });
       });
@@ -251,8 +251,8 @@ describe('request', () => {
               redirects.should.eql(['../tobi']);
               res.text.should.equal('tobi');
               done();
-            } catch (err2) {
-              done(err2);
+            } catch (err_) {
+              done(err_);
             }
           });
       });
@@ -278,8 +278,8 @@ describe('request', () => {
             redirects.should.eql(arr);
             res.text.should.match(/Moved Temporarily|Found/);
             done();
-          } catch (err2) {
-            done(err2);
+          } catch (err_) {
+            done(err_);
           }
         });
     });

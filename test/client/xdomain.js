@@ -40,8 +40,8 @@ describe('xdomain', function() {
             assert(err.crossDomain, 'not .crossDomain');
             assert.equal(2, err.retries, 'expected an error with .retries');
             next();
-          } catch (err2) {
-            next(err2);
+          } catch (err_) {
+            next(err_);
           }
         });
     });

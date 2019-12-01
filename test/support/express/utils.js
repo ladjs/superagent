@@ -78,8 +78,8 @@ exports.normalizeType = function(type) {
 exports.normalizeTypes = function(types) {
   const ret = [];
 
-  for (let i = 0; i < types.length; ++i) {
-    ret.push(exports.normalizeType(types[i]));
+  for (const element of types) {
+    ret.push(exports.normalizeType(element));
   }
 
   return ret;

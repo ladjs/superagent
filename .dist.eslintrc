@@ -17,7 +17,8 @@
     "no-unused-vars": "off",
     "no-useless-escape": "off",
     "no-cond-assign": "off",
-    "no-redeclare": "off"
+    "no-redeclare": "off",
+    "node/no-exports-assign": "off"
   },
   "globals": {
     "regeneratorRuntime": "writable"

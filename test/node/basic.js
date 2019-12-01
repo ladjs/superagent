@@ -312,8 +312,8 @@ describe('[node] request', () => {
           try {
             assert.equal('wahoo', res.text);
             next();
-          } catch (err2) {
-            next(err2);
+          } catch (err_) {
+            next(err_);
           }
         });
     });

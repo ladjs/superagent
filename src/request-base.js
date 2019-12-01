@@ -189,14 +189,14 @@ RequestBase.prototype._shouldRetry = function(err, res) {
       if (override === true) return true;
       if (override === false) return false;
       // undefined falls back to defaults
-    } catch (err2) {
-      console.error(err2);
+    } catch (err_) {
+      console.error(err_);
     }
   }
 
   if (res && res.status && res.status >= 500 && res.status !== 501) return true;
   if (err) {
-    if (err.code && ERROR_CODES.indexOf(err.code) !== -1) return true;
+    if (err.code && ERROR_CODES.includes(err.code)) return true;
     // Superagent timeout
     if (err.timeout && err.code === 'ECONNABORTED') return true;
     if (err.crossDomain) return true;
@@ -357,7 +357,6 @@ RequestBase.prototype.set = function(field, val) {
   return this;
 };
 
-// eslint-disable-next-line valid-jsdoc
 /**
  * Remove header `field`.
  * Case-insensitive.
@@ -674,7 +673,7 @@ RequestBase.prototype.sortQuery = function(sort) {
 RequestBase.prototype._finalizeQueryString = function() {
   const query = this._query.join('&');
   if (query) {
-    this.url += (this.url.indexOf('?') >= 0 ? '&' : '?') + query;
+    this.url += (this.url.includes('?') ? '&' : '?') + query;
   }
 
   this._query.length = 0; // Makes the call idempotent
@@ -682,14 +681,14 @@ RequestBase.prototype._finalizeQueryString = function() {
   if (this._sort) {
     const index = this.url.indexOf('?');
     if (index >= 0) {
-      const queryArr = this.url.substring(index + 1).split('&');
+      const queryArr = this.url.slice(index + 1).split('&');
       if (typeof this._sort === 'function') {
         queryArr.sort(this._sort);
       } else {
         queryArr.sort();
       }
 
-      this.url = this.url.substring(0, index) + '?' + queryArr.join('&');
+      this.url = this.url.slice(0, index) + '?' + queryArr.join('&');
     }
   }
 };

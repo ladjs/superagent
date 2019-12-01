@@ -70,19 +70,19 @@ request.getXHR = () => {
 
   try {
     return new ActiveXObject('Microsoft.XMLHTTP');
-  } catch (err) {}
+  } catch {}
 
   try {
     return new ActiveXObject('Msxml2.XMLHTTP.6.0');
-  } catch (err) {}
+  } catch {}
 
   try {
     return new ActiveXObject('Msxml2.XMLHTTP.3.0');
-  } catch (err) {}
+  } catch {}
 
   try {
     return new ActiveXObject('Msxml2.XMLHTTP');
-  } catch (err) {}
+  } catch {}
 
   throw new Error('Browser-only version of superagent could not find XHR');
 };
@@ -437,10 +437,10 @@ function Request(method, url) {
 
     try {
       res = new Response(self);
-    } catch (err2) {
+    } catch (err_) {
       err = new Error('Parser is unable to parse the response');
       err.parse = true;
-      err.original = err2;
+      err.original = err_;
       // issue #675: return the raw response if the response parsing fails
       if (self.xhr) {
         // ie9 doesn't have 'response' property
@@ -466,8 +466,8 @@ function Request(method, url) {
       if (!self._isResponseOK(res)) {
         new_err = new Error(res.statusText || 'Unsuccessful HTTP response');
       }
-    } catch (err2) {
-      new_err = err2; // ok() callback can throw
+    } catch (err_) {
+      new_err = err_; // ok() callback can throw
     }
 
     // #1000 don't catch errors from the callback to avoid double calling it
@@ -787,7 +787,7 @@ Request.prototype._end = function() {
     let status;
     try {
       status = xhr.status;
-    } catch (err) {
+    } catch {
       status = 0;
     }
 
@@ -822,7 +822,7 @@ Request.prototype._end = function() {
           handleProgress.bind(null, 'upload')
         );
       }
-    } catch (err) {
+    } catch {
       // Accessing xhr.upload fails in IE from a web worker, so just pretend it doesn't exist.
       // Reported here:
       // https://connect.microsoft.com/IE/feedback/details/837245/xmlhttprequest-upload-throws-invalid-argument-when-used-from-web-worker-context

@@ -87,8 +87,8 @@ describe('zlib', () => {
         try {
           assert.equal('Maximum response size reached', err && err.message);
           done();
-        } catch (err2) {
-          done(err2);
+        } catch (err_) {
+          done(err_);
         }
       });
   });

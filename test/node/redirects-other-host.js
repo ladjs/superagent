@@ -57,7 +57,10 @@ describe('request.get', () => {
     it('should follow Location with a GET request', done => {
       const req = request.get(`${base}/test-301`).redirects(1);
       req.end((err, res) => {
-        req.req._headers.host.should.eql(`localhost:${server2.address().port}`);
+        const headers = req.req.getHeaders
+          ? req.req.getHeaders()
+          : req.req._headers;
+        headers.host.should.eql(`localhost:${server2.address().port}`);
         res.status.should.eql(200);
         res.text.should.eql('GET');
         done();
@@ -68,7 +71,9 @@ describe('request.get', () => {
     it('should follow Location with a GET request', done => {
       const req = request.get(`${base}/test-302`).redirects(1);
       req.end((err, res) => {
-        req.req._headers.host.should.eql(`localhost:${server2.address().port}`);
+        const headers = req.req.getHeaders
+          ? req.req.getHeaders()
+          : req.req._headers;
         res.status.should.eql(200);
         res.text.should.eql('GET');
         done();
@@ -79,7 +84,10 @@ describe('request.get', () => {
     it('should follow Location with a GET request', done => {
       const req = request.get(`${base}/test-303`).redirects(1);
       req.end((err, res) => {
-        req.req._headers.host.should.eql(`localhost:${server2.address().port}`);
+        const headers = req.req.getHeaders
+          ? req.req.getHeaders()
+          : req.req._headers;
+        headers.host.should.eql(`localhost:${server2.address().port}`);
         res.status.should.eql(200);
         res.text.should.eql('GET');
         done();
@@ -90,7 +98,10 @@ describe('request.get', () => {
     it('should follow Location with a GET request', done => {
       const req = request.get(`${base}/test-307`).redirects(1);
       req.end((err, res) => {
-        req.req._headers.host.should.eql(`localhost:${server2.address().port}`);
+        const headers = req.req.getHeaders
+          ? req.req.getHeaders()
+          : req.req._headers;
+        headers.host.should.eql(`localhost:${server2.address().port}`);
         res.status.should.eql(200);
         res.text.should.eql('GET');
         done();
@@ -101,7 +112,10 @@ describe('request.get', () => {
     it('should follow Location with a GET request', done => {
       const req = request.get(`${base}/test-308`).redirects(1);
       req.end((err, res) => {
-        req.req._headers.host.should.eql(`localhost:${server2.address().port}`);
+        const headers = req.req.getHeaders
+          ? req.req.getHeaders()
+          : req.req._headers;
+        headers.host.should.eql(`localhost:${server2.address().port}`);
         res.status.should.eql(200);
         res.text.should.eql('GET');
         done();
@@ -115,7 +129,10 @@ describe('request.post', () => {
     it('should follow Location with a GET request', done => {
       const req = request.post(`${base}/test-301`).redirects(1);
       req.end((err, res) => {
-        req.req._headers.host.should.eql(`localhost:${server2.address().port}`);
+        const headers = req.req.getHeaders
+          ? req.req.getHeaders()
+          : req.req._headers;
+        headers.host.should.eql(`localhost:${server2.address().port}`);
         res.status.should.eql(200);
         res.text.should.eql('GET');
         done();
@@ -126,7 +143,10 @@ describe('request.post', () => {
     it('should follow Location with a GET request', done => {
       const req = request.post(`${base}/test-302`).redirects(1);
       req.end((err, res) => {
-        req.req._headers.host.should.eql(`localhost:${server2.address().port}`);
+        const headers = req.req.getHeaders
+          ? req.req.getHeaders()
+          : req.req._headers;
+        headers.host.should.eql(`localhost:${server2.address().port}`);
         res.status.should.eql(200);
         res.text.should.eql('GET');
         done();
@@ -137,7 +157,10 @@ describe('request.post', () => {
     it('should follow Location with a GET request', done => {
       const req = request.post(`${base}/test-303`).redirects(1);
       req.end((err, res) => {
-        req.req._headers.host.should.eql(`localhost:${server2.address().port}`);
+        const headers = req.req.getHeaders
+          ? req.req.getHeaders()
+          : req.req._headers;
+        headers.host.should.eql(`localhost:${server2.address().port}`);
         res.status.should.eql(200);
         res.text.should.eql('GET');
         done();
@@ -148,7 +171,10 @@ describe('request.post', () => {
     it('should follow Location with a POST request', done => {
       const req = request.post(`${base}/test-307`).redirects(1);
       req.end((err, res) => {
-        req.req._headers.host.should.eql(`localhost:${server2.address().port}`);
+        const headers = req.req.getHeaders
+          ? req.req.getHeaders()
+          : req.req._headers;
+        headers.host.should.eql(`localhost:${server2.address().port}`);
         res.status.should.eql(200);
         res.text.should.eql('POST');
         done();
@@ -159,7 +185,10 @@ describe('request.post', () => {
     it('should follow Location with a POST request', done => {
       const req = request.post(`${base}/test-308`).redirects(1);
       req.end((err, res) => {
-        req.req._headers.host.should.eql(`localhost:${server2.address().port}`);
+        const headers = req.req.getHeaders
+          ? req.req.getHeaders()
+          : req.req._headers;
+        headers.host.should.eql(`localhost:${server2.address().port}`);
         res.status.should.eql(200);
         res.text.should.eql('POST');
         done();

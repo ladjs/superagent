@@ -93,8 +93,8 @@ describe('req.send(Object) as "json"', function() {
             res.text.should.equal('{"tobi":"ferret"}');
             ({ tobi: 'ferret' }.should.eql(res.body));
             done();
-          } catch (err2) {
-            done(err2);
+          } catch (err_) {
+            done(err_);
           }
         });
     });
@@ -149,8 +149,8 @@ describe('res.body', function() {
             assert.strictEqual(res.text, undefined);
             assert.strictEqual(Object.keys(res.body).length, 0);
             done();
-          } catch (err2) {
-            done(err2);
+          } catch (err_) {
+            done(err_);
           }
         });
       });
@@ -184,8 +184,8 @@ describe('res.body', function() {
             assert.strictEqual(res.text, '');
             assert.strictEqual(Object.keys(res.body).length, 0);
             done();
-          } catch (err2) {
-            done(err2);
+          } catch (err_) {
+            done(err_);
           }
         });
       });

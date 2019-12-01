@@ -73,7 +73,7 @@ describe('request pipe', () => {
       try {
         res.pipe(stream);
         return done(new Error('Did not prevent nonsense pipe'));
-      } catch (err2) {
+      } catch (err_) {
         /* expected error */
       }
 

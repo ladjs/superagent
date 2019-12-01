@@ -12,7 +12,7 @@ if (process.env.HTTP2_TEST) {
 }
 
 app.get('/raw-query', (req, res) => {
-  res.status(200).send(req.url.substr(req.url.indexOf('?') + 1));
+  res.status(200).send(req.url.slice(req.url.indexOf('?') + 1));
 });
 
 app.get('/', (req, res) => {
