@@ -464,7 +464,9 @@ function Request(method, url) {
     let new_err;
     try {
       if (!self._isResponseOK(res)) {
-        new_err = new Error(res.statusText || 'Unsuccessful HTTP response');
+        new_err = new Error(
+          res.statusText || res.text || 'Unsuccessful HTTP response'
+        );
       }
     } catch (err_) {
       new_err = err_; // ok() callback can throw
