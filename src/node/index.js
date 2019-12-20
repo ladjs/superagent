@@ -747,7 +747,10 @@ Request.prototype.request = function() {
   options.cert = this._cert;
   options.passphrase = this._passphrase;
   options.agent = this._agent;
-  options.rejectUnauthorized = !this._disableTLSCerts;
+  options.rejectUnauthorized =
+    typeof this._disableTLSCerts === 'boolean'
+      ? !this._disableTLSCerts
+      : process.env.NODE_TLS_REJECT_UNAUTHORIZED !== '0';
 
   // Allows request.get('https://1.2.3.4/').set('Host', 'example.com')
   if (this._header.host) {
