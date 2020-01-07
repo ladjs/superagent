@@ -687,8 +687,8 @@ Request.prototype.agent = function() {
   return this;
 };
 
-Request.prototype.buffer = Request.prototype.ca;
 Request.prototype.ca = Request.prototype.agent;
+Request.prototype.buffer = Request.prototype.ca;
 
 // This throws, because it can't send/receive data as expected
 Request.prototype.write = () => {
