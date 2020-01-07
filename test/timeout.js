@@ -24,6 +24,22 @@ describe('.timeout(ms)', function() {
         });
     });
 
+    it('should error in promise interface ', done => {
+      request
+        .get(`${base}/delay/500`)
+        .timeout(150)
+        .catch(err => {
+          assert(err, 'expected an error');
+          assert.equal(
+            'number',
+            typeof err.timeout,
+            'expected an error with .timeout'
+          );
+          assert.equal('ECONNABORTED', err.code, 'expected abort error code');
+          done();
+        });
+    });
+
     it('should handle gzip timeout', done => {
       request
         .get(`${base}/delay/zip`)

@@ -223,6 +223,7 @@ RequestBase.prototype._retry = function() {
 
   this._aborted = false;
   this.timedout = false;
+  this.timedoutError = null;
 
   return this._end();
 };
@@ -246,6 +247,11 @@ RequestBase.prototype.then = function(resolve, reject) {
 
     this._fullfilledPromise = new Promise((resolve, reject) => {
       self.on('abort', () => {
+        if (this.timedout && this.timedoutError) {
+          reject(this.timedoutError);
+          return;
+        }
+
         const err = new Error('Aborted');
         err.code = 'ABORTED';
         err.status = this.status;
@@ -714,6 +720,7 @@ RequestBase.prototype._timeoutError = function(reason, timeout, errno) {
   err.code = 'ECONNABORTED';
   err.errno = errno;
   this.timedout = true;
+  this.timedoutError = err;
   this.abort();
   this.callback(err);
 };
