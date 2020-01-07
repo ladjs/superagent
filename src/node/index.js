@@ -647,6 +647,19 @@ Request.prototype.disableTLSCerts = function() {
 };
 
 /**
+ * Sends secure cookies on http and https requests
+ * Be warned this allows cookie hijacking
+ *
+ * @return {Request} for chaining
+ * @api public
+ */
+
+Request.prototype.sendSecureCookie = function() {
+  this._sendSecureCookie = true;
+  return this;
+};
+
+/**
  * Return an http[s] request.
  *
  * @return {OutgoingMessage}
