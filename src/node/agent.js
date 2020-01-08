@@ -50,10 +50,6 @@ function Agent(options) {
     if (options.rejectUnauthorized === false) {
       this.disableTLSCerts();
     }
-
-    if (options.sendSecureCookie) {
-      this.sendSecureCookie();
-    }
   }
 }
 
@@ -80,14 +76,11 @@ Agent.prototype._saveCookies = function(res) {
  */
 
 Agent.prototype._attachCookies = function(req) {
-  const sendSecureCookie = Boolean(
-    this._defaults.find(current => current.fn === 'sendSecureCookie')
-  );
   const url = parse(req.url);
   const access = new CookieAccessInfo(
     url.hostname,
     url.pathname,
-    url.protocol === 'https:' || sendSecureCookie
+    url.protocol === 'https:'
   );
   const cookies = this.jar.getCookies(access).toValueString();
   req.cookies = cookies;

@@ -24,8 +24,7 @@ function Agent() {
   'key',
   'pfx',
   'cert',
-  'disableTLSCerts',
-  'sendSecureCookie'
+  'disableTLSCerts'
 ].forEach(fn => {
   // Default setting for all requests from this agent
   Agent.prototype[fn] = function(...args) {
