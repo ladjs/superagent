@@ -128,7 +128,7 @@ function serialize(obj) {
 function pushEncodedKeyValuePair(pairs, key, val) {
   if (val === undefined) return;
   if (val === null) {
-    pairs.push(encodeURIComponent(key));
+    pairs.push(encodeURI(key));
     return;
   }
 
@@ -142,7 +142,7 @@ function pushEncodedKeyValuePair(pairs, key, val) {
         pushEncodedKeyValuePair(pairs, `${key}[${subkey}]`, val[subkey]);
     }
   } else {
-    pairs.push(encodeURIComponent(key) + '=' + encodeURIComponent(val));
+    pairs.push(encodeURI(key) + '=' + encodeURIComponent(val));
   }
 }
 
