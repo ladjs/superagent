@@ -178,6 +178,26 @@ describe('.retry(count)', function() {
       });
   });
 
+  it('should handle successful request after repeat attempt from server timeout when using .then(fulfill, reject)', done => {
+    const url = `/delay/1200/ok/${uniqid()}?built=in`;
+    request
+      .get(base + url)
+      .query('string=ified')
+      .query({ json: 'ed' })
+      .timeout(600)
+      .retry(1)
+      .then((res, err) => {
+        try {
+          assert.ifError(err);
+          assert(res.ok, 'response should be ok');
+          assert.equal(res.text, `ok = ${url}&string=ified&json=ed`);
+          done();
+        } catch (err_) {
+          done(err_);
+        }
+      });
+  });
+
   it('should correctly abort a retry attempt', done => {
     let aborted = false;
     const req = request
