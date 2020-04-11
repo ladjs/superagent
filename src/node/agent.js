@@ -94,8 +94,8 @@ methods.forEach(name => {
     req.on('response', this._saveCookies.bind(this));
     req.on('redirect', this._saveCookies.bind(this));
     req.on('redirect', this._attachCookies.bind(this, req));
-    this._attachCookies(req);
     this._setDefaults(req);
+    this._attachCookies(req);
 
     if (fn) {
       req.end(fn);
