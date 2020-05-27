@@ -692,6 +692,7 @@ Because the request may be redirected, it's possible to specify multiple hostnam
       .connect({
         "redir.example.com": "127.0.0.1", // redir.example.com:555 will use 127.0.0.1:555
         "www.example.com": false, // don't override this one; use DNS as normal
+        "mapped.example.com": { host: "127.0.0.1", port: 8080}, // mapped.example.com:* will use 127.0.0.1:8080
         "*": "proxy.example.com", // all other requests will go to this host
       });
 
