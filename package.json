@@ -1,7 +1,7 @@
 {
   "name": "superagent",
   "description": "elegant & feature rich browser / node HTTP with a fluent API",
-  "version": "5.2.2",
+  "version": "5.2.3",
   "author": "TJ Holowaychuk <tj@vision-media.ca>",
   "browser": {
     "./src/node/index.js": "./src/client.js",
