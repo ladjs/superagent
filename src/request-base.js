@@ -247,6 +247,10 @@ RequestBase.prototype.then = function(resolve, reject) {
 
     this._fullfilledPromise = new Promise((resolve, reject) => {
       self.on('abort', () => {
+        if (this._maxRetries && this._maxRetries > this._retries) {
+          return;
+        }
+
         if (this.timedout && this.timedoutError) {
           reject(this.timedoutError);
           return;
