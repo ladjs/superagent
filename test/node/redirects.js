@@ -103,6 +103,24 @@ describe('request', () => {
         });
     });
 
+    it('should follow Location with IP:port override', () => {
+      const redirects = [];
+      const url = URL.parse(base);
+      return request
+        .get(`http://redir.example.com:9999${url.pathname}`)
+        .connect({
+          '*': { host: url.hostname, port: url.port || 80 }
+        })
+        .on('redirect', res => {
+          redirects.push(res.headers.location);
+        })
+        .then(res => {
+          const arr = ['/movies', '/movies/all', '/movies/all/0'];
+          redirects.should.eql(arr);
+          res.text.should.equal('first movie page');
+        });
+    });
+
     it('should not follow on HEAD by default', () => {
       const redirects = [];
 

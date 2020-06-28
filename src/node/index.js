@@ -730,13 +730,25 @@ Request.prototype.request = function() {
         this.set('host', url.host);
       }
 
-      // wrap [ipv6]
-      url.host = /:/.test(match) ? `[${match}]` : match;
-      if (url.port) {
-        url.host += `:${url.port}`;
+      let newHost;
+      let newPort;
+
+      if (typeof match === 'object') {
+        newHost = match.host;
+        newPort = match.port;
+      } else {
+        newHost = match;
+        newPort = url.port;
       }
 
-      url.hostname = match;
+      // wrap [ipv6]
+      url.host = /:/.test(newHost) ? `[${newHost}]` : newHost;
+      if (newPort) {
+        url.host += `:${newPort}`;
+        url.port = newPort;
+      }
+
+      url.hostname = newHost;
     }
   }
 
