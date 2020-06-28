@@ -364,7 +364,6 @@ RequestBase.prototype.set = function(field, val) {
 
   this._header[field.toLowerCase()] = val;
   this.header[field] = val;
-  delete this._unset[field.toLowerCase()];
   return this;
 };
 
@@ -375,7 +374,7 @@ RequestBase.prototype.set = function(field, val) {
  * Example:
  *
  *      req.get('/')
- *        .unset('Accept-Encoding')
+ *        .unset('User-Agent')
  *        .end(callback);
  *
  * @param {String} field field name
@@ -383,7 +382,6 @@ RequestBase.prototype.set = function(field, val) {
 RequestBase.prototype.unset = function(field) {
   delete this._header[field.toLowerCase()];
   delete this.header[field];
-  this._unset[field.toLowerCase()] = true;
   return this;
 };
 
@@ -623,7 +621,7 @@ RequestBase.prototype.send = function(data) {
     }
   } else if (typeof data === 'string') {
     // default to x-www-form-urlencoded
-    if (!type && !('content-type' in this._unset)) this.type('form');
+    if (!type) this.type('form');
     type = this._header['content-type'];
     if (type === 'application/x-www-form-urlencoded') {
       this._data = this._data ? `${this._data}&${data}` : data;
@@ -639,7 +637,7 @@ RequestBase.prototype.send = function(data) {
   }
 
   // default to json
-  if (!type && !('content-type' in this._unset)) this.type('json');
+  if (!type) this.type('json');
   return this;
 };
 

@@ -67,43 +67,12 @@ describe('[node] request', () => {
   });
 
   describe('req.unset(field)', () => {
-    it('should remove a header added using set', done => {
+    it('should remove the header field', done => {
       request
         .post(`${base}/echo`)
-        .set('X-Header', 'value')
-        .unset('X-Header')
+        .unset('User-Agent')
         .end((err, res) => {
-          assert.equal(void 0, res.header['x-header']);
-          done();
-        });
-    });
-    it('should not prevent set from being used after to set the header again', done => {
-      request
-        .post(`${base}/echo`)
-        .set('X-Header', 'value 1')
-        .unset('X-Header')
-        .set('X-Header', 'value')
-        .end((err, res) => {
-          assert.equal('value', res.header['x-header']);
-          done();
-        });
-    });
-    it('should prevent the Accept-Encoding header from being added automatically', done => {
-      request
-        .post(`${base}/echo`)
-        .unset('Accept-Encoding')
-        .end((err, res) => {
-          assert.equal(void 0, res.header['accept-encoding']);
-          done();
-        });
-    });
-    it('should prevent the Content-Type field from being added automatically', done => {
-      request
-        .post(`${base}/echo`)
-        .send('hello=world')
-        .unset('Content-Type')
-        .end((err, res) => {
-          assert.equal(void 0, res.header['content-type']);
+          assert.equal(void 0, res.header['user-agent']);
           done();
         });
     });

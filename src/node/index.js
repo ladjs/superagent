@@ -131,10 +131,6 @@ exports.buffer = {};
  * @api private
  */
 function _initHeaders(req) {
-  req._unset = {
-    // lowercase headers that were unset; this is used to suppress some default
-    // headers, such as Accept-Encoding and Content-Type
-  };
   req._header = {
     // coerces header names to lowercase
   };
@@ -792,7 +788,7 @@ Request.prototype.request = function() {
   // set tcp no delay
   req.setNoDelay(true);
 
-  if (options.method !== 'HEAD' && !('accept-encoding' in this._unset)) {
+  if (options.method !== 'HEAD') {
     req.setHeader('Accept-Encoding', 'gzip, deflate');
   }
 
