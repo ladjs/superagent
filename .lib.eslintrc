@@ -12,7 +12,8 @@
     "no-func-assign": "off",
     "no-global-assign": ["error", {"exceptions": ["exports"]}],
     "no-fallthrough": "off",
-    "no-constant-condition": "off"
+    "no-constant-condition": "off",
+    "node/no-exports-assign": "off"
   },
   "overrides": [
     {
