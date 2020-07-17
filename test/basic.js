@@ -130,7 +130,7 @@ describe('request', function() {
         });
     });
 
-    it('should should be an Error object', done => {
+    it('should be an Error object', done => {
       let calledErrorEvent = false;
       request
         .get(`${uri}/error`)
