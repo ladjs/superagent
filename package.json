@@ -23,6 +23,7 @@
     "Nick Baugh <niftylettuce@gmail.com>"
   ],
   "dependencies": {
+    "@babel/runtime": "7.4.5",
     "component-emitter": "^1.3.0",
     "cookiejar": "^2.1.2",
     "debug": "^4.1.1",

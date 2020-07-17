@@ -857,8 +857,8 @@ Request.prototype.request = function() {
  * @api private
  */
 
-Request.prototype.callback = function(err, res) {
-  if (this._shouldRetry(err, res)) {
+Request.prototype.callback = async function(err, res) {
+  if (err !== null && (await this._shouldRetry(err, res))) {
     return this._retry();
   }
 
