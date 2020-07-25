@@ -178,14 +178,14 @@ const ERROR_CODES = ['ECONNRESET', 'ETIMEDOUT', 'EADDRINFO', 'ESOCKETTIMEDOUT'];
  * @param {Response} [res] response
  * @returns {Boolean} if segment should be retried
  */
-RequestBase.prototype._shouldRetry = async function(err, res) {
+RequestBase.prototype._shouldRetry = function(err, res) {
   if (!this._maxRetries || this._retries++ >= this._maxRetries) {
     return false;
   }
 
   if (this._retryCallback) {
     try {
-      const override = await this._retryCallback(err, res);
+      const override = this._retryCallback(err, res);
       if (override === true) return true;
       if (override === false) return false;
       // undefined falls back to defaults

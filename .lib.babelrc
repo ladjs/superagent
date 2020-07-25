@@ -7,7 +7,5 @@
       }
     }]
   ],
-    "plugins": [
-      ["@babel/plugin-transform-runtime"]
-  ]
+  "sourceMaps": "inline"
 }
