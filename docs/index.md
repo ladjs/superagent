@@ -485,6 +485,10 @@ By default only `Basic` auth is used. In browser you can add `{type:'auto'}` to 
 
     request.auth('digest', 'secret', {type:'auto'})
 
+The `auth` method also supports a `type` of `bearer`, to specify token-based authentication:
+
+    request.auth('my_token', { type: 'bearer' })
+
 ## Following redirects
 
 By default up to 5 redirects will be followed, however you may specify this with the `res.redirects(n)` method:
