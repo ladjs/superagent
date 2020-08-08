@@ -59,7 +59,7 @@ ResponseBase(Response.prototype);
  * Implements methods of a `ReadableStream`
  */
 
-Response.prototype.destroy = function(err) {
+Response.prototype.destroy = function (err) {
   this.res.destroy(err);
 };
 
@@ -67,7 +67,7 @@ Response.prototype.destroy = function(err) {
  * Pause.
  */
 
-Response.prototype.pause = function() {
+Response.prototype.pause = function () {
   this.res.pause();
 };
 
@@ -75,7 +75,7 @@ Response.prototype.pause = function() {
  * Resume.
  */
 
-Response.prototype.resume = function() {
+Response.prototype.resume = function () {
   this.res.resume();
 };
 
@@ -86,7 +86,7 @@ Response.prototype.resume = function() {
  * @api public
  */
 
-Response.prototype.toError = function() {
+Response.prototype.toError = function () {
   const { req } = this;
   const { method } = req;
   const { path } = req;
@@ -101,7 +101,7 @@ Response.prototype.toError = function() {
   return err;
 };
 
-Response.prototype.setStatusProperties = function(status) {
+Response.prototype.setStatusProperties = function (status) {
   console.warn('In superagent 2.x setStatusProperties is a private method');
   return this._setStatusProperties(status);
 };
@@ -113,7 +113,7 @@ Response.prototype.setStatusProperties = function(status) {
  * @api public
  */
 
-Response.prototype.toJSON = function() {
+Response.prototype.toJSON = function () {
   return {
     req: this.request.toJSON(),
     header: this.header,

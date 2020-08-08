@@ -7,6 +7,7 @@ const { parse } = require('url');
 const semver = require('semver');
 
 let http2;
+// eslint-disable-next-line node/no-unsupported-features/node-builtins
 if (semver.gte(process.version, 'v10.10.0')) http2 = require('http2');
 else
   throw new Error('superagent: this version of Node.js does not support http2');
@@ -58,7 +59,7 @@ function Request(protocol, options) {
   const session = http2.connect(`${protocol}//${host}:${port}`, sessionOptions);
   this.setHeader('host', `${host}:${port}`);
 
-  session.on('error', err => this.emit('error', err));
+  session.on('error', (err) => this.emit('error', err));
 
   this.session = session;
 }
@@ -68,7 +69,7 @@ function Request(protocol, options) {
  */
 util.inherits(Request, Stream);
 
-Request.prototype.createUnixConnection = function(authority, options) {
+Request.prototype.createUnixConnection = function (authority, options) {
   switch (this.protocol) {
     case 'http:':
       return net.connect(options.socketPath);
@@ -83,13 +84,13 @@ Request.prototype.createUnixConnection = function(authority, options) {
 };
 
 // eslint-disable-next-line no-unused-vars
-Request.prototype.setNoDelay = function(bool) {
+Request.prototype.setNoDelay = function (bool) {
   // We can not use setNoDelay with HTTP/2.
   // Node 10 limits http2session.socket methods to ones safe to use with HTTP/2.
   // See also https://nodejs.org/api/http2.html#http2_http2session_socket
 };
 
-Request.prototype.getFrame = function() {
+Request.prototype.getFrame = function () {
   if (this.frame) {
     return this.frame;
   }
@@ -116,14 +117,14 @@ Request.prototype.getFrame = function() {
   this._headerSent = true;
 
   frame.once('drain', () => this.emit('drain'));
-  frame.on('error', err => this.emit('error', err));
+  frame.on('error', (err) => this.emit('error', err));
   frame.on('close', () => this.session.close());
 
   this.frame = frame;
   return frame;
 };
 
-Request.prototype.mapToHttpHeader = function(headers) {
+Request.prototype.mapToHttpHeader = function (headers) {
   const keys = Object.keys(headers);
   const http2Headers = {};
   for (let key of keys) {
@@ -143,7 +144,7 @@ Request.prototype.mapToHttpHeader = function(headers) {
   return http2Headers;
 };
 
-Request.prototype.mapToHttp2Header = function(headers) {
+Request.prototype.mapToHttp2Header = function (headers) {
   const keys = Object.keys(headers);
   const http2Headers = {};
   for (let key of keys) {
@@ -166,31 +167,31 @@ Request.prototype.mapToHttp2Header = function(headers) {
   return http2Headers;
 };
 
-Request.prototype.setHeader = function(name, value) {
+Request.prototype.setHeader = function (name, value) {
   this._headers[name.toLowerCase()] = value;
 };
 
-Request.prototype.getHeader = function(name) {
+Request.prototype.getHeader = function (name) {
   return this._headers[name.toLowerCase()];
 };
 
-Request.prototype.write = function(data, encoding) {
+Request.prototype.write = function (data, encoding) {
   const frame = this.getFrame();
   return frame.write(data, encoding);
 };
 
-Request.prototype.pipe = function(stream, options) {
+Request.prototype.pipe = function (stream, options) {
   const frame = this.getFrame();
   return frame.pipe(stream, options);
 };
 
-Request.prototype.end = function(data) {
+Request.prototype.end = function (data) {
   const frame = this.getFrame();
   frame.end(data);
 };
 
 // eslint-disable-next-line no-unused-vars
-Request.prototype.abort = function(data) {
+Request.prototype.abort = function (data) {
   const frame = this.getFrame();
   frame.close(NGHTTP2_CANCEL);
   this.session.destroy();

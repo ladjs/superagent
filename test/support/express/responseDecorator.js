@@ -75,14 +75,14 @@ function setMethods(res) {
    * @public
    */
 
-  res.links = function(links) {
+  res.links = function (links) {
     let link = this.get('Link') || '';
     if (link) link += ', ';
     return this.set(
       'Link',
       link +
         Object.keys(links)
-          .map(rel => {
+          .map((rel) => {
             return '<' + links[rel] + '>; rel="' + rel + '"';
           })
           .join(', ')
@@ -265,7 +265,7 @@ function setMethods(res) {
       this.set('Content-Type', 'text/javascript');
 
       // restrict callback charset
-      callback = callback.replace(/[^\[\]\w$.]/g, '');
+      callback = callback.replace(/[^[\]\w$.]/g, '');
 
       // replace chars not allowed in JavaScript that are in JSON
       body = body.replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029');
@@ -378,7 +378,7 @@ function setMethods(res) {
     const file = send(req, pathname, opts);
 
     // transfer
-    sendfile(res, file, opts, err => {
+    sendfile(res, file, opts, (err) => {
       if (done) return done(err);
       if (err && err.code === 'EISDIR') return next();
 
@@ -528,7 +528,7 @@ function setMethods(res) {
    * @public
    */
 
-  res.format = function(obj) {
+  res.format = function (obj) {
     const { req } = this;
     const { next } = req;
 
@@ -548,7 +548,7 @@ function setMethods(res) {
     } else {
       const err = new Error('Not Acceptable');
       err.status = err.statusCode = 406;
-      err.types = normalizeTypes(keys).map(o => {
+      err.types = normalizeTypes(keys).map((o) => {
         return o.value;
       });
       next(err);
@@ -626,7 +626,7 @@ function setMethods(res) {
 
   res.set = res.header = function header(field, val) {
     if (arguments.length === 2) {
-      let value = Array.isArray(val) ? val.map(String) : String(val);
+      let value = Array.isArray(val) ? val.map((v) => String(v)) : String(val);
 
       // add charset to content-type
       if (field.toLowerCase() === 'content-type') {
@@ -658,7 +658,7 @@ function setMethods(res) {
    * @public
    */
 
-  res.get = function(field) {
+  res.get = function (field) {
     return this.getHeader(field);
   };
 
@@ -701,7 +701,7 @@ function setMethods(res) {
    * @public
    */
 
-  res.cookie = function(name, value, options) {
+  res.cookie = function (name, value, options) {
     const opts = merge({}, options);
     const { secret } = this.req;
     const { signed } = opts;
@@ -835,7 +835,7 @@ function setMethods(res) {
    * @public
    */
 
-  res.vary = function(field) {
+  res.vary = function (field) {
     vary(this, field);
 
     return this;
@@ -873,7 +873,7 @@ function setMethods(res) {
     // default callback to respond
     done =
       done ||
-      function(err, str) {
+      function (err, str) {
         if (err) return req.next(err);
         self.send(str);
       };
@@ -997,7 +997,7 @@ function stringify(value, replacer, spaces, escape) {
       : JSON.stringify(value);
 
   if (escape) {
-    json = json.replace(/[<>&]/g, c => {
+    json = json.replace(/[<>&]/g, (c) => {
       switch (c.charCodeAt(0)) {
         case 0x3c:
           return '\\u003c';

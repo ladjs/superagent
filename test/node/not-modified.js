@@ -7,7 +7,7 @@ const base = setup.uri;
 describe('request', () => {
   describe('not modified', () => {
     let ts;
-    it('should start with 200', done => {
+    it('should start with 200', (done) => {
       request.get(`${base}/if-mod`).end((err, res) => {
         res.should.have.status(200);
         res.text.should.match(/^\d+$/);
@@ -16,7 +16,7 @@ describe('request', () => {
       });
     });
 
-    it('should then be 304', done => {
+    it('should then be 304', (done) => {
       request
         .get(`${base}/if-mod`)
         .set('If-Modified-Since', new Date(ts).toUTCString())

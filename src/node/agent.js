@@ -63,7 +63,7 @@ Agent.prototype = Object.create(AgentBase.prototype);
  * @api private
  */
 
-Agent.prototype._saveCookies = function(res) {
+Agent.prototype._saveCookies = function (res) {
   const cookies = res.headers['set-cookie'];
   if (cookies) this.jar.setCookies(cookies);
 };
@@ -75,7 +75,7 @@ Agent.prototype._saveCookies = function(res) {
  * @api private
  */
 
-Agent.prototype._attachCookies = function(req) {
+Agent.prototype._attachCookies = function (req) {
   const url = parse(req.url);
   const access = new CookieAccessInfo(
     url.hostname,
@@ -86,9 +86,9 @@ Agent.prototype._attachCookies = function(req) {
   req.cookies = cookies;
 };
 
-methods.forEach(name => {
+methods.forEach((name) => {
   const method = name.toUpperCase();
-  Agent.prototype[name] = function(url, fn) {
+  Agent.prototype[name] = function (url, fn) {
     const req = new request.Request(method, url);
 
     req.on('response', this._saveCookies.bind(this));

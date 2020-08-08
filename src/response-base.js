@@ -45,7 +45,7 @@ function mixin(obj) {
  * @api public
  */
 
-ResponseBase.prototype.get = function(field) {
+ResponseBase.prototype.get = function (field) {
   return this.header[field.toLowerCase()];
 };
 
@@ -61,7 +61,7 @@ ResponseBase.prototype.get = function(field) {
  * @api private
  */
 
-ResponseBase.prototype._setHeaderProperties = function(header) {
+ResponseBase.prototype._setHeaderProperties = function (header) {
   // TODO: moar!
   // TODO: make this a util
 
@@ -109,7 +109,7 @@ ResponseBase.prototype._setHeaderProperties = function(header) {
  * @api private
  */
 
-ResponseBase.prototype._setStatusProperties = function(status) {
+ResponseBase.prototype._setStatusProperties = function (status) {
   const type = (status / 100) | 0;
 
   // status / class

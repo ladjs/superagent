@@ -10,7 +10,7 @@ const img = fs.readFileSync(`${__dirname}/fixtures/test.png`);
 
 describe('res.body', () => {
   describe('image/png', () => {
-    it('should parse the body', done => {
+    it('should parse the body', (done) => {
       request.get(`${base}/image`).end((err, res) => {
         res.type.should.equal('image/png');
         Buffer.isBuffer(res.body).should.be.true();
@@ -20,7 +20,7 @@ describe('res.body', () => {
     });
   });
   describe('application/octet-stream', () => {
-    it('should parse the body', done => {
+    it('should parse the body', (done) => {
       request
         .get(`${base}/image-as-octets`)
         .buffer(true) // that's tech debt :(
@@ -33,7 +33,7 @@ describe('res.body', () => {
     });
   });
   describe('application/octet-stream', () => {
-    it('should parse the body (using responseType)', done => {
+    it('should parse the body (using responseType)', (done) => {
       request
         .get(`${base}/image-as-octets`)
         .responseType('blob')

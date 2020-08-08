@@ -25,7 +25,7 @@ before(function listen(done) {
 });
 
 describe('res.toError()', () => {
-  it('should return an Error', done => {
+  it('should return an Error', (done) => {
     request.get(base).end((err, res) => {
       var err = res.toError();
       assert.equal(err.status, 400);

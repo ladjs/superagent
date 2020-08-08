@@ -20,7 +20,7 @@ describe('Multipart', () => {
       req.field('user[age]', '2');
       req.field('user[species]', 'ferret');
 
-      return req.then(res => {
+      return req.then((res) => {
         res.body['user[name]'].should.equal('tobi');
         res.body['user[age]'].should.equal('2');
         res.body['user[species]'].should.equal('ferret');
@@ -34,7 +34,7 @@ describe('Multipart', () => {
       req.attach('document', 'test/node/fixtures/user.html');
       req.field('species', 'ferret');
 
-      return req.then(res => {
+      return req.then((res) => {
         res.body.name.should.equal('Tobi');
         res.body.species.should.equal('ferret');
 
@@ -54,7 +54,7 @@ describe('Multipart', () => {
       req.attach('two', 'test/node/fixtures/user.json');
       req.attach('three', 'test/node/fixtures/user.txt');
 
-      return req.then(res => {
+      return req.then((res) => {
         const html = res.files.one;
         const json = res.files.two;
         const text = res.files.three;
@@ -74,7 +74,7 @@ describe('Multipart', () => {
     });
 
     describe('when a file does not exist', () => {
-      it('should fail the request with an error', done => {
+      it('should fail the request with an error', (done) => {
         const req = request.post(`${base}/echo`);
 
         req.attach('name', 'foo');
@@ -96,15 +96,15 @@ describe('Multipart', () => {
           .field({ a: 1, b: 2 })
           .attach('c', 'does-not-exist.txt')
           .then(
-            res => assert.fail('It should not allow this'),
-            err => {
+            (res) => assert.fail('It should not allow this'),
+            (err) => {
               err.code.should.equal('ENOENT');
               err.path.should.equal('does-not-exist.txt');
             }
           );
       });
 
-      it('should report ECONNREFUSED via the callback', done => {
+      it('should report ECONNREFUSED via the callback', (done) => {
         request
           .post('http://127.0.0.1:1') // nobody is listening there
           .attach('name', 'file-does-not-exist')
@@ -119,8 +119,8 @@ describe('Multipart', () => {
           .post('http://127.0.0.1:1') // nobody is listening there
           .attach('name', 'file-does-not-exist')
           .then(
-            res => assert.fail('Request should have failed'),
-            err => err.code.should.equal('ECONNREFUSED')
+            (res) => assert.fail('Request should have failed'),
+            (err) => err.code.should.equal('ECONNREFUSED')
           );
       });
     });
@@ -131,20 +131,20 @@ describe('Multipart', () => {
       request
         .post(`${base}/echo`)
         .attach('document', 'test/node/fixtures/user.html', 'doc.html')
-        .then(res => {
+        .then((res) => {
           const html = res.files.document;
           html.name.should.equal('doc.html');
           html.type.should.equal('text/html');
           read(html.path).should.equal('<h1>name</h1>');
         }));
-    it('should fire progress event', done => {
+    it('should fire progress event', (done) => {
       let loaded = 0;
       let total = 0;
       let uploadEventWasFired = false;
       request
         .post(`${base}/echo`)
         .attach('document', 'test/node/fixtures/user.html')
-        .on('progress', event => {
+        .on('progress', (event) => {
           total = event.total;
           loaded = event.loaded;
           if (event.direction === 'upload') {
@@ -163,7 +163,7 @@ describe('Multipart', () => {
           done();
         });
     });
-    it('filesystem errors should be caught', done => {
+    it('filesystem errors should be caught', (done) => {
       request
         .post(`${base}/echo`)
         .attach('filedata', 'test/node/fixtures/non-existent-file.ext')
@@ -177,7 +177,7 @@ describe('Multipart', () => {
   });
 
   describe('#field(name, val)', () => {
-    it('should set a multipart field value', done => {
+    it('should set a multipart field value', (done) => {
       request
         .post(`${base}/echo`)
         .field('first-name', 'foo')
@@ -193,7 +193,7 @@ describe('Multipart', () => {
   });
 
   describe('#field(object)', () => {
-    it('should set multiple multipart fields', done => {
+    it('should set multiple multipart fields', (done) => {
       request
         .post(`${base}/echo`)
         .field({ 'first-name': 'foo', 'last-name': 'bar' })

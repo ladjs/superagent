@@ -205,7 +205,7 @@ RequestBase(Request.prototype);
  * @api public
  */
 
-Request.prototype.http2 = function(bool) {
+Request.prototype.http2 = function (bool) {
   if (exports.protocols['http2:'] === undefined) {
     throw new Error(
       'superagent: this version of Node.js does not support http2'
@@ -241,7 +241,7 @@ Request.prototype.http2 = function(bool) {
  * @api public
  */
 
-Request.prototype.attach = function(field, file, options) {
+Request.prototype.attach = function (field, file, options) {
   if (file) {
     if (this._data) {
       throw new Error("superagent can't mix .send() and .attach()");
@@ -266,10 +266,10 @@ Request.prototype.attach = function(field, file, options) {
   return this;
 };
 
-Request.prototype._getFormData = function() {
+Request.prototype._getFormData = function () {
   if (!this._formData) {
     this._formData = new FormData();
-    this._formData.on('error', err => {
+    this._formData.on('error', (err) => {
       debug('FormData error', err);
       if (this.called) {
         // The request has already finished and the callback was called.
@@ -294,7 +294,7 @@ Request.prototype._getFormData = function() {
  * @api public
  */
 
-Request.prototype.agent = function(agent) {
+Request.prototype.agent = function (agent) {
   if (arguments.length === 0) return this._agent;
   this._agent = agent;
   return this;
@@ -325,7 +325,7 @@ Request.prototype.agent = function(agent) {
  * @api public
  */
 
-Request.prototype.type = function(type) {
+Request.prototype.type = function (type) {
   return this.set(
     'Content-Type',
     type.includes('/') ? type : mime.getType(type)
@@ -352,7 +352,7 @@ Request.prototype.type = function(type) {
  * @api public
  */
 
-Request.prototype.accept = function(type) {
+Request.prototype.accept = function (type) {
   return this.set('Accept', type.includes('/') ? type : mime.getType(type));
 };
 
@@ -370,7 +370,7 @@ Request.prototype.accept = function(type) {
  * @api public
  */
 
-Request.prototype.query = function(val) {
+Request.prototype.query = function (val) {
   if (typeof val === 'string') {
     this._query.push(val);
   } else {
@@ -389,7 +389,7 @@ Request.prototype.query = function(val) {
  * @api public
  */
 
-Request.prototype.write = function(data, encoding) {
+Request.prototype.write = function (data, encoding) {
   const req = this.request();
   if (!this._streamRequest) {
     this._streamRequest = true;
@@ -407,15 +407,15 @@ Request.prototype.write = function(data, encoding) {
  * @api public
  */
 
-Request.prototype.pipe = function(stream, options) {
+Request.prototype.pipe = function (stream, options) {
   this.piped = true; // HACK...
   this.buffer(false);
   this.end();
   return this._pipeContinue(stream, options);
 };
 
-Request.prototype._pipeContinue = function(stream, options) {
-  this.req.once('response', res => {
+Request.prototype._pipeContinue = function (stream, options) {
+  this.req.once('response', (res) => {
     // redirect
     if (
       isRedirect(res.statusCode) &&
@@ -432,7 +432,7 @@ Request.prototype._pipeContinue = function(stream, options) {
 
     if (this._shouldUnzip(res)) {
       const unzipObj = zlib.createUnzip();
-      unzipObj.on('error', err => {
+      unzipObj.on('error', (err) => {
         if (err && err.code === 'Z_BUF_ERROR') {
           // unexpected end of file is ignored by browsers and curl
           stream.emit('end');
@@ -461,7 +461,7 @@ Request.prototype._pipeContinue = function(stream, options) {
  * @api public
  */
 
-Request.prototype.buffer = function(val) {
+Request.prototype.buffer = function (val) {
   this._buffer = val !== false;
   return this;
 };
@@ -474,7 +474,7 @@ Request.prototype.buffer = function(val) {
  * @api private
  */
 
-Request.prototype._redirect = function(res) {
+Request.prototype._redirect = function (res) {
   let url = res.headers.location;
   if (!url) {
     return this.callback(new Error('No location header for redirect'), res);
@@ -558,7 +558,7 @@ Request.prototype._redirect = function(res) {
  * @api public
  */
 
-Request.prototype.auth = function(user, pass, options) {
+Request.prototype.auth = function (user, pass, options) {
   if (arguments.length === 1) pass = '';
   if (typeof pass === 'object' && pass !== null) {
     // pass is optional and can be replaced with options
@@ -570,7 +570,7 @@ Request.prototype.auth = function(user, pass, options) {
     options = { type: 'basic' };
   }
 
-  const encoder = string => Buffer.from(string).toString('base64');
+  const encoder = (string) => Buffer.from(string).toString('base64');
 
   return this._auth(user, pass, options, encoder);
 };
@@ -583,7 +583,7 @@ Request.prototype.auth = function(user, pass, options) {
  * @api public
  */
 
-Request.prototype.ca = function(cert) {
+Request.prototype.ca = function (cert) {
   this._ca = cert;
   return this;
 };
@@ -596,7 +596,7 @@ Request.prototype.ca = function(cert) {
  * @api public
  */
 
-Request.prototype.key = function(cert) {
+Request.prototype.key = function (cert) {
   this._key = cert;
   return this;
 };
@@ -609,7 +609,7 @@ Request.prototype.key = function(cert) {
  * @api public
  */
 
-Request.prototype.pfx = function(cert) {
+Request.prototype.pfx = function (cert) {
   if (typeof cert === 'object' && !Buffer.isBuffer(cert)) {
     this._pfx = cert.pfx;
     this._passphrase = cert.passphrase;
@@ -628,7 +628,7 @@ Request.prototype.pfx = function(cert) {
  * @api public
  */
 
-Request.prototype.cert = function(cert) {
+Request.prototype.cert = function (cert) {
   this._cert = cert;
   return this;
 };
@@ -641,7 +641,7 @@ Request.prototype.cert = function(cert) {
  * @api public
  */
 
-Request.prototype.disableTLSCerts = function() {
+Request.prototype.disableTLSCerts = function () {
   this._disableTLSCerts = true;
   return this;
 };
@@ -654,7 +654,7 @@ Request.prototype.disableTLSCerts = function() {
  */
 
 // eslint-disable-next-line complexity
-Request.prototype.request = function() {
+Request.prototype.request = function () {
   if (this.req) return this.req;
 
   const options = {};
@@ -800,7 +800,7 @@ Request.prototype.request = function() {
     this.emit('drain');
   });
 
-  req.on('error', err => {
+  req.on('error', (err) => {
     // flag abortion here for out timeouts
     // because node will emit a faux-error "socket hang up"
     // when request is aborted before a connection is made
@@ -857,7 +857,7 @@ Request.prototype.request = function() {
  * @api private
  */
 
-Request.prototype.callback = function(err, res) {
+Request.prototype.callback = function (err, res) {
   if (this._shouldRetry(err, res)) {
     return this._retry();
   }
@@ -909,7 +909,7 @@ Request.prototype.callback = function(err, res) {
  * @return {Boolean} is a host object
  * @api private
  */
-Request.prototype._isHost = function(obj) {
+Request.prototype._isHost = function (obj) {
   return (
     Buffer.isBuffer(obj) || obj instanceof Stream || obj instanceof FormData
   );
@@ -924,7 +924,7 @@ Request.prototype._isHost = function(obj) {
  * @api public
  */
 
-Request.prototype._emitResponse = function(body, files) {
+Request.prototype._emitResponse = function (body, files) {
   const response = new Response(this);
   this.response = response;
   response.redirects = this._redirectList;
@@ -934,7 +934,7 @@ Request.prototype._emitResponse = function(body, files) {
 
   response.files = files;
   if (this._endCalled) {
-    response.pipe = function() {
+    response.pipe = function () {
       throw new Error(
         "end() has already been called, so it's too late to start piping"
       );
@@ -945,7 +945,7 @@ Request.prototype._emitResponse = function(body, files) {
   return response;
 };
 
-Request.prototype.end = function(fn) {
+Request.prototype.end = function (fn) {
   this.request();
   debug('%s %s', this.method, this.url);
 
@@ -963,7 +963,7 @@ Request.prototype.end = function(fn) {
   this._end();
 };
 
-Request.prototype._end = function() {
+Request.prototype._end = function () {
   if (this._aborted)
     return this.callback(
       new Error('The request has been aborted even before .end() was called')
@@ -1001,7 +1001,7 @@ Request.prototype._end = function() {
 
   // response
   // eslint-disable-next-line complexity
-  req.once('response', res => {
+  req.once('response', (res) => {
     debug('%s %s -> %s', this.method, this.url, res.statusCode);
 
     if (this._responseTimeoutTimer) {
@@ -1092,7 +1092,7 @@ Request.prototype._end = function() {
     if (buffer) {
       // Protectiona against zip bombs and other nuisance
       let responseBytesLeft = this._maxResponseSize || 200000000;
-      res.on('data', buf => {
+      res.on('data', (buf) => {
         responseBytesLeft -= buf.byteLength || buf.length;
         if (responseBytesLeft < 0) {
           // This will propagate through error event
@@ -1151,7 +1151,7 @@ Request.prototype._end = function() {
     }
 
     // terminating events
-    res.once('error', err => {
+    res.once('error', (err) => {
       parserHandlesEnd = false;
       this.callback(err, null);
     });
@@ -1186,7 +1186,7 @@ Request.prototype._end = function() {
     return progress;
   };
 
-  const bufferToChunks = buffer => {
+  const bufferToChunks = (buffer) => {
     const chunkSize = 16 * 1024; // default highWaterMark value
     const chunking = new Stream.Readable();
     const totalLength = buffer.length;
@@ -1221,9 +1221,9 @@ Request.prototype._end = function() {
     }
 
     // attempt to get "Content-Length" header
-    // eslint-disable-next-line handle-callback-err
     formData.getLength((err, length) => {
       // TODO: Add chunked encoding when no length (if err)
+      if (err) debug('formData.getLength had error', err, length);
 
       debug('got FormData Content-Length: %s', length);
       if (typeof length === 'number') {
@@ -1233,16 +1233,14 @@ Request.prototype._end = function() {
       formData.pipe(getProgressMonitor()).pipe(req);
     });
   } else if (Buffer.isBuffer(data)) {
-    bufferToChunks(data)
-      .pipe(getProgressMonitor())
-      .pipe(req);
+    bufferToChunks(data).pipe(getProgressMonitor()).pipe(req);
   } else {
     req.end(data);
   }
 };
 
 // Check whether response has a non-0-sized gzip-encoded body
-Request.prototype._shouldUnzip = res => {
+Request.prototype._shouldUnzip = (res) => {
   if (res.statusCode === 204 || res.statusCode === 304) {
     // These aren't supposed to have any body
     return false;
@@ -1271,7 +1269,7 @@ Request.prototype._shouldUnzip = res => {
  *        'ipv6.example.com': '::1',
  *      })
  */
-Request.prototype.connect = function(connectOverride) {
+Request.prototype.connect = function (connectOverride) {
   if (typeof connectOverride === 'string') {
     this._connectOverride = { '*': connectOverride };
   } else if (typeof connectOverride === 'object') {
@@ -1283,7 +1281,7 @@ Request.prototype.connect = function(connectOverride) {
   return this;
 };
 
-Request.prototype.trustLocalhost = function(toggle) {
+Request.prototype.trustLocalhost = function (toggle) {
   this._trustLocalhost = toggle === undefined ? true : toggle;
   return this;
 };
@@ -1297,7 +1295,7 @@ if (!methods.includes('del')) {
   methods.push('del');
 }
 
-methods.forEach(method => {
+methods.forEach((method) => {
   const name = method;
   method = method === 'del' ? 'delete' : method;
 

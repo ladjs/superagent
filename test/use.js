@@ -5,10 +5,10 @@ const { uri } = setup;
 const assert = require('assert');
 const request = require('./support/client');
 
-describe('request', function() {
+describe('request', function () {
   this.timeout(20000);
   describe('use', () => {
-    it('should use plugin success', done => {
+    it('should use plugin success', (done) => {
       const now = `${Date.now()}`;
       function uuid(req) {
         req.set('X-UUID', now);
@@ -58,7 +58,7 @@ describe('subclass', () => {
     }
 
     NewRequest.prototype = Object.create(OriginalRequest.prototype);
-    NewRequest.prototype.send = function() {
+    NewRequest.prototype.send = function () {
       sendCalled = true;
       return this;
     };

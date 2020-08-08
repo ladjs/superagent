@@ -4,11 +4,11 @@ const base = setup.uri;
 const assert = require('assert');
 const request = require('./support/client');
 
-describe('.timeout(ms)', function() {
+describe('.timeout(ms)', function () {
   this.timeout(15000);
 
   describe('when timeout is exceeded', () => {
-    it('should error', done => {
+    it('should error', (done) => {
       request
         .get(`${base}/delay/500`)
         .timeout(150)
@@ -24,11 +24,11 @@ describe('.timeout(ms)', function() {
         });
     });
 
-    it('should error in promise interface ', done => {
+    it('should error in promise interface ', (done) => {
       request
         .get(`${base}/delay/500`)
         .timeout(150)
-        .catch(err => {
+        .catch((err) => {
           assert(err, 'expected an error');
           assert.equal(
             'number',
@@ -40,7 +40,7 @@ describe('.timeout(ms)', function() {
         });
     });
 
-    it('should handle gzip timeout', done => {
+    it('should handle gzip timeout', (done) => {
       request
         .get(`${base}/delay/zip`)
         .timeout(150)
@@ -56,7 +56,7 @@ describe('.timeout(ms)', function() {
         });
     });
 
-    it('should handle buffer timeout', done => {
+    it('should handle buffer timeout', (done) => {
       request
         .get(`${base}/delay/json`)
         .buffer(true)
@@ -73,7 +73,7 @@ describe('.timeout(ms)', function() {
         });
     });
 
-    it('should error on deadline', done => {
+    it('should error on deadline', (done) => {
       request
         .get(`${base}/delay/500`)
         .timeout({ deadline: 150 })
@@ -89,7 +89,7 @@ describe('.timeout(ms)', function() {
         });
     });
 
-    it('should support setting individual options', done => {
+    it('should support setting individual options', (done) => {
       request
         .get(`${base}/delay/500`)
         .timeout({ deadline: 10 })
@@ -102,7 +102,7 @@ describe('.timeout(ms)', function() {
         });
     });
 
-    it('should error on response', done => {
+    it('should error on response', (done) => {
       request
         .get(`${base}/delay/500`)
         .timeout({ response: 150 })
@@ -119,7 +119,7 @@ describe('.timeout(ms)', function() {
         });
     });
 
-    it('should accept slow body with fast response', done => {
+    it('should accept slow body with fast response', (done) => {
       request
         .get(`${base}/delay/slowbody`)
         .timeout({ response: 1000 })

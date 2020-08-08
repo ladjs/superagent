@@ -36,21 +36,21 @@
     "semver": "^7.3.2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.10.3",
-    "@babel/core": "^7.10.3",
-    "@babel/plugin-transform-runtime": "^7.10.5",
-    "@babel/preset-env": "^7.10.3",
-    "@commitlint/cli": "^9.0.1",
-    "@commitlint/config-conventional": "^9.0.1",
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.11.1",
+    "@babel/plugin-transform-runtime": "^7.11.0",
+    "@babel/preset-env": "^7.11.0",
+    "@commitlint/cli": "^9.1.1",
+    "@commitlint/config-conventional": "^9.1.1",
     "Base64": "^1.1.0",
     "babelify": "^10.0.0",
     "basic-auth-connect": "^1.0.0",
     "body-parser": "^1.19.0",
-    "browserify": "^16.5.1",
-    "codecov": "^3.7.0",
+    "browserify": "^16.5.2",
+    "codecov": "^3.7.2",
     "cookie-parser": "^1.4.5",
     "cross-env": "^7.0.2",
-    "eslint": "^6.7.2",
+    "eslint": "^7.6.0",
     "eslint-config-xo-lass": "^1.0.3",
     "eslint-plugin-compat": "^3.8.0",
     "eslint-plugin-node": "^11.1.0",
@@ -59,18 +59,17 @@
     "fixpack": "^3.0.6",
     "husky": "^4.2.5",
     "lint-staged": "^10.2.11",
-    "marked": "^1.1.0",
+    "marked": "^1.1.1",
     "mocha": "3.5.3",
     "multer": "^1.4.2",
     "nyc": "^15.1.0",
-    "remark-cli": "^8.0.0",
-    "remark-preset-github": "^2.0.0",
+    "remark-cli": "^8.0.1",
+    "remark-preset-github": "^3.0.0",
     "rimraf": "^3.0.2",
     "should": "^13.2.3",
     "should-http": "^0.1.1",
-    "tinyify": "^2.5.2",
-    "uglify-js": "^3.10.0",
-    "xo": "0.25.3",
+    "tinyify": "^3.0.0",
+    "xo": "0.32.1",
     "zuul": "^3.12.0"
   },
   "engines": {
@@ -212,10 +211,16 @@
           "promise/prefer-await-to-then": "off",
           "promise/valid-params": "off",
           "unicorn/filename-case": "off",
-          "valid-jsdoc": "off"
+          "valid-jsdoc": "off",
+          "node/no-unsupported-features/node-builtins": "off",
+          "node/no-path-concat": "off"
         }
       }
     ],
+    "rules": {
+      "unicorn/prevent-abbreviations": "off",
+      "node/no-unsupported-features/es-syntax": "off"
+    },
     "globals": [
       "ActiveXObject"
     ]

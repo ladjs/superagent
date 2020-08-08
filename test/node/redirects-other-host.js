@@ -54,7 +54,7 @@ app2.all('/', (req, res) => {
 
 describe('request.get', () => {
   describe('on 301 redirect', () => {
-    it('should follow Location with a GET request', done => {
+    it('should follow Location with a GET request', (done) => {
       const req = request.get(`${base}/test-301`).redirects(1);
       req.end((err, res) => {
         const headers = req.req.getHeaders
@@ -68,7 +68,7 @@ describe('request.get', () => {
     });
   });
   describe('on 302 redirect', () => {
-    it('should follow Location with a GET request', done => {
+    it('should follow Location with a GET request', (done) => {
       const req = request.get(`${base}/test-302`).redirects(1);
       req.end((err, res) => {
         const headers = req.req.getHeaders
@@ -81,7 +81,7 @@ describe('request.get', () => {
     });
   });
   describe('on 303 redirect', () => {
-    it('should follow Location with a GET request', done => {
+    it('should follow Location with a GET request', (done) => {
       const req = request.get(`${base}/test-303`).redirects(1);
       req.end((err, res) => {
         const headers = req.req.getHeaders
@@ -95,7 +95,7 @@ describe('request.get', () => {
     });
   });
   describe('on 307 redirect', () => {
-    it('should follow Location with a GET request', done => {
+    it('should follow Location with a GET request', (done) => {
       const req = request.get(`${base}/test-307`).redirects(1);
       req.end((err, res) => {
         const headers = req.req.getHeaders
@@ -109,7 +109,7 @@ describe('request.get', () => {
     });
   });
   describe('on 308 redirect', () => {
-    it('should follow Location with a GET request', done => {
+    it('should follow Location with a GET request', (done) => {
       const req = request.get(`${base}/test-308`).redirects(1);
       req.end((err, res) => {
         const headers = req.req.getHeaders
@@ -126,7 +126,7 @@ describe('request.get', () => {
 
 describe('request.post', () => {
   describe('on 301 redirect', () => {
-    it('should follow Location with a GET request', done => {
+    it('should follow Location with a GET request', (done) => {
       const req = request.post(`${base}/test-301`).redirects(1);
       req.end((err, res) => {
         const headers = req.req.getHeaders
@@ -140,7 +140,7 @@ describe('request.post', () => {
     });
   });
   describe('on 302 redirect', () => {
-    it('should follow Location with a GET request', done => {
+    it('should follow Location with a GET request', (done) => {
       const req = request.post(`${base}/test-302`).redirects(1);
       req.end((err, res) => {
         const headers = req.req.getHeaders
@@ -154,7 +154,7 @@ describe('request.post', () => {
     });
   });
   describe('on 303 redirect', () => {
-    it('should follow Location with a GET request', done => {
+    it('should follow Location with a GET request', (done) => {
       const req = request.post(`${base}/test-303`).redirects(1);
       req.end((err, res) => {
         const headers = req.req.getHeaders
@@ -168,7 +168,7 @@ describe('request.post', () => {
     });
   });
   describe('on 307 redirect', () => {
-    it('should follow Location with a POST request', done => {
+    it('should follow Location with a POST request', (done) => {
       const req = request.post(`${base}/test-307`).redirects(1);
       req.end((err, res) => {
         const headers = req.req.getHeaders
@@ -182,7 +182,7 @@ describe('request.post', () => {
     });
   });
   describe('on 308 redirect', () => {
-    it('should follow Location with a POST request', done => {
+    it('should follow Location with a POST request', (done) => {
       const req = request.post(`${base}/test-308`).redirects(1);
       req.end((err, res) => {
         const headers = req.req.getHeaders

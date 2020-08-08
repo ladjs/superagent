@@ -11,7 +11,7 @@ const setup = require('../support/setup');
 const base = setup.uri;
 
 describe('request.get().http2()', () => {
-  it('should preserve the encoding of the url', done => {
+  it('should preserve the encoding of the url', (done) => {
     request
       .get(`${base}/url?a=(b%29`)
       .http2()
@@ -25,7 +25,7 @@ describe('request.get().http2()', () => {
     request
       .get(url.parse(`${base}/login`))
       .http2()
-      .then(res => {
+      .then((res) => {
         assert(res.ok);
       }));
 
@@ -33,7 +33,7 @@ describe('request.get().http2()', () => {
     request
       .get('localhost:5000/login')
       .http2()
-      .then(res => {
+      .then((res) => {
         assert.equal(res.status, 200);
       }));
 });

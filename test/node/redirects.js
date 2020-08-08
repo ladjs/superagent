@@ -9,7 +9,7 @@ const base = setup.uri;
 
 describe('request', () => {
   describe('on redirect', () => {
-    it('should merge cookies if agent is used', done => {
+    it('should merge cookies if agent is used', (done) => {
       request
         .agent()
         .get(`${base}/cookie-redirect`)
@@ -27,7 +27,7 @@ describe('request', () => {
         });
     });
 
-    it('should not merge cookies if agent is not used', done => {
+    it('should not merge cookies if agent is not used', (done) => {
       request
         .get(`${base}/cookie-redirect`)
         .set('Cookie', 'orig=1; replaced=not')
@@ -45,9 +45,9 @@ describe('request', () => {
         });
     });
 
-    it('should have previously set cookie for subsquent requests when agent is used', done => {
+    it('should have previously set cookie for subsquent requests when agent is used', (done) => {
       const agent = request.agent();
-      agent.get(`${base}/set-cookie`).end(err => {
+      agent.get(`${base}/set-cookie`).end((err) => {
         assert.ifError(err);
         agent
           .get(`${base}/show-cookies`)
@@ -65,12 +65,12 @@ describe('request', () => {
       });
     });
 
-    it('should follow Location', done => {
+    it('should follow Location', (done) => {
       const redirects = [];
 
       request
         .get(base)
-        .on('redirect', res => {
+        .on('redirect', (res) => {
           redirects.push(res.headers.location);
         })
         .end((err, res) => {
@@ -93,10 +93,10 @@ describe('request', () => {
         .connect({
           '*': url.hostname
         })
-        .on('redirect', res => {
+        .on('redirect', (res) => {
           redirects.push(res.headers.location);
         })
-        .then(res => {
+        .then((res) => {
           const arr = ['/movies', '/movies/all', '/movies/all/0'];
           redirects.should.eql(arr);
           res.text.should.equal('first movie page');
@@ -111,10 +111,10 @@ describe('request', () => {
         .connect({
           '*': { host: url.hostname, port: url.port || 80 }
         })
-        .on('redirect', res => {
+        .on('redirect', (res) => {
           redirects.push(res.headers.location);
         })
-        .then(res => {
+        .then((res) => {
           const arr = ['/movies', '/movies/all', '/movies/all/0'];
           redirects.should.eql(arr);
           res.text.should.equal('first movie page');
@@ -127,22 +127,22 @@ describe('request', () => {
       return request
         .head(base)
         .ok(() => true)
-        .on('redirect', res => {
+        .on('redirect', (res) => {
           redirects.push(res.headers.location);
         })
-        .then(res => {
+        .then((res) => {
           redirects.should.eql([]);
           res.status.should.equal(302);
         });
     });
 
-    it('should follow on HEAD when redirects are set', done => {
+    it('should follow on HEAD when redirects are set', (done) => {
       const redirects = [];
 
       request
         .head(base)
         .redirects(10)
-        .on('redirect', res => {
+        .on('redirect', (res) => {
           redirects.push(res.headers.location);
         })
         .end((err, res) => {
@@ -160,7 +160,7 @@ describe('request', () => {
         });
     });
 
-    it('should remove Content-* fields', done => {
+    it('should remove Content-* fields', (done) => {
       request
         .post(`${base}/header`)
         .type('txt')
@@ -182,7 +182,7 @@ describe('request', () => {
         });
     });
 
-    it('should retain cookies', done => {
+    it('should retain cookies', (done) => {
       request
         .get(`${base}/header`)
         .set('Cookie', 'foo=bar;')
@@ -197,13 +197,13 @@ describe('request', () => {
         });
     });
 
-    it('should not resend query parameters', done => {
+    it('should not resend query parameters', (done) => {
       const redirects = [];
       const query = [];
 
       request
         .get(`${base}/?foo=bar`)
-        .on('redirect', res => {
+        .on('redirect', (res) => {
           query.push(res.headers.query);
           redirects.push(res.headers.location);
         })
@@ -225,7 +225,7 @@ describe('request', () => {
         });
     });
 
-    it('should handle no location header', done => {
+    it('should handle no location header', (done) => {
       request.get(`${base}/bad-redirect`).end((err, res) => {
         try {
           err.message.should.equal('No location header for redirect');
@@ -237,12 +237,12 @@ describe('request', () => {
     });
 
     describe('when relative', () => {
-      it('should redirect to a sibling path', done => {
+      it('should redirect to a sibling path', (done) => {
         const redirects = [];
 
         request
           .get(`${base}/relative`)
-          .on('redirect', res => {
+          .on('redirect', (res) => {
             redirects.push(res.headers.location);
           })
           .end((err, res) => {
@@ -256,12 +256,12 @@ describe('request', () => {
           });
       });
 
-      it('should redirect to a parent path', done => {
+      it('should redirect to a parent path', (done) => {
         const redirects = [];
 
         request
           .get(`${base}/relative/sub`)
-          .on('redirect', res => {
+          .on('redirect', (res) => {
             redirects.push(res.headers.location);
           })
           .end((err, res) => {
@@ -278,13 +278,13 @@ describe('request', () => {
   });
 
   describe('req.redirects(n)', () => {
-    it('should alter the default number of redirects to follow', done => {
+    it('should alter the default number of redirects to follow', (done) => {
       const redirects = [];
 
       request
         .get(base)
         .redirects(2)
-        .on('redirect', res => {
+        .on('redirect', (res) => {
           redirects.push(res.headers.location);
         })
         .end((err, res) => {
@@ -311,10 +311,10 @@ describe('request', () => {
         .post(`${base}/movie`)
         .send({ name: 'Tobi' })
         .redirects(2)
-        .on('redirect', res => {
+        .on('redirect', (res) => {
           redirects.push(res.headers.location);
         })
-        .then(res => {
+        .then((res) => {
           redirects.should.eql(['/movies/all/0']);
           res.text.should.equal('first movie page');
         });
@@ -328,10 +328,10 @@ describe('request', () => {
         .type('form')
         .field('name', 'Tobi')
         .redirects(2)
-        .on('redirect', res => {
+        .on('redirect', (res) => {
           redirects.push(res.headers.location);
         })
-        .then(res => {
+        .then((res) => {
           redirects.should.eql(['/movies/all/0']);
           res.text.should.equal('first movie page');
         });

@@ -1,10 +1,10 @@
 const assert = require('assert');
 const request = require('../support/client');
 
-describe('request', function() {
+describe('request', function () {
   this.timeout(20000);
 
-  it('request() error object', next => {
+  it('request() error object', (next) => {
     request('GET', '/error').end((err, res) => {
       assert(err);
       assert(res.error, 'response should be an error');
@@ -21,7 +21,7 @@ describe('request', function() {
   const isIE9OrOlder = !window.atob;
   if (!isIE9OrOlder && !isIE11) {
     // Don't run on IE9 or older, or IE11
-    it('patch()', next => {
+    it('patch()', (next) => {
       request.patch('/user/12').end((err, res) => {
         assert.equal('updated', res.text);
         next();
@@ -29,7 +29,7 @@ describe('request', function() {
     });
   }
 
-  it('POST native FormData', next => {
+  it('POST native FormData', (next) => {
     if (!window.FormData) {
       // Skip test if FormData is not supported by browser
       return next();
@@ -47,7 +47,7 @@ describe('request', function() {
       });
   });
 
-  it('defaults attached files to original file names', next => {
+  it('defaults attached files to original file names', (next) => {
     if (!window.FormData) {
       // Skip test if FormData is are not supported by browser
       return next();
@@ -55,6 +55,7 @@ describe('request', function() {
 
     try {
       var file = new File([''], 'image.jpg', { type: 'image/jpeg' });
+      // eslint-disable-next-line unicorn/prefer-optional-catch-binding
     } catch (err) {
       // Skip if file constructor not supported.
       return next();
@@ -78,22 +79,16 @@ describe('request', function() {
 
     assert.throws(() => {
       const file = new File([''], 'image.jpg', { type: 'image/jpeg' });
-      request
-        .post('/echo')
-        .attach('image', file)
-        .send('hi');
+      request.post('/echo').attach('image', file).send('hi');
     });
 
     assert.throws(() => {
       const file = new File([''], 'image.jpg', { type: 'image/jpeg' });
-      request
-        .post('/echo')
-        .send('hi')
-        .attach('image', file);
+      request.post('/echo').send('hi').attach('image', file);
     });
   });
 
-  it('GET invalid json', next => {
+  it('GET invalid json', (next) => {
     request.get('/invalid-json').end((err, res) => {
       assert(err.parse);
       assert.deepEqual(
@@ -104,7 +99,7 @@ describe('request', function() {
     });
   });
 
-  it('GET querystring empty objects', next => {
+  it('GET querystring empty objects', (next) => {
     const req = request.get('/querystring').query({});
     req.end((err, res) => {
       assert.deepEqual(req._query, []);
@@ -113,28 +108,28 @@ describe('request', function() {
     });
   });
 
-  it('GET querystring object .get(uri, obj)', next => {
+  it('GET querystring object .get(uri, obj)', (next) => {
     request.get('/querystring', { search: 'Manny' }).end((err, res) => {
       assert.deepEqual(res.body, { search: 'Manny' });
       next();
     });
   });
 
-  it('GET querystring object .get(uri, obj, fn)', next => {
+  it('GET querystring object .get(uri, obj, fn)', (next) => {
     request.get('/querystring', { search: 'Manny' }, (err, res) => {
       assert.deepEqual(res.body, { search: 'Manny' });
       next();
     });
   });
 
-  it('GET querystring object with null value', next => {
+  it('GET querystring object with null value', (next) => {
     request.get('/url', { nil: null }).end((err, res) => {
       assert.equal(res.text, '/url?nil');
       next();
     });
   });
 
-  it('GET blob object', next => {
+  it('GET blob object', (next) => {
     if (typeof Blob === 'undefined') {
       return next();
     }
@@ -159,7 +154,7 @@ describe('request', function() {
   });
 
   window.btoa = window.btoa || null;
-  it('basic auth', next => {
+  it('basic auth', (next) => {
     window.btoa = window.btoa || require('Base64').btoa;
 
     request
@@ -172,7 +167,7 @@ describe('request', function() {
       });
   });
 
-  it('auth type "basic"', next => {
+  it('auth type "basic"', (next) => {
     window.btoa = window.btoa || require('Base64').btoa;
 
     request
@@ -185,7 +180,7 @@ describe('request', function() {
       });
   });
 
-  it('auth type "auto"', next => {
+  it('auth type "auto"', (next) => {
     window.btoa = window.btoa || require('Base64').btoa;
 
     request
@@ -199,7 +194,7 @@ describe('request', function() {
   });
 
   it('progress event listener on xhr object registered when some on the request', () => {
-    const req = request.get('/foo').on('progress', data => {});
+    const req = request.get('/foo').on('progress', (data) => {});
     req.end();
 
     if (req.xhr.upload) {
@@ -218,7 +213,7 @@ describe('request', function() {
     }
   });
 
-  it('Request#parse overrides body parser no matter Content-Type', done => {
+  it('Request#parse overrides body parser no matter Content-Type', (done) => {
     let runParser = false;
 
     function testParser(data) {
@@ -231,7 +226,7 @@ describe('request', function() {
       .serialize(testParser)
       .type('json')
       .send({ foo: 123 })
-      .end(err => {
+      .end((err) => {
         if (err) return done(err);
         assert(runParser);
         done();
@@ -240,35 +235,35 @@ describe('request', function() {
 
   // Don't run on browsers without xhr2 support
   if ('FormData' in window) {
-    it('xhr2 download file old hack', next => {
-      request.parse['application/vnd.superagent'] = obj => obj;
+    it('xhr2 download file old hack', (next) => {
+      request.parse['application/vnd.superagent'] = (obj) => obj;
 
       request
         .get('/arraybuffer')
-        .on('request', function() {
+        .on('request', function () {
           this.xhr.responseType = 'arraybuffer';
         })
-        .on('response', res => {
+        .on('response', (res) => {
           assert(res.body instanceof ArrayBuffer);
           next();
         })
         .end();
     });
 
-    it('xhr2 download file responseType', next => {
-      request.parse['application/vnd.superagent'] = obj => obj;
+    it('xhr2 download file responseType', (next) => {
+      request.parse['application/vnd.superagent'] = (obj) => obj;
 
       request
         .get('/arraybuffer')
         .responseType('arraybuffer')
-        .on('response', res => {
+        .on('response', (res) => {
           assert(res.body instanceof ArrayBuffer);
           next();
         })
         .end();
     });
 
-    it('get error status code and rawResponse on file download', next => {
+    it('get error status code and rawResponse on file download', (next) => {
       request
         .get('/arraybuffer-unauthorized')
         .responseType('arraybuffer')
@@ -289,7 +284,7 @@ describe('request', function() {
     });
   }
 
-  it('parse should take precedence over default parse', done => {
+  it('parse should take precedence over default parse', (done) => {
     request
       .get('/foo')
       .parse((res, text) => `customText: ${res.status}`)
@@ -300,7 +295,7 @@ describe('request', function() {
       });
   });
 
-  it('handles `xhr.open()` errors', done => {
+  it('handles `xhr.open()` errors', (done) => {
     request
       .get('http://foo\0.com') // throws "Failed to execute 'open' on 'XMLHttpRequest': Invalid URL"
       .end((err, res) => {

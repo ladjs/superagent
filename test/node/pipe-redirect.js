@@ -12,12 +12,12 @@ describe('pipe on redirect', () => {
     fs.unlink(destPath, done);
   });
 
-  it('should follow Location', done => {
+  it('should follow Location', (done) => {
     const stream = fs.createWriteStream(destPath);
     const redirects = [];
     const req = request
       .get(base)
-      .on('redirect', res => {
+      .on('redirect', (res) => {
         redirects.push(res.headers.location);
       })
       .connect({

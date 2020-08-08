@@ -13,7 +13,8 @@
     "no-global-assign": ["error", {"exceptions": ["exports"]}],
     "no-fallthrough": "off",
     "no-constant-condition": "off",
-    "node/no-exports-assign": "off"
+    "node/no-exports-assign": "off",
+    "no-unsafe-finally": "off"
   },
   "overrides": [
     {

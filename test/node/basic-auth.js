@@ -7,7 +7,7 @@ const URL = require('url');
 
 describe('Basic auth', () => {
   describe('when credentials are present in url', () => {
-    it('should set Authorization', done => {
+    it('should set Authorization', (done) => {
       const new_url = URL.parse(base);
       new_url.auth = 'tobi:learnboost';
       new_url.pathname = '/basic-auth';
@@ -20,7 +20,7 @@ describe('Basic auth', () => {
   });
 
   describe('req.auth(user, pass)', () => {
-    it('should set Authorization', done => {
+    it('should set Authorization', (done) => {
       request
         .get(`${base}/basic-auth`)
         .auth('tobi', 'learnboost')
@@ -32,7 +32,7 @@ describe('Basic auth', () => {
   });
 
   describe('req.auth(user + ":" + pass)', () => {
-    it('should set authorization', done => {
+    it('should set authorization', (done) => {
       request
         .get(`${base}/basic-auth/again`)
         .auth('tobi')

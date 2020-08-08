@@ -124,7 +124,7 @@ function setMethods(req) {
    * @public
    */
 
-  req.accepts = function() {
+  req.accepts = function () {
     const accept = accepts(this);
     return accept.types.apply(accept, arguments);
   };
@@ -137,7 +137,7 @@ function setMethods(req) {
    * @public
    */
 
-  req.acceptsEncodings = function() {
+  req.acceptsEncodings = function () {
     const accept = accepts(this);
     return accept.encodings.apply(accept, arguments);
   };
@@ -151,7 +151,7 @@ function setMethods(req) {
    * @public
    */
 
-  req.acceptsCharsets = function() {
+  req.acceptsCharsets = function () {
     const accept = accepts(this);
     return accept.charsets.apply(accept, arguments);
   };
@@ -165,7 +165,7 @@ function setMethods(req) {
    * @public
    */
 
-  req.acceptsLanguages = function() {
+  req.acceptsLanguages = function () {
     const accept = accepts(this);
     return accept.languages.apply(accept, arguments);
   };
@@ -438,7 +438,7 @@ function setMethods(req) {
    * @public
    */
 
-  defineGetter(req, 'fresh', function() {
+  defineGetter(req, 'fresh', function () {
     const { method } = this;
     const { res } = this;
     const status = res.statusCode;

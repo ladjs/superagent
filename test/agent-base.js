@@ -28,7 +28,7 @@ describe('Agent', () => {
 
     return agent
       .get(`${base}/echo`)
-      .then(res => {
+      .then((res) => {
         assert.equal(1, called);
         assert.equal(1, event_called);
         assert.equal('application/json', res.headers.accept);
@@ -36,7 +36,7 @@ describe('Agent', () => {
 
         return agent.get(`${base}/querystring`);
       })
-      .then(res => {
+      .then((res) => {
         assert.equal(2, called);
         assert.equal(2, event_called);
         assert.deepEqual({ hello: 'world' }, res.body);

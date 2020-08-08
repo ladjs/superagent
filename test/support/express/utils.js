@@ -28,7 +28,7 @@ let isHttp2Supported = true;
  */
 try {
   require('http2');
-} catch (_) {
+} catch {
   isHttp2Supported = false;
 }
 /**
@@ -61,7 +61,7 @@ exports.wetag = createETagGenerator({ weak: true });
  * @api private
  */
 
-exports.normalizeType = function(type) {
+exports.normalizeType = function (type) {
   return ~type.indexOf('/')
     ? acceptParams(type)
     : { value: mime.lookup(type), params: {} };
@@ -75,7 +75,7 @@ exports.normalizeType = function(type) {
  * @api private
  */
 
-exports.normalizeTypes = function(types) {
+exports.normalizeTypes = function (types) {
   const ret = [];
 
   for (const element of types) {
@@ -102,7 +102,7 @@ function acceptParams(str, index) {
   for (let i = 1; i < parts.length; ++i) {
     const pms = parts[i].split(/ *= */);
     if (pms[0] === 'q') {
-      ret.quality = parseFloat(pms[1]);
+      ret.quality = Number.parseFloat(pms[1]);
     } else {
       ret.params[pms[0]] = pms[1];
     }
@@ -119,7 +119,7 @@ function acceptParams(str, index) {
  * @api private
  */
 
-exports.compileETag = function(val) {
+exports.compileETag = function (val) {
   let fn;
 
   if (typeof val === 'function') {
@@ -187,19 +187,19 @@ exports.compileQueryParser = function compileQueryParser(val) {
  * @api private
  */
 
-exports.compileTrust = function(val) {
+exports.compileTrust = function (val) {
   if (typeof val === 'function') return val;
 
   if (val === true) {
     // Support plain true/false
-    return function() {
+    return function () {
       return true;
     };
   }
 
   if (typeof val === 'number') {
     // Support trusting hop count
-    return function(a, i) {
+    return function (a, i) {
       return i < val;
     };
   }

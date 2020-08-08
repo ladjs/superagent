@@ -61,10 +61,7 @@ describe('Merging objects', () => {
     data.append('foo', 'bar');
 
     assert.throws(() => {
-      request
-        .post('/echo')
-        .send(data)
-        .send({ allowed: false });
+      request.post('/echo').send(data).send({ allowed: false });
     });
   });
 

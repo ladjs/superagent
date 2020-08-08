@@ -45,7 +45,7 @@ describe('req.query(String)', () => {
   // This is no longer true as of qs v3.0.0 (https://github.com/ljharb/qs/commit/0c6f2a6318c94f6226d3cf7fe36094e9685042b6)
   // it('should supply uri malformed error to the callback')
 
-  it('should support passing in a string', done => {
+  it('should support passing in a string', (done) => {
     request
       .del(base)
       .query('name=t%F6bi')
@@ -55,7 +55,7 @@ describe('req.query(String)', () => {
       });
   });
 
-  it('should work with url query-string and string for query', done => {
+  it('should work with url query-string and string for query', (done) => {
     request
       .del(`${base}/?name=tobi`)
       .query('age=2%20')
@@ -65,7 +65,7 @@ describe('req.query(String)', () => {
       });
   });
 
-  it('should support compound elements in a string', done => {
+  it('should support compound elements in a string', (done) => {
     request
       .del(base)
       .query('name=t%F6bi&age=2')
@@ -75,7 +75,7 @@ describe('req.query(String)', () => {
       });
   });
 
-  it('should work when called multiple times with a string', done => {
+  it('should work when called multiple times with a string', (done) => {
     request
       .del(base)
       .query('name=t%F6bi')
@@ -86,7 +86,7 @@ describe('req.query(String)', () => {
       });
   });
 
-  it('should work with normal `query` object and query string', done => {
+  it('should work with normal `query` object and query string', (done) => {
     request
       .del(base)
       .query('name=t%F6bi')
@@ -102,11 +102,11 @@ describe('req.query(String)', () => {
       request
         .get(`${base}/raw-query`)
         .query('name=`t%60bi`&age`=2')
-        .then(res => {
+        .then((res) => {
           res.text.should.eql('name=`t%60bi`&age`=2');
         }),
 
-      request.get(base + '/raw-query?`age%60`=2%60`').then(res => {
+      request.get(base + '/raw-query?`age%60`=2%60`').then((res) => {
         res.text.should.eql('`age%60`=2%60`');
       }),
 
@@ -114,7 +114,7 @@ describe('req.query(String)', () => {
         .get(`${base}/raw-query`)
         .query('name=`t%60bi`')
         .query('age`=2')
-        .then(res => {
+        .then((res) => {
           res.text.should.eql('name=`t%60bi`&age`=2');
         })
     ]);
@@ -122,7 +122,7 @@ describe('req.query(String)', () => {
 });
 
 describe('req.query(Object)', () => {
-  it('should construct the query-string', done => {
+  it('should construct the query-string', (done) => {
     request
       .del(base)
       .query({ name: 'tobi' })
@@ -135,7 +135,7 @@ describe('req.query(Object)', () => {
   });
 
   // See commit message for the reasoning here.
-  it('should encode raw backticks', done => {
+  it('should encode raw backticks', (done) => {
     request
       .get(`${base}/raw-query`)
       .query({ name: '`tobi`' })
@@ -147,7 +147,7 @@ describe('req.query(Object)', () => {
       });
   });
 
-  it('should not error on dates', done => {
+  it('should not error on dates', (done) => {
     const date = new Date(0);
 
     request
@@ -159,7 +159,7 @@ describe('req.query(Object)', () => {
       });
   });
 
-  it('should work after setting header fields', done => {
+  it('should work after setting header fields', (done) => {
     request
       .del(base)
       .set('Foo', 'bar')
@@ -173,7 +173,7 @@ describe('req.query(Object)', () => {
       });
   });
 
-  it('should append to the original query-string', done => {
+  it('should append to the original query-string', (done) => {
     request
       .del(`${base}/?name=tobi`)
       .query({ order: 'asc' })
@@ -183,14 +183,14 @@ describe('req.query(Object)', () => {
       });
   });
 
-  it('should retain the original query-string', done => {
+  it('should retain the original query-string', (done) => {
     request.del(`${base}/?name=tobi`).end((err, res) => {
       res.body.should.eql({ name: 'tobi' });
       done();
     });
   });
 
-  it('should keep only keys with null querystring values', done => {
+  it('should keep only keys with null querystring values', (done) => {
     request
       .del(`${base}/url`)
       .query({ nil: null })
@@ -200,11 +200,11 @@ describe('req.query(Object)', () => {
       });
   });
 
-  it('query-string should be sent on pipe', done => {
+  it('query-string should be sent on pipe', (done) => {
     const req = request.put(`${base}/?name=tobi`);
     const stream = fs.createReadStream('test/node/fixtures/user.json');
 
-    req.on('response', res => {
+    req.on('response', (res) => {
       res.body.should.eql({ name: 'tobi' });
       done();
     });

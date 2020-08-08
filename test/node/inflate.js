@@ -69,7 +69,7 @@ app.get('/chopped', (req, res) => {
 });
 
 describe('zlib', () => {
-  it('should deflate the content', done => {
+  it('should deflate the content', (done) => {
     request.get(base).end((err, res) => {
       res.should.have.status(200);
       res.text.should.equal(subject);
@@ -78,7 +78,7 @@ describe('zlib', () => {
     });
   });
 
-  it('should protect from zip bombs', done => {
+  it('should protect from zip bombs', (done) => {
     request
       .get(base)
       .buffer(true)
@@ -93,7 +93,7 @@ describe('zlib', () => {
       });
   });
 
-  it('should ignore trailing junk', done => {
+  it('should ignore trailing junk', (done) => {
     request.get(`${base}/junk`).end((err, res) => {
       res.should.have.status(200);
       res.text.should.equal(subject);
@@ -101,7 +101,7 @@ describe('zlib', () => {
     });
   });
 
-  it('should ignore missing data', done => {
+  it('should ignore missing data', (done) => {
     request.get(`${base}/chopped`).end((err, res) => {
       assert.equal(undefined, err);
       res.should.have.status(200);
@@ -110,7 +110,7 @@ describe('zlib', () => {
     });
   });
 
-  it('should handle corrupted responses', done => {
+  it('should handle corrupted responses', (done) => {
     request.get(`${base}/corrupt`).end((err, res) => {
       assert(err, 'missing error');
       assert(!res, 'response should not be defined');
@@ -118,7 +118,7 @@ describe('zlib', () => {
     });
   });
 
-  it('should handle no content with gzip header', done => {
+  it('should handle no content with gzip header', (done) => {
     request.get(`${base}/nocontent`).end((err, res) => {
       assert.ifError(err);
       assert(res);
@@ -134,7 +134,7 @@ describe('zlib', () => {
       return request
         .get(`${base}/binary`)
         .buffer(true)
-        .then(res => {
+        .then((res) => {
           res.should.have.status(200);
           assert(res.headers['content-length']);
           assert(res.body.byteLength);
@@ -142,12 +142,12 @@ describe('zlib', () => {
         });
     });
 
-    it('should emit buffers', done => {
+    it('should emit buffers', (done) => {
       request.get(`${base}/binary`).end((err, res) => {
         res.should.have.status(200);
         res.headers['content-length'].should.be.below(subject.length);
 
-        res.on('data', chunk => {
+        res.on('data', (chunk) => {
           chunk.should.have.length(subject.length);
         });
 

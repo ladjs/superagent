@@ -18,7 +18,7 @@ describe('Merging objects', () => {
 });
 
 describe('req.send(String)', () => {
-  it('should default to "form"', done => {
+  it('should default to "form"', (done) => {
     request
       .post(`${base}/echo`)
       .send('user[name]=tj')
@@ -37,7 +37,7 @@ describe('req.send(String)', () => {
 
 describe('res.body', () => {
   describe('application/x-www-form-urlencoded', () => {
-    it('should parse the body', done => {
+    it('should parse the body', (done) => {
       request.get(`${base}/form-data`).end((err, res) => {
         res.text.should.equal('pet[name]=manny');
         res.body.should.eql({ pet: { name: 'manny' } });

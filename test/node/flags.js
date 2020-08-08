@@ -8,7 +8,7 @@ const assert = require('assert');
 
 describe('flags', () => {
   describe('with 4xx response', () => {
-    it('should set res.error and res.clientError', done => {
+    it('should set res.error and res.clientError', (done) => {
       request.get(`${base}/notfound`).end((err, res) => {
         assert(err);
         assert(!res.ok, 'response should not be ok');
@@ -21,7 +21,7 @@ describe('flags', () => {
   });
 
   describe('with 5xx response', () => {
-    it('should set res.error and res.serverError', done => {
+    it('should set res.error and res.serverError', (done) => {
       request.get(`${base}/error`).end((err, res) => {
         assert(err);
         assert(!res.ok, 'response should not be ok');
@@ -35,7 +35,7 @@ describe('flags', () => {
   });
 
   describe('with 404 Not Found', () => {
-    it('should res.notFound', done => {
+    it('should res.notFound', (done) => {
       request.get(`${base}/notfound`).end((err, res) => {
         assert(err);
         assert(res.notFound, 'response should be .notFound');
@@ -45,7 +45,7 @@ describe('flags', () => {
   });
 
   describe('with 400 Bad Request', () => {
-    it('should set req.badRequest', done => {
+    it('should set req.badRequest', (done) => {
       request.get(`${base}/bad-request`).end((err, res) => {
         assert(err);
         assert(res.badRequest, 'response should be .badRequest');
@@ -55,7 +55,7 @@ describe('flags', () => {
   });
 
   describe('with 401 Bad Request', () => {
-    it('should set res.unauthorized', done => {
+    it('should set res.unauthorized', (done) => {
       request.get(`${base}/unauthorized`).end((err, res) => {
         assert(err);
         assert(res.unauthorized, 'response should be .unauthorized');
@@ -65,7 +65,7 @@ describe('flags', () => {
   });
 
   describe('with 406 Not Acceptable', () => {
-    it('should set res.notAcceptable', done => {
+    it('should set res.notAcceptable', (done) => {
       request.get(`${base}/not-acceptable`).end((err, res) => {
         assert(err);
         assert(res.notAcceptable, 'response should be .notAcceptable');
@@ -75,7 +75,7 @@ describe('flags', () => {
   });
 
   describe('with 204 No Content', () => {
-    it('should set res.noContent', done => {
+    it('should set res.noContent', (done) => {
       request.get(`${base}/no-content`).end((err, res) => {
         assert(!err);
         assert(res.noContent, 'response should be .noContent');
@@ -85,7 +85,7 @@ describe('flags', () => {
   });
 
   describe('with 201 Created', () => {
-    it('should set res.created', done => {
+    it('should set res.created', (done) => {
       request.post(`${base}/created`).end((err, res) => {
         assert(!err);
         assert(res.created, 'response should be .created');
@@ -95,7 +95,7 @@ describe('flags', () => {
   });
 
   describe('with 422 Unprocessable Entity', () => {
-    it('should set res.unprocessableEntity', done => {
+    it('should set res.unprocessableEntity', (done) => {
       request.post(`${base}/unprocessable-entity`).end((err, res) => {
         assert(err);
         assert(

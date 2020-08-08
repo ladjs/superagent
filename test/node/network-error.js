@@ -15,16 +15,16 @@ function getFreePort(fn) {
 }
 
 describe('with network error', () => {
-  before(function(done) {
+  before(function (done) {
     // connecting to a free port
     // will trigger a connection refused
-    getFreePort(port => {
+    getFreePort((port) => {
       this.port = port;
       done();
     });
   });
 
-  it('should error', function(done) {
+  it('should error', function (done) {
     request.get(`http://localhost:${this.port}/`).end((err, res) => {
       assert(err, 'expected an error');
       done();

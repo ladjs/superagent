@@ -22,7 +22,7 @@ exports.unzip = (req, res) => {
   // make node responseOnEnd() happy
   stream.req = req;
 
-  unzip.on('error', err => {
+  unzip.on('error', (err) => {
     if (err && err.code === 'Z_BUF_ERROR') {
       // unexpected end of file is ignored by browsers and curl
       stream.emit('end');
@@ -36,12 +36,12 @@ exports.unzip = (req, res) => {
   res.pipe(unzip);
 
   // override `setEncoding` to capture encoding
-  res.setEncoding = type => {
+  res.setEncoding = (type) => {
     decoder = new StringDecoder(type);
   };
 
   // decode upon decompressing with captured encoding
-  unzip.on('data', buf => {
+  unzip.on('data', (buf) => {
     if (decoder) {
       const str = decoder.write(buf);
       if (str.length > 0) stream.emit('data', str);
@@ -56,7 +56,7 @@ exports.unzip = (req, res) => {
 
   // override `on` to capture data listeners
   const _on = res.on;
-  res.on = function(type, fn) {
+  res.on = function (type, fn) {
     if (type === 'data' || type === 'end') {
       stream.on(type, fn.bind(res));
     } else if (type === 'error') {

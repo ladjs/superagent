@@ -83,7 +83,7 @@ Browser-ready versions of this module are available via [jsdelivr][], [unpkg][],
 This is the solution for you if you're just using `<script>` tags everywhere!
 
 ```html
-<script src="https://polyfill.io/v3/polyfill.min.js?features=Array.from,Promise,Symbol,Object.setPrototypeOf,Object.getOwnPropertySymbols"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=Array.from,Promise,Symbol,Object.setPrototypeOf,Object.getOwnPropertySymbols,Set"></script>
 <script src="https://cdn.jsdelivr.net/npm/superagent"></script>
 <!-- if you wish to use unpkg.com instead: -->
 <!-- <script src="https://unpkg.com/superagent"></script> -->
@@ -159,11 +159,11 @@ If you are using [browserify][], [webpack][], [rollup][], or another bundler, th
 We recommend using <https://polyfill.io> (specifically with the bundle mentioned in [VanillaJS](#vanillajs) above):
 
 ```html
-<script src="https://polyfill.io/v3/polyfill.min.js?features=Array.from,Promise,Symbol,Object.setPrototypeOf,Object.getOwnPropertySymbols"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=Array.from,Promise,Symbol,Object.setPrototypeOf,Object.getOwnPropertySymbols,Set"></script>
 ```
 
 * IE 9-10 requires a polyfill for `Promise`, `Array.from`, `Symbol`, `Object.getOwnPropertySymbols`, and `Object.setPrototypeOf`
-* IE 9 requires a polyfill for `window.FormData` (we recommend [formdata-polyfill][])
+* IE 9 requires a polyfill for `window.FormData` (we recommend [formdata-polyfill][]) and `Set`
 
 
 ## Plugins
@@ -212,6 +212,10 @@ For SuperAgent extensions such as couchdb and oauth visit the [wiki](https://git
 
 Our breaking changes are mostly in rarely used functionality and from stricter error handling.
 
+* [5.x to 6.x](https://github.com/visionmedia/superagent/releases/tag/v6.0.0):
+  * Retry behavior is still opt-in, however we now have a more fine-grained list of status codes and error codes that we retry against (see updated docs)
+  * A specific issue with Content-Type matching not being case-insensitive is fixed
+  * Set is now required for IE 9, see [Required Browser Features](#required-browser-features) for more insight
 * [4.x to 5.x](https://github.com/visionmedia/superagent/releases/tag/v5.0.0):
   * We've implemented the build setup of [Lass](https://lass.js.org) to simplify our stack and linting
   * Unminified browserified build size has been reduced from 48KB to 20KB (via `tinyify` and the latest version of Babel using `@babel/preset-env` and `.browserslistrc`)

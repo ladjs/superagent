@@ -8,10 +8,10 @@ function uniqid() {
   return Math.random() * 10000000;
 }
 
-describe('.retry(count)', function() {
+describe('.retry(count)', function () {
   this.timeout(15000);
 
-  it('should not retry if passed "0"', done => {
+  it('should not retry if passed "0"', (done) => {
     request
       .get(`${base}/error`)
       .retry(0)
@@ -31,7 +31,7 @@ describe('.retry(count)', function() {
       });
   });
 
-  it('should not retry if passed an invalid number', done => {
+  it('should not retry if passed an invalid number', (done) => {
     request
       .get(`${base}/error`)
       .retry(-2)
@@ -51,7 +51,7 @@ describe('.retry(count)', function() {
       });
   });
 
-  it('should not retry if passed undefined', done => {
+  it('should not retry if passed undefined', (done) => {
     request
       .get(`${base}/error`)
       .retry(undefined)
@@ -71,7 +71,7 @@ describe('.retry(count)', function() {
       });
   });
 
-  it('should handle server error after repeat attempt', done => {
+  it('should handle server error after repeat attempt', (done) => {
     request
       .get(`${base}/error`)
       .retry(2)
@@ -87,7 +87,7 @@ describe('.retry(count)', function() {
       });
   });
 
-  it('should retry if passed nothing', done => {
+  it('should retry if passed nothing', (done) => {
     request
       .get(`${base}/error`)
       .retry()
@@ -103,7 +103,7 @@ describe('.retry(count)', function() {
       });
   });
 
-  it('should retry if passed "true"', done => {
+  it('should retry if passed "true"', (done) => {
     request
       .get(`${base}/error`)
       .retry(true)
@@ -119,7 +119,7 @@ describe('.retry(count)', function() {
       });
   });
 
-  it('should handle successful request after repeat attempt from server error', done => {
+  it('should handle successful request after repeat attempt from server error', (done) => {
     request
       .get(`${base}/error/ok/${uniqid()}`)
       .query({ qs: 'present' })
@@ -136,7 +136,7 @@ describe('.retry(count)', function() {
       });
   });
 
-  it('should handle server timeout error after repeat attempt', done => {
+  it('should handle server timeout error after repeat attempt', (done) => {
     request
       .get(`${base}/delay/400`)
       .timeout(200)
@@ -158,7 +158,7 @@ describe('.retry(count)', function() {
       });
   });
 
-  it('should handle successful request after repeat attempt from server timeout', done => {
+  it('should handle successful request after repeat attempt from server timeout', (done) => {
     const url = `/delay/1200/ok/${uniqid()}?built=in`;
     request
       .get(base + url)
@@ -178,7 +178,7 @@ describe('.retry(count)', function() {
       });
   });
 
-  it('should handle successful request after repeat attempt from server timeout when using .then(fulfill, reject)', done => {
+  it('should handle successful request after repeat attempt from server timeout when using .then(fulfill, reject)', (done) => {
     const url = `/delay/1200/ok/${uniqid()}?built=in`;
     request
       .get(base + url)
@@ -198,12 +198,9 @@ describe('.retry(count)', function() {
       });
   });
 
-  it('should correctly abort a retry attempt', done => {
+  it('should correctly abort a retry attempt', (done) => {
     let aborted = false;
-    const req = request
-      .get(`${base}/delay/400`)
-      .timeout(200)
-      .retry(2);
+    const req = request.get(`${base}/delay/400`).timeout(200).retry(2);
     req.end((err, res) => {
       try {
         assert(false, 'should not complete the request');
@@ -229,7 +226,7 @@ describe('.retry(count)', function() {
     }, 150);
   });
 
-  it('should correctly retain header fields', done => {
+  it('should correctly retain header fields', (done) => {
     request
       .get(`${base}/error/ok/${uniqid()}`)
       .query({ qs: 'present' })
@@ -247,7 +244,7 @@ describe('.retry(count)', function() {
       });
   });
 
-  it('should not retry on 4xx responses', done => {
+  it('should not retry on 4xx responses', (done) => {
     request
       .get(`${base}/bad-request`)
       .retry(2)
@@ -263,7 +260,7 @@ describe('.retry(count)', function() {
       });
   });
 
-  it('should execute callback on retry if passed', done => {
+  it('should execute callback on retry if passed', (done) => {
     let callbackCallCount = 0;
     function retryCallback(request) {
       callbackCallCount++;

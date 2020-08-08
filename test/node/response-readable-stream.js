@@ -25,7 +25,7 @@ before(function listen(done) {
 });
 
 describe('response', () => {
-  it('should act as a readable stream', done => {
+  it('should act as a readable stream', (done) => {
     const req = request.get(base).buffer(false);
 
     req.end((err, res) => {

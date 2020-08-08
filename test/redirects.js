@@ -6,10 +6,10 @@ const isMSIE = !setup.NODE && /Trident\//.test(navigator.userAgent);
 const assert = require('assert');
 const request = require('./support/client');
 
-describe('request', function() {
+describe('request', function () {
   this.timeout(20000);
   describe('on redirect', () => {
-    it('should retain header fields', done => {
+    it('should retain header fields', (done) => {
       request
         .get(`${base}/header`)
         .set('X-Foo', 'bar')
@@ -24,7 +24,7 @@ describe('request', function() {
         });
     });
 
-    it('should preserve timeout across redirects', done => {
+    it('should preserve timeout across redirects', (done) => {
       request
         .get(`${base}/movies/random`)
         .timeout(250)
@@ -39,7 +39,7 @@ describe('request', function() {
         });
     });
 
-    it('should successfully redirect after retry on error', done => {
+    it('should successfully redirect after retry on error', (done) => {
       const id = Math.random() * 1000000 * Date.now();
       request
         .get(`${base}/error/redirect/${id}`)
@@ -51,7 +51,7 @@ describe('request', function() {
         });
     });
 
-    it('should preserve retries across redirects', done => {
+    it('should preserve retries across redirects', (done) => {
       const id = Math.random() * 1000000 * Date.now();
       request
         .get(`${base}/error/redirect-error${id}`)
@@ -66,12 +66,12 @@ describe('request', function() {
   });
 
   describe('on 303', () => {
-    it('should redirect with same method', done => {
+    it('should redirect with same method', (done) => {
       request
         .put(`${base}/redirect-303`)
         .send({ msg: 'hello' })
         .redirects(1)
-        .on('redirect', res => {
+        .on('redirect', (res) => {
           res.headers.location.should.equal('/reply-method');
         })
         .end((err, res) => {
@@ -87,14 +87,14 @@ describe('request', function() {
   });
 
   describe('on 307', () => {
-    it('should redirect with same method', done => {
+    it('should redirect with same method', (done) => {
       if (isMSIE) return done(); // IE9 broken
 
       request
         .put(`${base}/redirect-307`)
         .send({ msg: 'hello' })
         .redirects(1)
-        .on('redirect', res => {
+        .on('redirect', (res) => {
           res.headers.location.should.equal('/reply-method');
         })
         .end((err, res) => {
@@ -110,14 +110,14 @@ describe('request', function() {
   });
 
   describe('on 308', () => {
-    it('should redirect with same method', done => {
+    it('should redirect with same method', (done) => {
       if (isMSIE) return done(); // IE9 broken
 
       request
         .put(`${base}/redirect-308`)
         .send({ msg: 'hello' })
         .redirects(1)
-        .on('redirect', res => {
+        .on('redirect', (res) => {
           res.headers.location.should.equal('/reply-method');
         })
         .end((err, res) => {

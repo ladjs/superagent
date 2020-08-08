@@ -35,7 +35,7 @@ describe('[unix-sockets] http', () => {
     return;
   }
 
-  before(done => {
+  before((done) => {
     if (fs.existsSync(httpSockPath) === true) {
       // try unlink if sock file exists
       fs.unlinkSync(httpSockPath);
@@ -48,7 +48,7 @@ describe('[unix-sockets] http', () => {
   const base = `http+unix://${httpSockPath.replace(/\//g, '%2F')}`;
 
   describe('request', () => {
-    it('path: / (root)', done => {
+    it('path: / (root)', (done) => {
       request.get(`${base}/`).end((err, res) => {
         assert(res.ok);
         assert.strictEqual('root ok!', res.text);
@@ -56,7 +56,7 @@ describe('[unix-sockets] http', () => {
       });
     });
 
-    it('path: /request/path', done => {
+    it('path: /request/path', (done) => {
       request.get(`${base}/request/path`).end((err, res) => {
         assert(res.ok);
         assert.strictEqual('request path ok!', res.text);
@@ -77,7 +77,7 @@ describe('[unix-sockets] https', () => {
     return;
   }
 
-  before(done => {
+  before((done) => {
     if (fs.existsSync(httpsSockPath) === true) {
       // try unlink if sock file exists
       fs.unlinkSync(httpsSockPath);
@@ -95,7 +95,7 @@ describe('[unix-sockets] https', () => {
   const base = `https+unix://${httpsSockPath.replace(/\//g, '%2F')}`;
 
   describe('request', () => {
-    it('path: / (root)', done => {
+    it('path: / (root)', (done) => {
       request
         .get(`${base}/`)
         .ca(cacert)
@@ -107,7 +107,7 @@ describe('[unix-sockets] https', () => {
         });
     });
 
-    it('path: /request/path', done => {
+    it('path: /request/path', (done) => {
       request
         .get(`${base}/request/path`)
         .ca(cacert)
@@ -120,7 +120,7 @@ describe('[unix-sockets] https', () => {
     });
   });
 
-  after(done => {
+  after((done) => {
     httpsServer.close(done);
   });
 });

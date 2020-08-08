@@ -81,13 +81,13 @@ describe('request', () => {
     const agent4 = request.agent();
 
     it('should gain a session on POST', () =>
-      agent3.post(`${base}/signin`).then(res => {
+      agent3.post(`${base}/signin`).then((res) => {
         res.should.have.status(200);
         should.not.exist(res.headers['set-cookie']);
         res.text.should.containEql('dashboard');
       }));
 
-    it('should start with empty session (set cookies)', done => {
+    it('should start with empty session (set cookies)', (done) => {
       agent1.get(`${base}/dashboard`).end((err, res) => {
         should.exist(err);
         res.should.have.status(401);
@@ -97,14 +97,14 @@ describe('request', () => {
     });
 
     it('should gain a session (cookies already set)', () =>
-      agent1.post(`${base}/signin`).then(res => {
+      agent1.post(`${base}/signin`).then((res) => {
         res.should.have.status(200);
         should.not.exist(res.headers['set-cookie']);
         res.text.should.containEql('dashboard');
       }));
 
     it('should persist cookies across requests', () =>
-      agent1.get(`${base}/dashboard`).then(res => {
+      agent1.get(`${base}/dashboard`).then((res) => {
         res.should.have.status(200);
       }));
 
@@ -112,12 +112,12 @@ describe('request', () => {
       agent4
         .post(`${base}/setcookie`)
         .then(() => agent4.get(`${base}/getcookie`))
-        .then(res => {
+        .then((res) => {
           res.should.have.status(200);
           assert.strictEqual(res.text, 'jar');
         }));
 
-    it('should not share cookies', done => {
+    it('should not share cookies', (done) => {
       agent2.get(`${base}/dashboard`).end((err, res) => {
         should.exist(err);
         res.should.have.status(401);
@@ -126,12 +126,12 @@ describe('request', () => {
     });
 
     it('should not lose cookies between agents', () =>
-      agent1.get(`${base}/dashboard`).then(res => {
+      agent1.get(`${base}/dashboard`).then((res) => {
         res.should.have.status(200);
       }));
 
     it('should be able to follow redirects', () =>
-      agent1.get(base).then(res => {
+      agent1.get(base).then((res) => {
         res.should.have.status(200);
         res.text.should.containEql('dashboard');
       }));
@@ -140,13 +140,13 @@ describe('request', () => {
       agent1
         .post(`${base}/redirect`)
         .send({ foo: 'bar', baz: 'blaaah' })
-        .then(res => {
+        .then((res) => {
           res.should.have.status(200);
           res.text.should.containEql('simple');
           res.redirects.should.eql([`${base}/simple`]);
         }));
 
-    it('should be able to limit redirects', done => {
+    it('should be able to limit redirects', (done) => {
       agent1
         .get(base)
         .redirects(0)
@@ -160,12 +160,12 @@ describe('request', () => {
     });
 
     it('should be able to create a new session (clear cookie)', () =>
-      agent1.post(`${base}/signout`).then(res => {
+      agent1.post(`${base}/signout`).then((res) => {
         res.should.have.status(200);
         should.exist(res.headers['set-cookie']);
       }));
 
-    it('should regenerate with an empty session', done => {
+    it('should regenerate with an empty session', (done) => {
       agent1.get(`${base}/dashboard`).end((err, res) => {
         should.exist(err);
         res.should.have.status(401);

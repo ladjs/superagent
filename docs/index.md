@@ -248,6 +248,32 @@ This method has two optional arguments: number of retries (default 1) and a call
 
 Use `.retry()` only with requests that are *idempotent* (i.e. multiple requests reaching the server won't cause undesirable side effects like duplicate purchases).
 
+All request methods are tried by default (which means if you do not want POST requests to be retried, you will need to pass a custom retry callback).
+
+By default the following status codes are retried:
+
+* `408`
+* `413`
+* `429`
+* `500`
+* `502`
+* `503`
+* `504`
+* `521`
+* `522`
+* `524`
+
+By default the following error codes are retried:
+
+* `'ETIMEDOUT'`
+* `'ECONNRESET'`
+* `'EADDRINUSE'`
+* `'ECONNREFUSED'`
+* `'EPIPE'`
+* `'ENOTFOUND'`
+* `'ENETUNREACH'`
+* `'EAI_AGAIN'`
+
 ## Setting Accept
 
 In a similar fashion to the `.type()` method it is also possible to set the `Accept` header via the short hand method `.accept()`. Which references `request.types` as well allowing you to specify either the full canonicalized MIME type name as `type/subtype`, or the extension suffix form as "xml", "json", "png", etc. for convenience:

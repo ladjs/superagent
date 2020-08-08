@@ -14,7 +14,7 @@ const doesntWorkInHttp2 = !process.env.HTTP2_TEST;
 
 describe('[node] request', () => {
   describe('with an url', () => {
-    it('should preserve the encoding of the url', done => {
+    it('should preserve the encoding of the url', (done) => {
       request.get(`${base}/url?a=(b%29`).end((err, res) => {
         assert.equal('/url?a=(b%29', res.text);
         done();
@@ -24,14 +24,14 @@ describe('[node] request', () => {
 
   describe('with an object', () => {
     it('should format the url', () =>
-      request.get(url.parse(`${base}/login`)).then(res => {
+      request.get(url.parse(`${base}/login`)).then((res) => {
         assert(res.ok);
       }));
   });
 
   describe('without a schema', () => {
     it('should default to http', () =>
-      request.get('localhost:5000/login').then(res => {
+      request.get('localhost:5000/login').then((res) => {
         assert.equal(res.status, 200);
       }));
   });
@@ -41,7 +41,7 @@ describe('[node] request', () => {
       request
         .post(`${base}/echo`)
         .send({ foo: 'baz' })
-        .then(res => {
+        .then((res) => {
           const obj = res.toJSON();
           assert.equal('object', typeof obj.header);
           assert.equal('object', typeof obj.req);
@@ -52,11 +52,11 @@ describe('[node] request', () => {
 
   describe('res.links', () => {
     it('should default to an empty object', () =>
-      request.get(`${base}/login`).then(res => {
+      request.get(`${base}/login`).then((res) => {
         res.links.should.eql({});
       }));
 
-    it('should parse the Link header field', done => {
+    it('should parse the Link header field', (done) => {
       request.get(`${base}/links`).end((err, res) => {
         res.links.next.should.equal(
           'https://api.github.com/repos/visionmedia/mocha/issues?page=2'
@@ -67,7 +67,7 @@ describe('[node] request', () => {
   });
 
   describe('req.unset(field)', () => {
-    it('should remove the header field', done => {
+    it('should remove the header field', (done) => {
       request
         .post(`${base}/echo`)
         .unset('User-Agent')
@@ -94,7 +94,7 @@ describe('[node] request', () => {
   });
 
   describe('req.write(str)', () => {
-    it('should write the given data', done => {
+    it('should write the given data', (done) => {
       const req = request.post(`${base}/echo`);
       req.set('Content-Type', 'application/json');
       assert.equal('boolean', typeof req.write('{"name"'));
@@ -107,30 +107,27 @@ describe('[node] request', () => {
   });
 
   describe('req.pipe(stream)', () => {
-    it('should pipe the response to the given stream', done => {
+    it('should pipe the response to the given stream', (done) => {
       const stream = new EventEmitter();
 
       stream.buf = '';
       stream.writable = true;
 
-      stream.write = function(chunk) {
+      stream.write = function (chunk) {
         this.buf += chunk;
       };
 
-      stream.end = function() {
+      stream.end = function () {
         this.buf.should.equal('{"name":"tobi"}');
         done();
       };
 
-      request
-        .post(`${base}/echo`)
-        .send('{"name":"tobi"}')
-        .pipe(stream);
+      request.post(`${base}/echo`).send('{"name":"tobi"}').pipe(stream);
     });
   });
 
   describe('.buffer()', () => {
-    it('should enable buffering', done => {
+    it('should enable buffering', (done) => {
       request
         .get(`${base}/custom`)
         .buffer()
@@ -141,7 +138,7 @@ describe('[node] request', () => {
           done();
         });
     });
-    it("should take precedence over request.buffer['someMimeType'] = false", done => {
+    it("should take precedence over request.buffer['someMimeType'] = false", (done) => {
       const type = 'application/barbaz';
       const send = 'some text';
       request.buffer[type] = false;
@@ -162,7 +159,7 @@ describe('[node] request', () => {
   });
 
   describe('.buffer(false)', () => {
-    it('should disable buffering', done => {
+    it('should disable buffering', (done) => {
       request
         .post(`${base}/echo`)
         .type('application/x-dog')
@@ -174,7 +171,7 @@ describe('[node] request', () => {
           res.body.should.eql({});
           let buf = '';
           res.setEncoding('utf8');
-          res.on('data', chunk => {
+          res.on('data', (chunk) => {
             buf += chunk;
           });
           res.on('end', () => {
@@ -183,7 +180,7 @@ describe('[node] request', () => {
           });
         });
     });
-    it("should take precedence over request.buffer['someMimeType'] = true", done => {
+    it("should take precedence over request.buffer['someMimeType'] = true", (done) => {
       const type = 'application/foobar';
       const send = 'hello this is a dog';
       request.buffer[type] = true;
@@ -201,7 +198,7 @@ describe('[node] request', () => {
           res.body.should.eql({});
           let buf = '';
           res.setEncoding('utf8');
-          res.on('data', chunk => {
+          res.on('data', (chunk) => {
             buf += chunk;
           });
           res.on('end', () => {
@@ -213,7 +210,7 @@ describe('[node] request', () => {
   });
 
   describe('.withCredentials()', () => {
-    it('should not throw an error when using the client-side "withCredentials" method', done => {
+    it('should not throw an error when using the client-side "withCredentials" method', (done) => {
       request
         .get(`${base}/custom`)
         .withCredentials()
@@ -225,7 +222,7 @@ describe('[node] request', () => {
   });
 
   describe('.agent()', () => {
-    it('should return the defaut agent', done => {
+    it('should return the defaut agent', (done) => {
       const req = request.post(`${base}/echo`);
       req.agent().should.equal(false);
       done();
@@ -233,7 +230,7 @@ describe('[node] request', () => {
   });
 
   describe('.agent(undefined)', () => {
-    it('should set an agent to undefined and ensure it is chainable', done => {
+    it('should set an agent to undefined and ensure it is chainable', (done) => {
       const req = request.get(`${base}/echo`);
       const ret = req.agent(undefined);
       ret.should.equal(req);
@@ -243,7 +240,7 @@ describe('[node] request', () => {
   });
 
   describe('.agent(new http.Agent())', () => {
-    it('should set passed agent', done => {
+    it('should set passed agent', (done) => {
       const http = require('http');
       const req = request.get(`${base}/echo`);
       const agent = new http.Agent();
@@ -260,7 +257,7 @@ describe('[node] request', () => {
         .post(`${base}/echo`)
         .type('application/x-dog')
         .send('hello this is dog')
-        .then(res => {
+        .then((res) => {
           assert.equal(null, res.text);
           assert.equal(res.body.toString(), 'hello this is dog');
           res.buffered.should.be.true;
@@ -269,7 +266,7 @@ describe('[node] request', () => {
   });
 
   describe('content-length', () => {
-    it('should be set to the byte length of a non-buffer object', done => {
+    it('should be set to the byte length of a non-buffer object', (done) => {
       const decoder = new StringDecoder('utf8');
       let img = fs.readFileSync(`${__dirname}/fixtures/test.png`);
       img = decoder.write(img);
@@ -286,7 +283,7 @@ describe('[node] request', () => {
         });
     });
 
-    it('should be set to the length of a buffer object', done => {
+    it('should be set to the length of a buffer object', (done) => {
       const img = fs.readFileSync(`${__dirname}/fixtures/test.png`);
       request
         .post(`${base}/echo`)
@@ -303,7 +300,7 @@ describe('[node] request', () => {
   });
 
   if (doesntWorkInHttp2)
-    it('should send body with .get().send()', next => {
+    it('should send body with .get().send()', (next) => {
       request
         .get(`${base}/echo`)
         .set('Content-Type', 'text/plain')

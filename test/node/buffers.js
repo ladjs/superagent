@@ -6,7 +6,7 @@ const setup = require('../support/setup');
 const base = setup.uri;
 
 describe("req.buffer['someMimeType']", () => {
-  it('should respect that agent.buffer(true) takes precedent', done => {
+  it('should respect that agent.buffer(true) takes precedent', (done) => {
     const agent = request.agent();
     agent.buffer(true);
     const type = 'application/somerandomtype';
@@ -26,7 +26,7 @@ describe("req.buffer['someMimeType']", () => {
       });
   });
 
-  it('should respect that agent.buffer(false) takes precedent', done => {
+  it('should respect that agent.buffer(false) takes precedent', (done) => {
     const agent = request.agent();
     agent.buffer(false);
     const type = 'application/barrr';
@@ -45,7 +45,7 @@ describe("req.buffer['someMimeType']", () => {
         res.body.should.eql({});
         let buf = '';
         res.setEncoding('utf8');
-        res.on('data', chunk => {
+        res.on('data', (chunk) => {
           buf += chunk;
         });
         res.on('end', () => {
@@ -55,7 +55,7 @@ describe("req.buffer['someMimeType']", () => {
       });
   });
 
-  it('should disable buffering for that mimetype when false', done => {
+  it('should disable buffering for that mimetype when false', (done) => {
     const type = 'application/bar';
     const send = 'some random text';
     request.buffer[type] = false;
@@ -72,7 +72,7 @@ describe("req.buffer['someMimeType']", () => {
         res.body.should.eql({});
         let buf = '';
         res.setEncoding('utf8');
-        res.on('data', chunk => {
+        res.on('data', (chunk) => {
           buf += chunk;
         });
         res.on('end', () => {
@@ -81,7 +81,7 @@ describe("req.buffer['someMimeType']", () => {
         });
       });
   });
-  it('should enable buffering for that mimetype when true', done => {
+  it('should enable buffering for that mimetype when true', (done) => {
     const type = 'application/baz';
     const send = 'woooo';
     request.buffer[type] = true;
@@ -105,7 +105,7 @@ describe("req.buffer['someMimeType']", () => {
       .post(`${base}/echo`)
       .type(type)
       .send(send)
-      .then(res => {
+      .then((res) => {
         assert.equal(res.type, type);
         assert.equal(send, res.body.toString());
         assert(res.buffered);

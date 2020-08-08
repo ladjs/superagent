@@ -15,8 +15,8 @@ module.exports = RequestBase;
  * @api public
  */
 
-function RequestBase(obj) {
-  if (obj) return mixin(obj);
+function RequestBase(object) {
+  if (object) return mixin(object);
 }
 
 /**
@@ -27,13 +27,13 @@ function RequestBase(obj) {
  * @api private
  */
 
-function mixin(obj) {
+function mixin(object) {
   for (const key in RequestBase.prototype) {
     if (Object.prototype.hasOwnProperty.call(RequestBase.prototype, key))
-      obj[key] = RequestBase.prototype[key];
+      object[key] = RequestBase.prototype[key];
   }
 
-  return obj;
+  return object;
 }
 
 /**
@@ -43,7 +43,7 @@ function mixin(obj) {
  * @api public
  */
 
-RequestBase.prototype.clearTimeout = function() {
+RequestBase.prototype.clearTimeout = function () {
   clearTimeout(this._timer);
   clearTimeout(this._responseTimeoutTimer);
   clearTimeout(this._uploadTimeoutTimer);
@@ -62,7 +62,7 @@ RequestBase.prototype.clearTimeout = function() {
  * @api public
  */
 
-RequestBase.prototype.parse = function(fn) {
+RequestBase.prototype.parse = function (fn) {
   this._parser = fn;
   return this;
 };
@@ -85,8 +85,8 @@ RequestBase.prototype.parse = function(fn) {
  * @api public
  */
 
-RequestBase.prototype.responseType = function(val) {
-  this._responseType = val;
+RequestBase.prototype.responseType = function (value) {
+  this._responseType = value;
   return this;
 };
 
@@ -99,7 +99,7 @@ RequestBase.prototype.responseType = function(val) {
  * @api public
  */
 
-RequestBase.prototype.serialize = function(fn) {
+RequestBase.prototype.serialize = function (fn) {
   this._serializer = fn;
   return this;
 };
@@ -118,7 +118,7 @@ RequestBase.prototype.serialize = function(fn) {
  * @api public
  */
 
-RequestBase.prototype.timeout = function(options) {
+RequestBase.prototype.timeout = function (options) {
   if (!options || typeof options !== 'object') {
     this._timeout = options;
     this._responseTimeout = 0;
@@ -158,7 +158,7 @@ RequestBase.prototype.timeout = function(options) {
  * @api public
  */
 
-RequestBase.prototype.retry = function(count, fn) {
+RequestBase.prototype.retry = function (count, fn) {
   // Default to 1 if no count passed or true
   if (arguments.length === 0 || count === true) count = 1;
   if (count <= 0) count = 0;
@@ -168,17 +168,53 @@ RequestBase.prototype.retry = function(count, fn) {
   return this;
 };
 
-const ERROR_CODES = ['ECONNRESET', 'ETIMEDOUT', 'EADDRINFO', 'ESOCKETTIMEDOUT'];
+//
+// NOTE: we do not include ESOCKETTIMEDOUT because that is from `request` package
+//       <https://github.com/sindresorhus/got/pull/537>
+//
+// NOTE: we do not include EADDRINFO because it was removed from libuv in 2014
+//       <https://github.com/libuv/libuv/commit/02e1ebd40b807be5af46343ea873331b2ee4e9c1>
+//       <https://github.com/request/request/search?q=ESOCKETTIMEDOUT&unscoped_q=ESOCKETTIMEDOUT>
+//
+//
+// TODO: expose these as configurable defaults
+//
+const ERROR_CODES = new Set([
+  'ETIMEDOUT',
+  'ECONNRESET',
+  'EADDRINUSE',
+  'ECONNREFUSED',
+  'EPIPE',
+  'ENOTFOUND',
+  'ENETUNREACH',
+  'EAI_AGAIN'
+]);
+
+const STATUS_CODES = new Set([
+  408,
+  413,
+  429,
+  500,
+  502,
+  503,
+  504,
+  521,
+  522,
+  524
+]);
+
+// TODO: we would need to make this easily configurable before adding it in (e.g. some might want to add POST)
+// const METHODS = new Set(['GET', 'PUT', 'HEAD', 'DELETE', 'OPTIONS', 'TRACE']);
 
 /**
  * Determine if a request should be retried.
- * (Borrowed from segmentio/superagent-retry)
+ * (Inspired by https://github.com/sindresorhus/got#retry)
  *
  * @param {Error} err an error
  * @param {Response} [res] response
  * @returns {Boolean} if segment should be retried
  */
-RequestBase.prototype._shouldRetry = function(err, res) {
+RequestBase.prototype._shouldRetry = function (err, res) {
   if (!this._maxRetries || this._retries++ >= this._maxRetries) {
     return false;
   }
@@ -194,9 +230,18 @@ RequestBase.prototype._shouldRetry = function(err, res) {
     }
   }
 
-  if (res && res.status && res.status >= 500 && res.status !== 501) return true;
+  // TODO: we would need to make this easily configurable before adding it in (e.g. some might want to add POST)
+  /*
+  if (
+    this.req &&
+    this.req.method &&
+    !METHODS.has(this.req.method.toUpperCase())
+  )
+    return false;
+  */
+  if (res && res.status && STATUS_CODES.has(res.status)) return true;
   if (err) {
-    if (err.code && ERROR_CODES.includes(err.code)) return true;
+    if (err.code && ERROR_CODES.has(err.code)) return true;
     // Superagent timeout
     if (err.timeout && err.code === 'ECONNABORTED') return true;
     if (err.crossDomain) return true;
@@ -212,7 +257,7 @@ RequestBase.prototype._shouldRetry = function(err, res) {
  * @api private
  */
 
-RequestBase.prototype._retry = function() {
+RequestBase.prototype._retry = function () {
   this.clearTimeout();
 
   // node
@@ -236,7 +281,7 @@ RequestBase.prototype._retry = function() {
  * @return {Request}
  */
 
-RequestBase.prototype.then = function(resolve, reject) {
+RequestBase.prototype.then = function (resolve, reject) {
   if (!this._fullfilledPromise) {
     const self = this;
     if (this._endCalled) {
@@ -273,7 +318,7 @@ RequestBase.prototype.then = function(resolve, reject) {
   return this._fullfilledPromise.then(resolve, reject);
 };
 
-RequestBase.prototype.catch = function(cb) {
+RequestBase.prototype.catch = function (cb) {
   return this.then(undefined, cb);
 };
 
@@ -281,18 +326,18 @@ RequestBase.prototype.catch = function(cb) {
  * Allow for extension
  */
 
-RequestBase.prototype.use = function(fn) {
+RequestBase.prototype.use = function (fn) {
   fn(this);
   return this;
 };
 
-RequestBase.prototype.ok = function(cb) {
+RequestBase.prototype.ok = function (cb) {
   if (typeof cb !== 'function') throw new Error('Callback required');
   this._okCallback = cb;
   return this;
 };
 
-RequestBase.prototype._isResponseOK = function(res) {
+RequestBase.prototype._isResponseOK = function (res) {
   if (!res) {
     return false;
   }
@@ -313,7 +358,7 @@ RequestBase.prototype._isResponseOK = function(res) {
  * @api public
  */
 
-RequestBase.prototype.get = function(field) {
+RequestBase.prototype.get = function (field) {
   return this._header[field.toLowerCase()];
 };
 
@@ -352,7 +397,7 @@ RequestBase.prototype.getHeader = RequestBase.prototype.get;
  * @api public
  */
 
-RequestBase.prototype.set = function(field, val) {
+RequestBase.prototype.set = function (field, value) {
   if (isObject(field)) {
     for (const key in field) {
       if (Object.prototype.hasOwnProperty.call(field, key))
@@ -362,8 +407,8 @@ RequestBase.prototype.set = function(field, val) {
     return this;
   }
 
-  this._header[field.toLowerCase()] = val;
-  this.header[field] = val;
+  this._header[field.toLowerCase()] = value;
+  this.header[field] = value;
   return this;
 };
 
@@ -379,7 +424,7 @@ RequestBase.prototype.set = function(field, val) {
  *
  * @param {String} field field name
  */
-RequestBase.prototype.unset = function(field) {
+RequestBase.prototype.unset = function (field) {
   delete this._header[field.toLowerCase()];
   delete this.header[field];
   return this;
@@ -404,7 +449,7 @@ RequestBase.prototype.unset = function(field) {
  * @return {Request} for chaining
  * @api public
  */
-RequestBase.prototype.field = function(name, val) {
+RequestBase.prototype.field = function (name, value) {
   // name should be either a string or an object.
   if (name === null || undefined === name) {
     throw new Error('.field(name, val) name can not be empty');
@@ -425,25 +470,25 @@ RequestBase.prototype.field = function(name, val) {
     return this;
   }
 
-  if (Array.isArray(val)) {
-    for (const i in val) {
-      if (Object.prototype.hasOwnProperty.call(val, i))
-        this.field(name, val[i]);
+  if (Array.isArray(value)) {
+    for (const i in value) {
+      if (Object.prototype.hasOwnProperty.call(value, i))
+        this.field(name, value[i]);
     }
 
     return this;
   }
 
   // val should be defined now
-  if (val === null || undefined === val) {
+  if (value === null || undefined === value) {
     throw new Error('.field(name, val) val can not be empty');
   }
 
-  if (typeof val === 'boolean') {
-    val = String(val);
+  if (typeof value === 'boolean') {
+    value = String(value);
   }
 
-  this._getFormData().append(name, val);
+  this._getFormData().append(name, value);
   return this;
 };
 
@@ -453,7 +498,7 @@ RequestBase.prototype.field = function(name, val) {
  * @return {Request} request
  * @api public
  */
-RequestBase.prototype.abort = function() {
+RequestBase.prototype.abort = function () {
   if (this._aborted) {
     return this;
   }
@@ -466,7 +511,7 @@ RequestBase.prototype.abort = function() {
   return this;
 };
 
-RequestBase.prototype._auth = function(user, pass, options, base64Encoder) {
+RequestBase.prototype._auth = function (user, pass, options, base64Encoder) {
   switch (options.type) {
     case 'basic':
       this.set('Authorization', `Basic ${base64Encoder(`${user}:${pass}`)}`);
@@ -498,7 +543,7 @@ RequestBase.prototype._auth = function(user, pass, options, base64Encoder) {
  * @api public
  */
 
-RequestBase.prototype.withCredentials = function(on) {
+RequestBase.prototype.withCredentials = function (on) {
   // This is browser-only functionality. Node side is no-op.
   if (on === undefined) on = true;
   this._withCredentials = on;
@@ -513,7 +558,7 @@ RequestBase.prototype.withCredentials = function(on) {
  * @api public
  */
 
-RequestBase.prototype.redirects = function(n) {
+RequestBase.prototype.redirects = function (n) {
   this._maxRedirects = n;
   return this;
 };
@@ -525,7 +570,7 @@ RequestBase.prototype.redirects = function(n) {
  * @param {Number} n number of bytes
  * @return {Request} for chaining
  */
-RequestBase.prototype.maxResponseSize = function(n) {
+RequestBase.prototype.maxResponseSize = function (n) {
   if (typeof n !== 'number') {
     throw new TypeError('Invalid argument');
   }
@@ -543,7 +588,7 @@ RequestBase.prototype.maxResponseSize = function(n) {
  * @api public
  */
 
-RequestBase.prototype.toJSON = function() {
+RequestBase.prototype.toJSON = function () {
   return {
     method: this.method,
     url: this.url,
@@ -593,8 +638,8 @@ RequestBase.prototype.toJSON = function() {
  */
 
 // eslint-disable-next-line complexity
-RequestBase.prototype.send = function(data) {
-  const isObj = isObject(data);
+RequestBase.prototype.send = function (data) {
+  const isObject_ = isObject(data);
   let type = this._header['content-type'];
 
   if (this._formData) {
@@ -603,7 +648,7 @@ RequestBase.prototype.send = function(data) {
     );
   }
 
-  if (isObj && !this._data) {
+  if (isObject_ && !this._data) {
     if (Array.isArray(data)) {
       this._data = [];
     } else if (!this._isHost(data)) {
@@ -614,7 +659,7 @@ RequestBase.prototype.send = function(data) {
   }
 
   // merge
-  if (isObj && isObject(this._data)) {
+  if (isObject_ && isObject(this._data)) {
     for (const key in data) {
       if (Object.prototype.hasOwnProperty.call(data, key))
         this._data[key] = data[key];
@@ -633,7 +678,7 @@ RequestBase.prototype.send = function(data) {
     this._data = data;
   }
 
-  if (!isObj || this._isHost(data)) {
+  if (!isObject_ || this._isHost(data)) {
     return this;
   }
 
@@ -670,7 +715,7 @@ RequestBase.prototype.send = function(data) {
  * @api public
  */
 
-RequestBase.prototype.sortQuery = function(sort) {
+RequestBase.prototype.sortQuery = function (sort) {
   // _sort default to true but otherwise can be a function or boolean
   this._sort = typeof sort === 'undefined' ? true : sort;
   return this;
@@ -681,7 +726,7 @@ RequestBase.prototype.sortQuery = function(sort) {
  *
  * @api private
  */
-RequestBase.prototype._finalizeQueryString = function() {
+RequestBase.prototype._finalizeQueryString = function () {
   const query = this._query.join('&');
   if (query) {
     this.url += (this.url.includes('?') ? '&' : '?') + query;
@@ -692,14 +737,14 @@ RequestBase.prototype._finalizeQueryString = function() {
   if (this._sort) {
     const index = this.url.indexOf('?');
     if (index >= 0) {
-      const queryArr = this.url.slice(index + 1).split('&');
+      const queryArray = this.url.slice(index + 1).split('&');
       if (typeof this._sort === 'function') {
-        queryArr.sort(this._sort);
+        queryArray.sort(this._sort);
       } else {
-        queryArr.sort();
+        queryArray.sort();
       }
 
-      this.url = this.url.slice(0, index) + '?' + queryArr.join('&');
+      this.url = this.url.slice(0, index) + '?' + queryArray.join('&');
     }
   }
 };
@@ -715,7 +760,7 @@ RequestBase.prototype._appendQueryString = () => {
  * @api private
  */
 
-RequestBase.prototype._timeoutError = function(reason, timeout, errno) {
+RequestBase.prototype._timeoutError = function (reason, timeout, errno) {
   if (this._aborted) {
     return;
   }
@@ -730,7 +775,7 @@ RequestBase.prototype._timeoutError = function(reason, timeout, errno) {
   this.callback(err);
 };
 
-RequestBase.prototype._setTimeouts = function() {
+RequestBase.prototype._setTimeouts = function () {
   const self = this;
 
   // deadline

@@ -6,7 +6,7 @@
  * @api private
  */
 
-exports.type = str => str.split(/ *; */).shift();
+exports.type = (str) => str.split(/ *; */).shift();
 
 /**
  * Return header field parameters.
@@ -16,15 +16,18 @@ exports.type = str => str.split(/ *; */).shift();
  * @api private
  */
 
-exports.params = str =>
-  str.split(/ *; */).reduce((obj, str) => {
+exports.params = (val) => {
+  const obj = {};
+  for (const str of val.split(/ *; */)) {
     const parts = str.split(/ *= */);
     const key = parts.shift();
     const val = parts.shift();
 
     if (key && val) obj[key] = val;
-    return obj;
-  }, {});
+  }
+
+  return obj;
+};
 
 /**
  * Parse Link header fields.
@@ -34,14 +37,17 @@ exports.params = str =>
  * @api private
  */
 
-exports.parseLinks = str =>
-  str.split(/ *, */).reduce((obj, str) => {
+exports.parseLinks = (val) => {
+  const obj = {};
+  for (const str of val.split(/ *, */)) {
     const parts = str.split(/ *; */);
     const url = parts[0].slice(1, -1);
     const rel = parts[1].split(/ *= */)[1].slice(1, -1);
     obj[rel] = url;
-    return obj;
-  }, {});
+  }
+
+  return obj;
+};
 
 /**
  * Strip content related fields from `header`.

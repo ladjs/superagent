@@ -34,7 +34,7 @@ function noop() {}
  * Expose `request`.
  */
 
-module.exports = function(method, url) {
+module.exports = function (method, url) {
   // callback
   if (typeof url === 'function') {
     return new exports.Request('GET', method).end(url);
@@ -95,7 +95,7 @@ request.getXHR = () => {
  * @api private
  */
 
-const trim = ''.trim ? s => s.trim() : s => s.replace(/(^\s*|\s*$)/g, '');
+const trim = ''.trim ? (s) => s.trim() : (s) => s.replace(/(^\s*|\s*$)/g, '');
 
 /**
  * Serialize the given `obj`.
@@ -133,7 +133,7 @@ function pushEncodedKeyValuePair(pairs, key, val) {
   }
 
   if (Array.isArray(val)) {
-    val.forEach(v => {
+    val.forEach((v) => {
       pushEncodedKeyValuePair(pairs, key, v);
     });
   } else if (isObject(val)) {
@@ -374,7 +374,7 @@ ResponseBase(Response.prototype);
  * @api private
  */
 
-Response.prototype._parseBody = function(str) {
+Response.prototype._parseBody = function (str) {
   let parse = request.parse[this.type];
   if (this.req._parser) {
     return this.req._parser(this, str);
@@ -396,7 +396,7 @@ Response.prototype._parseBody = function(str) {
  * @api public
  */
 
-Response.prototype.toError = function() {
+Response.prototype.toError = function () {
   const { req } = this;
   const { method } = req;
   const { url } = req;
@@ -515,7 +515,7 @@ RequestBase(Request.prototype);
  * @api public
  */
 
-Request.prototype.type = function(type) {
+Request.prototype.type = function (type) {
   this.set('Content-Type', request.types[type] || type);
   return this;
 };
@@ -540,7 +540,7 @@ Request.prototype.type = function(type) {
  * @api public
  */
 
-Request.prototype.accept = function(type) {
+Request.prototype.accept = function (type) {
   this.set('Accept', request.types[type] || type);
   return this;
 };
@@ -555,7 +555,7 @@ Request.prototype.accept = function(type) {
  * @api public
  */
 
-Request.prototype.auth = function(user, pass, options) {
+Request.prototype.auth = function (user, pass, options) {
   if (arguments.length === 1) pass = '';
   if (typeof pass === 'object' && pass !== null) {
     // pass is optional and can be replaced with options
@@ -569,7 +569,7 @@ Request.prototype.auth = function(user, pass, options) {
     };
   }
 
-  const encoder = string => {
+  const encoder = (string) => {
     if (typeof btoa === 'function') {
       return btoa(string);
     }
@@ -594,7 +594,7 @@ Request.prototype.auth = function(user, pass, options) {
  * @api public
  */
 
-Request.prototype.query = function(val) {
+Request.prototype.query = function (val) {
   if (typeof val !== 'string') val = serialize(val);
   if (val) this._query.push(val);
   return this;
@@ -617,7 +617,7 @@ Request.prototype.query = function(val) {
  * @api public
  */
 
-Request.prototype.attach = function(field, file, options) {
+Request.prototype.attach = function (field, file, options) {
   if (file) {
     if (this._data) {
       throw new Error("superagent can't mix .send() and .attach()");
@@ -629,7 +629,7 @@ Request.prototype.attach = function(field, file, options) {
   return this;
 };
 
-Request.prototype._getFormData = function() {
+Request.prototype._getFormData = function () {
   if (!this._formData) {
     this._formData = new root.FormData();
   }
@@ -646,7 +646,7 @@ Request.prototype._getFormData = function() {
  * @api private
  */
 
-Request.prototype.callback = function(err, res) {
+Request.prototype.callback = function (err, res) {
   if (this._shouldRetry(err, res)) {
     return this._retry();
   }
@@ -668,7 +668,7 @@ Request.prototype.callback = function(err, res) {
  * @api private
  */
 
-Request.prototype.crossDomainError = function() {
+Request.prototype.crossDomainError = function () {
   const err = new Error(
     'Request has been terminated\nPossible causes: the network is offline, Origin is not allowed by Access-Control-Allow-Origin, the page is being unloaded, etc.'
   );
@@ -682,7 +682,7 @@ Request.prototype.crossDomainError = function() {
 };
 
 // This only warns, because the request is still likely to work
-Request.prototype.agent = function() {
+Request.prototype.agent = function () {
   console.warn('This is not supported in browser version of superagent');
   return this;
 };
@@ -707,7 +707,7 @@ Request.prototype.pipe = Request.prototype.write;
  * @return {Boolean} is a host object
  * @api private
  */
-Request.prototype._isHost = function(obj) {
+Request.prototype._isHost = function (obj) {
   // Native objects stringify to [object File], [object Blob], [object FormData], etc.
   return (
     obj &&
@@ -726,7 +726,7 @@ Request.prototype._isHost = function(obj) {
  * @api public
  */
 
-Request.prototype.end = function(fn) {
+Request.prototype.end = function (fn) {
   if (this._endCalled) {
     console.warn(
       'Warning: .end() was called twice. This is not supported in superagent'
@@ -744,7 +744,7 @@ Request.prototype.end = function(fn) {
   this._end();
 };
 
-Request.prototype._setUploadTimeout = function() {
+Request.prototype._setUploadTimeout = function () {
   const self = this;
 
   // upload timeout it's wokrs only if deadline timeout is off
@@ -760,7 +760,7 @@ Request.prototype._setUploadTimeout = function() {
 };
 
 // eslint-disable-next-line complexity
-Request.prototype._end = function() {
+Request.prototype._end = function () {
   if (this._aborted)
     return this.callback(
       new Error('The request has been aborted even before .end() was called')
@@ -892,8 +892,8 @@ Request.prototype._end = function() {
 
 request.agent = () => new Agent();
 
-['GET', 'POST', 'OPTIONS', 'PATCH', 'PUT', 'DELETE'].forEach(method => {
-  Agent.prototype[method.toLowerCase()] = function(url, fn) {
+['GET', 'POST', 'OPTIONS', 'PATCH', 'PUT', 'DELETE'].forEach((method) => {
+  Agent.prototype[method.toLowerCase()] = function (url, fn) {
     const req = new request.Request(method, url);
     this._setDefaults(req);
     if (fn) {

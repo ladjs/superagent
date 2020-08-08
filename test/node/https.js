@@ -78,7 +78,7 @@ describe('https', () => {
     });
 
     describe('request', () => {
-      it('should give a good response', done => {
+      it('should give a good response', (done) => {
         request
           .get(testEndpoint)
           .ca(ca)
@@ -124,7 +124,7 @@ describe('https', () => {
     });
 
     describe('.agent', () => {
-      it('should be able to make multiple requests without redefining the certificate', done => {
+      it('should be able to make multiple requests without redefining the certificate', (done) => {
         const agent = request.agent({ ca });
         agent.get(testEndpoint).end((err, res) => {
           assert.ifError(err);
@@ -178,7 +178,7 @@ describe('https', () => {
     });
 
     describe('request', () => {
-      it('should give a good response with client certificates and CA', done => {
+      it('should give a good response with client certificates and CA', (done) => {
         request
           .get(testEndpoint)
           .ca(ca)
@@ -191,7 +191,7 @@ describe('https', () => {
             done();
           });
       });
-      it('should give a good response with client pfx', done => {
+      it('should give a good response with client pfx', (done) => {
         request
           .get(testEndpoint)
           .pfx(pfx)
@@ -202,7 +202,7 @@ describe('https', () => {
             done();
           });
       });
-      it('should give a good response with client pfx with passphrase', done => {
+      it('should give a good response with client pfx with passphrase', (done) => {
         request
           .get(testEndpoint)
           .pfx({
@@ -219,7 +219,7 @@ describe('https', () => {
     });
 
     describe('.agent', () => {
-      it('should be able to make multiple requests without redefining the certificates', done => {
+      it('should be able to make multiple requests without redefining the certificates', (done) => {
         const agent = request.agent({ ca, key, cert });
         agent.get(testEndpoint).end((err, res) => {
           assert.ifError(err);
@@ -233,7 +233,7 @@ describe('https', () => {
           });
         });
       });
-      it('should be able to make multiple requests without redefining pfx', done => {
+      it('should be able to make multiple requests without redefining pfx', (done) => {
         const agent = request.agent({ pfx });
         agent.get(testEndpoint).end((err, res) => {
           assert.ifError(err);

@@ -17,7 +17,7 @@ if (process.env.HTTP2_TEST) {
     HTTP2_HEADER_SCHEME,
     HTTP2_HEADER_STATUS
   } = http.constants;
-  isPseudoHeader = function(name) {
+  isPseudoHeader = function (name) {
     switch (name) {
       case HTTP2_HEADER_STATUS: // :status
       case HTTP2_HEADER_METHOD: // :method
@@ -45,7 +45,7 @@ app.all('/url', (req, res) => {
 app.all('/echo', (req, res) => {
   const { headers } = req;
   if (process.env.HTTP2_TEST) {
-    Object.keys(headers).forEach(name => {
+    Object.keys(headers).forEach((name) => {
       if (isPseudoHeader(name)) {
         delete headers[name];
       }
@@ -199,7 +199,7 @@ app.delete('/user/:id', (req, res) => {
 
 app.post('/todo/item', (req, res) => {
   let buf = '';
-  req.on('data', chunk => {
+  req.on('data', (chunk) => {
     buf += chunk;
   });
   req.on('end', () => {
@@ -234,7 +234,7 @@ app.get('/delay/slowbody', (req, res) => {
 
   // Send lots of garbage data to overflow all buffers along the way,
   // so that the browser gets some data before the request is done
-  const initialDataSent = new Promise(resolve => {
+  const initialDataSent = new Promise((resolve) => {
     res.write(new Buffer.alloc(4000), () => {
       res.write(new Buffer.alloc(16000));
       resolve();
@@ -243,11 +243,11 @@ app.get('/delay/slowbody', (req, res) => {
 
   // Make sure sending of request body takes over 1s,
   // so that the test can't pass by accident.
-  const minimumTime = new Promise(resolve => {
+  const minimumTime = new Promise((resolve) => {
     setTimeout(resolve, 1001);
   });
 
-  new Promise(resolve => {
+  new Promise((resolve) => {
     // Waiting full 10 seconds for the test would be too annoying,
     // so the remote callback is a hack to push the test forward
     slowBodyCallback = resolve;
@@ -330,9 +330,7 @@ app.get('/basic-auth/again', basicAuth('tobi', ''), (req, res) => {
 app.post('/auth', basicAuth('foo', 'bar'), (req, res) => {
   const auth = req.headers.authorization;
   const parts = auth.split(' ');
-  const credentials = Buffer.from(parts[1], 'base64')
-    .toString()
-    .split(':');
+  const credentials = Buffer.from(parts[1], 'base64').toString().split(':');
   const user = credentials[0];
   const pass = credentials[1];
 
@@ -473,7 +471,7 @@ app.get('/bad-redirect', (req, res) => {
 app.all('/ua', (req, res) => {
   const { headers } = req;
   if (process.env.HTTP2_TEST) {
-    Object.keys(headers).forEach(name => {
+    Object.keys(headers).forEach((name) => {
       if (isPseudoHeader(name)) {
         delete headers[name];
       }

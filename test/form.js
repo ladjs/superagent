@@ -12,7 +12,7 @@ const formDataSupported = setup.NODE || FormData !== 'undefined';
 
 describe('req.send(Object) as "form"', () => {
   describe('with req.type() set to form', () => {
-    it('should send x-www-form-urlencoded data', done => {
+    it('should send x-www-form-urlencoded data', (done) => {
       request
         .post(`${base}/echo`)
         .type('form')
@@ -28,7 +28,7 @@ describe('req.send(Object) as "form"', () => {
   });
 
   describe('when called several times', () => {
-    it('should merge the objects', done => {
+    it('should merge the objects', (done) => {
       request
         .post(`${base}/echo`)
         .type('form')
@@ -48,7 +48,7 @@ describe('req.send(Object) as "form"', () => {
 });
 
 describe('req.attach', () => {
-  it('ignores null file', done => {
+  it('ignores null file', (done) => {
     request
       .post('/echo')
       .attach('image', null)
@@ -58,9 +58,9 @@ describe('req.attach', () => {
   });
 });
 
-describe('req.field', function() {
+describe('req.field', function () {
   this.timeout(5000);
-  it('allow bools', done => {
+  it('allow bools', (done) => {
     if (!formDataSupported) {
       return done();
     }
@@ -76,7 +76,7 @@ describe('req.field', function() {
       });
   });
 
-  it('allow objects', done => {
+  it('allow objects', (done) => {
     if (!formDataSupported) {
       return done();
     }
@@ -91,7 +91,7 @@ describe('req.field', function() {
       });
   });
 
-  it('works with arrays in objects', done => {
+  it('works with arrays in objects', (done) => {
     if (!formDataSupported) {
       return done();
     }
@@ -106,7 +106,7 @@ describe('req.field', function() {
       });
   });
 
-  it('works with arrays', done => {
+  it('works with arrays', (done) => {
     if (!formDataSupported) {
       return done();
     }
@@ -133,17 +133,11 @@ describe('req.field', function() {
 
   it('cannot be mixed with send()', () => {
     assert.throws(() => {
-      request
-        .post('/echo')
-        .field('form', 'data')
-        .send('hi');
+      request.post('/echo').field('form', 'data').send('hi');
     });
 
     assert.throws(() => {
-      request
-        .post('/echo')
-        .send('hi')
-        .field('form', 'data');
+      request.post('/echo').send('hi').field('form', 'data');
     });
   });
 });

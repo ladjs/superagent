@@ -18,7 +18,8 @@
     "no-useless-escape": "off",
     "no-cond-assign": "off",
     "no-redeclare": "off",
-    "node/no-exports-assign": "off"
+    "node/no-exports-assign": "off",
+    "no-unsafe-finally": "off"
   },
   "globals": {
     "regeneratorRuntime": "writable"
@@ -29,7 +30,8 @@
       "Array.from",
       "Symbol",
       "Object.getOwnPropertySymbols",
-      "Object.setPrototypeOf"
+      "Object.setPrototypeOf",
+      "Set"
     ]
   }
 }
