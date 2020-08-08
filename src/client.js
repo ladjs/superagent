@@ -275,7 +275,7 @@ function parseHeader(str) {
 function isJSON(mime) {
   // should match /json or +json
   // but not /json-seq
-  return /[/+]json($|[^-\w])/.test(mime);
+  return /[/+]json($|[^-\w])/i.test(mime);
 }
 
 /**

@@ -623,6 +623,7 @@ RequestBase.prototype.send = function(data) {
     // default to x-www-form-urlencoded
     if (!type) this.type('form');
     type = this._header['content-type'];
+    if (type) type = type.toLowerCase().trim();
     if (type === 'application/x-www-form-urlencoded') {
       this._data = this._data ? `${this._data}&${data}` : data;
     } else {

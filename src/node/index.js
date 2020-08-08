@@ -1014,7 +1014,8 @@ Request.prototype._end = function() {
 
     const max = this._maxRedirects;
     const mime = utils.type(res.headers['content-type'] || '') || 'text/plain';
-    const type = mime.split('/')[0];
+    let type = mime.split('/')[0];
+    if (type) type = type.toLowerCase().trim();
     const multipart = type === 'multipart';
     const redirect = isRedirect(res.statusCode);
     const responseType = this._responseType;
@@ -1331,14 +1332,17 @@ methods.forEach(method => {
 
 function isText(mime) {
   const parts = mime.split('/');
-  const type = parts[0];
-  const subtype = parts[1];
+  let type = parts[0];
+  if (type) type = type.toLowerCase().trim();
+  let subtype = parts[1];
+  if (subtype) subtype = subtype.toLowerCase().trim();
 
   return type === 'text' || subtype === 'x-www-form-urlencoded';
 }
 
 function isImageOrVideo(mime) {
-  const type = mime.split('/')[0];
+  let type = mime.split('/')[0];
+  if (type) type = type.toLowerCase().trim();
 
   return type === 'image' || type === 'video';
 }
@@ -1354,7 +1358,7 @@ function isImageOrVideo(mime) {
 function isJSON(mime) {
   // should match /json or +json
   // but not /json-seq
-  return /[/+]json($|[^-\w])/.test(mime);
+  return /[/+]json($|[^-\w])/i.test(mime);
 }
 
 /**
