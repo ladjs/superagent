@@ -9,6 +9,559 @@
   <body>
     <ul id="menu"></ul>
     <div id="content">
+<h1 id="superagent">SuperAgent</h1>
+<p>SuperAgent is light-weight progressive ajax API crafted for flexibility, readability, and a low learning curve after being frustrated with many of the existing request APIs. It also works with Node.js!</p>
+<pre><code> request
+   .post(&#39;/api/pet&#39;)
+   .send({ name: &#39;Manny&#39;, species: &#39;cat&#39; })
+   .set(&#39;X-API-Key&#39;, &#39;foobar&#39;)
+   .set(&#39;Accept&#39;, &#39;application/json&#39;)
+   .then(res =&gt; {
+      alert(&#39;yay got &#39; + JSON.stringify(res.body));
+   });</code></pre>
+<h2 id="test-documentation">Test documentation</h2>
+<p>The following <a href="docs/test.html">test documentation</a> was generated with <a href="https://mochajs.org/">Mocha&#39;s</a> &quot;doc&quot; reporter, and directly reflects the test suite. This provides an additional source of documentation.</p>
+<h2 id="request-basics">Request basics</h2>
+<p>A request can be initiated by invoking the appropriate method on the <code>request</code> object, then calling <code>.then()</code> (or <code>.end()</code> <a href="#promise-and-generator-support">or <code>await</code></a>) to send the request. For example a simple <strong>GET</strong> request:</p>
+<pre><code> request
+   .get(&#39;/search&#39;)
+   .then(res =&gt; {
+      // res.body, res.headers, res.status
+   })
+   .catch(err =&gt; {
+      // err.message, err.response
+   });</code></pre>
+<p>HTTP method may also be passed as a string:</p>
+<pre><code>request(&#39;GET&#39;, &#39;/search&#39;).then(success, failure);</code></pre>
+<p>Old-style callbacks are also supported, but not recommended. <em>Instead of</em> <code>.then()</code> you can call <code>.end()</code>:</p>
+<pre><code>request(&#39;GET&#39;, &#39;/search&#39;).end(function(err, res){
+  if (res.ok) {}
+});</code></pre>
+<p>Absolute URLs can be used. In web browsers absolute URLs work only if the server implements <a href="#cors">CORS</a>.</p>
+<pre><code> request
+   .get(&#39;https://example.com/search&#39;)
+   .then(res =&gt; {
+
+   });</code></pre>
+<p>The <strong>Node</strong> client supports making requests to <a href="https://en.wikipedia.org/wiki/Unix_domain_socket">Unix Domain Sockets</a>:</p>
+<pre><code>// pattern: https?+unix://SOCKET_PATH/REQUEST_PATH
+//          Use `%2F` as `/` in SOCKET_PATH
+try {
+  const res = await request
+    .get(&#39;http+unix://%2Fabsolute%2Fpath%2Fto%2Funix.sock/search&#39;);
+  // res.body, res.headers, res.status
+} catch(err) {
+  // err.message, err.response
+}</code></pre>
+<p><strong>DELETE</strong>, <strong>HEAD</strong>, <strong>PATCH</strong>, <strong>POST</strong>, and <strong>PUT</strong> requests can also be used, simply change the method name:</p>
+<pre><code>request
+  .head(&#39;/favicon.ico&#39;)
+  .then(res =&gt; {
+
+  });</code></pre>
+<p><strong>DELETE</strong> can be also called as <code>.del()</code> for compatibility with old IE where <code>delete</code> is a reserved word.</p>
+<p>The HTTP method defaults to <strong>GET</strong>, so if you wish, the following is valid:</p>
+<pre><code> request(&#39;/search&#39;, (err, res) =&gt; {
+
+ });</code></pre>
+<h2 id="setting-header-fields">Setting header fields</h2>
+<p>Setting header fields is simple, invoke <code>.set()</code> with a field name and value:</p>
+<pre><code> request
+   .get(&#39;/search&#39;)
+   .set(&#39;API-Key&#39;, &#39;foobar&#39;)
+   .set(&#39;Accept&#39;, &#39;application/json&#39;)
+   .then(callback);</code></pre>
+<p>You may also pass an object to set several fields in a single call:</p>
+<pre><code> request
+   .get(&#39;/search&#39;)
+   .set({ &#39;API-Key&#39;: &#39;foobar&#39;, Accept: &#39;application/json&#39; })
+   .then(callback);</code></pre>
+<h2 id="get-requests"><code>GET</code> requests</h2>
+<p>The <code>.query()</code> method accepts objects, which when used with the <strong>GET</strong> method will form a query-string. The following will produce the path <code>/search?query=Manny&amp;range=1..5&amp;order=desc</code>.</p>
+<pre><code> request
+   .get(&#39;/search&#39;)
+   .query({ query: &#39;Manny&#39; })
+   .query({ range: &#39;1..5&#39; })
+   .query({ order: &#39;desc&#39; })
+   .then(res =&gt; {
+
+   });</code></pre>
+<p>Or as a single object:</p>
+<pre><code>request
+  .get(&#39;/search&#39;)
+  .query({ query: &#39;Manny&#39;, range: &#39;1..5&#39;, order: &#39;desc&#39; })
+  .then(res =&gt; {
+
+  });</code></pre>
+<p>The <code>.query()</code> method accepts strings as well:</p>
+<pre><code>  request
+    .get(&#39;/querystring&#39;)
+    .query(&#39;search=Manny&amp;range=1..5&#39;)
+    .then(res =&gt; {
+
+    });</code></pre>
+<p>Or joined:</p>
+<pre><code>  request
+    .get(&#39;/querystring&#39;)
+    .query(&#39;search=Manny&#39;)
+    .query(&#39;range=1..5&#39;)
+    .then(res =&gt; {
+
+    });</code></pre>
+<h2 id="head-requests"><code>HEAD</code> requests</h2>
+<p>You can also use the <code>.query()</code> method for HEAD requests. The following will produce the path <code>/users?email=joe@smith.com</code>.</p>
+<pre><code>  request
+    .head(&#39;/users&#39;)
+    .query({ email: &#39;joe@smith.com&#39; })
+    .then(res =&gt; {
+
+    });</code></pre>
+<h2 id="post--put-requests"><code>POST</code> / <code>PUT</code> requests</h2>
+<p>A typical JSON <strong>POST</strong> request might look a little like the following, where we set the Content-Type header field appropriately, and &quot;write&quot; some data, in this case just a JSON string.</p>
+<pre><code>  request.post(&#39;/user&#39;)
+    .set(&#39;Content-Type&#39;, &#39;application/json&#39;)
+    .send(&#39;{&quot;name&quot;:&quot;tj&quot;,&quot;pet&quot;:&quot;tobi&quot;}&#39;)
+    .then(callback)
+    .catch(errorCallback)</code></pre>
+<p>Since JSON is undoubtedly the most common, it&#39;s the <em>default</em>! The following example is equivalent to the previous.</p>
+<pre><code>  request.post(&#39;/user&#39;)
+    .send({ name: &#39;tj&#39;, pet: &#39;tobi&#39; })
+    .then(callback, errorCallback)</code></pre>
+<p>Or using multiple <code>.send()</code> calls:</p>
+<pre><code>  request.post(&#39;/user&#39;)
+    .send({ name: &#39;tj&#39; })
+    .send({ pet: &#39;tobi&#39; })
+    .then(callback, errorCallback)</code></pre>
+<p>By default sending strings will set the <code>Content-Type</code> to <code>application/x-www-form-urlencoded</code>,
+  multiple calls will be concatenated with <code>&amp;</code>, here resulting in <code>name=tj&amp;pet=tobi</code>:</p>
+<pre><code>  request.post(&#39;/user&#39;)
+    .send(&#39;name=tj&#39;)
+    .send(&#39;pet=tobi&#39;)
+    .then(callback, errorCallback);</code></pre>
+<p>SuperAgent formats are extensible, however by default &quot;json&quot; and &quot;form&quot; are supported. To send the data as <code>application/x-www-form-urlencoded</code> simply invoke <code>.type()</code> with &quot;form&quot;, where the default is &quot;json&quot;. This request will <strong>POST</strong> the body &quot;name=tj&amp;pet=tobi&quot;.</p>
+<pre><code>  request.post(&#39;/user&#39;)
+    .type(&#39;form&#39;)
+    .send({ name: &#39;tj&#39; })
+    .send({ pet: &#39;tobi&#39; })
+    .then(callback, errorCallback)</code></pre>
+<p>Sending a <a href="https://developer.mozilla.org/en-US/docs/Web/API/FormData/FormData"><code>FormData</code></a> object is also supported. The following example will <strong>POST</strong> the content of the HTML form identified by id=&quot;myForm&quot;:</p>
+<pre><code>  request.post(&#39;/user&#39;)
+    .send(new FormData(document.getElementById(&#39;myForm&#39;)))
+    .then(callback, errorCallback)</code></pre>
+<h2 id="setting-the-content-type">Setting the <code>Content-Type</code></h2>
+<p>The obvious solution is to use the <code>.set()</code> method:</p>
+<pre><code> request.post(&#39;/user&#39;)
+   .set(&#39;Content-Type&#39;, &#39;application/json&#39;)</code></pre>
+<p>As a short-hand the <code>.type()</code> method is also available, accepting
+the canonicalized MIME type name complete with type/subtype, or
+simply the extension name such as &quot;xml&quot;, &quot;json&quot;, &quot;png&quot;, etc:</p>
+<pre><code> request.post(&#39;/user&#39;)
+   .type(&#39;application/json&#39;)
+
+ request.post(&#39;/user&#39;)
+   .type(&#39;json&#39;)
+
+ request.post(&#39;/user&#39;)
+   .type(&#39;png&#39;)</code></pre>
+<h2 id="serializing-request-body">Serializing request body</h2>
+<p>SuperAgent will automatically serialize JSON and forms.
+You can setup automatic serialization for other types as well:</p>
+<pre><code class="language-js">request.serialize[&#39;application/xml&#39;] = function (obj) {
+    return &#39;string generated from obj&#39;;
+};
+
+// going forward, all requests with a Content-type of
+// &#39;application/xml&#39; will be automatically serialized</code></pre>
+<p>If you want to send the payload in a custom format, you can replace
+the built-in serialization with the <code>.serialize()</code> method on a per-request basis:</p>
+<pre><code class="language-js">request
+    .post(&#39;/user&#39;)
+    .send({foo: &#39;bar&#39;})
+    .serialize(obj =&gt; {
+        return &#39;string generated from obj&#39;;
+    });</code></pre>
+<h2 id="retrying-requests">Retrying requests</h2>
+<p>When given the <code>.retry()</code> method, SuperAgent will automatically retry requests, if they fail in a way that is transient or could be due to a flaky Internet connection.</p>
+<p>This method has two optional arguments: number of retries (default 1) and a callback. It calls <code>callback(err, res)</code> before each retry. The callback may return <code>true</code>/<code>false</code> to control whether the request should be retried (but the maximum number of retries is always applied).</p>
+<pre><code> request
+   .get(&#39;https://example.com/search&#39;)
+   .retry(2) // or:
+   .retry(2, callback)
+   .then(finished);
+   .catch(failed);</code></pre>
+<p>Use <code>.retry()</code> only with requests that are <em>idempotent</em> (i.e. multiple requests reaching the server won&#39;t cause undesirable side effects like duplicate purchases).</p>
+<p>All request methods are tried by default (which means if you do not want POST requests to be retried, you will need to pass a custom retry callback).</p>
+<p>By default the following status codes are retried:</p>
+<ul>
+<li><code>408</code></li>
+<li><code>413</code></li>
+<li><code>429</code></li>
+<li><code>500</code></li>
+<li><code>502</code></li>
+<li><code>503</code></li>
+<li><code>504</code></li>
+<li><code>521</code></li>
+<li><code>522</code></li>
+<li><code>524</code></li>
+</ul>
+<p>By default the following error codes are retried:</p>
+<ul>
+<li><code>&#39;ETIMEDOUT&#39;</code></li>
+<li><code>&#39;ECONNRESET&#39;</code></li>
+<li><code>&#39;EADDRINUSE&#39;</code></li>
+<li><code>&#39;ECONNREFUSED&#39;</code></li>
+<li><code>&#39;EPIPE&#39;</code></li>
+<li><code>&#39;ENOTFOUND&#39;</code></li>
+<li><code>&#39;ENETUNREACH&#39;</code></li>
+<li><code>&#39;EAI_AGAIN&#39;</code></li>
+</ul>
+<h2 id="setting-accept">Setting Accept</h2>
+<p>In a similar fashion to the <code>.type()</code> method it is also possible to set the <code>Accept</code> header via the short hand method <code>.accept()</code>. Which references <code>request.types</code> as well allowing you to specify either the full canonicalized MIME type name as <code>type/subtype</code>, or the extension suffix form as &quot;xml&quot;, &quot;json&quot;, &quot;png&quot;, etc. for convenience:</p>
+<pre><code> request.get(&#39;/user&#39;)
+   .accept(&#39;application/json&#39;)
+
+ request.get(&#39;/user&#39;)
+   .accept(&#39;json&#39;)
+
+ request.post(&#39;/user&#39;)
+   .accept(&#39;png&#39;)</code></pre>
+<h3 id="facebook-and-accept-json">Facebook and Accept JSON</h3>
+<p>If you are calling Facebook&#39;s API, be sure to send an <code>Accept: application/json</code> header in your request. If you don&#39;t do this, Facebook will respond with <code>Content-Type: text/javascript; charset=UTF-8</code>, which SuperAgent will not parse and thus <code>res.body</code> will be undefined. You can do this with either <code>req.accept(&#39;json&#39;)</code> or <code>req.header(&#39;Accept&#39;, &#39;application/json&#39;)</code>. See <a href="https://github.com/visionmedia/superagent/issues/1078">issue 1078</a> for details.</p>
+<h2 id="query-strings">Query strings</h2>
+<p>  <code>req.query(obj)</code> is a method which may be used to build up a query-string. For example populating <code>?format=json&amp;dest=/login</code> on a <strong>POST</strong>:</p>
+<pre><code>request
+  .post(&#39;/&#39;)
+  .query({ format: &#39;json&#39; })
+  .query({ dest: &#39;/login&#39; })
+  .send({ post: &#39;data&#39;, here: &#39;wahoo&#39; })
+  .then(callback);</code></pre>
+<p>By default the query string is not assembled in any particular order. An asciibetically-sorted query string can be enabled with <code>req.sortQuery()</code>. You may also provide a custom sorting comparison function with <code>req.sortQuery(myComparisonFn)</code>. The comparison function should take 2 arguments and return a negative/zero/positive integer.</p>
+<pre><code class="language-js"> // default order
+ request.get(&#39;/user&#39;)
+   .query(&#39;name=Nick&#39;)
+   .query(&#39;search=Manny&#39;)
+   .sortQuery()
+   .then(callback)
+
+ // customized sort function
+ request.get(&#39;/user&#39;)
+   .query(&#39;name=Nick&#39;)
+   .query(&#39;search=Manny&#39;)
+   .sortQuery((a, b) =&gt; a.length - b.length)
+   .then(callback)</code></pre>
+<h2 id="tls-options">TLS options</h2>
+<p>In Node.js SuperAgent supports methods to configure HTTPS requests:</p>
+<ul>
+<li><code>.ca()</code>: Set the CA certificate(s) to trust</li>
+<li><code>.cert()</code>: Set the client certificate chain(s)</li>
+<li><code>.key()</code>: Set the client private key(s)</li>
+<li><code>.pfx()</code>: Set the client PFX or PKCS12 encoded private key and certificate chain</li>
+<li><code>.disableTLSCerts()</code>: Does not reject expired or invalid TLS certs. Sets internally <code>rejectUnauthorized=true</code>. <em>Be warned, this method allows MITM attacks.</em></li>
+</ul>
+<p>For more information, see Node.js <a href="https://nodejs.org/api/https.html#https_https_request_options_callback">https.request docs</a>.</p>
+<pre><code class="language-js">var key = fs.readFileSync(&#39;key.pem&#39;),
+    cert = fs.readFileSync(&#39;cert.pem&#39;);
+
+request
+  .post(&#39;/client-auth&#39;)
+  .key(key)
+  .cert(cert)
+  .then(callback);</code></pre>
+<pre><code class="language-js">var ca = fs.readFileSync(&#39;ca.cert.pem&#39;);
+
+request
+  .post(&#39;https://localhost/private-ca-server&#39;)
+  .ca(ca)
+  .then(res =&gt; {});</code></pre>
+<h2 id="parsing-response-bodies">Parsing response bodies</h2>
+<p>SuperAgent will parse known response-body data for you,
+currently supporting <code>application/x-www-form-urlencoded</code>,
+<code>application/json</code>, and <code>multipart/form-data</code>. You can setup
+automatic parsing for other response-body data as well:</p>
+<pre><code class="language-js">//browser
+request.parse[&#39;application/xml&#39;] = function (str) {
+    return {&#39;object&#39;: &#39;parsed from str&#39;};
+};
+
+//node
+request.parse[&#39;application/xml&#39;] = function (res, cb) {
+    //parse response text and set res.body here
+
+    cb(null, res);
+};
+
+//going forward, responses of type &#39;application/xml&#39;
+//will be parsed automatically</code></pre>
+<p>You can set a custom parser (that takes precedence over built-in parsers) with the <code>.buffer(true).parse(fn)</code> method. If response buffering is not enabled (<code>.buffer(false)</code>) then the <code>response</code> event will be emitted without waiting for the body parser to finish, so <code>response.body</code> won&#39;t be available.</p>
+<h3 id="json--urlencoded">JSON / Urlencoded</h3>
+<p>The property <code>res.body</code> is the parsed object, for example if a request responded with the JSON string &#39;{&quot;user&quot;:{&quot;name&quot;:&quot;tobi&quot;}}&#39;, <code>res.body.user.name</code> would be &quot;tobi&quot;. Likewise the x-www-form-urlencoded value of &quot;user[name]=tobi&quot; would yield the same result. Only one level of nesting is supported. If you need more complex data, send JSON instead.</p>
+<p>Arrays are sent by repeating the key. <code>.send({color: [&#39;red&#39;,&#39;blue&#39;]})</code> sends <code>color=red&amp;color=blue</code>. If you want the array keys to contain <code>[]</code> in their name, you must add it yourself, as SuperAgent doesn&#39;t add it automatically.</p>
+<h3 id="multipart">Multipart</h3>
+<p>The Node client supports <em>multipart/form-data</em> via the <a href="https://github.com/felixge/node-formidable">Formidable</a> module. When parsing multipart responses, the object <code>res.files</code> is also available to you. Suppose for example a request responds with the following multipart body:</p>
+<pre><code>--whoop
+Content-Disposition: attachment; name=&quot;image&quot;; filename=&quot;tobi.png&quot;
+Content-Type: image/png
+
+... data here ...
+--whoop
+Content-Disposition: form-data; name=&quot;name&quot;
+Content-Type: text/plain
+
+Tobi
+--whoop--</code></pre>
+<p>You would have the values <code>res.body.name</code> provided as &quot;Tobi&quot;, and <code>res.files.image</code> as a <code>File</code> object containing the path on disk, filename, and other properties.</p>
+<h3 id="binary">Binary</h3>
+<p>In browsers, you may use <code>.responseType(&#39;blob&#39;)</code> to request handling of binary response bodies. This API is unnecessary when running in node.js. The supported argument values for this method are</p>
+<ul>
+<li><code>&#39;blob&#39;</code> passed through to the XmlHTTPRequest <code>responseType</code> property</li>
+<li><code>&#39;arraybuffer&#39;</code> passed through to the XmlHTTPRequest <code>responseType</code> property</li>
+</ul>
+<pre><code class="language-js">req.get(&#39;/binary.data&#39;)
+  .responseType(&#39;blob&#39;)
+  .then(res =&gt; {
+    // res.body will be a browser native Blob type here
+  });</code></pre>
+<p>For more information, see the Mozilla Developer Network <a href="https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/responseType">xhr.responseType docs</a>.</p>
+<h2 id="response-properties">Response properties</h2>
+<p>Many helpful flags and properties are set on the <code>Response</code> object, ranging from the response text, parsed response body, header fields, status flags and more.</p>
+<h3 id="response-text">Response text</h3>
+<p>The <code>res.text</code> property contains the unparsed response body string. This property is always present for the client API, and only when the mime type matches &quot;text/<em>&quot;, &quot;</em>/json&quot;, or &quot;x-www-form-urlencoded&quot; by default for node. The reasoning is to conserve memory, as buffering text of large bodies such as multipart files or images is extremely inefficient. To force buffering see the &quot;Buffering responses&quot; section.</p>
+<h3 id="response-body">Response body</h3>
+<p>Much like SuperAgent can auto-serialize request data, it can also automatically parse it. When a parser is defined for the Content-Type, it is parsed, which by default includes &quot;application/json&quot; and &quot;application/x-www-form-urlencoded&quot;. The parsed object is then available via <code>res.body</code>.</p>
+<h3 id="response-header-fields">Response header fields</h3>
+<p>The <code>res.header</code> contains an object of parsed header fields, lowercasing field names much like node does. For example <code>res.header[&#39;content-length&#39;]</code>.</p>
+<h3 id="response-content-type">Response Content-Type</h3>
+<p>The Content-Type response header is special-cased, providing <code>res.type</code>, which is void of the charset (if any). For example the Content-Type of &quot;text/html; charset=utf8&quot; will provide &quot;text/html&quot; as <code>res.type</code>, and the <code>res.charset</code> property would then contain &quot;utf8&quot;.</p>
+<h3 id="response-status">Response status</h3>
+<p>The response status flags help determine if the request was a success, among other useful information, making SuperAgent ideal for interacting with RESTful web services. These flags are currently defined as:</p>
+<pre><code> var type = status / 100 | 0;
+
+ // status / class
+ res.status = status;
+ res.statusType = type;
+
+ // basics
+ res.info = 1 == type;
+ res.ok = 2 == type;
+ res.clientError = 4 == type;
+ res.serverError = 5 == type;
+ res.error = 4 == type || 5 == type;
+
+ // sugar
+ res.accepted = 202 == status;
+ res.noContent = 204 == status || 1223 == status;
+ res.badRequest = 400 == status;
+ res.unauthorized = 401 == status;
+ res.notAcceptable = 406 == status;
+ res.notFound = 404 == status;
+ res.forbidden = 403 == status;</code></pre>
+<h2 id="aborting-requests">Aborting requests</h2>
+<p>To abort requests simply invoke the <code>req.abort()</code> method.</p>
+<h2 id="timeouts">Timeouts</h2>
+<p>Sometimes networks and servers get &quot;stuck&quot; and never respond after accepting a request. Set timeouts to avoid requests waiting forever.</p>
+<ul>
+<li><p><code>req.timeout({deadline:ms})</code> or <code>req.timeout(ms)</code> (where <code>ms</code> is a number of milliseconds &gt; 0) sets a deadline for the entire request (including all uploads, redirects, server processing time) to complete. If the response isn&#39;t fully downloaded within that time, the request will be aborted.</p>
+</li>
+<li><p><code>req.timeout({response:ms})</code> sets maximum time to wait for the first byte to arrive from the server, but it does not limit how long the entire download can take. Response timeout should be at least few seconds longer than just the time it takes the server to respond, because it also includes time to make DNS lookup, TCP/IP and TLS connections, and time to upload request data.</p>
+</li>
+</ul>
+<p>You should use both <code>deadline</code> and <code>response</code> timeouts. This way you can use a short response timeout to detect unresponsive networks quickly, and a long deadline to give time for downloads on slow, but reliable, networks. Note that both of these timers limit how long <em>uploads</em> of attached files are allowed to take. Use long timeouts if you&#39;re uploading files.</p>
+<pre><code>request
+  .get(&#39;/big-file?network=slow&#39;)
+  .timeout({
+    response: 5000,  // Wait 5 seconds for the server to start sending,
+    deadline: 60000, // but allow 1 minute for the file to finish loading.
+  })
+  .then(res =&gt; {
+      /* responded in time */
+    }, err =&gt; {
+      if (err.timeout) { /* timed out! */ } else { /* other error */ }
+  });</code></pre>
+<p>Timeout errors have a <code>.timeout</code> property.</p>
+<h2 id="authentication">Authentication</h2>
+<p>In both Node and browsers auth available via the <code>.auth()</code> method:</p>
+<pre><code>request
+  .get(&#39;http://local&#39;)
+  .auth(&#39;tobi&#39;, &#39;learnboost&#39;)
+  .then(callback);</code></pre>
+<p>In the <em>Node</em> client Basic auth can be in the URL as &quot;user:pass&quot;:</p>
+<pre><code>request.get(&#39;http://tobi:learnboost@local&#39;).then(callback);</code></pre>
+<p>By default only <code>Basic</code> auth is used. In browser you can add <code>{type:&#39;auto&#39;}</code> to enable all methods built-in in the browser (Digest, NTLM, etc.):</p>
+<pre><code>request.auth(&#39;digest&#39;, &#39;secret&#39;, {type:&#39;auto&#39;})</code></pre>
+<p>The <code>auth</code> method also supports a <code>type</code> of <code>bearer</code>, to specify token-based authentication:</p>
+<pre><code>request.auth(&#39;my_token&#39;, { type: &#39;bearer&#39; })</code></pre>
+<h2 id="following-redirects">Following redirects</h2>
+<p>By default up to 5 redirects will be followed, however you may specify this with the <code>res.redirects(n)</code> method:</p>
+<pre><code>const response = await request.get(&#39;/some.png&#39;).redirects(2);</code></pre>
+<p>Redirects exceeding the limit are treated as errors. Use <code>.ok(res =&gt; res.status &lt; 400)</code> to read them as successful responses.</p>
+<h2 id="agents-for-global-state">Agents for global state</h2>
+<h3 id="saving-cookies">Saving cookies</h3>
+<p>In Node SuperAgent does not save cookies by default, but you can use the <code>.agent()</code> method to create a copy of SuperAgent that saves cookies. Each copy has a separate cookie jar.</p>
+<pre><code>const agent = request.agent();
+agent
+  .post(&#39;/login&#39;)
+  .then(() =&gt; {
+    return agent.get(&#39;/cookied-page&#39;);
+  });</code></pre>
+<p>In browsers cookies are managed automatically by the browser, so the <code>.agent()</code> does not isolate cookies.</p>
+<h3 id="default-options-for-multiple-requests">Default options for multiple requests</h3>
+<p>Regular request methods called on the agent will be used as defaults for all requests made by that agent.</p>
+<pre><code>const agent = request.agent()
+  .use(plugin)
+  .auth(shared);
+
+await agent.get(&#39;/with-plugin-and-auth&#39;);
+await agent.get(&#39;/also-with-plugin-and-auth&#39;);</code></pre>
+<p>The complete list of methods that the agent can use to set defaults is: <code>use</code>, <code>on</code>, <code>once</code>, <code>set</code>, <code>query</code>, <code>type</code>, <code>accept</code>, <code>auth</code>, <code>withCredentials</code>, <code>sortQuery</code>, <code>retry</code>, <code>ok</code>, <code>redirects</code>, <code>timeout</code>, <code>buffer</code>, <code>serialize</code>, <code>parse</code>, <code>ca</code>, <code>key</code>, <code>pfx</code>, <code>cert</code>.</p>
+<h2 id="piping-data">Piping data</h2>
+<p>The Node client allows you to pipe data to and from the request. Please note that <code>.pipe()</code> is used <strong>instead of</strong> <code>.end()</code>/<code>.then()</code> methods.</p>
+<p>For example piping a file&#39;s contents as the request:</p>
+<pre><code>const request = require(&#39;superagent&#39;);
+const fs = require(&#39;fs&#39;);
+
+const stream = fs.createReadStream(&#39;path/to/my.json&#39;);
+const req = request.post(&#39;/somewhere&#39;);
+req.type(&#39;json&#39;);
+stream.pipe(req);</code></pre>
+<p>Note that when you pipe to a request, superagent sends the piped data with <a href="https://en.wikipedia.org/wiki/Chunked_transfer_encoding">chunked transfer encoding</a>, which isn&#39;t supported by all servers (for instance, Python WSGI servers).</p>
+<p>Or piping the response to a file:</p>
+<pre><code>const stream = fs.createWriteStream(&#39;path/to/my.json&#39;);
+const req = request.get(&#39;/some.json&#39;);
+req.pipe(stream);</code></pre>
+<p> It&#39;s not possible to mix pipes and callbacks or promises. Note that you should <strong>NOT</strong> attempt to pipe the result of <code>.end()</code> or the <code>Response</code> object:</p>
+<pre><code>// Don&#39;t do either of these:
+const stream = getAWritableStream();
+const req = request
+  .get(&#39;/some.json&#39;)
+  // BAD: this pipes garbage to the stream and fails in unexpected ways
+  .end((err, this_does_not_work) =&gt; this_does_not_work.pipe(stream))
+const req = request
+  .get(&#39;/some.json&#39;)
+  .end()
+  // BAD: this is also unsupported, .pipe calls .end for you.
+  .pipe(nope_its_too_late);</code></pre>
+<p>In a <a href="https://github.com/visionmedia/superagent/issues/1188">future version</a> of superagent, improper calls to <code>pipe()</code> will fail.</p>
+<h2 id="multipart-requests">Multipart requests</h2>
+<p>SuperAgent is also great for <em>building</em> multipart requests for which it provides methods <code>.attach()</code> and <code>.field()</code>.</p>
+<p>When you use <code>.field()</code> or <code>.attach()</code> you can&#39;t use <code>.send()</code> and you <em>must not</em> set <code>Content-Type</code> (the correct type will be set for you).</p>
+<h3 id="attaching-files">Attaching files</h3>
+<p>To send a file use <code>.attach(name, [file], [options])</code>. You can attach multiple files by calling <code>.attach</code> multiple times. The arguments are:</p>
+<ul>
+<li><code>name</code> — field name in the form.</li>
+<li><code>file</code> — either string with file path or <code>Blob</code>/<code>Buffer</code> object.</li>
+<li><code>options</code> — (optional) either string with custom file name or <code>{filename: string}</code> object. In Node also <code>{contentType: &#39;mime/type&#39;}</code> is supported. In browser create a <code>Blob</code> with an appropriate type instead.</li>
+</ul>
+<br>
+
+<pre><code>request
+  .post(&#39;/upload&#39;)
+  .attach(&#39;image1&#39;, &#39;path/to/felix.jpeg&#39;)
+  .attach(&#39;image2&#39;, imageBuffer, &#39;luna.jpeg&#39;)
+  .field(&#39;caption&#39;, &#39;My cats&#39;)
+  .then(callback);</code></pre>
+<h3 id="field-values">Field values</h3>
+<p>Much like form fields in HTML, you can set field values with <code>.field(name, value)</code> and <code>.field({name: value})</code>. Suppose you want to upload a few images with your name and email, your request might look something like this:</p>
+<pre><code> request
+   .post(&#39;/upload&#39;)
+   .field(&#39;user[name]&#39;, &#39;Tobi&#39;)
+   .field(&#39;user[email]&#39;, &#39;tobi@learnboost.com&#39;)
+   .field(&#39;friends[]&#39;, [&#39;loki&#39;, &#39;jane&#39;])
+   .attach(&#39;image&#39;, &#39;path/to/tobi.png&#39;)
+   .then(callback);</code></pre>
+<h2 id="compression">Compression</h2>
+<p>The node client supports compressed responses, best of all, you don&#39;t have to do anything! It just works.</p>
+<h2 id="buffering-responses">Buffering responses</h2>
+<p>To force buffering of response bodies as <code>res.text</code> you may invoke <code>req.buffer()</code>. To undo the default of buffering for text responses such as &quot;text/plain&quot;, &quot;text/html&quot; etc you may invoke <code>req.buffer(false)</code>.</p>
+<p>When buffered the <code>res.buffered</code> flag is provided, you may use this to handle both buffered and unbuffered responses in the same callback.</p>
+<h2 id="cors">CORS</h2>
+<p>For security reasons, browsers will block cross-origin requests unless the server opts-in using CORS headers. Browsers will also make extra <strong>OPTIONS</strong> requests to check what HTTP headers and methods are allowed by the server. <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS">Read more about CORS</a>.</p>
+<p>The <code>.withCredentials()</code> method enables the ability to send cookies from the origin, however only when <code>Access-Control-Allow-Origin</code> is <em>not</em> a wildcard (&quot;*&quot;), and <code>Access-Control-Allow-Credentials</code> is &quot;true&quot;.</p>
+<pre><code>request
+  .get(&#39;https://api.example.com:4001/&#39;)
+  .withCredentials()
+  .then(res =&gt; {
+    assert.equal(200, res.status);
+    assert.equal(&#39;tobi&#39;, res.text);
+  })</code></pre>
+<h2 id="error-handling">Error handling</h2>
+<p>Your callback function will always be passed two arguments: error and response. If no error occurred, the first argument will be null:</p>
+<pre><code>request
+ .post(&#39;/upload&#39;)
+ .attach(&#39;image&#39;, &#39;path/to/tobi.png&#39;)
+ .then(res =&gt; {
+
+ });</code></pre>
+<p>An &quot;error&quot; event is also emitted, with you can listen for:</p>
+<pre><code>request
+  .post(&#39;/upload&#39;)
+  .attach(&#39;image&#39;, &#39;path/to/tobi.png&#39;)
+  .on(&#39;error&#39;, handle)
+  .then(res =&gt; {
+
+  });</code></pre>
+<p>Note that <strong>superagent considers 4xx and 5xx responses (as well as unhandled 3xx responses) errors by default</strong>. For example, if you get a <code>304 Not modified</code>, <code>403 Forbidden</code> or <code>500 Internal server error</code> response, this status information will be available via <code>err.status</code>. Errors from such responses also contain an <code>err.response</code> field with all of the properties mentioned in &quot;<a href="#response-properties">Response properties</a>&quot;. The library behaves in this way to handle the common case of wanting success responses and treating HTTP error status codes as errors while still allowing for custom logic around specific error conditions.</p>
+<p>Network failures, timeouts, and other errors that produce no response will contain no <code>err.status</code> or <code>err.response</code> fields.</p>
+<p>If you wish to handle 404 or other HTTP error responses, you can query the <code>err.status</code> property. When an HTTP error occurs (4xx or 5xx response) the <code>res.error</code> property is an <code>Error</code> object, this allows you to perform checks such as:</p>
+<pre><code>if (err &amp;&amp; err.status === 404) {
+  alert(&#39;oh no &#39; + res.body.message);
+}
+else if (err) {
+  // all other error types we handle generically
+}</code></pre>
+<p>Alternatively, you can use the <code>.ok(callback)</code> method to decide whether a response is an error or not. The callback to the <code>ok</code> function gets a response and returns <code>true</code> if the response should be interpreted as success.</p>
+<pre><code>request.get(&#39;/404&#39;)
+  .ok(res =&gt; res.status &lt; 500)
+  .then(response =&gt; {
+    // reads 404 page as a successful response
+  })</code></pre>
+<h2 id="progress-tracking">Progress tracking</h2>
+<p>SuperAgent fires <code>progress</code> events on upload and download of large files.</p>
+<pre><code>request.post(url)
+  .attach(&#39;field_name&#39;, file)
+  .on(&#39;progress&#39;, event =&gt; {
+    /* the event is:
+    {
+      direction: &quot;upload&quot; or &quot;download&quot;
+      percent: 0 to 100 // may be missing if file size is unknown
+      total: // total file size, may be missing
+      loaded: // bytes downloaded or uploaded so far
+    } */
+  })
+  .then()</code></pre>
+<h2 id="testing-on-localhost">Testing on localhost</h2>
+<h3 id="forcing-specific-connection-ip-address">Forcing specific connection IP address</h3>
+<p>In Node.js it&#39;s possible to ignore DNS resolution and direct all requests to a specific IP address using <code>.connect()</code> method. For example, this request will go to localhost instead of <code>example.com</code>:</p>
+<pre><code>const res = await request.get(&quot;http://example.com&quot;).connect(&quot;127.0.0.1&quot;);</code></pre>
+<p>Because the request may be redirected, it&#39;s possible to specify multiple hostnames and multiple IPs, as well as a special <code>*</code> as the fallback (note: other wildcards are not supported). The requests will keep their <code>Host</code> header with the original value. <code>.connect(undefined)</code> turns off the feature.</p>
+<pre><code>const res = await request.get(&quot;http://redir.example.com:555&quot;)
+  .connect({
+    &quot;redir.example.com&quot;: &quot;127.0.0.1&quot;, // redir.example.com:555 will use 127.0.0.1:555
+    &quot;www.example.com&quot;: false, // don&#39;t override this one; use DNS as normal
+    &quot;mapped.example.com&quot;: { host: &quot;127.0.0.1&quot;, port: 8080}, // mapped.example.com:* will use 127.0.0.1:8080
+    &quot;*&quot;: &quot;proxy.example.com&quot;, // all other requests will go to this host
+  });</code></pre>
+<h3 id="ignoring-brokeninsecure-https-on-localhost">Ignoring broken/insecure HTTPS on localhost</h3>
+<p>In Node.js, when HTTPS is misconfigured and insecure (e.g. using self-signed certificate <em>without</em> specifying own <code>.ca()</code>), it&#39;s still possible to permit requests to <code>localhost</code> by calling <code>.trustLocalhost()</code>:</p>
+<pre><code>const res = await request.get(&quot;https://localhost&quot;).trustLocalhost()</code></pre>
+<p>Together with <code>.connect(&quot;127.0.0.1&quot;)</code> this may be used to force HTTPS requests to any domain to be re-routed to <code>localhost</code> instead.</p>
+<p>It&#39;s generally safe to ignore broken HTTPS on <code>localhost</code>, because the loopback interface is not exposed to untrusted networks. Trusting <code>localhost</code> may become the default in the future. Use <code>.trustLocalhost(false)</code> to force check of <code>127.0.0.1</code>&#39;s authenticity.</p>
+<p>We intentionally don&#39;t support disabling of HTTPS security when making requests to any other IP, because such options end up abused as a quick &quot;fix&quot; for HTTPS problems. You can get free HTTPS certificates from <a href="https://certbot.eff.org">Let&#39;s Encrypt</a> or set your own CA (<code>.ca(ca_public_pem)</code>) to make your self-signed certificates trusted.</p>
+<h2 id="promise-and-generator-support">Promise and Generator support</h2>
+<p>SuperAgent&#39;s request is a &quot;thenable&quot; object that&#39;s compatible with JavaScript promises and the <code>async</code>/<code>await</code> syntax.</p>
+<pre><code>const res = await request.get(url);</code></pre>
+<p>If you&#39;re using promises, <strong>do not</strong> call <code>.end()</code> or <code>.pipe()</code>. Any use of <code>.then()</code> or <code>await</code> disables all other ways of using the request.</p>
+<p>Libraries like <a href="https://github.com/tj/co">co</a> or a web framework like <a href="https://github.com/koajs/koa">koa</a> can <code>yield</code> on any SuperAgent method:</p>
+<pre><code>const req = request
+  .get(&#39;http://local&#39;)
+  .auth(&#39;tobi&#39;, &#39;learnboost&#39;);
+const res = yield req;</code></pre>
+<p>Note that SuperAgent expects the global <code>Promise</code> object to be present. You&#39;ll need a polyfill to use promises in Internet Explorer or Node.js 0.10.</p>
+<h2 id="browser-and-node-versions">Browser and node versions</h2>
+<p>SuperAgent has two implementations: one for web browsers (using XHR) and one for Node.JS (using core http module). By default Browserify and WebPack will pick the browser version.</p>
+<p>If want to use WebPack to compile code for Node.JS, you <em>must</em> specify <a href="https://webpack.github.io/docs/configuration.html#target">node target</a> in its configuration.</p>
+<h3 id="using-browser-version-in-electron">Using browser version in electron</h3>
+<p><a href="https://electron.atom.io/">Electron</a> developers report if you would prefer to use the browser version of SuperAgent instead of the Node version, you can <code>require(&#39;superagent/superagent&#39;)</code>. Your requests will now show up in the Chrome developer tools Network tab. Note this environment is not covered by automated test suite and not officially supported.</p>
+
     </div>
     <a href="http://github.com/visionmedia/superagent"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub"></a>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
