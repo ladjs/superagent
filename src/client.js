@@ -117,15 +117,35 @@ function serialize(obj) {
 }
 
 /**
+ * Serialize the given `obj`, with indices for arrays.
+ *
+ * @param {Object} obj
+ * @return {String}
+ * @api private
+ */
+
+function serializeWithIndices(obj) {
+  if (!isObject(obj)) return obj;
+  const pairs = [];
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key))
+      pushEncodedKeyValuePair(pairs, key, obj[key], true);
+  }
+
+  return pairs.join('&');
+}
+
+/**
  * Helps 'serialize' with serializing arrays.
  * Mutates the pairs array.
  *
  * @param {Array} pairs
  * @param {String} key
  * @param {Mixed} val
+ * @param {Boolean} indices
  */
 
-function pushEncodedKeyValuePair(pairs, key, val) {
+function pushEncodedKeyValuePair(pairs, key, val, indices = false) {
   if (val === undefined) return;
   if (val === null) {
     pairs.push(encodeURI(key));
@@ -133,13 +153,13 @@ function pushEncodedKeyValuePair(pairs, key, val) {
   }
 
   if (Array.isArray(val)) {
-    val.forEach((v) => {
-      pushEncodedKeyValuePair(pairs, key, v);
+    val.forEach((v, idx) => {
+      pushEncodedKeyValuePair(pairs, indices ? `${key}[${idx}]` : key, v, indices);
     });
   } else if (isObject(val)) {
     for (const subkey in val) {
       if (Object.prototype.hasOwnProperty.call(val, subkey))
-        pushEncodedKeyValuePair(pairs, `${key}[${subkey}]`, val[subkey]);
+        pushEncodedKeyValuePair(pairs, `${key}[${subkey}]`, val[subkey], indices);
     }
   } else {
     pairs.push(encodeURI(key) + '=' + encodeURIComponent(val));
@@ -213,7 +233,7 @@ request.types = {
  */
 
 request.serialize = {
-  'application/x-www-form-urlencoded': serialize,
+  'application/x-www-form-urlencoded': serializeWithIndices,
   'application/json': safeStringify
 };
 
