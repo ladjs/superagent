@@ -19,6 +19,7 @@ if (typeof window !== 'undefined') {
 
 const Emitter = require('component-emitter');
 const safeStringify = require('fast-safe-stringify');
+const qs = require('qs');
 const RequestBase = require('./request-base');
 const isObject = require('./is-object');
 const ResponseBase = require('./response-base');
@@ -213,7 +214,7 @@ request.types = {
  */
 
 request.serialize = {
-  'application/x-www-form-urlencoded': serialize,
+  'application/x-www-form-urlencoded': qs.stringify,
   'application/json': safeStringify
 };
 
