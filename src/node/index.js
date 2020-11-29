@@ -881,6 +881,7 @@ Request.prototype.callback = function (err, res) {
       }
     } catch (err_) {
       err = err_;
+      err.status = err.status || (res ? res.status : undefined);
     }
   }
 

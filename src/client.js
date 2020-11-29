@@ -477,7 +477,7 @@ function Request(method, url) {
     if (new_err) {
       new_err.original = err;
       new_err.response = res;
-      new_err.status = res.status;
+      new_err.status = new_err.status || res.status;
       self.callback(new_err, res);
     } else {
       self.callback(null, res);

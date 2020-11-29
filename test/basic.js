@@ -206,6 +206,31 @@ describe('request', function () {
             assert.fail();
           },
           (err) => {
+            assert.equal(200, err.status);
+            assert.equal(200, err.response.status);
+            assert.equal(err.message, 'boom');
+          }
+        );
+    });
+
+    it('with .ok() throwing an Error with status', () => {
+      if (typeof Promise === 'undefined') {
+        return;
+      }
+
+      return request
+        .get(`${uri}/echo`)
+        .ok(() => {
+          const err = new Error('boom');
+          err.status = 404;
+          throw err;
+        })
+        .then(
+          () => {
+            assert.fail();
+          },
+          (err) => {
+            assert.equal(404, err.status);
             assert.equal(200, err.response.status);
             assert.equal(err.message, 'boom');
           }
