@@ -578,7 +578,9 @@ Request.prototype.auth = function (user, pass, options) {
     throw new Error('Cannot use basic auth, btoa is not a function');
   };
 
-  return this._auth(user, pass, options, encoder);
+  options.encoder = options.encoder || encoder;
+
+  return this._auth(user, pass, options, options.encoder);
 };
 
 /**
