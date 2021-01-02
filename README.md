@@ -212,6 +212,8 @@ For SuperAgent extensions such as couchdb and oauth visit the [wiki](https://git
 
 Our breaking changes are mostly in rarely used functionality and from stricter error handling.
 
+* [6.0 to 6.1](https://github.com/visionmedia/superagent/releases/tag/v6.1.0)
+  * Browser behaviour changed to match Node when serializing `application/x-www-form-urlencoded`, using `arrayFormat: 'indices'` semantics of `qs` library. (See: https://www.npmjs.com/package/qs#stringifying)
 * [5.x to 6.x](https://github.com/visionmedia/superagent/releases/tag/v6.0.0):
   * Retry behavior is still opt-in, however we now have a more fine-grained list of status codes and error codes that we retry against (see updated docs)
   * A specific issue with Content-Type matching not being case-insensitive is fixed
