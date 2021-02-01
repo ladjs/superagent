@@ -4,16 +4,7 @@ lib-cov
 support
 test
 src
-.browserslistrc
-.dist.*
-.editorconfig
-.gitattributes
-.github
-.lib.*
-.nyc_output
-.remarkignore
-.travis.yml
-.zuul.yml
+.*
 coverage.html
 Makefile
 *.sock
