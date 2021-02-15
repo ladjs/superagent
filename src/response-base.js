@@ -110,7 +110,7 @@ ResponseBase.prototype._setHeaderProperties = function (header) {
  */
 
 ResponseBase.prototype._setStatusProperties = function (status) {
-  const type = (status / 100) | 0;
+  const type = Math.trunc(status / 100);
 
   // status / class
   this.statusCode = status;

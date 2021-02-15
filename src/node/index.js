@@ -1044,13 +1044,11 @@ Request.prototype._end = function () {
     }
 
     let parser = this._parser;
-    if (undefined === buffer) {
-      if (parser) {
-        console.warn(
-          "A custom superagent parser has been set, but buffering strategy for the parser hasn't been configured. Call `req.buffer(true or false)` or set `superagent.buffer[mime] = true or false`"
-        );
-        buffer = true;
-      }
+    if (undefined === buffer && parser) {
+      console.warn(
+        "A custom superagent parser has been set, but buffering strategy for the parser hasn't been configured. Call `req.buffer(true or false)` or set `superagent.buffer[mime] = true or false`"
+      );
+      buffer = true;
     }
 
     if (!parser) {
@@ -1093,7 +1091,7 @@ Request.prototype._end = function () {
       // Protectiona against zip bombs and other nuisance
       let responseBytesLeft = this._maxResponseSize || 200000000;
       res.on('data', (buf) => {
-        responseBytesLeft -= buf.byteLength || buf.length;
+        responseBytesLeft -= buf.byteLength || buf.length > 0 ? buf.length : 0;
         if (responseBytesLeft < 0) {
           // This will propagate through error event
           const err = new Error('Maximum response size reached');

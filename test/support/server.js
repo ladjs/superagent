@@ -265,7 +265,7 @@ app.get('/delay/slowbody/finish', (req, res) => {
 });
 
 app.get('/delay/:ms', (req, res) => {
-  const ms = ~~req.params.ms;
+  const ms = Math.trunc(req.params.ms);
   setTimeout(() => {
     res.sendStatus(200);
   }, ms);
@@ -544,7 +544,7 @@ app.get('/delay/:ms/ok/:id', (req, res) => {
   const { id } = req.params;
   if (!called[id]) {
     called[id] = true;
-    const ms = ~~req.params.ms;
+    const ms = Math.trunc(req.params.ms);
     setTimeout(() => {
       res.sendStatus(200);
     }, ms);

@@ -31,7 +31,8 @@
       "Symbol",
       "Object.getOwnPropertySymbols",
       "Object.setPrototypeOf",
-      "Set"
+      "Set",
+      "Math.trunc"
     ]
   }
 }

@@ -49,23 +49,21 @@ let testEndpoint;
 describe('https', () => {
   describe('certificate authority', () => {
     before(function listen(done) {
-      if (process.env.HTTP2_TEST) {
-        server = http2.createSecureServer(
-          {
-            key,
-            cert
-          },
-          app
-        );
-      } else {
-        server = https.createServer(
-          {
-            key,
-            cert
-          },
-          app
-        );
-      }
+      server = process.env.HTTP2_TEST
+        ? http2.createSecureServer(
+            {
+              key,
+              cert
+            },
+            app
+          )
+        : https.createServer(
+            {
+              key,
+              cert
+            },
+            app
+          );
 
       server.listen(0, function listening() {
         testEndpoint = `${base}:${server.address().port}`;
@@ -143,29 +141,27 @@ describe('https', () => {
 
   describe.skip('client certificates', () => {
     before(function listen(done) {
-      if (process.env.HTTP2_TEST) {
-        server = http2.createSecureServer(
-          {
-            ca,
-            key,
-            cert,
-            requestCert: true,
-            rejectUnauthorized: true
-          },
-          app
-        );
-      } else {
-        server = https.createServer(
-          {
-            ca,
-            key,
-            cert,
-            requestCert: true,
-            rejectUnauthorized: true
-          },
-          app
-        );
-      }
+      server = process.env.HTTP2_TEST
+        ? http2.createSecureServer(
+            {
+              ca,
+              key,
+              cert,
+              requestCert: true,
+              rejectUnauthorized: true
+            },
+            app
+          )
+        : https.createServer(
+            {
+              ca,
+              key,
+              cert,
+              requestCert: true,
+              rejectUnauthorized: true
+            },
+            app
+          );
 
       server.listen(0, function listening() {
         testEndpoint = `${base}:${server.address().port}`;

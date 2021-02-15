@@ -83,11 +83,9 @@ describe('[unix-sockets] https', () => {
       fs.unlinkSync(httpsSockPath);
     }
 
-    if (process.env.HTTP2_TEST) {
-      httpsServer = https.createSecureServer({ key, cert }, app);
-    } else {
-      httpsServer = https.createServer({ key, cert }, app);
-    }
+    httpsServer = process.env.HTTP2_TEST
+      ? https.createSecureServer({ key, cert }, app)
+      : https.createServer({ key, cert }, app);
 
     httpsServer.listen(httpsSockPath, done);
   });

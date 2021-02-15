@@ -171,10 +171,8 @@ function setMethods(res) {
 
     // populate ETag
     let etag;
-    if (generateETag && len !== undefined) {
-      if ((etag = etagFn(chunk, encoding))) {
-        this.set('ETag', etag);
-      }
+    if (generateETag && len !== undefined && (etag = etagFn(chunk, encoding))) {
+      this.set('ETag', etag);
     }
 
     // freshness
@@ -260,7 +258,7 @@ function setMethods(res) {
     }
 
     // jsonp
-    if (typeof callback === 'string' && callback.length !== 0) {
+    if (typeof callback === 'string' && callback.length > 0) {
       this.set('X-Content-Type-Options', 'nosniff');
       this.set('Content-Type', 'text/javascript');
 
