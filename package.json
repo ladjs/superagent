@@ -220,9 +220,6 @@
     "rules": {
       "unicorn/prevent-abbreviations": "off",
       "node/no-unsupported-features/es-syntax": "off"
-    },
-    "globals": [
-      "ActiveXObject"
-    ]
+    }
   }
 }
