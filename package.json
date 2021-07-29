@@ -148,14 +148,14 @@
     "url": "git://github.com/visionmedia/superagent.git"
   },
   "scripts": {
-    "browserify": "browserify src/node/index.js -o dist/superagent.js -s superagent -g [ babelify --configFile ./.dist.babelrc ]",
+    "browserify": "cross-env BROWSERSLIST_ENV=dist browserify src/node/index.js -o dist/superagent.js -s superagent -g babelify",
     "build": "npm run build:clean && npm run build:lib && npm run build:dist",
     "build:clean": "rimraf lib dist",
     "build:dist": "npm run browserify && npm run minify",
-    "build:lib": "babel --config-file ./.lib.babelrc src --out-dir lib",
+    "build:lib": "cross-env BROWSERSLIST_ENV=lib babel src --out-dir lib",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "lint": "xo && remark . -qfo && eslint -c .lib.eslintrc lib && eslint -c .dist.eslintrc dist",
-    "minify": "cross-env NODE_ENV=production browserify src/node/index.js -o dist/superagent.min.js -s superagent -g [ babelify --configFile ./.dist.babelrc ] -p tinyify",
+    "minify": "cross-env BROWSERSLIST_ENV=dist NODE_ENV=production browserify src/node/index.js -o dist/superagent.min.js -s superagent -g babelify -p tinyify",
     "nyc": "cross-env NODE_ENV=test nyc ava",
     "test": "npm run build && npm run lint && make test",
     "test-http2": "npm run build && npm run lint && make test-node-http2"

@@ -1,5 +1,12 @@
 # Browsers that we support
 
+[lib]
+> 1%
+last 2 versions
+ie 9
+Node 6.4
+
+[dist]
 > 1%
 last 2 versions
 ie 9
