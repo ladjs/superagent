@@ -1056,7 +1056,7 @@ Request.prototype._end = function () {
         parser = exports.parse.image; // It's actually a generic Buffer
         buffer = true;
       } else if (multipart) {
-        const form = new formidable.IncomingForm();
+        const form = formidable();
         parser = form.parse.bind(form);
         buffer = true;
       } else if (isImageOrVideo(mime)) {
