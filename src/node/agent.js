@@ -75,34 +75,34 @@ Agent.prototype._saveCookies = function (res) {
  * @api private
  */
 
-Agent.prototype._attachCookies = function (req) {
-  const url = parse(req.url);
+Agent.prototype._attachCookies = function (request_) {
+  const url = parse(request_.url);
   const access = new CookieAccessInfo(
     url.hostname,
     url.pathname,
     url.protocol === 'https:'
   );
   const cookies = this.jar.getCookies(access).toValueString();
-  req.cookies = cookies;
+  request_.cookies = cookies;
 };
 
-methods.forEach((name) => {
+for (const name of methods) {
   const method = name.toUpperCase();
   Agent.prototype[name] = function (url, fn) {
-    const req = new request.Request(method, url);
+    const request_ = new request.Request(method, url);
 
-    req.on('response', this._saveCookies.bind(this));
-    req.on('redirect', this._saveCookies.bind(this));
-    req.on('redirect', this._attachCookies.bind(this, req));
-    this._setDefaults(req);
-    this._attachCookies(req);
+    request_.on('response', this._saveCookies.bind(this));
+    request_.on('redirect', this._saveCookies.bind(this));
+    request_.on('redirect', this._attachCookies.bind(this, request_));
+    this._setDefaults(request_);
+    this._attachCookies(request_);
 
     if (fn) {
-      req.end(fn);
+      request_.end(fn);
     }
 
-    return req;
+    return request_;
   };
-});
+}
 
 Agent.prototype.del = Agent.prototype.delete;

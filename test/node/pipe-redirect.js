@@ -15,7 +15,7 @@ describe('pipe on redirect', () => {
   it('should follow Location', (done) => {
     const stream = fs.createWriteStream(destPath);
     const redirects = [];
-    const req = request
+    const request_ = request
       .get(base)
       .on('redirect', (res) => {
         redirects.push(res.headers.location);
@@ -28,6 +28,6 @@ describe('pipe on redirect', () => {
       fs.readFileSync(destPath, 'utf8').should.eql('first movie page');
       done();
     });
-    req.pipe(stream);
+    request_.pipe(stream);
   });
 });

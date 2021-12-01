@@ -37,7 +37,7 @@ if (process.env.HTTP2_TEST) {
 
 let server;
 
-app.get('/', (req, res) => {
+app.get('/', (request_, res) => {
   res.send('Safe and secure!');
 });
 
@@ -80,8 +80,8 @@ describe('https', () => {
         request
           .get(testEndpoint)
           .ca(ca)
-          .end((err, res) => {
-            assert.ifError(err);
+          .end((error, res) => {
+            assert.ifError(error);
             assert(res.ok);
             assert.strictEqual('Safe and secure!', res.text);
             done();
@@ -124,12 +124,12 @@ describe('https', () => {
     describe('.agent', () => {
       it('should be able to make multiple requests without redefining the certificate', (done) => {
         const agent = request.agent({ ca });
-        agent.get(testEndpoint).end((err, res) => {
-          assert.ifError(err);
+        agent.get(testEndpoint).end((error, res) => {
+          assert.ifError(error);
           assert(res.ok);
           assert.strictEqual('Safe and secure!', res.text);
-          agent.get(url.parse(testEndpoint)).end((err, res) => {
-            assert.ifError(err);
+          agent.get(url.parse(testEndpoint)).end((error, res) => {
+            assert.ifError(error);
             assert(res.ok);
             assert.strictEqual('Safe and secure!', res.text);
             done();
@@ -180,8 +180,8 @@ describe('https', () => {
           .ca(ca)
           .key(key)
           .cert(cert)
-          .end((err, res) => {
-            assert.ifError(err);
+          .end((error, res) => {
+            assert.ifError(error);
             assert(res.ok);
             assert.strictEqual('Safe and secure!', res.text);
             done();
@@ -191,8 +191,8 @@ describe('https', () => {
         request
           .get(testEndpoint)
           .pfx(pfx)
-          .end((err, res) => {
-            assert.ifError(err);
+          .end((error, res) => {
+            assert.ifError(error);
             assert(res.ok);
             assert.strictEqual('Safe and secure!', res.text);
             done();
@@ -205,8 +205,8 @@ describe('https', () => {
             pfx: passpfx,
             passphrase: 'test'
           })
-          .end((err, res) => {
-            assert.ifError(err);
+          .end((error, res) => {
+            assert.ifError(error);
             assert(res.ok);
             assert.strictEqual('Safe and secure!', res.text);
             done();
@@ -217,12 +217,12 @@ describe('https', () => {
     describe('.agent', () => {
       it('should be able to make multiple requests without redefining the certificates', (done) => {
         const agent = request.agent({ ca, key, cert });
-        agent.get(testEndpoint).end((err, res) => {
-          assert.ifError(err);
+        agent.get(testEndpoint).end((error, res) => {
+          assert.ifError(error);
           assert(res.ok);
           assert.strictEqual('Safe and secure!', res.text);
-          agent.get(url.parse(testEndpoint)).end((err, res) => {
-            assert.ifError(err);
+          agent.get(url.parse(testEndpoint)).end((error, res) => {
+            assert.ifError(error);
             assert(res.ok);
             assert.strictEqual('Safe and secure!', res.text);
             done();
@@ -231,12 +231,12 @@ describe('https', () => {
       });
       it('should be able to make multiple requests without redefining pfx', (done) => {
         const agent = request.agent({ pfx });
-        agent.get(testEndpoint).end((err, res) => {
-          assert.ifError(err);
+        agent.get(testEndpoint).end((error, res) => {
+          assert.ifError(error);
           assert(res.ok);
           assert.strictEqual('Safe and secure!', res.text);
-          agent.get(url.parse(testEndpoint)).end((err, res) => {
-            assert.ifError(err);
+          agent.get(url.parse(testEndpoint)).end((error, res) => {
+            assert.ifError(error);
             assert(res.ok);
             assert.strictEqual('Safe and secure!', res.text);
             done();

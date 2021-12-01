@@ -15,7 +15,7 @@ describe('request.get().http2()', () => {
     request
       .get(`${base}/url?a=(b%29`)
       .http2()
-      .end((err, res) => {
+      .end((error, res) => {
         assert.equal('/url?a=(b%29', res.text);
         done();
       });

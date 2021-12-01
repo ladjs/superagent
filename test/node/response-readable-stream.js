@@ -10,7 +10,7 @@ if (process.env.HTTP2_TEST) {
   http = require('http2');
 }
 
-app.get('/', (req, res) => {
+app.get('/', (request_, res) => {
   fs.createReadStream('test/node/fixtures/user.json').pipe(res);
 });
 
@@ -26,10 +26,10 @@ before(function listen(done) {
 
 describe('response', () => {
   it('should act as a readable stream', (done) => {
-    const req = request.get(base).buffer(false);
+    const request_ = request.get(base).buffer(false);
 
-    req.end((err, res) => {
-      if (err) return done(err);
+    request_.end((error, res) => {
+      if (error) return done(error);
       let trackEndEvent = 0;
       let trackCloseEvent = 0;
 

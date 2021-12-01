@@ -14,22 +14,22 @@ const zlib = require('zlib');
  * @api private
  */
 
-exports.unzip = (req, res) => {
+exports.unzip = (request, res) => {
   const unzip = zlib.createUnzip();
   const stream = new Stream();
   let decoder;
 
   // make node responseOnEnd() happy
-  stream.req = req;
+  stream.req = request;
 
-  unzip.on('error', (err) => {
-    if (err && err.code === 'Z_BUF_ERROR') {
+  unzip.on('error', (error) => {
+    if (error && error.code === 'Z_BUF_ERROR') {
       // unexpected end of file is ignored by browsers and curl
       stream.emit('end');
       return;
     }
 
-    stream.emit('error', err);
+    stream.emit('error', error);
   });
 
   // pipe to unzip
@@ -43,8 +43,8 @@ exports.unzip = (req, res) => {
   // decode upon decompressing with captured encoding
   unzip.on('data', (buf) => {
     if (decoder) {
-      const str = decoder.write(buf);
-      if (str.length > 0) stream.emit('data', str);
+      const string_ = decoder.write(buf);
+      if (string_.length > 0) stream.emit('data', string_);
     } else {
       stream.emit('data', buf);
     }

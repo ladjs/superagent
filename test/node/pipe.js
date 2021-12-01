@@ -13,26 +13,26 @@ if (process.env.HTTP2_TEST) {
 
 app.use(bodyParser.json());
 
-app.get('/', (req, res) => {
+app.get('/', (request_, res) => {
   fs.createReadStream('test/node/fixtures/user.json').pipe(res);
 });
 
-app.get('/redirect', (req, res) => {
+app.get('/redirect', (request_, res) => {
   res.set('Location', '/').sendStatus(302);
 });
 
-app.get('/badRedirectNoLocation', (req, res) => {
+app.get('/badRedirectNoLocation', (request_, res) => {
   res.set('Location', '').sendStatus(302);
 });
 
-app.post('/', (req, res) => {
+app.post('/', (request_, res) => {
   if (process.env.HTTP2_TEST) {
     // body-parser does not support http2 yet.
     // This section can be remove after body-parser supporting http2.
     res.set('content-type', 'application/json');
-    req.pipe(res);
+    request_.pipe(res);
   } else {
-    res.send(req.body);
+    res.send(request_.body);
   }
 });
 
@@ -54,22 +54,22 @@ describe('request pipe', () => {
   });
 
   it('should act as a writable stream', (done) => {
-    const req = request.post(base);
+    const request_ = request.post(base);
     const stream = fs.createReadStream('test/node/fixtures/user.json');
 
-    req.type('json');
+    request_.type('json');
 
-    req.on('response', (res) => {
+    request_.on('response', (res) => {
       res.body.should.eql({ name: 'tobi' });
       done();
     });
 
-    stream.pipe(req);
+    stream.pipe(request_);
   });
 
   it('end() stops piping', (done) => {
     const stream = fs.createWriteStream(destPath);
-    request.get(base).end((err, res) => {
+    request.get(base).end((error, res) => {
       try {
         res.pipe(stream);
         return done(new Error('Did not prevent nonsense pipe'));
@@ -85,10 +85,10 @@ describe('request pipe', () => {
     const stream = fs.createWriteStream(destPath);
 
     let responseCalled = false;
-    const req = request.get(base);
-    req.type('json');
+    const request_ = request.get(base);
+    request_.type('json');
 
-    req.on('response', (res) => {
+    request_.on('response', (res) => {
       res.status.should.eql(200);
       responseCalled = true;
     });
@@ -99,17 +99,17 @@ describe('request pipe', () => {
       responseCalled.should.be.true();
       done();
     });
-    req.pipe(stream);
+    request_.pipe(stream);
   });
 
   it('should follow redirects', (done) => {
     const stream = fs.createWriteStream(destPath);
 
     let responseCalled = false;
-    const req = request.get(base + '/redirect');
-    req.type('json');
+    const request_ = request.get(base + '/redirect');
+    request_.type('json');
 
-    req.on('response', (res) => {
+    request_.on('response', (res) => {
       res.status.should.eql(200);
       responseCalled = true;
     });
@@ -120,7 +120,7 @@ describe('request pipe', () => {
       responseCalled.should.be.true();
       done();
     });
-    req.pipe(stream);
+    request_.pipe(stream);
   });
 
   it('should not throw on bad redirects', (done) => {
@@ -128,14 +128,14 @@ describe('request pipe', () => {
 
     let responseCalled = false;
     let errorCalled = false;
-    const req = request.get(base + '/badRedirectNoLocation');
-    req.type('json');
+    const request_ = request.get(base + '/badRedirectNoLocation');
+    request_.type('json');
 
-    req.on('response', (res) => {
+    request_.on('response', (res) => {
       responseCalled = true;
     });
-    req.on('error', (err) => {
-      err.message.should.eql('No location header for redirect');
+    request_.on('error', (error) => {
+      error.message.should.eql('No location header for redirect');
       errorCalled = true;
       stream.end();
     });
@@ -144,6 +144,6 @@ describe('request pipe', () => {
       errorCalled.should.be.true();
       done();
     });
-    req.pipe(stream);
+    request_.pipe(stream);
   });
 });

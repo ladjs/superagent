@@ -7,19 +7,19 @@ const assert = require('assert');
 const request = require('./support/client');
 
 describe('request', function () {
-  this.timeout(20000);
+  this.timeout(20_000);
   describe('on redirect', () => {
     it('should retain header fields', (done) => {
       request
         .get(`${base}/header`)
         .set('X-Foo', 'bar')
-        .end((err, res) => {
+        .end((error, res) => {
           try {
             assert(res.body);
             res.body.should.have.property('x-foo', 'bar');
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
     });
@@ -28,23 +28,23 @@ describe('request', function () {
       request
         .get(`${base}/movies/random`)
         .timeout(250)
-        .end((err, res) => {
+        .end((error, res) => {
           try {
-            assert(err instanceof Error, 'expected an error');
-            err.should.have.property('timeout', 250);
+            assert(error instanceof Error, 'expected an error');
+            error.should.have.property('timeout', 250);
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
     });
 
     it('should successfully redirect after retry on error', (done) => {
-      const id = Math.random() * 1000000 * Date.now();
+      const id = Math.random() * 1_000_000 * Date.now();
       request
         .get(`${base}/error/redirect/${id}`)
         .retry(2)
-        .end((err, res) => {
+        .end((error, res) => {
           assert(res.ok, 'response should be ok');
           assert(res.text, 'first movie page');
           done();
@@ -52,14 +52,14 @@ describe('request', function () {
     });
 
     it('should preserve retries across redirects', (done) => {
-      const id = Math.random() * 1000000 * Date.now();
+      const id = Math.random() * 1_000_000 * Date.now();
       request
         .get(`${base}/error/redirect-error${id}`)
         .retry(2)
-        .end((err, res) => {
-          assert(err, 'expected an error');
-          assert.equal(2, err.retries, 'expected an error with .retries');
-          assert.equal(500, err.status, 'expected an error status of 500');
+        .end((error, res) => {
+          assert(error, 'expected an error');
+          assert.equal(2, error.retries, 'expected an error with .retries');
+          assert.equal(500, error.status, 'expected an error status of 500');
           done();
         });
     });
@@ -74,9 +74,9 @@ describe('request', function () {
         .on('redirect', (res) => {
           res.headers.location.should.equal('/reply-method');
         })
-        .end((err, res) => {
-          if (err) {
-            done(err);
+        .end((error, res) => {
+          if (error) {
+            done(error);
             return;
           }
 
@@ -97,9 +97,9 @@ describe('request', function () {
         .on('redirect', (res) => {
           res.headers.location.should.equal('/reply-method');
         })
-        .end((err, res) => {
-          if (err) {
-            done(err);
+        .end((error, res) => {
+          if (error) {
+            done(error);
             return;
           }
 
@@ -120,9 +120,9 @@ describe('request', function () {
         .on('redirect', (res) => {
           res.headers.location.should.equal('/reply-method');
         })
-        .end((err, res) => {
-          if (err) {
-            done(err);
+        .end((error, res) => {
+          if (error) {
+            done(error);
             return;
           }
 

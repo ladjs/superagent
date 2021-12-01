@@ -14,13 +14,13 @@ function read(file) {
 describe('Multipart', () => {
   describe('#field(name, value)', () => {
     it('should set a multipart field value', () => {
-      const req = request.post(`${base}/echo`);
+      const request_ = request.post(`${base}/echo`);
 
-      req.field('user[name]', 'tobi');
-      req.field('user[age]', '2');
-      req.field('user[species]', 'ferret');
+      request_.field('user[name]', 'tobi');
+      request_.field('user[age]', '2');
+      request_.field('user[species]', 'ferret');
 
-      return req.then((res) => {
+      return request_.then((res) => {
         res.body['user[name]'].should.equal('tobi');
         res.body['user[age]'].should.equal('2');
         res.body['user[species]'].should.equal('ferret');
@@ -28,13 +28,13 @@ describe('Multipart', () => {
     });
 
     it('should work with file attachments', () => {
-      const req = request.post(`${base}/echo`);
+      const request_ = request.post(`${base}/echo`);
 
-      req.field('name', 'Tobi');
-      req.attach('document', 'test/node/fixtures/user.html');
-      req.field('species', 'ferret');
+      request_.field('name', 'Tobi');
+      request_.attach('document', 'test/node/fixtures/user.html');
+      request_.field('species', 'ferret');
 
-      return req.then((res) => {
+      return request_.then((res) => {
         res.body.name.should.equal('Tobi');
         res.body.species.should.equal('ferret');
 
@@ -48,13 +48,13 @@ describe('Multipart', () => {
 
   describe('#attach(name, path)', () => {
     it('should attach a file', () => {
-      const req = request.post(`${base}/echo`);
+      const request_ = request.post(`${base}/echo`);
 
-      req.attach('one', 'test/node/fixtures/user.html');
-      req.attach('two', 'test/node/fixtures/user.json');
-      req.attach('three', 'test/node/fixtures/user.txt');
+      request_.attach('one', 'test/node/fixtures/user.html');
+      request_.attach('two', 'test/node/fixtures/user.json');
+      request_.attach('three', 'test/node/fixtures/user.txt');
 
-      return req.then((res) => {
+      return request_.then((res) => {
         const html = res.files.one;
         const json = res.files.two;
         const text = res.files.three;
@@ -75,17 +75,17 @@ describe('Multipart', () => {
 
     describe('when a file does not exist', () => {
       it('should fail the request with an error', (done) => {
-        const req = request.post(`${base}/echo`);
+        const request_ = request.post(`${base}/echo`);
 
-        req.attach('name', 'foo');
-        req.attach('name2', 'bar');
-        req.attach('name3', 'baz');
+        request_.attach('name', 'foo');
+        request_.attach('name2', 'bar');
+        request_.attach('name3', 'baz');
 
-        req.end((err, res) => {
-          assert.ok(Boolean(err), 'Request should have failed.');
-          err.code.should.equal('ENOENT');
-          err.message.should.containEql('ENOENT');
-          err.path.should.equal('foo');
+        request_.end((error, res) => {
+          assert.ok(Boolean(error), 'Request should have failed.');
+          error.code.should.equal('ENOENT');
+          error.message.should.containEql('ENOENT');
+          error.path.should.equal('foo');
           done();
         });
       });
@@ -108,9 +108,9 @@ describe('Multipart', () => {
         request
           .post('http://127.0.0.1:1') // nobody is listening there
           .attach('name', 'file-does-not-exist')
-          .end((err, res) => {
-            assert.ok(Boolean(err), 'Request should have failed');
-            err.code.should.equal('ECONNREFUSED');
+          .end((error, res) => {
+            assert.ok(Boolean(error), 'Request should have failed');
+            error.code.should.equal('ECONNREFUSED');
             done();
           });
       });
@@ -151,8 +151,8 @@ describe('Multipart', () => {
             uploadEventWasFired = true;
           }
         })
-        .end((err, res) => {
-          if (err) return done(err);
+        .end((error, res) => {
+          if (error) return done(error);
           const html = res.files.document;
           html.name.should.equal('user.html');
           html.type.should.equal('text/html');
@@ -167,10 +167,10 @@ describe('Multipart', () => {
       request
         .post(`${base}/echo`)
         .attach('filedata', 'test/node/fixtures/non-existent-file.ext')
-        .end((err, res) => {
-          assert.ok(Boolean(err), 'Request should have failed.');
-          err.code.should.equal('ENOENT');
-          err.path.should.equal('test/node/fixtures/non-existent-file.ext');
+        .end((error, res) => {
+          assert.ok(Boolean(error), 'Request should have failed.');
+          error.code.should.equal('ENOENT');
+          error.path.should.equal('test/node/fixtures/non-existent-file.ext');
           done();
         });
     });
@@ -182,8 +182,8 @@ describe('Multipart', () => {
         .post(`${base}/echo`)
         .field('first-name', 'foo')
         .field('last-name', 'bar')
-        .end((err, res) => {
-          if (err) done(err);
+        .end((error, res) => {
+          if (error) done(error);
           res.should.be.ok();
           res.body['first-name'].should.equal('foo');
           res.body['last-name'].should.equal('bar');
@@ -197,8 +197,8 @@ describe('Multipart', () => {
       request
         .post(`${base}/echo`)
         .field({ 'first-name': 'foo', 'last-name': 'bar' })
-        .end((err, res) => {
-          if (err) done(err);
+        .end((error, res) => {
+          if (error) done(error);
           res.should.be.ok();
           res.body['first-name'].should.equal('foo');
           res.body['last-name'].should.equal('bar');
