@@ -2,7 +2,7 @@ function Agent() {
   this._defaults = [];
 }
 
-[
+for (const fn of [
   'use',
   'on',
   'once',
@@ -25,18 +25,18 @@ function Agent() {
   'pfx',
   'cert',
   'disableTLSCerts'
-].forEach((fn) => {
+]) {
   // Default setting for all requests from this agent
   Agent.prototype[fn] = function (...args) {
     this._defaults.push({ fn, args });
     return this;
   };
-});
+}
 
-Agent.prototype._setDefaults = function (req) {
-  this._defaults.forEach((def) => {
-    req[def.fn](...def.args);
-  });
+Agent.prototype._setDefaults = function (request) {
+  for (const def of this._defaults) {
+    request[def.fn](...def.args);
+  }
 };
 
 module.exports = Agent;

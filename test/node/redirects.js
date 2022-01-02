@@ -14,15 +14,15 @@ describe('request', () => {
         .agent()
         .get(`${base}/cookie-redirect`)
         .set('Cookie', 'orig=1; replaced=not')
-        .end((err, res) => {
+        .end((error, res) => {
           try {
-            assert.ifError(err);
+            assert.ifError(error);
             assert(/orig=1/.test(res.text), 'orig=1/.test');
             assert(/replaced=yes/.test(res.text), 'replaced=yes/.test');
             assert(/from-redir=1/.test(res.text), 'from-redir=1');
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
     });
@@ -31,35 +31,35 @@ describe('request', () => {
       request
         .get(`${base}/cookie-redirect`)
         .set('Cookie', 'orig=1; replaced=not')
-        .end((err, res) => {
+        .end((error, res) => {
           try {
-            assert.ifError(err);
+            assert.ifError(error);
             assert(/orig=1/.test(res.text), '/orig=1');
             assert(/replaced=not/.test(res.text), '/replaced=not');
             assert(!/replaced=yes/.test(res.text), '!/replaced=yes');
             assert(!/from-redir/.test(res.text), '!/from-redir');
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
     });
 
     it('should have previously set cookie for subsquent requests when agent is used', (done) => {
       const agent = request.agent();
-      agent.get(`${base}/set-cookie`).end((err) => {
-        assert.ifError(err);
+      agent.get(`${base}/set-cookie`).end((error) => {
+        assert.ifError(error);
         agent
           .get(`${base}/show-cookies`)
           .set({ Cookie: 'orig=1' })
-          .end((err, res) => {
+          .end((error, res) => {
             try {
-              assert.ifError(err);
+              assert.ifError(error);
               assert(/orig=1/.test(res.text), 'orig=1/.test');
               assert(/persist=123/.test(res.text), 'persist=123');
               done();
-            } catch (err_) {
-              done(err_);
+            } catch (err) {
+              done(err);
             }
           });
       });
@@ -73,14 +73,14 @@ describe('request', () => {
         .on('redirect', (res) => {
           redirects.push(res.headers.location);
         })
-        .end((err, res) => {
+        .end((error, res) => {
           try {
-            const arr = ['/movies', '/movies/all', '/movies/all/0'];
-            redirects.should.eql(arr);
+            const array = ['/movies', '/movies/all', '/movies/all/0'];
+            redirects.should.eql(array);
             res.text.should.equal('first movie page');
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
     });
@@ -97,8 +97,8 @@ describe('request', () => {
           redirects.push(res.headers.location);
         })
         .then((res) => {
-          const arr = ['/movies', '/movies/all', '/movies/all/0'];
-          redirects.should.eql(arr);
+          const array = ['/movies', '/movies/all', '/movies/all/0'];
+          redirects.should.eql(array);
           res.text.should.equal('first movie page');
         });
     });
@@ -115,8 +115,8 @@ describe('request', () => {
           redirects.push(res.headers.location);
         })
         .then((res) => {
-          const arr = ['/movies', '/movies/all', '/movies/all/0'];
-          redirects.should.eql(arr);
+          const array = ['/movies', '/movies/all', '/movies/all/0'];
+          redirects.should.eql(array);
           res.text.should.equal('first movie page');
         });
     });
@@ -145,17 +145,15 @@ describe('request', () => {
         .on('redirect', (res) => {
           redirects.push(res.headers.location);
         })
-        .end((err, res) => {
+        .end((error, res) => {
           try {
-            const arr = [];
-            arr.push('/movies');
-            arr.push('/movies/all');
-            arr.push('/movies/all/0');
-            redirects.should.eql(arr);
+            const array = [];
+            array.push('/movies', '/movies/all', '/movies/all/0');
+            redirects.should.eql(array);
             assert(!res.text);
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
     });
@@ -167,7 +165,7 @@ describe('request', () => {
         .set('X-Foo', 'bar')
         .set('X-Bar', 'baz')
         .send('hey')
-        .end((err, res) => {
+        .end((error, res) => {
           try {
             assert(res.body);
             res.body.should.have.property('x-foo', 'bar');
@@ -176,8 +174,8 @@ describe('request', () => {
             res.body.should.not.have.property('content-length');
             res.body.should.not.have.property('transfer-encoding');
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
     });
@@ -186,13 +184,13 @@ describe('request', () => {
       request
         .get(`${base}/header`)
         .set('Cookie', 'foo=bar;')
-        .end((err, res) => {
+        .end((error, res) => {
           try {
             assert(res.body);
             res.body.should.have.property('cookie', 'foo=bar;');
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
     });
@@ -207,31 +205,29 @@ describe('request', () => {
           query.push(res.headers.query);
           redirects.push(res.headers.location);
         })
-        .end((err, res) => {
+        .end((error, res) => {
           try {
-            const arr = [];
-            arr.push('/movies');
-            arr.push('/movies/all');
-            arr.push('/movies/all/0');
-            redirects.should.eql(arr);
+            const array = [];
+            array.push('/movies', '/movies/all', '/movies/all/0');
+            redirects.should.eql(array);
             res.text.should.equal('first movie page');
 
             query.should.eql(['{"foo":"bar"}', '{}', '{}']);
             res.headers.query.should.eql('{}');
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
     });
 
     it('should handle no location header', (done) => {
-      request.get(`${base}/bad-redirect`).end((err, res) => {
+      request.get(`${base}/bad-redirect`).end((error, res) => {
         try {
-          err.message.should.equal('No location header for redirect');
+          error.message.should.equal('No location header for redirect');
           done();
-        } catch (err_) {
-          done(err_);
+        } catch (err) {
+          done(err);
         }
       });
     });
@@ -245,13 +241,13 @@ describe('request', () => {
           .on('redirect', (res) => {
             redirects.push(res.headers.location);
           })
-          .end((err, res) => {
+          .end((error, res) => {
             try {
               redirects.should.eql(['tobi']);
               res.text.should.equal('tobi');
               done();
-            } catch (err_) {
-              done(err_);
+            } catch (err) {
+              done(err);
             }
           });
       });
@@ -264,13 +260,13 @@ describe('request', () => {
           .on('redirect', (res) => {
             redirects.push(res.headers.location);
           })
-          .end((err, res) => {
+          .end((error, res) => {
             try {
               redirects.should.eql(['../tobi']);
               res.text.should.equal('tobi');
               done();
-            } catch (err_) {
-              done(err_);
+            } catch (err) {
+              done(err);
             }
           });
       });
@@ -287,17 +283,16 @@ describe('request', () => {
         .on('redirect', (res) => {
           redirects.push(res.headers.location);
         })
-        .end((err, res) => {
+        .end((error, res) => {
           try {
-            const arr = [];
+            const array = [];
             assert(res.redirect, 'res.redirect');
-            arr.push('/movies');
-            arr.push('/movies/all');
-            redirects.should.eql(arr);
+            array.push('/movies', '/movies/all');
+            redirects.should.eql(array);
             res.text.should.match(/Moved Temporarily|Found/);
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
     });

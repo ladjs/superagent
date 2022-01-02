@@ -14,9 +14,9 @@ describe('utils.type(str)', () => {
 
 describe('utils.params(str)', () => {
   it('should return the field parameters', () => {
-    const obj = utils.params('application/json; charset=utf-8; foo  = bar');
-    obj.charset.should.equal('utf-8');
-    obj.foo.should.equal('bar');
+    const object = utils.params('application/json; charset=utf-8; foo  = bar');
+    object.charset.should.equal('utf-8');
+    object.foo.should.equal('bar');
 
     utils.params('application/json').should.eql({});
   });
@@ -24,13 +24,13 @@ describe('utils.params(str)', () => {
 
 describe('utils.parseLinks(str)', () => {
   it('should parse links', () => {
-    const str =
+    const string_ =
       '<https://api.github.com/repos/visionmedia/mocha/issues?page=2>; rel="next", <https://api.github.com/repos/visionmedia/mocha/issues?page=5>; rel="last"';
-    const ret = utils.parseLinks(str);
-    ret.next.should.equal(
+    const returnValue = utils.parseLinks(string_);
+    returnValue.next.should.equal(
       'https://api.github.com/repos/visionmedia/mocha/issues?page=2'
     );
-    ret.last.should.equal(
+    returnValue.last.should.equal(
       'https://api.github.com/repos/visionmedia/mocha/issues?page=5'
     );
   });

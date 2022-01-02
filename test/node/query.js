@@ -11,24 +11,24 @@ if (process.env.HTTP2_TEST) {
   http = require('http2');
 }
 
-app.get('/raw-query', (req, res) => {
-  res.status(200).send(req.url.slice(req.url.indexOf('?') + 1));
+app.get('/raw-query', (request_, res) => {
+  res.status(200).send(request_.url.slice(request_.url.indexOf('?') + 1));
 });
 
-app.get('/', (req, res) => {
-  res.status(200).send(req.query);
+app.get('/', (request_, res) => {
+  res.status(200).send(request_.query);
 });
 
-app.delete('/url', (req, res) => {
-  res.status(200).send(req.url);
+app.delete('/url', (request_, res) => {
+  res.status(200).send(request_.url);
 });
 
-app.delete('/', (req, res) => {
-  res.status(200).send(req.query);
+app.delete('/', (request_, res) => {
+  res.status(200).send(request_.query);
 });
 
-app.put('/', (req, res) => {
-  res.status(200).send(req.query);
+app.put('/', (request_, res) => {
+  res.status(200).send(request_.query);
 });
 
 let base = 'http://localhost';
@@ -49,7 +49,7 @@ describe('req.query(String)', () => {
     request
       .del(base)
       .query('name=t%F6bi')
-      .end((err, res) => {
+      .end((error, res) => {
         res.body.should.eql({ name: 't%F6bi' });
         done();
       });
@@ -59,7 +59,7 @@ describe('req.query(String)', () => {
     request
       .del(`${base}/?name=tobi`)
       .query('age=2%20')
-      .end((err, res) => {
+      .end((error, res) => {
         res.body.should.eql({ name: 'tobi', age: '2 ' });
         done();
       });
@@ -69,7 +69,7 @@ describe('req.query(String)', () => {
     request
       .del(base)
       .query('name=t%F6bi&age=2')
-      .end((err, res) => {
+      .end((error, res) => {
         res.body.should.eql({ name: 't%F6bi', age: '2' });
         done();
       });
@@ -80,7 +80,7 @@ describe('req.query(String)', () => {
       .del(base)
       .query('name=t%F6bi')
       .query('age=2%F6')
-      .end((err, res) => {
+      .end((error, res) => {
         res.body.should.eql({ name: 't%F6bi', age: '2%F6' });
         done();
       });
@@ -91,7 +91,7 @@ describe('req.query(String)', () => {
       .del(base)
       .query('name=t%F6bi')
       .query({ age: '2' })
-      .end((err, res) => {
+      .end((error, res) => {
         res.body.should.eql({ name: 't%F6bi', age: '2' });
         done();
       });
@@ -128,7 +128,7 @@ describe('req.query(Object)', () => {
       .query({ name: 'tobi' })
       .query({ order: 'asc' })
       .query({ limit: ['1', '2'] })
-      .end((err, res) => {
+      .end((error, res) => {
         res.body.should.eql({ name: 'tobi', order: 'asc', limit: ['1', '2'] });
         done();
       });
@@ -141,7 +141,7 @@ describe('req.query(Object)', () => {
       .query({ name: '`tobi`' })
       .query({ 'orde%60r': null })
       .query({ '`limit`': ['%602`'] })
-      .end((err, res) => {
+      .end((error, res) => {
         res.text.should.eql('name=%60tobi%60&orde%2560r&%60limit%60=%25602%60');
         done();
       });
@@ -153,7 +153,7 @@ describe('req.query(Object)', () => {
     request
       .del(base)
       .query({ at: date })
-      .end((err, res) => {
+      .end((error, res) => {
         assert.equal(date.toISOString(), res.body.at);
         done();
       });
@@ -167,7 +167,7 @@ describe('req.query(Object)', () => {
       .query({ name: 'tobi' })
       .query({ order: 'asc' })
       .query({ limit: ['1', '2'] })
-      .end((err, res) => {
+      .end((error, res) => {
         res.body.should.eql({ name: 'tobi', order: 'asc', limit: ['1', '2'] });
         done();
       });
@@ -177,14 +177,14 @@ describe('req.query(Object)', () => {
     request
       .del(`${base}/?name=tobi`)
       .query({ order: 'asc' })
-      .end((err, res) => {
+      .end((error, res) => {
         res.body.should.eql({ name: 'tobi', order: 'asc' });
         done();
       });
   });
 
   it('should retain the original query-string', (done) => {
-    request.del(`${base}/?name=tobi`).end((err, res) => {
+    request.del(`${base}/?name=tobi`).end((error, res) => {
       res.body.should.eql({ name: 'tobi' });
       done();
     });
@@ -194,21 +194,21 @@ describe('req.query(Object)', () => {
     request
       .del(`${base}/url`)
       .query({ nil: null })
-      .end((err, res) => {
+      .end((error, res) => {
         res.text.should.equal('/url?nil');
         done();
       });
   });
 
   it('query-string should be sent on pipe', (done) => {
-    const req = request.put(`${base}/?name=tobi`);
+    const request_ = request.put(`${base}/?name=tobi`);
     const stream = fs.createReadStream('test/node/fixtures/user.json');
 
-    req.on('response', (res) => {
+    request_.on('response', (res) => {
       res.body.should.eql({ name: 'tobi' });
       done();
     });
 
-    stream.pipe(req);
+    stream.pipe(request_);
   });
 });

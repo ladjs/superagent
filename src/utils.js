@@ -6,7 +6,7 @@
  * @api private
  */
 
-exports.type = (str) => str.split(/ *; */).shift();
+exports.type = (string_) => string_.split(/ *; */).shift();
 
 /**
  * Return header field parameters.
@@ -16,17 +16,17 @@ exports.type = (str) => str.split(/ *; */).shift();
  * @api private
  */
 
-exports.params = (val) => {
-  const obj = {};
-  for (const str of val.split(/ *; */)) {
-    const parts = str.split(/ *= */);
+exports.params = (value) => {
+  const object = {};
+  for (const string_ of value.split(/ *; */)) {
+    const parts = string_.split(/ *= */);
     const key = parts.shift();
-    const val = parts.shift();
+    const value = parts.shift();
 
-    if (key && val) obj[key] = val;
+    if (key && value) object[key] = value;
   }
 
-  return obj;
+  return object;
 };
 
 /**
@@ -37,16 +37,16 @@ exports.params = (val) => {
  * @api private
  */
 
-exports.parseLinks = (val) => {
-  const obj = {};
-  for (const str of val.split(/ *, */)) {
-    const parts = str.split(/ *; */);
+exports.parseLinks = (value) => {
+  const object = {};
+  for (const string_ of value.split(/ *, */)) {
+    const parts = string_.split(/ *; */);
     const url = parts[0].slice(1, -1);
     const rel = parts[1].split(/ *= */)[1].slice(1, -1);
-    obj[rel] = url;
+    object[rel] = url;
   }
 
-  return obj;
+  return object;
 };
 
 /**

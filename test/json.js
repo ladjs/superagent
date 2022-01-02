@@ -8,13 +8,13 @@ const assert = require('assert');
 const request = require('./support/client');
 
 describe('req.send(Object) as "json"', function () {
-  this.timeout(20000);
+  this.timeout(20_000);
 
   it('should default to json', (done) => {
     request
       .post(`${uri}/echo`)
       .send({ name: 'tobi' })
-      .end((err, res) => {
+      .end((error, res) => {
         res.should.be.json();
         res.text.should.equal('{"name":"tobi"}');
         done();
@@ -25,7 +25,7 @@ describe('req.send(Object) as "json"', function () {
     request
       .post(`${uri}/echo`)
       .send([1, 2, 3])
-      .end((err, res) => {
+      .end((error, res) => {
         res.should.be.json();
         res.text.should.equal('[1,2,3]');
         done();
@@ -37,7 +37,7 @@ describe('req.send(Object) as "json"', function () {
       .post(`${uri}/echo`)
       .type('json')
       .send('null')
-      .end((err, res) => {
+      .end((error, res) => {
         res.should.be.json();
         assert.strictEqual(res.body, null);
         done();
@@ -49,7 +49,7 @@ describe('req.send(Object) as "json"', function () {
       .post(`${uri}/echo`)
       .type('json')
       .send('false')
-      .end((err, res) => {
+      .end((error, res) => {
         res.should.be.json();
         res.body.should.equal(false);
         done();
@@ -63,7 +63,7 @@ describe('req.send(Object) as "json"', function () {
         .post(`${uri}/echo`)
         .type('json')
         .send('0')
-        .end((err, res) => {
+        .end((error, res) => {
           res.should.be.json();
           res.body.should.equal(0);
           done();
@@ -75,7 +75,7 @@ describe('req.send(Object) as "json"', function () {
       .post(`${uri}/echo`)
       .type('json')
       .send('""')
-      .end((err, res) => {
+      .end((error, res) => {
         res.should.be.json();
         res.body.should.equal('');
         done();
@@ -87,14 +87,14 @@ describe('req.send(Object) as "json"', function () {
       request
         .get(`${uri}/echo`)
         .send({ tobi: 'ferret' })
-        .end((err, res) => {
+        .end((error, res) => {
           try {
             res.should.be.json();
             res.text.should.equal('{"tobi":"ferret"}');
             ({ tobi: 'ferret' }.should.eql(res.body));
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
     });
@@ -104,7 +104,7 @@ describe('req.send(Object) as "json"', function () {
       .post(`${uri}/echo`)
       .set('Content-Type', 'application/vnd.example+json')
       .send({ name: 'vendor' })
-      .end((err, res) => {
+      .end((error, res) => {
         res.text.should.equal('{"name":"vendor"}');
         ({ name: 'vendor' }.should.eql(res.body));
         done();
@@ -117,7 +117,7 @@ describe('req.send(Object) as "json"', function () {
         .post(`${uri}/echo`)
         .send({ name: 'tobi' })
         .send({ age: 1 })
-        .end((err, res) => {
+        .end((error, res) => {
           res.should.be.json();
           res.text.should.equal('{"name":"tobi","age":1}');
           ({ name: 'tobi', age: 1 }.should.eql(res.body));
@@ -128,11 +128,11 @@ describe('req.send(Object) as "json"', function () {
 });
 
 describe('res.body', function () {
-  this.timeout(20000);
+  this.timeout(20_000);
 
   describe('application/json', () => {
     it('should parse the body', (done) => {
-      request.get(`${uri}/json`).end((err, res) => {
+      request.get(`${uri}/json`).end((error, res) => {
         res.text.should.equal('{"name":"manny"}');
         res.body.should.eql({ name: 'manny' });
         done();
@@ -143,14 +143,14 @@ describe('res.body', function () {
   if (doesntWorkInBrowserYet)
     describe('HEAD requests', () => {
       it('should not throw a parse error', (done) => {
-        request.head(`${uri}/json`).end((err, res) => {
+        request.head(`${uri}/json`).end((error, res) => {
           try {
-            assert.strictEqual(err, null);
+            assert.strictEqual(error, null);
             assert.strictEqual(res.text, undefined);
             assert.strictEqual(Object.keys(res.body).length, 0);
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
       });
@@ -158,9 +158,9 @@ describe('res.body', function () {
 
   describe('Invalid JSON response', () => {
     it('should return the raw response', (done) => {
-      request.get(`${uri}/invalid-json`).end((err, res) => {
+      request.get(`${uri}/invalid-json`).end((error, res) => {
         assert.deepEqual(
-          err.rawResponse,
+          error.rawResponse,
           ")]}', {'header':{'code':200,'text':'OK','version':'1.0'},'data':'some data'}"
         );
         done();
@@ -168,8 +168,8 @@ describe('res.body', function () {
     });
 
     it('should return the http status code', (done) => {
-      request.get(`${uri}/invalid-json-forbidden`).end((err, res) => {
-        assert.equal(err.statusCode, 403);
+      request.get(`${uri}/invalid-json-forbidden`).end((error, res) => {
+        assert.equal(error.statusCode, 403);
         done();
       });
     });
@@ -178,14 +178,14 @@ describe('res.body', function () {
   if (doesntWorkInBrowserYet)
     describe('No content', () => {
       it('should not throw a parse error', (done) => {
-        request.get(`${uri}/no-content`).end((err, res) => {
+        request.get(`${uri}/no-content`).end((error, res) => {
           try {
-            assert.strictEqual(err, null);
+            assert.strictEqual(error, null);
             assert.strictEqual(res.text, '');
             assert.strictEqual(Object.keys(res.body).length, 0);
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
       });
@@ -194,8 +194,8 @@ describe('res.body', function () {
   if (doesntWorkInBrowserYet)
     describe('application/json+hal', () => {
       it('should parse the body', (done) => {
-        request.get(`${uri}/json-hal`).end((err, res) => {
-          if (err) return done(err);
+        request.get(`${uri}/json-hal`).end((error, res) => {
+          if (error) return done(error);
           res.text.should.equal('{"name":"hal 5000"}');
           res.body.should.eql({ name: 'hal 5000' });
           done();
@@ -206,7 +206,7 @@ describe('res.body', function () {
   if (doesntWorkInBrowserYet)
     describe('vnd.collection+json', () => {
       it('should parse the body', (done) => {
-        request.get(`${uri}/collection-json`).end((err, res) => {
+        request.get(`${uri}/collection-json`).end((error, res) => {
           res.text.should.equal('{"name":"chewbacca"}');
           res.body.should.eql({ name: 'chewbacca' });
           done();

@@ -6,8 +6,8 @@
  * @api private
  */
 
-function isObject(obj) {
-  return obj !== null && typeof obj === 'object';
+function isObject(object) {
+  return object !== null && typeof object === 'object';
 }
 
 module.exports = isObject;

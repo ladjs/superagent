@@ -23,7 +23,7 @@ describe('req.send(String)', () => {
       .post(`${base}/echo`)
       .send('user[name]=tj')
       .send('user[email]=tj@vision-media.ca')
-      .end((err, res) => {
+      .end((error, res) => {
         res.header['content-type'].should.equal(
           'application/x-www-form-urlencoded'
         );
@@ -38,7 +38,7 @@ describe('req.send(String)', () => {
 describe('res.body', () => {
   describe('application/x-www-form-urlencoded', () => {
     it('should parse the body', (done) => {
-      request.get(`${base}/form-data`).end((err, res) => {
+      request.get(`${base}/form-data`).end((error, res) => {
         res.text.should.equal('pet[name]=manny');
         res.body.should.eql({ pet: { name: 'manny' } });
         done();

@@ -13,8 +13,8 @@
  * @private
  */
 
-const accepts = require('accepts');
 const { isIP } = require('net');
+const accepts = require('accepts');
 const typeis = require('type-is');
 const fresh = require('fresh');
 const parseRange = require('range-parser');
@@ -33,7 +33,7 @@ const proxyaddr = require('proxy-addr');
 
 module.exports = setMethods;
 
-function setMethods(req) {
+function setMethods(request) {
   /**
    * Return request header.
    *
@@ -58,7 +58,7 @@ function setMethods(req) {
    * @public
    */
 
-  req.get = req.header = function header(name) {
+  request.get = request.header = function header(name) {
     if (!name) {
       throw new TypeError('name argument is required to req.get');
     }
@@ -124,7 +124,7 @@ function setMethods(req) {
    * @public
    */
 
-  req.accepts = function () {
+  request.accepts = function () {
     const accept = accepts(this);
     return accept.types.apply(accept, arguments);
   };
@@ -137,7 +137,7 @@ function setMethods(req) {
    * @public
    */
 
-  req.acceptsEncodings = function () {
+  request.acceptsEncodings = function () {
     const accept = accepts(this);
     return accept.encodings.apply(accept, arguments);
   };
@@ -151,7 +151,7 @@ function setMethods(req) {
    * @public
    */
 
-  req.acceptsCharsets = function () {
+  request.acceptsCharsets = function () {
     const accept = accepts(this);
     return accept.charsets.apply(accept, arguments);
   };
@@ -165,7 +165,7 @@ function setMethods(req) {
    * @public
    */
 
-  req.acceptsLanguages = function () {
+  request.acceptsLanguages = function () {
     const accept = accepts(this);
     return accept.languages.apply(accept, arguments);
   };
@@ -195,7 +195,7 @@ function setMethods(req) {
    * @public
    */
 
-  req.range = function range(size, options) {
+  request.range = function range(size, options) {
     const range = this.get('Range');
     if (!range) return;
     return parseRange(size, range, options);
@@ -211,7 +211,7 @@ function setMethods(req) {
    * @api public
    */
 
-  defineGetter(req, 'query', function query() {
+  defineGetter(request, 'query', function query() {
     const queryparse = this.app.get('query parser fn');
 
     if (!queryparse) {
@@ -250,18 +250,18 @@ function setMethods(req) {
    * @public
    */
 
-  req.is = function is(types) {
-    let arr = types;
+  request.is = function is(types) {
+    let array = types;
 
     // support flattened arguments
     if (!Array.isArray(types)) {
-      arr = new Array(arguments.length);
-      for (let i = 0; i < arr.length; i++) {
-        arr[i] = arguments[i];
+      array = new Array(arguments.length);
+      for (let i = 0; i < array.length; i++) {
+        array[i] = arguments[i];
       }
     }
 
-    return typeis(this, arr);
+    return typeis(this, array);
   };
 
   /**
@@ -278,7 +278,7 @@ function setMethods(req) {
    * @public
    */
 
-  defineGetter(req, 'protocol', function protocol() {
+  defineGetter(request, 'protocol', function protocol() {
     const proto = this.connection.encrypted ? 'https' : 'http';
     const trust = this.app.get('trust proxy fn');
 
@@ -303,7 +303,7 @@ function setMethods(req) {
    * @public
    */
 
-  defineGetter(req, 'secure', function secure() {
+  defineGetter(request, 'secure', function secure() {
     return this.protocol === 'https';
   });
 
@@ -317,7 +317,7 @@ function setMethods(req) {
    * @public
    */
 
-  defineGetter(req, 'ip', function ip() {
+  defineGetter(request, 'ip', function ip() {
     const trust = this.app.get('trust proxy fn');
     return proxyaddr(this, trust);
   });
@@ -334,7 +334,7 @@ function setMethods(req) {
    * @public
    */
 
-  defineGetter(req, 'ips', function ips() {
+  defineGetter(request, 'ips', function ips() {
     const trust = this.app.get('trust proxy fn');
     const addrs = proxyaddr.all(this, trust);
 
@@ -360,7 +360,7 @@ function setMethods(req) {
    * @public
    */
 
-  defineGetter(req, 'subdomains', function subdomains() {
+  defineGetter(request, 'subdomains', function subdomains() {
     const { hostname } = this;
 
     if (!hostname) return [];
@@ -380,7 +380,7 @@ function setMethods(req) {
    * @public
    */
 
-  defineGetter(req, 'path', function path() {
+  defineGetter(request, 'path', function path() {
     return parse(this).pathname;
   });
 
@@ -395,15 +395,15 @@ function setMethods(req) {
    * @public
    */
 
-  defineGetter(req, 'host', function host() {
+  defineGetter(request, 'host', function host() {
     const trust = this.app.get('trust proxy fn');
-    let val = this.get('X-Forwarded-Host');
+    let value = this.get('X-Forwarded-Host');
 
-    if (!val || !trust(this.connection.remoteAddress, 0)) {
-      val = this.get('Host');
+    if (!value || !trust(this.connection.remoteAddress, 0)) {
+      value = this.get('Host');
     }
 
-    return val || undefined;
+    return value || undefined;
   });
 
   /**
@@ -417,7 +417,7 @@ function setMethods(req) {
    * @api public
    */
 
-  defineGetter(req, 'hostname', function hostname() {
+  defineGetter(request, 'hostname', function hostname() {
     const { host } = this;
 
     if (!host) return;
@@ -438,7 +438,7 @@ function setMethods(req) {
    * @public
    */
 
-  defineGetter(req, 'fresh', function () {
+  defineGetter(request, 'fresh', function () {
     const { method } = this;
     const { res } = this;
     const status = res.statusCode;
@@ -466,7 +466,7 @@ function setMethods(req) {
    * @public
    */
 
-  defineGetter(req, 'stale', function stale() {
+  defineGetter(request, 'stale', function stale() {
     return !this.fresh;
   });
 
@@ -477,12 +477,12 @@ function setMethods(req) {
    * @public
    */
 
-  defineGetter(req, 'xhr', function xhr() {
-    const val = this.get('X-Requested-With') || '';
-    return val.toLowerCase() === 'xmlhttprequest';
+  defineGetter(request, 'xhr', function xhr() {
+    const value = this.get('X-Requested-With') || '';
+    return value.toLowerCase() === 'xmlhttprequest';
   });
 
-  return req;
+  return request;
 }
 
 /**
@@ -493,8 +493,8 @@ function setMethods(req) {
  * @param {Function} getter
  * @private
  */
-function defineGetter(obj, name, getter) {
-  Object.defineProperty(obj, name, {
+function defineGetter(object, name, getter) {
+  Object.defineProperty(object, name, {
     configurable: true,
     enumerable: true,
     get: getter

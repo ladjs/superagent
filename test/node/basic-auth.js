@@ -12,7 +12,7 @@ describe('Basic auth', () => {
       new_url.auth = 'tobi:learnboost';
       new_url.pathname = '/basic-auth';
 
-      request.get(URL.format(new_url)).end((err, res) => {
+      request.get(URL.format(new_url)).end((error, res) => {
         res.status.should.equal(200);
         done();
       });
@@ -24,7 +24,7 @@ describe('Basic auth', () => {
       request
         .get(`${base}/basic-auth`)
         .auth('tobi', 'learnboost')
-        .end((err, res) => {
+        .end((error, res) => {
           res.status.should.equal(200);
           done();
         });
@@ -36,7 +36,7 @@ describe('Basic auth', () => {
       request
         .get(`${base}/basic-auth/again`)
         .auth('tobi')
-        .end((err, res) => {
+        .end((error, res) => {
           res.status.should.eql(200);
           done();
         });

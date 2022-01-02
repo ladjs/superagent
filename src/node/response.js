@@ -26,16 +26,16 @@ module.exports = Response;
  * @api private
  */
 
-function Response(req) {
+function Response(request) {
   Stream.call(this);
-  this.res = req.res;
+  this.res = request.res;
   const { res } = this;
-  this.request = req;
-  this.req = req.req;
+  this.request = request;
+  this.req = request.req;
   this.text = res.text;
   this.body = res.body === undefined ? {} : res.body;
   this.files = res.files || {};
-  this.buffered = req._resBuffered;
+  this.buffered = request._resBuffered;
   this.headers = res.headers;
   this.header = this.headers;
   this._setStatusProperties(res.statusCode);
@@ -59,8 +59,8 @@ ResponseBase(Response.prototype);
  * Implements methods of a `ReadableStream`
  */
 
-Response.prototype.destroy = function (err) {
-  this.res.destroy(err);
+Response.prototype.destroy = function (error) {
+  this.res.destroy(error);
 };
 
 /**
@@ -91,14 +91,14 @@ Response.prototype.toError = function () {
   const { method } = req;
   const { path } = req;
 
-  const msg = `cannot ${method} ${path} (${this.status})`;
-  const err = new Error(msg);
-  err.status = this.status;
-  err.text = this.text;
-  err.method = method;
-  err.path = path;
+  const message = `cannot ${method} ${path} (${this.status})`;
+  const error = new Error(message);
+  error.status = this.status;
+  error.text = this.text;
+  error.method = method;
+  error.path = path;
 
-  return err;
+  return error;
 };
 
 Response.prototype.setStatusProperties = function (status) {

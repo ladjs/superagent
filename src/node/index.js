@@ -130,11 +130,11 @@ exports.buffer = {};
  * @param {Object} req the instance
  * @api private
  */
-function _initHeaders(req) {
-  req._header = {
+function _initHeaders(request_) {
+  request_._header = {
     // coerces header names to lowercase
   };
-  req.header = {
+  request_.header = {
     // preserves header name case
   };
 }
@@ -269,15 +269,15 @@ Request.prototype.attach = function (field, file, options) {
 Request.prototype._getFormData = function () {
   if (!this._formData) {
     this._formData = new FormData();
-    this._formData.on('error', (err) => {
-      debug('FormData error', err);
+    this._formData.on('error', (error) => {
+      debug('FormData error', error);
       if (this.called) {
         // The request has already finished and the callback was called.
         // Silently ignore the error.
         return;
       }
 
-      this.callback(err);
+      this.callback(error);
       this.abort();
     });
   }
@@ -370,11 +370,11 @@ Request.prototype.accept = function (type) {
  * @api public
  */
 
-Request.prototype.query = function (val) {
-  if (typeof val === 'string') {
-    this._query.push(val);
+Request.prototype.query = function (value) {
+  if (typeof value === 'string') {
+    this._query.push(value);
   } else {
-    Object.assign(this.qs, val);
+    Object.assign(this.qs, value);
   }
 
   return this;
@@ -390,12 +390,12 @@ Request.prototype.query = function (val) {
  */
 
 Request.prototype.write = function (data, encoding) {
-  const req = this.request();
+  const request_ = this.request();
   if (!this._streamRequest) {
     this._streamRequest = true;
   }
 
-  return req.write(data, encoding);
+  return request_.write(data, encoding);
 };
 
 /**
@@ -431,17 +431,17 @@ Request.prototype._pipeContinue = function (stream, options) {
     if (this._aborted) return;
 
     if (this._shouldUnzip(res)) {
-      const unzipObj = zlib.createUnzip();
-      unzipObj.on('error', (err) => {
-        if (err && err.code === 'Z_BUF_ERROR') {
+      const unzipObject = zlib.createUnzip();
+      unzipObject.on('error', (error) => {
+        if (error && error.code === 'Z_BUF_ERROR') {
           // unexpected end of file is ignored by browsers and curl
           stream.emit('end');
           return;
         }
 
-        stream.emit('error', err);
+        stream.emit('error', error);
       });
-      res.pipe(unzipObj).pipe(stream, options);
+      res.pipe(unzipObject).pipe(stream, options);
     } else {
       res.pipe(stream, options);
     }
@@ -461,8 +461,8 @@ Request.prototype._pipeContinue = function (stream, options) {
  * @api public
  */
 
-Request.prototype.buffer = function (val) {
-  this._buffer = val !== false;
+Request.prototype.buffer = function (value) {
+  this._buffer = value !== false;
   return this;
 };
 
@@ -800,7 +800,7 @@ Request.prototype.request = function () {
     this.emit('drain');
   });
 
-  req.on('error', (err) => {
+  req.on('error', (error) => {
     // flag abortion here for out timeouts
     // because node will emit a faux-error "socket hang up"
     // when request is aborted before a connection is made
@@ -811,7 +811,7 @@ Request.prototype.request = function () {
     // if we've received a response then we don't want to let
     // an error in the request blow up the response
     if (this.response) return;
-    this.callback(err);
+    this.callback(error);
   });
 
   // auth
@@ -833,12 +833,12 @@ Request.prototype.request = function () {
   if (this.cookies) {
     if (Object.prototype.hasOwnProperty.call(this._header, 'cookie')) {
       // merge
-      const tmpJar = new CookieJar.CookieJar();
-      tmpJar.setCookies(this._header.cookie.split(';'));
-      tmpJar.setCookies(this.cookies.split(';'));
+      const temporaryJar = new CookieJar.CookieJar();
+      temporaryJar.setCookies(this._header.cookie.split(';'));
+      temporaryJar.setCookies(this.cookies.split(';'));
       req.setHeader(
         'Cookie',
-        tmpJar.getCookies(CookieJar.CookieAccessInfo.All).toValueString()
+        temporaryJar.getCookies(CookieJar.CookieAccessInfo.All).toValueString()
       );
     } else {
       req.setHeader('Cookie', this.cookies);
@@ -857,8 +857,8 @@ Request.prototype.request = function () {
  * @api private
  */
 
-Request.prototype.callback = function (err, res) {
-  if (this._shouldRetry(err, res)) {
+Request.prototype.callback = function (error, res) {
+  if (this._shouldRetry(error, res)) {
     return this._retry();
   }
 
@@ -868,38 +868,38 @@ Request.prototype.callback = function (err, res) {
   if (this.called) return console.warn('superagent: double callback bug');
   this.called = true;
 
-  if (!err) {
+  if (!error) {
     try {
       if (!this._isResponseOK(res)) {
-        let msg = 'Unsuccessful HTTP response';
+        let message = 'Unsuccessful HTTP response';
         if (res) {
-          msg = http.STATUS_CODES[res.status] || msg;
+          message = http.STATUS_CODES[res.status] || message;
         }
 
-        err = new Error(msg);
-        err.status = res ? res.status : undefined;
+        error = new Error(message);
+        error.status = res ? res.status : undefined;
       }
-    } catch (err_) {
-      err = err_;
+    } catch (error_) {
+      error = error_;
     }
   }
 
   // It's important that the callback is called outside try/catch
   // to avoid double callback
-  if (!err) {
+  if (!error) {
     return fn(null, res);
   }
 
-  err.response = res;
-  if (this._maxRetries) err.retries = this._retries - 1;
+  error.response = res;
+  if (this._maxRetries) error.retries = this._retries - 1;
 
   // only emit error event if there is a listener
   // otherwise we assume the callback to `.end()` will get the error
-  if (err && this.listeners('error').length > 0) {
-    this.emit('error', err);
+  if (error && this.listeners('error').length > 0) {
+    this.emit('error', error);
   }
 
-  fn(err, res);
+  fn(error, res);
 };
 
 /**
@@ -909,9 +909,11 @@ Request.prototype.callback = function (err, res) {
  * @return {Boolean} is a host object
  * @api private
  */
-Request.prototype._isHost = function (obj) {
+Request.prototype._isHost = function (object) {
   return (
-    Buffer.isBuffer(obj) || obj instanceof Stream || obj instanceof FormData
+    Buffer.isBuffer(object) ||
+    object instanceof Stream ||
+    object instanceof FormData
   );
 };
 
@@ -1056,7 +1058,7 @@ Request.prototype._end = function () {
         parser = exports.parse.image; // It's actually a generic Buffer
         buffer = true;
       } else if (multipart) {
-        const form = new formidable.IncomingForm();
+        const form = formidable();
         parser = form.parse.bind(form);
         buffer = true;
       } else if (isImageOrVideo(mime)) {
@@ -1089,18 +1091,18 @@ Request.prototype._end = function () {
     let parserHandlesEnd = false;
     if (buffer) {
       // Protectiona against zip bombs and other nuisance
-      let responseBytesLeft = this._maxResponseSize || 200000000;
+      let responseBytesLeft = this._maxResponseSize || 200_000_000;
       res.on('data', (buf) => {
         responseBytesLeft -= buf.byteLength || buf.length > 0 ? buf.length : 0;
         if (responseBytesLeft < 0) {
           // This will propagate through error event
-          const err = new Error('Maximum response size reached');
-          err.code = 'ETOOLARGE';
+          const error = new Error('Maximum response size reached');
+          error.code = 'ETOOLARGE';
           // Parsers aren't required to observe error event,
           // so would incorrectly report success
           parserHandlesEnd = false;
           // Will emit error event
-          res.destroy(err);
+          res.destroy(error);
         }
       });
     }
@@ -1111,7 +1113,7 @@ Request.prototype._end = function () {
         // which is weird BTW, because response.body won't be there.
         parserHandlesEnd = buffer;
 
-        parser(res, (err, obj, files) => {
+        parser(res, (error, object, files) => {
           if (this.timedout) {
             // Timeout has already handled all callbacks
             return;
@@ -1119,13 +1121,13 @@ Request.prototype._end = function () {
 
           // Intentional (non-timeout) abort is supposed to preserve partial response,
           // even if it doesn't parse.
-          if (err && !this._aborted) {
-            return this.callback(err);
+          if (error && !this._aborted) {
+            return this.callback(error);
           }
 
           if (parserHandlesEnd) {
             this.emit('end');
-            this.callback(null, this._emitResponse(obj, files));
+            this.callback(null, this._emitResponse(object, files));
           }
         });
       } catch (err) {
@@ -1149,9 +1151,9 @@ Request.prototype._end = function () {
     }
 
     // terminating events
-    res.once('error', (err) => {
+    res.once('error', (error) => {
       parserHandlesEnd = false;
-      this.callback(err, null);
+      this.callback(error, null);
     });
     if (!parserHandlesEnd)
       res.once('end', () => {
@@ -1219,9 +1221,9 @@ Request.prototype._end = function () {
     }
 
     // attempt to get "Content-Length" header
-    formData.getLength((err, length) => {
+    formData.getLength((error, length) => {
       // TODO: Add chunked encoding when no length (if err)
-      if (err) debug('formData.getLength had error', err, length);
+      if (error) debug('formData.getLength had error', error, length);
 
       debug('got FormData Content-Length: %s', length);
       if (typeof length === 'number') {
@@ -1289,17 +1291,17 @@ if (!methods.includes('del')) {
   // create a copy so we don't cause conflicts with
   // other packages using the methods package and
   // npm 3.x
-  methods = methods.slice(0);
+  methods = [...methods];
   methods.push('del');
 }
 
-methods.forEach((method) => {
+for (let method of methods) {
   const name = method;
   method = method === 'del' ? 'delete' : method;
 
   method = method.toUpperCase();
   request[name] = (url, data, fn) => {
-    const req = request(method, url);
+    const request_ = request(method, url);
     if (typeof data === 'function') {
       fn = data;
       data = null;
@@ -1307,16 +1309,16 @@ methods.forEach((method) => {
 
     if (data) {
       if (method === 'GET' || method === 'HEAD') {
-        req.query(data);
+        request_.query(data);
       } else {
-        req.send(data);
+        request_.send(data);
       }
     }
 
-    if (fn) req.end(fn);
-    return req;
+    if (fn) request_.end(fn);
+    return request_;
   };
-});
+}
 
 /**
  * Check if `mime` is text and should be buffered.

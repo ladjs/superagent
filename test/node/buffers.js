@@ -16,9 +16,9 @@ describe("req.buffer['someMimeType']", () => {
       .post(`${base}/echo`)
       .type(type)
       .send(send)
-      .end((err, res) => {
+      .end((error, res) => {
         delete request.buffer[type];
-        assert.ifError(err);
+        assert.ifError(error);
         assert.equal(res.type, type);
         assert.equal(send, res.text);
         assert(res.buffered);
@@ -36,9 +36,9 @@ describe("req.buffer['someMimeType']", () => {
       .post(`${base}/echo`)
       .type(type)
       .send(send)
-      .end((err, res) => {
+      .end((error, res) => {
         delete request.buffer[type];
-        assert.ifError(err);
+        assert.ifError(error);
         assert.equal(null, res.text);
         assert.equal(res.type, type);
         assert(!res.buffered);
@@ -63,9 +63,9 @@ describe("req.buffer['someMimeType']", () => {
       .post(`${base}/echo`)
       .type(type)
       .send(send)
-      .end((err, res) => {
+      .end((error, res) => {
         delete request.buffer[type];
-        assert.ifError(err);
+        assert.ifError(error);
         assert.equal(null, res.text);
         assert.equal(res.type, type);
         assert(!res.buffered);
@@ -89,9 +89,9 @@ describe("req.buffer['someMimeType']", () => {
       .post(`${base}/echo`)
       .type(type)
       .send(send)
-      .end((err, res) => {
+      .end((error, res) => {
         delete request.buffer[type];
-        assert.ifError(err);
+        assert.ifError(error);
         assert.equal(res.type, type);
         assert.equal(send, res.text);
         assert(res.buffered);

@@ -191,16 +191,7 @@ const ERROR_CODES = new Set([
 ]);
 
 const STATUS_CODES = new Set([
-  408,
-  413,
-  429,
-  500,
-  502,
-  503,
-  504,
-  521,
-  522,
-  524
+  408, 413, 429, 500, 502, 503, 504, 521, 522, 524
 ]);
 
 // TODO: we would need to make this easily configurable before adding it in (e.g. some might want to add POST)
@@ -214,19 +205,19 @@ const STATUS_CODES = new Set([
  * @param {Response} [res] response
  * @returns {Boolean} if segment should be retried
  */
-RequestBase.prototype._shouldRetry = function (err, res) {
+RequestBase.prototype._shouldRetry = function (error, res) {
   if (!this._maxRetries || this._retries++ >= this._maxRetries) {
     return false;
   }
 
   if (this._retryCallback) {
     try {
-      const override = this._retryCallback(err, res);
+      const override = this._retryCallback(error, res);
       if (override === true) return true;
       if (override === false) return false;
       // undefined falls back to defaults
-    } catch (err_) {
-      console.error(err_);
+    } catch (error_) {
+      console.error(error_);
     }
   }
 
@@ -240,11 +231,11 @@ RequestBase.prototype._shouldRetry = function (err, res) {
     return false;
   */
   if (res && res.status && STATUS_CODES.has(res.status)) return true;
-  if (err) {
-    if (err.code && ERROR_CODES.has(err.code)) return true;
+  if (error) {
+    if (error.code && ERROR_CODES.has(error.code)) return true;
     // Superagent timeout
-    if (err.timeout && err.code === 'ECONNABORTED') return true;
-    if (err.crossDomain) return true;
+    if (error.timeout && error.code === 'ECONNABORTED') return true;
+    if (error.crossDomain) return true;
   }
 
   return false;
@@ -301,15 +292,15 @@ RequestBase.prototype.then = function (resolve, reject) {
           return;
         }
 
-        const err = new Error('Aborted');
-        err.code = 'ABORTED';
-        err.status = this.status;
-        err.method = this.method;
-        err.url = this.url;
-        reject(err);
+        const error = new Error('Aborted');
+        error.code = 'ABORTED';
+        error.status = this.status;
+        error.method = this.method;
+        error.url = this.url;
+        reject(error);
       });
-      self.end((err, res) => {
-        if (err) reject(err);
+      self.end((error, res) => {
+        if (error) reject(error);
         else resolve(res);
       });
     });
@@ -765,14 +756,14 @@ RequestBase.prototype._timeoutError = function (reason, timeout, errno) {
     return;
   }
 
-  const err = new Error(`${reason + timeout}ms exceeded`);
-  err.timeout = timeout;
-  err.code = 'ECONNABORTED';
-  err.errno = errno;
+  const error = new Error(`${reason + timeout}ms exceeded`);
+  error.timeout = timeout;
+  error.code = 'ECONNABORTED';
+  error.errno = errno;
   this.timedout = true;
-  this.timedoutError = err;
+  this.timedoutError = error;
   this.abort();
-  this.callback(err);
+  this.callback(error);
 };
 
 RequestBase.prototype._setTimeouts = function () {

@@ -16,8 +16,8 @@ module.exports = ResponseBase;
  * @api public
  */
 
-function ResponseBase(obj) {
-  if (obj) return mixin(obj);
+function ResponseBase(object) {
+  if (object) return mixin(object);
 }
 
 /**
@@ -28,13 +28,13 @@ function ResponseBase(obj) {
  * @api private
  */
 
-function mixin(obj) {
+function mixin(object) {
   for (const key in ResponseBase.prototype) {
     if (Object.prototype.hasOwnProperty.call(ResponseBase.prototype, key))
-      obj[key] = ResponseBase.prototype[key];
+      object[key] = ResponseBase.prototype[key];
   }
 
-  return obj;
+  return object;
 }
 
 /**
@@ -70,10 +70,10 @@ ResponseBase.prototype._setHeaderProperties = function (header) {
   this.type = utils.type(ct);
 
   // params
-  const params = utils.params(ct);
-  for (const key in params) {
-    if (Object.prototype.hasOwnProperty.call(params, key))
-      this[key] = params[key];
+  const parameters = utils.params(ct);
+  for (const key in parameters) {
+    if (Object.prototype.hasOwnProperty.call(parameters, key))
+      this[key] = parameters[key];
   }
 
   this.links = {};
