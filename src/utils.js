@@ -70,3 +70,14 @@ exports.cleanHeader = (header, changesOrigin) => {
 
   return header;
 };
+
+/**
+ * Check if `obj` is an object.
+ *
+ * @param {Object} object
+ * @return {Boolean}
+ * @api private
+ */
+exports.isObject = (object) => {
+  return object !== null && typeof object === 'object';
+}

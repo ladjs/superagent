@@ -1,7 +1,7 @@
 /**
  * Module of mixed-in functions shared between node and client code
  */
-const isObject = require('./is-object');
+const { isObject, hasOwn } = require('./utils');
 
 /**
  * Expose `RequestBase`.

@@ -21,7 +21,7 @@ const Emitter = require('component-emitter');
 const safeStringify = require('fast-safe-stringify');
 const qs = require('qs');
 const RequestBase = require('./request-base');
-const isObject = require('./is-object');
+const { isObject, mixin, hasOwn } = require('./utils');
 const ResponseBase = require('./response-base');
 const Agent = require('./agent-base');
 
