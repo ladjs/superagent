@@ -361,8 +361,7 @@ function Response(request_) {
   }
 }
 
-// eslint-disable-next-line new-cap
-ResponseBase(Response.prototype);
+mixin(Response.prototype, ResponseBase.prototype);
 
 /**
  * Parse the given body `str`.
@@ -492,7 +491,7 @@ function Request(method, url) {
 // eslint-disable-next-line new-cap
 Emitter(Request.prototype);
 // eslint-disable-next-line new-cap
-RequestBase(Request.prototype);
+mixin(Request.prototype, RequestBase.prototype);
 
 /**
  * Set Content-Type to `type`, mapping values from `request.types`.

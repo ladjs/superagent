@@ -25,6 +25,8 @@ const RequestBase = require('../request-base');
 const { unzip } = require('./unzip');
 const Response = require('./response');
 
+const { mixin, hasOwn } = utils;
+
 let http2;
 
 if (semver.gte(process.version, 'v10.10.0')) http2 = require('./http2wrapper');
@@ -174,7 +176,7 @@ function Request(method, url) {
  */
 util.inherits(Request, Stream);
 // eslint-disable-next-line new-cap
-RequestBase(Request.prototype);
+mixin(Request.prototype, RequestBase.prototype);
 
 /**
  * Enable or Disable http2.
