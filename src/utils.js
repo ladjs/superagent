@@ -81,3 +81,16 @@ exports.cleanHeader = (header, changesOrigin) => {
 exports.isObject = (object) => {
   return object !== null && typeof object === 'object';
 }
+
+/**
+ * Object.hasOwn fallback/polyfill.
+ *
+ * @type {(object: object, property: string) => boolean} object
+ * @api private
+ */
+exports.hasOwn = Object.hasOwn || function (object, property) {
+  if (object == null) {
+    throw new TypeError("Cannot convert undefined or null to object")
+  }
+  return Object.prototype.hasOwnProperty.call(Object(object), property)
+}

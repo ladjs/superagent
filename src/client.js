@@ -110,7 +110,7 @@ function serialize(object) {
   if (!isObject(object)) return object;
   const pairs = [];
   for (const key in object) {
-    if (Object.prototype.hasOwnProperty.call(object, key))
+    if (hasOwn(object, key))
       pushEncodedKeyValuePair(pairs, key, object[key]);
   }
 
@@ -139,7 +139,7 @@ function pushEncodedKeyValuePair(pairs, key, value) {
     }
   } else if (isObject(value)) {
     for (const subkey in value) {
-      if (Object.prototype.hasOwnProperty.call(value, subkey))
+      if (hasOwn(value, subkey))
         pushEncodedKeyValuePair(pairs, `${key}[${subkey}]`, value[subkey]);
     }
   } else {
@@ -875,7 +875,7 @@ Request.prototype._end = function () {
   for (const field in this.header) {
     if (this.header[field] === null) continue;
 
-    if (Object.prototype.hasOwnProperty.call(this.header, field))
+    if (hasOwn(this.header, field))
       xhr.setRequestHeader(field, this.header[field]);
   }
 

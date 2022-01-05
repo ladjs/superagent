@@ -127,7 +127,7 @@ RequestBase.prototype.timeout = function (options) {
   }
 
   for (const option in options) {
-    if (Object.prototype.hasOwnProperty.call(options, option)) {
+    if (hasOwn(options, option)) {
       switch (option) {
         case 'deadline':
           this._timeout = options.deadline;
@@ -391,7 +391,7 @@ RequestBase.prototype.getHeader = RequestBase.prototype.get;
 RequestBase.prototype.set = function (field, value) {
   if (isObject(field)) {
     for (const key in field) {
-      if (Object.prototype.hasOwnProperty.call(field, key))
+      if (hasOwn(field, key))
         this.set(key, field[key]);
     }
 
@@ -454,7 +454,7 @@ RequestBase.prototype.field = function (name, value) {
 
   if (isObject(name)) {
     for (const key in name) {
-      if (Object.prototype.hasOwnProperty.call(name, key))
+      if (hasOwn(name, key))
         this.field(key, name[key]);
     }
 
@@ -463,7 +463,7 @@ RequestBase.prototype.field = function (name, value) {
 
   if (Array.isArray(value)) {
     for (const i in value) {
-      if (Object.prototype.hasOwnProperty.call(value, i))
+      if (hasOwn(value, i))
         this.field(name, value[i]);
     }
 
@@ -652,7 +652,7 @@ RequestBase.prototype.send = function (data) {
   // merge
   if (isObject_ && isObject(this._data)) {
     for (const key in data) {
-      if (Object.prototype.hasOwnProperty.call(data, key))
+      if (hasOwn(data, key))
         this._data[key] = data[key];
     }
   } else if (typeof data === 'string') {

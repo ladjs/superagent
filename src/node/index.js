@@ -825,13 +825,13 @@ Request.prototype.request = function () {
   }
 
   for (const key in this.header) {
-    if (Object.prototype.hasOwnProperty.call(this.header, key))
+    if (hasOwn(this.header, key))
       req.setHeader(key, this.header[key]);
   }
 
   // add cookies
   if (this.cookies) {
-    if (Object.prototype.hasOwnProperty.call(this._header, 'cookie')) {
+    if (hasOwn(this._header, 'cookie')) {
       // merge
       const temporaryJar = new CookieJar.CookieJar();
       temporaryJar.setCookies(this._header.cookie.split(';'));
@@ -1214,7 +1214,7 @@ Request.prototype._end = function () {
     // set headers
     const headers = formData.getHeaders();
     for (const i in headers) {
-      if (Object.prototype.hasOwnProperty.call(headers, i)) {
+      if (hasOwn(headers, i)) {
         debug('setting FormData header: "%s: %s"', i, headers[i]);
         req.setHeader(i, headers[i]);
       }
