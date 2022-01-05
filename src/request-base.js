@@ -15,26 +15,7 @@ module.exports = RequestBase;
  * @api public
  */
 
-function RequestBase(object) {
-  if (object) return mixin(object);
-}
-
-/**
- * Mixin the prototype properties.
- *
- * @param {Object} obj
- * @return {Object}
- * @api private
- */
-
-function mixin(object) {
-  for (const key in RequestBase.prototype) {
-    if (Object.prototype.hasOwnProperty.call(RequestBase.prototype, key))
-      object[key] = RequestBase.prototype[key];
-  }
-
-  return object;
-}
+function RequestBase() {}
 
 /**
  * Clear previous timeout.
