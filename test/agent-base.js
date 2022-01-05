@@ -1,10 +1,12 @@
-const setup = require('./support/setup');
-
-const base = setup.uri;
 const assert = require('assert');
+const getSetup = require('./support/setup');
+
 const request = require('./support/client');
 
-describe('Agent', () => {
+describe('Agent', async () => {
+  const setup = await getSetup();
+  const base = setup.uri;
+
   it('should remember defaults', () => {
     if (typeof Promise === 'undefined') {
       return;

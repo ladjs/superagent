@@ -1,10 +1,11 @@
 'use strict';
 const request = require('../support/client');
-const setup = require('../support/setup');
+const getSetup = require('../support/setup');
 
-const base = setup.uri;
+describe('request', async () => {
+  const setup = await getSetup();
+  const base = setup.uri;
 
-describe('request', () => {
   describe('not modified', () => {
     let ts;
     it('should start with 200', (done) => {

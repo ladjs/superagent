@@ -1,11 +1,12 @@
-const setup = require('./support/setup');
-
-const { uri } = setup;
-
 const assert = require('assert');
+const getSetup = require('./support/setup');
+
 const request = require('./support/client');
 
-describe('req.set("Content-Type", contentType)', function () {
+describe('req.set("Content-Type", contentType)', async function () {
+  const setup = await getSetup();
+  const { uri } = setup;
+
   this.timeout(20_000);
 
   it('should work with just the contentType component', (done) => {

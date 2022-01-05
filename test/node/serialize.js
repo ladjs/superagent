@@ -1,12 +1,13 @@
 'use strict';
 
-const request = require('../support/client');
-const setup = require('../support/setup');
-
-const base = setup.uri;
 const assert = require('assert');
+const request = require('../support/client');
+const getSetup = require('../support/setup');
 
-describe('req.serialize(fn)', () => {
+describe('req.serialize(fn)', async () => {
+  const setup = await getSetup();
+  const base = setup.uri;
+
   it('should take precedence over default parsers', (done) => {
     request
       .post(`${base}/echo`)

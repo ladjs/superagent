@@ -1,13 +1,15 @@
-const setup = require('./support/setup');
+const getSetup = require('./support/setup');
 
-const { uri } = setup;
-const doesntWorkInBrowserYet = setup.NODE;
 const doesntWorkInHttp2 = !process.env.HTTP2_TEST;
 
 const assert = require('assert');
 const request = require('./support/client');
 
-describe('req.send(Object) as "json"', function () {
+describe('req.send(Object) as "json"', async function () {
+  const setup = await getSetup();
+  const { uri } = setup;
+  const doesntWorkInBrowserYet = setup.NODE;
+
   this.timeout(20_000);
 
   it('should default to json', (done) => {
@@ -127,7 +129,11 @@ describe('req.send(Object) as "json"', function () {
   });
 });
 
-describe('res.body', function () {
+describe('res.body', async function () {
+  const setup = await getSetup();
+  const { uri } = setup;
+  const doesntWorkInBrowserYet = setup.NODE;
+
   this.timeout(20_000);
 
   describe('application/json', () => {

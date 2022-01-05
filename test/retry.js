@@ -1,14 +1,16 @@
-const setup = require('./support/setup');
-
-const base = setup.uri;
 const assert = require('assert');
+const getSetup = require('./support/setup');
+
 const request = require('./support/client');
 
 function uniqid() {
   return Math.random() * 10_000_000;
 }
 
-describe('.retry(count)', function () {
+describe('.retry(count)', async function () {
+  const setup = await getSetup();
+  const base = setup.uri;
+
   this.timeout(15_000);
 
   it('should not retry if passed "0"', (done) => {

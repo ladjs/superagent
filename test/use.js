@@ -1,11 +1,12 @@
-const setup = require('./support/setup');
-
-const { uri } = setup;
-
 const assert = require('assert');
+const getSetup = require('./support/setup');
+
 const request = require('./support/client');
 
-describe('request', function () {
+describe('request', async function () {
+  const setup = await getSetup();
+  const { uri } = setup;
+
   this.timeout(20_000);
   describe('use', () => {
     it('should use plugin success', (done) => {

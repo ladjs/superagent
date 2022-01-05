@@ -1,11 +1,12 @@
 'use strict';
 const assert = require('assert');
 const request = require('../support/client');
-const setup = require('../support/setup');
+const getSetup = require('../support/setup');
 
-const base = setup.uri;
+describe("req.buffer['someMimeType']", async () => {
+  const setup = await getSetup();
+  const base = setup.uri;
 
-describe("req.buffer['someMimeType']", () => {
   it('should respect that agent.buffer(true) takes precedent', (done) => {
     const agent = request.agent();
     agent.buffer(true);

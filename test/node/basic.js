@@ -5,14 +5,15 @@ const fs = require('fs');
 const { EventEmitter } = require('events');
 const { StringDecoder } = require('string_decoder');
 const url = require('url');
-const setup = require('../support/setup');
+const getSetup = require('../support/setup');
 const request = require('../support/client');
-
-const base = setup.uri;
 
 const doesntWorkInHttp2 = !process.env.HTTP2_TEST;
 
-describe('[node] request', () => {
+describe('[node] request', async () => {
+  const setup = await getSetup();
+  const base = setup.uri;
+
   describe('with an url', () => {
     it('should preserve the encoding of the url', (done) => {
       request.get(`${base}/url?a=(b%29`).end((error, res) => {

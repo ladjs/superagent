@@ -1,12 +1,13 @@
 'use strict';
 
-const request = require('../support/client');
-const setup = require('../support/setup');
-
-const base = setup.uri;
 const assert = require('assert');
+const request = require('../support/client');
+const getSetup = require('../support/setup');
 
-describe('Merging objects', () => {
+describe('Merging objects', async () => {
+  const setup = await getSetup();
+  const base = setup.uri;
+
   it("Don't mix Buffer and JSON", () => {
     assert.throws(() => {
       request
@@ -17,7 +18,10 @@ describe('Merging objects', () => {
   });
 });
 
-describe('req.send(String)', () => {
+describe('req.send(String)', async () => {
+  const setup = await getSetup();
+  const base = setup.uri;
+
   it('should default to "form"', (done) => {
     request
       .post(`${base}/echo`)
@@ -35,7 +39,10 @@ describe('req.send(String)', () => {
   });
 });
 
-describe('res.body', () => {
+describe('res.body', async () => {
+  const setup = await getSetup();
+  const base = setup.uri;
+
   describe('application/x-www-form-urlencoded', () => {
     it('should parse the body', (done) => {
       request.get(`${base}/form-data`).end((error, res) => {

@@ -13,6 +13,7 @@ test-node:
 		--throw-deprecation \
 		--reporter $(REPORTER) \
 		--timeout 5000 \
+		--exit \
 		$(NODETESTS)
 
 test-node-http2:
@@ -22,6 +23,7 @@ test-node-http2:
 		--throw-deprecation \
 		--reporter $(REPORTER) \
 		--timeout 5000 \
+		--exit \
 		$(NODETESTS)
 
 test-cov: lib-cov

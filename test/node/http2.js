@@ -6,11 +6,12 @@ if (!process.env.HTTP2_TEST) {
 const assert = require('assert');
 const url = require('url');
 const request = require('../..');
-const setup = require('../support/setup');
+const getSetup = require('../support/setup');
 
-const base = setup.uri;
+describe('request.get().http2()', async () => {
+  const setup = await getSetup();
+  const base = setup.uri;
 
-describe('request.get().http2()', () => {
   it('should preserve the encoding of the url', (done) => {
     request
       .get(`${base}/url?a=(b%29`)

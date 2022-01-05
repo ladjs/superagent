@@ -1,17 +1,18 @@
 'use strict';
 
-const request = require('../support/client');
-const setup = require('../support/setup');
-
-const base = setup.uri;
 const assert = require('assert');
 const fs = require('fs');
+const request = require('../support/client');
+const getSetup = require('../support/setup');
 
 function read(file) {
   return fs.readFileSync(file, 'utf8');
 }
 
-describe('Multipart', () => {
+describe('Multipart', async () => {
+  const setup = await getSetup();
+  const base = setup.uri;
+
   describe('#field(name, value)', () => {
     it('should set a multipart field value', () => {
       const request_ = request.post(`${base}/echo`);

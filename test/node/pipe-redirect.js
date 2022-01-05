@@ -1,11 +1,11 @@
 'use strict';
-const request = require('../support/client');
-const setup = require('../support/setup');
-
-const base = setup.uri;
 const fs = require('fs');
+const request = require('../support/client');
+const getSetup = require('../support/setup');
 
-describe('pipe on redirect', () => {
+describe('pipe on redirect', async () => {
+  const setup = await getSetup();
+  const base = setup.uri;
   const destPath = 'test/node/fixtures/pipe.txt';
 
   after(function removeTmpfile(done) {

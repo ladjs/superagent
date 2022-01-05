@@ -1,12 +1,14 @@
 'use strict';
 const assert = require('assert');
 const request = require('../support/client');
-const setup = require('../support/setup');
+const getSetup = require('../support/setup');
 
-const base = setup.uri;
 const doesntWorkInHttp2 = !process.env.HTTP2_TEST;
 
-describe('req.parse(fn)', () => {
+describe('req.parse(fn)', async () => {
+  const setup = await getSetup();
+  const base = setup.uri;
+
   it('should take precedence over default parsers', (done) => {
     request
       .get(`${base}/manny`)
