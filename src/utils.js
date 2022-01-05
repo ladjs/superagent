@@ -94,3 +94,11 @@ exports.hasOwn = Object.hasOwn || function (object, property) {
   }
   return Object.prototype.hasOwnProperty.call(Object(object), property)
 }
+
+exports.mixin = (target, source) => {
+  for (const key in source) {
+    if (exports.hasOwn(source, key)) {
+      target[key] = source[key];
+    }
+  }
+}
