@@ -1101,8 +1101,10 @@ Request.prototype._end = function () {
           // Parsers aren't required to observe error event,
           // so would incorrectly report success
           parserHandlesEnd = false;
-          // Will emit error event
+          // Will not emit error event
           res.destroy(error);
+          // so we do callback now
+          this.callback(error, null);
         }
       });
     }
