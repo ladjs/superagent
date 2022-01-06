@@ -32,7 +32,7 @@ describe('[node] request', async () => {
 
   describe('without a schema', () => {
     it('should default to http', () =>
-      request.get('localhost:5000/login').then((res) => {
+      request.get(`${base}/login`).then((res) => {
         assert.equal(res.status, 200);
       }));
   });

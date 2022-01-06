@@ -2,6 +2,8 @@
 
 const assert = require('assert');
 const fs = require('fs');
+const should = require('should');
+const getPort = require('get-port');
 const request = require('../support/client');
 const getSetup = require('../support/setup');
 
@@ -40,9 +42,9 @@ describe('Multipart', async () => {
         res.body.species.should.equal('ferret');
 
         const html = res.files.document;
-        html.name.should.equal('user.html');
-        html.type.should.equal('text/html');
-        read(html.path).should.equal('<h1>name</h1>');
+        html.originalFilename.should.equal('user.html');
+        html.mimetype.should.equal('text/html');
+        read(html.filepath).should.equal('<h1>name</h1>');
       });
     });
   });
@@ -60,17 +62,17 @@ describe('Multipart', async () => {
         const json = res.files.two;
         const text = res.files.three;
 
-        html.name.should.equal('user.html');
-        html.type.should.equal('text/html');
-        read(html.path).should.equal('<h1>name</h1>');
+        html.originalFilename.should.equal('user.html');
+        html.mimetype.should.equal('text/html');
+        read(html.filepath).should.equal('<h1>name</h1>');
 
-        json.name.should.equal('user.json');
-        json.type.should.equal('application/json');
-        read(json.path).should.equal('{"name":"tobi"}');
+        json.originalFilename.should.equal('user.json');
+        json.mimetype.should.equal('application/json');
+        read(json.filepath).should.equal('{"name":"tobi"}');
 
-        text.name.should.equal('user.txt');
-        text.type.should.equal('text/plain');
-        read(text.path).should.equal('Tobi');
+        text.originalFilename.should.equal('user.txt');
+        text.mimetype.should.equal('text/plain');
+        read(text.filepath).should.equal('Tobi');
       });
     });
 
@@ -110,6 +112,7 @@ describe('Multipart', async () => {
           .post('http://127.0.0.1:1') // nobody is listening there
           .attach('name', 'file-does-not-exist')
           .end((error, res) => {
+            console.log('multipart error', error);
             assert.ok(Boolean(error), 'Request should have failed');
             error.code.should.equal('ECONNREFUSED');
             done();
@@ -117,7 +120,7 @@ describe('Multipart', async () => {
       });
       it('should report ECONNREFUSED via Promise', () => {
         return request
-          .post('http://127.0.0.1:1') // nobody is listening there
+          .post(`http://127.0.0.1:1`) // nobody is listening there
           .attach('name', 'file-does-not-exist')
           .then(
             (res) => assert.fail('Request should have failed'),
@@ -134,9 +137,9 @@ describe('Multipart', async () => {
         .attach('document', 'test/node/fixtures/user.html', 'doc.html')
         .then((res) => {
           const html = res.files.document;
-          html.name.should.equal('doc.html');
-          html.type.should.equal('text/html');
-          read(html.path).should.equal('<h1>name</h1>');
+          html.originalFilename.should.equal('doc.html');
+          html.mimetype.should.equal('text/html');
+          read(html.filepath).should.equal('<h1>name</h1>');
         }));
     it('should fire progress event', (done) => {
       let loaded = 0;
@@ -154,10 +157,11 @@ describe('Multipart', async () => {
         })
         .end((error, res) => {
           if (error) return done(error);
+          console.log('multipart res', res.files);
           const html = res.files.document;
-          html.name.should.equal('user.html');
-          html.type.should.equal('text/html');
-          read(html.path).should.equal('<h1>name</h1>');
+          html.originalFilename.should.equal('user.html');
+          html.mimetype.should.equal('text/html');
+          read(html.filepath).should.equal('<h1>name</h1>');
           total.should.equal(223);
           loaded.should.equal(223);
           uploadEventWasFired.should.equal(true);
