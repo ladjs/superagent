@@ -6,9 +6,14 @@ const getSetup = require('../support/setup');
 
 const img = fs.readFileSync(`${__dirname}/fixtures/test.png`);
 
-describe('res.body', async () => {
-  const setup = await getSetup();
-  const base = setup.uri;
+describe('res.body', () => {
+  let setup;
+  let base;
+
+  before(async () => {
+    setup = await getSetup();
+    base = setup.uri;
+  });
 
   describe('image/png', () => {
     it('should parse the body', (done) => {

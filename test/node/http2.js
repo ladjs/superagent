@@ -8,9 +8,14 @@ const url = require('url');
 const request = require('../..');
 const getSetup = require('../support/setup');
 
-describe('request.get().http2()', async () => {
-  const setup = await getSetup();
-  const base = setup.uri;
+describe('request.get().http2()', () => {
+  let setup;
+  let base;
+
+  before(async () => {
+    setup = await getSetup();
+    base = setup.uri;
+  });
 
   it('should preserve the encoding of the url', (done) => {
     request

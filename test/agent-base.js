@@ -3,9 +3,14 @@ const getSetup = require('./support/setup');
 
 const request = require('./support/client');
 
-describe('Agent', async () => {
-  const setup = await getSetup();
-  const base = setup.uri;
+describe('Agent', () => {
+  let setup;
+  let base;
+
+  before(async () => {
+    setup = await getSetup();
+    base = setup.uri;
+  });
 
   it('should remember defaults', () => {
     if (typeof Promise === 'undefined') {

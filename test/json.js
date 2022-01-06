@@ -135,10 +135,16 @@ describe('req.send(Object) as "json"', function () {
   });
 });
 
-describe('res.body', async function () {
-  const setup = await getSetup();
-  const { uri } = setup;
-  const doesntWorkInBrowserYet = setup.NODE;
+describe('res.body', function () {
+  let setup;
+  let uri;
+  let doesntWorkInBrowserYet;
+
+  before(async () => {
+    setup = await getSetup();
+    uri = setup.uri;
+    doesntWorkInBrowserYet = setup.NODE;
+  });
 
   this.timeout(20_000);
 

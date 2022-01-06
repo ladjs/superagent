@@ -3,9 +3,14 @@ const getSetup = require('./support/setup');
 
 const request = require('./support/client');
 
-describe('.timeout(ms)', async function () {
-  const setup = await getSetup();
-  const base = setup.uri;
+describe('.timeout(ms)', function () {
+  let setup;
+  let base;
+
+  before(async () => {
+    setup = await getSetup();
+    base = setup.uri;
+  });
 
   this.timeout(15_000);
 

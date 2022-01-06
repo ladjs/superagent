@@ -5,9 +5,14 @@ const assert = require('assert');
 const getSetup = require('../support/setup');
 const request = require('../support/client');
 
-describe('request', async () => {
-  const setup = await getSetup();
-  const base = setup.uri;
+describe('request', () => {
+  let setup;
+  let base;
+
+  before(async () => {
+    setup = await getSetup();
+    base = setup.uri;
+  });
 
   describe('on redirect', () => {
     it('should merge cookies if agent is used', (done) => {

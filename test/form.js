@@ -65,13 +65,14 @@ describe('req.attach', () => {
 describe('req.field', function () {
   let setup;
   let base;
+  let formDataSupported;
 
   before(async () => {
     setup = await getSetup();
     base = setup.uri;
-  });
 
-  const formDataSupported = setup.NODE || FormData !== 'undefined';
+    formDataSupported = setup.NODE || FormData !== 'undefined';
+  });
 
   this.timeout(5000);
   it('allow bools', (done) => {

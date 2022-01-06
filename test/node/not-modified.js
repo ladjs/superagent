@@ -2,9 +2,14 @@
 const request = require('../support/client');
 const getSetup = require('../support/setup');
 
-describe('request', async () => {
-  const setup = await getSetup();
-  const base = setup.uri;
+describe('request', () => {
+  let setup;
+  let base;
+
+  before(async () => {
+    setup = await getSetup();
+    base = setup.uri;
+  });
 
   describe('not modified', () => {
     let ts;

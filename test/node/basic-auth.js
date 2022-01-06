@@ -3,9 +3,14 @@ const URL = require('url');
 const request = require('../support/client');
 const getSetup = require('../support/setup');
 
-describe('Basic auth', async () => {
-  const setup = await getSetup();
-  const base = setup.uri;
+describe('Basic auth', () => {
+  let setup;
+  let base;
+
+  before(async () => {
+    setup = await getSetup();
+    base = setup.uri;
+  });
 
   describe('when credentials are present in url', () => {
     it('should set Authorization', (done) => {

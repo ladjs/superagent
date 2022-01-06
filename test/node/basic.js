@@ -10,9 +10,14 @@ const request = require('../support/client');
 
 const doesntWorkInHttp2 = !process.env.HTTP2_TEST;
 
-describe('[node] request', async () => {
-  const setup = await getSetup();
-  const base = setup.uri;
+describe('[node] request', () => {
+  let setup;
+  let base;
+
+  before(async () => {
+    setup = await getSetup();
+    base = setup.uri;
+  });
 
   describe('with an url', () => {
     it('should preserve the encoding of the url', (done) => {

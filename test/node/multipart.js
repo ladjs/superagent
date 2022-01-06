@@ -11,9 +11,14 @@ function read(file) {
   return fs.readFileSync(file, 'utf8');
 }
 
-describe('Multipart', async () => {
-  const setup = await getSetup();
-  const base = setup.uri;
+describe('Multipart', () => {
+  let setup;
+  let base;
+
+  before(async () => {
+    setup = await getSetup();
+    base = setup.uri;
+  });
 
   describe('#field(name, value)', () => {
     it('should set a multipart field value', () => {
@@ -157,7 +162,6 @@ describe('Multipart', async () => {
         })
         .end((error, res) => {
           if (error) return done(error);
-          console.log('multipart res', res.files);
           const html = res.files.document;
           html.originalFilename.should.equal('user.html');
           html.mimetype.should.equal('text/html');

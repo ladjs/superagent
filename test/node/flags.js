@@ -4,9 +4,14 @@ const assert = require('assert');
 const request = require('../support/client');
 const getSetup = require('../support/setup');
 
-describe('flags', async () => {
-  const setup = await getSetup();
-  const base = setup.uri;
+describe('flags', () => {
+  let setup;
+  let base;
+
+  before(async () => {
+    setup = await getSetup();
+    base = setup.uri;
+  });
 
   describe('with 4xx response', () => {
     it('should set res.error and res.clientError', (done) => {
