@@ -3,10 +3,16 @@ const assert = require('assert');
 const getSetup = require('./support/setup');
 const request = require('./support/client');
 
-describe('request', async function () {
-  const setup = await getSetup();
-  const base = setup.uri;
-  const isMSIE = !setup.NODE && /Trident\//.test(navigator.userAgent);
+describe('request', function () {
+  let setup;
+  let base;
+  let isMSIE;
+
+  before(async () => {
+    setup = await getSetup();
+    base = setup.uri;
+    isMSIE = !setup.NODE && /Trident\//.test(navigator.userAgent);
+  });
 
   this.timeout(20_000);
   describe('on redirect', () => {

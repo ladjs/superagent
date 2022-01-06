@@ -3,9 +3,16 @@ const getSetup = require('./support/setup');
 
 const request = require('./support/client');
 
-describe('request', async function () {
-  const setup = await getSetup();
-  const { NODE, uri } = setup;
+describe('request', function () {
+  let setup;
+  let NODE;
+  let uri;
+
+  before(async () => {
+    setup = await getSetup();
+    NODE = setup.NODE;
+    uri = setup.uri;
+  });
 
   this.timeout(20_000);
 

@@ -5,9 +5,14 @@ const getSetup = require('../support/setup');
 
 const doesntWorkInHttp2 = !process.env.HTTP2_TEST;
 
-describe('req.parse(fn)', async () => {
-  const setup = await getSetup();
-  const base = setup.uri;
+describe('req.parse(fn)', () => {
+  let setup;
+  let base;
+
+  before(async () => {
+    setup = await getSetup();
+    base = setup.uri;
+  });
 
   it('should take precedence over default parsers', (done) => {
     request

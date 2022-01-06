@@ -6,9 +6,14 @@ const request = require('./support/client');
 
 if (!assert.deepStrictEqual) assert.deepStrictEqual = assert.deepEqual;
 
-describe('req.send(Object) as "form"', async () => {
-  const setup = await getSetup();
-  const base = setup.uri;
+describe('req.send(Object) as "form"', () => {
+  let setup;
+  let base;
+
+  before(async () => {
+    setup = await getSetup();
+    base = setup.uri;
+  });
 
   describe('with req.type() set to form', () => {
     it('should send x-www-form-urlencoded data', (done) => {
@@ -57,9 +62,14 @@ describe('req.attach', () => {
   });
 });
 
-describe('req.field', async function () {
-  const setup = await getSetup();
-  const base = setup.uri;
+describe('req.field', function () {
+  let setup;
+  let base;
+
+  before(async () => {
+    setup = await getSetup();
+    base = setup.uri;
+  });
 
   const formDataSupported = setup.NODE || FormData !== 'undefined';
 

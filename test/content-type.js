@@ -3,9 +3,14 @@ const getSetup = require('./support/setup');
 
 const request = require('./support/client');
 
-describe('req.set("Content-Type", contentType)', async function () {
-  const setup = await getSetup();
-  const { uri } = setup;
+describe('req.set("Content-Type", contentType)', function () {
+  let setup;
+  let uri;
+
+  before(async () => {
+    setup = await getSetup();
+    uri = setup.uri;
+  });
 
   this.timeout(20_000);
 
