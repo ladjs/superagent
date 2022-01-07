@@ -19,7 +19,13 @@
     "no-cond-assign": "off",
     "no-redeclare": "off",
     "node/no-exports-assign": "off",
-    "no-unsafe-finally": "off"
+    "no-unsafe-finally": "off",
+    "complexity": ["error", 10000],
+    "max-statements": "off",
+    "no-constant-condition": "off",
+    "no-control-regex": "off",
+    "no-fallthrough": "off",
+    "operator-linebreak": "off"
   },
   "globals": {
     "regeneratorRuntime": "writable"
@@ -32,7 +38,13 @@
       "Object.getOwnPropertySymbols",
       "Object.setPrototypeOf",
       "Set",
-      "Math.trunc"
+      "Math.trunc",
+      "BigInt",
+      "Map",
+      "Reflect",
+      "WeakMap",
+      "WeakRef",
+      "WeakSet"
     ]
   }
 }

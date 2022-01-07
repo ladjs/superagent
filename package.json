@@ -6,7 +6,8 @@
   "browser": {
     "./src/node/index.js": "./src/client.js",
     "./lib/node/index.js": "./lib/client.js",
-    "./test/support/server.js": "./test/support/blank.js"
+    "./test/support/server.js": "./test/support/blank.js",
+    "semver": false
   },
   "bugs": {
     "url": "https://github.com/visionmedia/superagent/issues"
@@ -15,9 +16,6 @@
     "extends": [
       "@commitlint/config-conventional"
     ]
-  },
-  "engines": {
-    "node": ">=6.4.0 <13|>=14"
   },
   "contributors": [
     "Kornel Lesiński <kornel@geekhood.net>",
@@ -75,6 +73,9 @@
     "tinyify": "^3.0.0",
     "xo": "^0.47.0",
     "zuul": "^3.12.0"
+  },
+  "engines": {
+    "node": ">=6.4.0 <13|>=14"
   },
   "homepage": "https://github.com/visionmedia/superagent",
   "husky": {
