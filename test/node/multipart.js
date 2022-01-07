@@ -117,7 +117,6 @@ describe('Multipart', () => {
           .post('http://127.0.0.1:1') // nobody is listening there
           .attach('name', 'file-does-not-exist')
           .end((error, res) => {
-            console.log('multipart error', error);
             assert.ok(Boolean(error), 'Request should have failed');
             error.code.should.equal('ECONNREFUSED');
             done();
