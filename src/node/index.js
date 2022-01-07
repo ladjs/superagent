@@ -256,6 +256,10 @@ Request.prototype.attach = function (field, file, options) {
       if (!o.filename) o.filename = file;
       debug('creating `fs.ReadStream` instance for file: %s', file);
       file = fs.createReadStream(file);
+      file.on('error', (error) => {
+        const formData = this._getFormData();
+        formData.emit('error', error);
+      });
     } else if (!o.filename && file.path) {
       o.filename = file.path;
     }
@@ -1101,8 +1105,10 @@ Request.prototype._end = function () {
           // Parsers aren't required to observe error event,
           // so would incorrectly report success
           parserHandlesEnd = false;
-          // Will emit error event
+          // Will not emit error event
           res.destroy(error);
+          // so we do callback now
+          this.callback(error, null);
         }
       });
     }

@@ -1,11 +1,17 @@
 'use strict';
-const request = require('../support/client');
-const setup = require('../support/setup');
-
-const base = setup.uri;
 const URL = require('url');
+const request = require('../support/client');
+const getSetup = require('../support/setup');
 
 describe('Basic auth', () => {
+  let setup;
+  let base;
+
+  before(async () => {
+    setup = await getSetup();
+    base = setup.uri;
+  });
+
   describe('when credentials are present in url', () => {
     it('should set Authorization', (done) => {
       const new_url = URL.parse(base);

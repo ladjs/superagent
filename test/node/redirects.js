@@ -2,12 +2,18 @@
 
 const URL = require('url');
 const assert = require('assert');
-const setup = require('../support/setup');
+const getSetup = require('../support/setup');
 const request = require('../support/client');
 
-const base = setup.uri;
-
 describe('request', () => {
+  let setup;
+  let base;
+
+  before(async () => {
+    setup = await getSetup();
+    base = setup.uri;
+  });
+
   describe('on redirect', () => {
     it('should merge cookies if agent is used', (done) => {
       request

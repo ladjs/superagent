@@ -1,14 +1,20 @@
 'use strict';
 
-const request = require('../support/client');
-const setup = require('../support/setup');
-
-const base = setup.uri;
 const fs = require('fs');
+const request = require('../support/client');
+const getSetup = require('../support/setup');
 
 const img = fs.readFileSync(`${__dirname}/fixtures/test.png`);
 
 describe('res.body', () => {
+  let setup;
+  let base;
+
+  before(async () => {
+    setup = await getSetup();
+    base = setup.uri;
+  });
+
   describe('image/png', () => {
     it('should parse the body', (done) => {
       request.get(`${base}/image`).end((error, res) => {

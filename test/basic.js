@@ -1,12 +1,19 @@
-const setup = require('./support/setup');
-
-const { NODE } = setup;
-const { uri } = setup;
-
 const assert = require('assert');
+const getSetup = require('./support/setup');
+
 const request = require('./support/client');
 
 describe('request', function () {
+  let setup;
+  let NODE;
+  let uri;
+
+  before(async () => {
+    setup = await getSetup();
+    NODE = setup.NODE;
+    uri = setup.uri;
+  });
+
   this.timeout(20_000);
 
   describe('res.statusCode', () => {
