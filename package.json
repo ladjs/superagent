@@ -75,7 +75,7 @@
     "zuul": "^3.12.0"
   },
   "engines": {
-    "node": ">=6.4.0 <13||>=14"
+    "node": ">=6.4.0 <13|>=14"
   },
   "homepage": "https://github.com/visionmedia/superagent",
   "husky": {
