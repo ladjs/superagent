@@ -1,3 +1,5 @@
+const semver = require('semver');
+
 /**
  * Module of mixed-in functions shared between node and client code
  */
@@ -496,7 +498,29 @@ RequestBase.prototype.abort = function () {
 
   this._aborted = true;
   if (this.xhr) this.xhr.abort(); // browser
-  if (this.req) this.req.abort(); // node
+  if (this.req) {
+    // Node v13 has major differences in `abort()`
+    // https://github.com/nodejs/node/blob/v12.x/lib/internal/streams/end-of-stream.js
+    // https://github.com/nodejs/node/blob/v13.x/lib/internal/streams/end-of-stream.js
+    // https://github.com/nodejs/node/blob/v14.x/lib/internal/streams/end-of-stream.js
+    // (if you run a diff across these you will see the differences)
+    //
+    // References:
+    // <https://github.com/nodejs/node/issues/31630>
+    // <https://github.com/visionmedia/superagent/pull/1084/commits/dc18679a7c5ccfc6046d882015e5126888973bc8>
+    //
+    // Thanks to @shadowgate15 and @niftylettuce
+    if (semver.gte(process.version, 'v13.0.0') && semver.lt(process.version, 'v14.0.0')) {
+      // Note that the reason this doesn't work is because in v13 as compared to v14
+      // there is no `callback = nop` set in end-of-stream.js above
+      throw new Error('Superagent does not work in v13 properly with abort() due to Node.js core changes');
+    } else if (semver.gte(process.version, 'v14.0.0')) {
+      // We have to manually set `destroyed` to `true` in order for this to work
+      // (see core internals of end-of-stream.js above in v14 branch as compared to v12)
+      this.req.destroyed = true;
+    }
+    this.req.abort(); // node
+  }
   this.clearTimeout();
   this.emit('abort');
   return this;
