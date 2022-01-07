@@ -510,17 +510,24 @@ RequestBase.prototype.abort = function () {
     // <https://github.com/visionmedia/superagent/pull/1084/commits/dc18679a7c5ccfc6046d882015e5126888973bc8>
     //
     // Thanks to @shadowgate15 and @niftylettuce
-    if (semver.gte(process.version, 'v13.0.0') && semver.lt(process.version, 'v14.0.0')) {
+    if (
+      semver.gte(process.version, 'v13.0.0') &&
+      semver.lt(process.version, 'v14.0.0')
+    ) {
       // Note that the reason this doesn't work is because in v13 as compared to v14
       // there is no `callback = nop` set in end-of-stream.js above
-      throw new Error('Superagent does not work in v13 properly with abort() due to Node.js core changes');
+      throw new Error(
+        'Superagent does not work in v13 properly with abort() due to Node.js core changes'
+      );
     } else if (semver.gte(process.version, 'v14.0.0')) {
       // We have to manually set `destroyed` to `true` in order for this to work
       // (see core internals of end-of-stream.js above in v14 branch as compared to v12)
       this.req.destroyed = true;
     }
+
     this.req.abort(); // node
   }
+
   this.clearTimeout();
   this.emit('abort');
   return this;
