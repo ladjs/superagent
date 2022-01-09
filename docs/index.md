@@ -14,6 +14,8 @@ SuperAgent is light-weight progressive ajax API crafted for flexibility, readabi
 
 ## Test documentation
 
+[**中文文档**](docs/zh_CN/index.html)
+
 The following [test documentation](docs/test.html) was generated with [Mocha's](https://mochajs.org/) "doc" reporter, and directly reflects the test suite. This provides an additional source of documentation.
 
 ## Request basics
