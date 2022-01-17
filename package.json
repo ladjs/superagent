@@ -78,12 +78,6 @@
     "node": ">=6.4.0 <13 || >=14"
   },
   "homepage": "https://github.com/visionmedia/superagent",
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm test",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
-  },
   "jsdelivr": "dist/superagent.min.js",
   "keywords": [
     "agent",
@@ -150,6 +144,7 @@
     "url": "git://github.com/visionmedia/superagent.git"
   },
   "scripts": {
+    "prepare": "husky install",
     "browserify": "browserify src/node/index.js -o dist/superagent.js -s superagent -g [ babelify --configFile ./.dist.babelrc ]",
     "build": "npm run build:clean && npm run build:lib && npm run build:dist",
     "build:clean": "rimraf lib dist",
