@@ -6,19 +6,20 @@ const getSetup = require('../support/setup');
 describe('pipe on redirect', () => {
   let setup;
   let base;
-  const destPath = 'test/node/fixtures/pipe.txt';
+  const destinationPath = 'test/node/fixtures/pipe.txt';
 
   before(async () => {
     setup = await getSetup();
     base = setup.uri;
   });
 
-  after(function removeTmpfile(done) {
-    fs.unlink(destPath, done);
+  after((done) => {
+    // Remove tmp file
+    fs.unlink(destinationPath, done);
   });
 
   it('should follow Location', (done) => {
-    const stream = fs.createWriteStream(destPath);
+    const stream = fs.createWriteStream(destinationPath);
     const redirects = [];
     const request_ = request
       .get(base)
@@ -30,7 +31,7 @@ describe('pipe on redirect', () => {
       });
     stream.on('finish', () => {
       redirects.should.eql(['/movies', '/movies/all', '/movies/all/0']);
-      fs.readFileSync(destPath, 'utf8').should.eql('first movie page');
+      fs.readFileSync(destinationPath, 'utf8').should.eql('first movie page');
       done();
     });
     request_.pipe(stream);

@@ -19,7 +19,7 @@ describe('req.set("Content-Type", contentType)', function () {
       .post(`${uri}/echo`)
       .set('Content-Type', 'application/json')
       .send({ name: 'tobi' })
-      .end((error, res) => {
+      .end((error) => {
         assert(!error);
         done();
       });
@@ -30,7 +30,7 @@ describe('req.set("Content-Type", contentType)', function () {
       .post(`${uri}/echo`)
       .set('Content-Type', 'application/json; charset=utf-8')
       .send({ name: 'tobi' })
-      .end((error, res) => {
+      .end((error) => {
         assert(!error);
         done();
       });
