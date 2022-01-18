@@ -217,7 +217,15 @@
       }
     ],
     "rules": {
-      "unicorn/prevent-abbreviations": "warn",
+      "unicorn/prevent-abbreviations": [
+        "warn",
+        {
+          "replacements": {
+            "res": false,
+            "args": false
+          }
+        }
+      ],
       "no-bitwise": "warn",
       "node/prefer-global/buffer": "warn",
       "node/prefer-global/process": "warn",
