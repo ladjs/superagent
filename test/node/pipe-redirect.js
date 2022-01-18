@@ -13,7 +13,7 @@ describe('pipe on redirect', () => {
     base = setup.uri;
   });
 
-  after(function removeTmpfile(done) {
+  after((done) => {
     fs.unlink(destPath, done);
   });
 
@@ -22,8 +22,8 @@ describe('pipe on redirect', () => {
     const redirects = [];
     const request_ = request
       .get(base)
-      .on('redirect', (res) => {
-        redirects.push(res.headers.location);
+      .on('redirect', (response) => {
+        redirects.push(response.headers.location);
       })
       .connect({
         inapplicable: 'should be ignored'

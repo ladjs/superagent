@@ -13,8 +13,8 @@ describe('req.get()', () => {
   });
 
   it('should not set a default user-agent', () =>
-    request.get(`${base}/ua`).then((res) => {
-      assert(res.headers);
-      assert(!res.headers['user-agent']);
+    request.get(`${base}/ua`).then((response) => {
+      assert(response.headers);
+      assert(!response.headers['user-agent']);
     }));
 });

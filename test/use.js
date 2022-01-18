@@ -30,9 +30,9 @@ describe('request', function () {
         .get('/echo')
         .use(uuid)
         .use(prefix)
-        .end((error, res) => {
-          assert.strictEqual(res.statusCode, 200);
-          assert.equal(res.get('X-UUID'), now);
+        .end((error, response) => {
+          assert.strictEqual(response.statusCode, 200);
+          assert.equal(response.get('X-UUID'), now);
           done();
         });
     });

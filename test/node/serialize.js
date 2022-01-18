@@ -17,11 +17,11 @@ describe('req.serialize(fn)', () => {
     request
       .post(`${base}/echo`)
       .send({ foo: 123 })
-      .serialize((data) => '{"bar":456}')
-      .end((error, res) => {
+      .serialize(() => '{"bar":456}')
+      .end((error, response) => {
         assert.ifError(error);
-        assert.equal('{"bar":456}', res.text);
-        assert.equal(456, res.body.bar);
+        assert.equal('{"bar":456}', response.text);
+        assert.equal(456, response.body.bar);
         done();
       });
   });
