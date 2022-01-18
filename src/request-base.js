@@ -420,10 +420,11 @@ RequestBase.prototype.unset = function (field) {
  *
  * @param {String|Object} name name of field
  * @param {String|Blob|File|Buffer|fs.ReadStream} val value of field
+ * @param {String} options extra options, e.g. 'blob'
  * @return {Request} for chaining
  * @api public
  */
-RequestBase.prototype.field = function (name, value) {
+RequestBase.prototype.field = function (name, value, options) {
   // name should be either a string or an object.
   if (name === null || undefined === name) {
     throw new Error('.field(name, val) name can not be empty');
@@ -462,7 +463,7 @@ RequestBase.prototype.field = function (name, value) {
     value = String(value);
   }
 
-  this._getFormData().append(name, value);
+  this._getFormData().append(name, value, options);
   return this;
 };
 
