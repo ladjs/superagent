@@ -21,7 +21,7 @@ const Emitter = require('component-emitter');
 const safeStringify = require('fast-safe-stringify');
 const qs = require('qs');
 const RequestBase = require('./request-base');
-const isObject = require('./is-object');
+const { isObject, mixin, hasOwn } = require('./utils');
 const ResponseBase = require('./response-base');
 const Agent = require('./agent-base');
 
@@ -110,7 +110,7 @@ function serialize(object) {
   if (!isObject(object)) return object;
   const pairs = [];
   for (const key in object) {
-    if (Object.prototype.hasOwnProperty.call(object, key))
+    if (hasOwn(object, key))
       pushEncodedKeyValuePair(pairs, key, object[key]);
   }
 
@@ -139,7 +139,7 @@ function pushEncodedKeyValuePair(pairs, key, value) {
     }
   } else if (isObject(value)) {
     for (const subkey in value) {
-      if (Object.prototype.hasOwnProperty.call(value, subkey))
+      if (hasOwn(value, subkey))
         pushEncodedKeyValuePair(pairs, `${key}[${subkey}]`, value[subkey]);
     }
   } else {
@@ -361,8 +361,7 @@ function Response(request_) {
   }
 }
 
-// eslint-disable-next-line new-cap
-ResponseBase(Response.prototype);
+mixin(Response.prototype, ResponseBase.prototype);
 
 /**
  * Parse the given body `str`.
@@ -492,7 +491,7 @@ function Request(method, url) {
 // eslint-disable-next-line new-cap
 Emitter(Request.prototype);
 // eslint-disable-next-line new-cap
-RequestBase(Request.prototype);
+mixin(Request.prototype, RequestBase.prototype);
 
 /**
  * Set Content-Type to `type`, mapping values from `request.types`.
@@ -875,7 +874,7 @@ Request.prototype._end = function () {
   for (const field in this.header) {
     if (this.header[field] === null) continue;
 
-    if (Object.prototype.hasOwnProperty.call(this.header, field))
+    if (hasOwn(this.header, field))
       xhr.setRequestHeader(field, this.header[field]);
   }
 

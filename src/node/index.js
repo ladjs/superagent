@@ -25,6 +25,8 @@ const RequestBase = require('../request-base');
 const { unzip } = require('./unzip');
 const Response = require('./response');
 
+const { mixin, hasOwn } = utils;
+
 let http2;
 
 if (semverGte(process.version, 'v10.10.0')) http2 = require('./http2wrapper');
@@ -174,7 +176,7 @@ function Request(method, url) {
  */
 util.inherits(Request, Stream);
 // eslint-disable-next-line new-cap
-RequestBase(Request.prototype);
+mixin(Request.prototype, RequestBase.prototype);
 
 /**
  * Enable or Disable http2.
@@ -829,13 +831,13 @@ Request.prototype.request = function () {
   }
 
   for (const key in this.header) {
-    if (Object.prototype.hasOwnProperty.call(this.header, key))
+    if (hasOwn(this.header, key))
       req.setHeader(key, this.header[key]);
   }
 
   // add cookies
   if (this.cookies) {
-    if (Object.prototype.hasOwnProperty.call(this._header, 'cookie')) {
+    if (hasOwn(this._header, 'cookie')) {
       // merge
       const temporaryJar = new CookieJar.CookieJar();
       temporaryJar.setCookies(this._header.cookie.split(';'));
@@ -1220,7 +1222,7 @@ Request.prototype._end = function () {
     // set headers
     const headers = formData.getHeaders();
     for (const i in headers) {
-      if (Object.prototype.hasOwnProperty.call(headers, i)) {
+      if (hasOwn(headers, i)) {
         debug('setting FormData header: "%s: %s"', i, headers[i]);
         req.setHeader(i, headers[i]);
       }

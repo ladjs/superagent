@@ -70,3 +70,35 @@ exports.cleanHeader = (header, changesOrigin) => {
 
   return header;
 };
+
+/**
+ * Check if `obj` is an object.
+ *
+ * @param {Object} object
+ * @return {Boolean}
+ * @api private
+ */
+exports.isObject = (object) => {
+  return object !== null && typeof object === 'object';
+}
+
+/**
+ * Object.hasOwn fallback/polyfill.
+ *
+ * @type {(object: object, property: string) => boolean} object
+ * @api private
+ */
+exports.hasOwn = Object.hasOwn || function (object, property) {
+  if (object == null) {
+    throw new TypeError("Cannot convert undefined or null to object")
+  }
+  return Object.prototype.hasOwnProperty.call(Object(object), property)
+}
+
+exports.mixin = (target, source) => {
+  for (const key in source) {
+    if (exports.hasOwn(source, key)) {
+      target[key] = source[key];
+    }
+  }
+}

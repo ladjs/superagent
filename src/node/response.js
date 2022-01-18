@@ -5,6 +5,7 @@
 const util = require('util');
 const Stream = require('stream');
 const ResponseBase = require('../response-base');
+const { mixin } = require('../utils');
 
 /**
  * Expose `Response`.
@@ -52,8 +53,8 @@ function Response(request) {
  */
 
 util.inherits(Response, Stream);
-// eslint-disable-next-line new-cap
-ResponseBase(Response.prototype);
+
+mixin(Response.prototype, ResponseBase.prototype);
 
 /**
  * Implements methods of a `ReadableStream`
