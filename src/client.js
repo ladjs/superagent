@@ -60,7 +60,11 @@ exports.Request = Request;
  */
 
 request.getXHR = () => {
-  if (root.XMLHttpRequest) {
+  if (
+    root.XMLHttpRequest &&
+    (!root.location ||
+      root.location.protocol !== 'file:')
+  ) {
     return new XMLHttpRequest();
   }
 
