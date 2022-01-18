@@ -110,8 +110,7 @@ function serialize(object) {
   if (!isObject(object)) return object;
   const pairs = [];
   for (const key in object) {
-    if (hasOwn(object, key))
-      pushEncodedKeyValuePair(pairs, key, object[key]);
+    if (hasOwn(object, key)) pushEncodedKeyValuePair(pairs, key, object[key]);
   }
 
   return pairs.join('&');
@@ -490,7 +489,7 @@ function Request(method, url) {
 
 // eslint-disable-next-line new-cap
 Emitter(Request.prototype);
-// eslint-disable-next-line new-cap
+
 mixin(Request.prototype, RequestBase.prototype);
 
 /**

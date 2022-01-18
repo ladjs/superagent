@@ -176,7 +176,7 @@ function Request(method, url) {
  * Mixin `RequestBase`.
  */
 util.inherits(Request, Stream);
-// eslint-disable-next-line new-cap
+
 mixin(Request.prototype, RequestBase.prototype);
 
 /**
@@ -847,8 +847,7 @@ Request.prototype.request = function () {
   }
 
   for (const key in this.header) {
-    if (hasOwn(this.header, key))
-      req.setHeader(key, this.header[key]);
+    if (hasOwn(this.header, key)) req.setHeader(key, this.header[key]);
   }
 
   // add cookies

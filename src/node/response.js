@@ -50,14 +50,14 @@ function Response(request) {
 // Lazy access res.body.
 // https://github.com/nodejs/node/pull/39520#issuecomment-889697136
 Object.defineProperty(Response.prototype, 'body', {
-  get () {
+  get() {
     return this._body !== undefined
       ? this._body
       : this.res.body !== undefined
-        ? this.res.body
-        : {};
+      ? this.res.body
+      : {};
   },
-  set (value) {
+  set(value) {
     this._body = value;
   }
 });

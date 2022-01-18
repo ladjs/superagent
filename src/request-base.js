@@ -374,8 +374,7 @@ RequestBase.prototype.getHeader = RequestBase.prototype.get;
 RequestBase.prototype.set = function (field, value) {
   if (isObject(field)) {
     for (const key in field) {
-      if (hasOwn(field, key))
-        this.set(key, field[key]);
+      if (hasOwn(field, key)) this.set(key, field[key]);
     }
 
     return this;
@@ -438,8 +437,7 @@ RequestBase.prototype.field = function (name, value, options) {
 
   if (isObject(name)) {
     for (const key in name) {
-      if (hasOwn(name, key))
-        this.field(key, name[key]);
+      if (hasOwn(name, key)) this.field(key, name[key]);
     }
 
     return this;
@@ -447,8 +445,7 @@ RequestBase.prototype.field = function (name, value, options) {
 
   if (Array.isArray(value)) {
     for (const i in value) {
-      if (hasOwn(value, i))
-        this.field(name, value[i]);
+      if (hasOwn(value, i)) this.field(name, value[i]);
     }
 
     return this;
@@ -665,8 +662,7 @@ RequestBase.prototype.send = function (data) {
   // merge
   if (isObject_ && isObject(this._data)) {
     for (const key in data) {
-      if (hasOwn(data, key))
-        this._data[key] = data[key];
+      if (hasOwn(data, key)) this._data[key] = data[key];
     }
   } else if (typeof data === 'string') {
     // default to x-www-form-urlencoded
