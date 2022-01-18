@@ -1,5 +1,6 @@
 'use strict';
 const assert = require('assert');
+const process = require('process');
 const request = require('../support/client');
 const getSetup = require('../support/setup');
 
@@ -30,7 +31,7 @@ describe('req.parse(fn)', () => {
     request
       .get(`${base}/image`)
       .buffer(false)
-      .parse((res, fn) => {
+      .parse((res) => {
         res.on('data', () => {});
       })
       .then((res) => {
@@ -55,8 +56,8 @@ describe('req.parse(fn)', () => {
   it('should emit error if parser returns an error', (done) => {
     request
       .get(`${base}/manny`)
-      .parse((res, fn) => {
-        fn(new Error('I am broken'));
+      .parse((res, callback) => {
+        callback(new Error('I am broken'));
       })
       .on('error', (error) => {
         error.message.should.equal('I am broken');

@@ -1,5 +1,6 @@
 'use strict';
 let http = require('http');
+const process = require('process');
 const assert = require('assert');
 const fs = require('fs');
 const request = require('../support/client');
@@ -33,9 +34,9 @@ app.put('/', (request_, res) => {
 
 let base = 'http://localhost';
 let server;
-before(function listen(done) {
+before((done) => {
   server = http.createServer(app);
-  server = server.listen(0, function listening() {
+  server = server.listen(0, () => {
     base += `:${server.address().port}`;
     done();
   });

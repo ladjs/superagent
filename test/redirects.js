@@ -25,8 +25,8 @@ describe('request', function () {
             assert(res.body);
             res.body.should.have.property('x-foo', 'bar');
             done();
-          } catch (err) {
-            done(err);
+          } catch (error) {
+            done(error);
           }
         });
     });

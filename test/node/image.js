@@ -1,10 +1,12 @@
 'use strict';
 
 const fs = require('fs');
+const path = require('path');
+const {Buffer} = require('buffer');
 const request = require('../support/client');
 const getSetup = require('../support/setup');
 
-const img = fs.readFileSync(`${__dirname}/fixtures/test.png`);
+const img = fs.readFileSync(path.join(__dirname, '/fixtures/test.png'));
 
 describe('res.body', () => {
   let setup;
