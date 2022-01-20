@@ -71,19 +71,19 @@ request.getXHR = () => {
 
   try {
     return new ActiveXObject('Microsoft.XMLHTTP');
-  } catch {}
+  } catch {/**/}
 
   try {
     return new ActiveXObject('Msxml2.XMLHTTP.6.0');
-  } catch {}
+  } catch {/**/}
 
   try {
     return new ActiveXObject('Msxml2.XMLHTTP.3.0');
-  } catch {}
+  } catch {/**/}
 
   try {
     return new ActiveXObject('Msxml2.XMLHTTP');
-  } catch {}
+  } catch {/**/}
 
   throw new Error('Browser-only version of superagent could not find XHR');
 };

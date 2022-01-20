@@ -1,5 +1,5 @@
 {
-  "extends": ["eslint:recommended"],
+  "extends": ["eslint:recommended", "plugin:compat/recommended"],
   "env": {
     "node": false,
     "browser": true,
@@ -8,6 +8,14 @@
   },
   "plugins": ["compat"],
   "rules": {
+    "node/no-unsupported-features/es-builtins": ["error", {
+      "version": ">=8.0.0",
+      "ignores": [
+        "Atomics",
+        "BigInt",
+        "SharedArrayBuffer"
+      ]
+    }],
     "compat/compat": "error",
     "no-console": "off",
     "no-empty": "off",
@@ -44,7 +52,9 @@
       "Reflect",
       "WeakMap",
       "WeakRef",
-      "WeakSet"
+      "WeakSet",
+      "Atomics",
+      "SharedArrayBuffer"
     ]
   }
 }
