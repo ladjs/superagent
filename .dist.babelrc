@@ -6,5 +6,6 @@
       }
     }]
   ],
-  "sourceMaps": "inline"
+  "sourceMaps": "inline",
+  "comments": false
 }

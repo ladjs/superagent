@@ -21,7 +21,7 @@ const Emitter = require('component-emitter');
 const safeStringify = require('fast-safe-stringify');
 const qs = require('qs');
 const RequestBase = require('./request-base');
-const isObject = require('./is-object');
+const { isObject, mixin, hasOwn } = require('./utils');
 const ResponseBase = require('./response-base');
 const Agent = require('./agent-base');
 
@@ -106,12 +106,11 @@ const trim = ''.trim ? (s) => s.trim() : (s) => s.replace(/(^\s*|\s*$)/g, '');
  * @api private
  */
 
-function serialize(obj) {
-  if (!isObject(obj)) return obj;
+function serialize(object) {
+  if (!isObject(object)) return object;
   const pairs = [];
-  for (const key in obj) {
-    if (Object.prototype.hasOwnProperty.call(obj, key))
-      pushEncodedKeyValuePair(pairs, key, obj[key]);
+  for (const key in object) {
+    if (hasOwn(object, key)) pushEncodedKeyValuePair(pairs, key, object[key]);
   }
 
   return pairs.join('&');
@@ -126,24 +125,24 @@ function serialize(obj) {
  * @param {Mixed} val
  */
 
-function pushEncodedKeyValuePair(pairs, key, val) {
-  if (val === undefined) return;
-  if (val === null) {
+function pushEncodedKeyValuePair(pairs, key, value) {
+  if (value === undefined) return;
+  if (value === null) {
     pairs.push(encodeURI(key));
     return;
   }
 
-  if (Array.isArray(val)) {
-    val.forEach((v) => {
+  if (Array.isArray(value)) {
+    for (const v of value) {
       pushEncodedKeyValuePair(pairs, key, v);
-    });
-  } else if (isObject(val)) {
-    for (const subkey in val) {
-      if (Object.prototype.hasOwnProperty.call(val, subkey))
-        pushEncodedKeyValuePair(pairs, `${key}[${subkey}]`, val[subkey]);
+    }
+  } else if (isObject(value)) {
+    for (const subkey in value) {
+      if (hasOwn(value, subkey))
+        pushEncodedKeyValuePair(pairs, `${key}[${subkey}]`, value[subkey]);
     }
   } else {
-    pairs.push(encodeURI(key) + '=' + encodeURIComponent(val));
+    pairs.push(encodeURI(key) + '=' + encodeURIComponent(value));
   }
 }
 
@@ -161,25 +160,25 @@ request.serializeObject = serialize;
  * @api private
  */
 
-function parseString(str) {
-  const obj = {};
-  const pairs = str.split('&');
+function parseString(string_) {
+  const object = {};
+  const pairs = string_.split('&');
   let pair;
   let pos;
 
-  for (let i = 0, len = pairs.length; i < len; ++i) {
+  for (let i = 0, length_ = pairs.length; i < length_; ++i) {
     pair = pairs[i];
     pos = pair.indexOf('=');
     if (pos === -1) {
-      obj[decodeURIComponent(pair)] = '';
+      object[decodeURIComponent(pair)] = '';
     } else {
-      obj[decodeURIComponent(pair.slice(0, pos))] = decodeURIComponent(
+      object[decodeURIComponent(pair.slice(0, pos))] = decodeURIComponent(
         pair.slice(pos + 1)
       );
     }
   }
 
-  return obj;
+  return object;
 }
 
 /**
@@ -241,15 +240,15 @@ request.parse = {
  * @api private
  */
 
-function parseHeader(str) {
-  const lines = str.split(/\r?\n/);
+function parseHeader(string_) {
+  const lines = string_.split(/\r?\n/);
   const fields = {};
   let index;
   let line;
   let field;
-  let val;
+  let value;
 
-  for (let i = 0, len = lines.length; i < len; ++i) {
+  for (let i = 0, length_ = lines.length; i < length_; ++i) {
     line = lines[i];
     index = line.indexOf(':');
     if (index === -1) {
@@ -258,8 +257,8 @@ function parseHeader(str) {
     }
 
     field = line.slice(0, index).toLowerCase();
-    val = trim(line.slice(index + 1));
-    fields[field] = val;
+    value = trim(line.slice(index + 1));
+    fields[field] = value;
   }
 
   return fields;
@@ -325,8 +324,8 @@ function isJSON(mime) {
  * @api private
  */
 
-function Response(req) {
-  this.req = req;
+function Response(request_) {
+  this.req = request_;
   this.xhr = this.req.xhr;
   // responseText is accessible only if responseType is '' or 'text' and on older browsers
   this.text =
@@ -351,7 +350,7 @@ function Response(req) {
   this.header['content-type'] = this.xhr.getResponseHeader('content-type');
   this._setHeaderProperties(this.header);
 
-  if (this.text === null && req._responseType) {
+  if (this.text === null && request_._responseType) {
     this.body = this.xhr.response;
   } else {
     this.body =
@@ -361,8 +360,7 @@ function Response(req) {
   }
 }
 
-// eslint-disable-next-line new-cap
-ResponseBase(Response.prototype);
+mixin(Response.prototype, ResponseBase.prototype);
 
 /**
  * Parse the given body `str`.
@@ -375,18 +373,18 @@ ResponseBase(Response.prototype);
  * @api private
  */
 
-Response.prototype._parseBody = function (str) {
+Response.prototype._parseBody = function (string_) {
   let parse = request.parse[this.type];
   if (this.req._parser) {
-    return this.req._parser(this, str);
+    return this.req._parser(this, string_);
   }
 
   if (!parse && isJSON(this.type)) {
     parse = request.parse['application/json'];
   }
 
-  return parse && str && (str.length > 0 || str instanceof Object)
-    ? parse(str)
+  return parse && string_ && (string_.length > 0 || string_ instanceof Object)
+    ? parse(string_)
     : null;
 };
 
@@ -402,13 +400,13 @@ Response.prototype.toError = function () {
   const { method } = req;
   const { url } = req;
 
-  const msg = `cannot ${method} ${url} (${this.status})`;
-  const err = new Error(msg);
-  err.status = this.status;
-  err.method = method;
-  err.url = url;
+  const message = `cannot ${method} ${url} (${this.status})`;
+  const error = new Error(message);
+  error.status = this.status;
+  error.method = method;
+  error.url = url;
 
-  return err;
+  return error;
 };
 
 /**
@@ -433,52 +431,52 @@ function Request(method, url) {
   this.header = {}; // preserves header name case
   this._header = {}; // coerces header names to lowercase
   this.on('end', () => {
-    let err = null;
+    let error = null;
     let res = null;
 
     try {
       res = new Response(self);
-    } catch (err_) {
-      err = new Error('Parser is unable to parse the response');
-      err.parse = true;
-      err.original = err_;
+    } catch (error_) {
+      error = new Error('Parser is unable to parse the response');
+      error.parse = true;
+      error.original = error_;
       // issue #675: return the raw response if the response parsing fails
       if (self.xhr) {
         // ie9 doesn't have 'response' property
-        err.rawResponse =
+        error.rawResponse =
           typeof self.xhr.responseType === 'undefined'
             ? self.xhr.responseText
             : self.xhr.response;
         // issue #876: return the http status code if the response parsing fails
-        err.status = self.xhr.status ? self.xhr.status : null;
-        err.statusCode = err.status; // backwards-compat only
+        error.status = self.xhr.status ? self.xhr.status : null;
+        error.statusCode = error.status; // backwards-compat only
       } else {
-        err.rawResponse = null;
-        err.status = null;
+        error.rawResponse = null;
+        error.status = null;
       }
 
-      return self.callback(err);
+      return self.callback(error);
     }
 
     self.emit('response', res);
 
-    let new_err;
+    let new_error;
     try {
       if (!self._isResponseOK(res)) {
-        new_err = new Error(
+        new_error = new Error(
           res.statusText || res.text || 'Unsuccessful HTTP response'
         );
       }
-    } catch (err_) {
-      new_err = err_; // ok() callback can throw
+    } catch (err) {
+      new_error = err; // ok() callback can throw
     }
 
     // #1000 don't catch errors from the callback to avoid double calling it
-    if (new_err) {
-      new_err.original = err;
-      new_err.response = res;
-      new_err.status = res.status;
-      self.callback(new_err, res);
+    if (new_error) {
+      new_error.original = error;
+      new_error.response = res;
+      new_error.status = res.status;
+      self.callback(new_error, res);
     } else {
       self.callback(null, res);
     }
@@ -491,8 +489,8 @@ function Request(method, url) {
 
 // eslint-disable-next-line new-cap
 Emitter(Request.prototype);
-// eslint-disable-next-line new-cap
-RequestBase(Request.prototype);
+
+mixin(Request.prototype, RequestBase.prototype);
 
 /**
  * Set Content-Type to `type`, mapping values from `request.types`.
@@ -595,9 +593,9 @@ Request.prototype.auth = function (user, pass, options) {
  * @api public
  */
 
-Request.prototype.query = function (val) {
-  if (typeof val !== 'string') val = serialize(val);
-  if (val) this._query.push(val);
+Request.prototype.query = function (value) {
+  if (typeof value !== 'string') value = serialize(value);
+  if (value) this._query.push(value);
   return this;
 };
 
@@ -647,20 +645,20 @@ Request.prototype._getFormData = function () {
  * @api private
  */
 
-Request.prototype.callback = function (err, res) {
-  if (this._shouldRetry(err, res)) {
+Request.prototype.callback = function (error, res) {
+  if (this._shouldRetry(error, res)) {
     return this._retry();
   }
 
   const fn = this._callback;
   this.clearTimeout();
 
-  if (err) {
-    if (this._maxRetries) err.retries = this._retries - 1;
-    this.emit('error', err);
+  if (error) {
+    if (this._maxRetries) error.retries = this._retries - 1;
+    this.emit('error', error);
   }
 
-  fn(err, res);
+  fn(error, res);
 };
 
 /**
@@ -670,16 +668,16 @@ Request.prototype.callback = function (err, res) {
  */
 
 Request.prototype.crossDomainError = function () {
-  const err = new Error(
+  const error = new Error(
     'Request has been terminated\nPossible causes: the network is offline, Origin is not allowed by Access-Control-Allow-Origin, the page is being unloaded, etc.'
   );
-  err.crossDomain = true;
+  error.crossDomain = true;
 
-  err.status = this.status;
-  err.method = this.method;
-  err.url = this.url;
+  error.status = this.status;
+  error.method = this.method;
+  error.url = this.url;
 
-  this.callback(err);
+  this.callback(error);
 };
 
 // This only warns, because the request is still likely to work
@@ -708,13 +706,13 @@ Request.prototype.pipe = Request.prototype.write;
  * @return {Boolean} is a host object
  * @api private
  */
-Request.prototype._isHost = function (obj) {
+Request.prototype._isHost = function (object) {
   // Native objects stringify to [object File], [object Blob], [object FormData], etc.
   return (
-    obj &&
-    typeof obj === 'object' &&
-    !Array.isArray(obj) &&
-    Object.prototype.toString.call(obj) !== '[object Object]'
+    object &&
+    typeof object === 'object' &&
+    !Array.isArray(object) &&
+    Object.prototype.toString.call(object) !== '[object Object]'
   );
 };
 
@@ -775,7 +773,7 @@ Request.prototype._end = function () {
   this._setTimeouts();
 
   // state change
-  xhr.onreadystatechange = () => {
+  xhr.addEventListener('readystatechange', () => {
     const { readyState } = xhr;
     if (readyState >= 2 && self._responseTimeoutTimer) {
       clearTimeout(self._responseTimeoutTimer);
@@ -800,7 +798,7 @@ Request.prototype._end = function () {
     }
 
     self.emit('end');
-  };
+  });
 
   // progress
   const handleProgress = (direction, e) => {
@@ -875,7 +873,7 @@ Request.prototype._end = function () {
   for (const field in this.header) {
     if (this.header[field] === null) continue;
 
-    if (Object.prototype.hasOwnProperty.call(this.header, field))
+    if (hasOwn(this.header, field))
       xhr.setRequestHeader(field, this.header[field]);
   }
 
@@ -893,17 +891,17 @@ Request.prototype._end = function () {
 
 request.agent = () => new Agent();
 
-['GET', 'POST', 'OPTIONS', 'PATCH', 'PUT', 'DELETE'].forEach((method) => {
+for (const method of ['GET', 'POST', 'OPTIONS', 'PATCH', 'PUT', 'DELETE']) {
   Agent.prototype[method.toLowerCase()] = function (url, fn) {
-    const req = new request.Request(method, url);
-    this._setDefaults(req);
+    const request_ = new request.Request(method, url);
+    this._setDefaults(request_);
     if (fn) {
-      req.end(fn);
+      request_.end(fn);
     }
 
-    return req;
+    return request_;
   };
-});
+}
 
 Agent.prototype.del = Agent.prototype.delete;
 
@@ -918,15 +916,15 @@ Agent.prototype.del = Agent.prototype.delete;
  */
 
 request.get = (url, data, fn) => {
-  const req = request('GET', url);
+  const request_ = request('GET', url);
   if (typeof data === 'function') {
     fn = data;
     data = null;
   }
 
-  if (data) req.query(data);
-  if (fn) req.end(fn);
-  return req;
+  if (data) request_.query(data);
+  if (fn) request_.end(fn);
+  return request_;
 };
 
 /**
@@ -940,15 +938,15 @@ request.get = (url, data, fn) => {
  */
 
 request.head = (url, data, fn) => {
-  const req = request('HEAD', url);
+  const request_ = request('HEAD', url);
   if (typeof data === 'function') {
     fn = data;
     data = null;
   }
 
-  if (data) req.query(data);
-  if (fn) req.end(fn);
-  return req;
+  if (data) request_.query(data);
+  if (fn) request_.end(fn);
+  return request_;
 };
 
 /**
@@ -962,15 +960,15 @@ request.head = (url, data, fn) => {
  */
 
 request.options = (url, data, fn) => {
-  const req = request('OPTIONS', url);
+  const request_ = request('OPTIONS', url);
   if (typeof data === 'function') {
     fn = data;
     data = null;
   }
 
-  if (data) req.send(data);
-  if (fn) req.end(fn);
-  return req;
+  if (data) request_.send(data);
+  if (fn) request_.end(fn);
+  return request_;
 };
 
 /**
@@ -984,15 +982,15 @@ request.options = (url, data, fn) => {
  */
 
 function del(url, data, fn) {
-  const req = request('DELETE', url);
+  const request_ = request('DELETE', url);
   if (typeof data === 'function') {
     fn = data;
     data = null;
   }
 
-  if (data) req.send(data);
-  if (fn) req.end(fn);
-  return req;
+  if (data) request_.send(data);
+  if (fn) request_.end(fn);
+  return request_;
 }
 
 request.del = del;
@@ -1009,15 +1007,15 @@ request.delete = del;
  */
 
 request.patch = (url, data, fn) => {
-  const req = request('PATCH', url);
+  const request_ = request('PATCH', url);
   if (typeof data === 'function') {
     fn = data;
     data = null;
   }
 
-  if (data) req.send(data);
-  if (fn) req.end(fn);
-  return req;
+  if (data) request_.send(data);
+  if (fn) request_.end(fn);
+  return request_;
 };
 
 /**
@@ -1031,15 +1029,15 @@ request.patch = (url, data, fn) => {
  */
 
 request.post = (url, data, fn) => {
-  const req = request('POST', url);
+  const request_ = request('POST', url);
   if (typeof data === 'function') {
     fn = data;
     data = null;
   }
 
-  if (data) req.send(data);
-  if (fn) req.end(fn);
-  return req;
+  if (data) request_.send(data);
+  if (fn) request_.end(fn);
+  return request_;
 };
 
 /**
@@ -1053,13 +1051,13 @@ request.post = (url, data, fn) => {
  */
 
 request.put = (url, data, fn) => {
-  const req = request('PUT', url);
+  const request_ = request('PUT', url);
   if (typeof data === 'function') {
     fn = data;
     data = null;
   }
 
-  if (data) req.send(data);
-  if (fn) req.end(fn);
-  return req;
+  if (data) request_.send(data);
+  if (fn) request_.end(fn);
+  return request_;
 };

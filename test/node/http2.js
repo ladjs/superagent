@@ -6,16 +6,22 @@ if (!process.env.HTTP2_TEST) {
 const assert = require('assert');
 const url = require('url');
 const request = require('../..');
-const setup = require('../support/setup');
-
-const base = setup.uri;
+const getSetup = require('../support/setup');
 
 describe('request.get().http2()', () => {
+  let setup;
+  let base;
+
+  before(async () => {
+    setup = await getSetup();
+    base = setup.uri;
+  });
+
   it('should preserve the encoding of the url', (done) => {
     request
       .get(`${base}/url?a=(b%29`)
       .http2()
-      .end((err, res) => {
+      .end((error, res) => {
         assert.equal('/url?a=(b%29', res.text);
         done();
       });

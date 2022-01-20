@@ -1,18 +1,24 @@
 'use strict';
-const request = require('../support/client');
-const setup = require('../support/setup');
-
-const base = setup.uri;
 const URL = require('url');
+const request = require('../support/client');
+const getSetup = require('../support/setup');
 
 describe('Basic auth', () => {
+  let setup;
+  let base;
+
+  before(async () => {
+    setup = await getSetup();
+    base = setup.uri;
+  });
+
   describe('when credentials are present in url', () => {
     it('should set Authorization', (done) => {
       const new_url = URL.parse(base);
       new_url.auth = 'tobi:learnboost';
       new_url.pathname = '/basic-auth';
 
-      request.get(URL.format(new_url)).end((err, res) => {
+      request.get(URL.format(new_url)).end((error, res) => {
         res.status.should.equal(200);
         done();
       });
@@ -24,7 +30,7 @@ describe('Basic auth', () => {
       request
         .get(`${base}/basic-auth`)
         .auth('tobi', 'learnboost')
-        .end((err, res) => {
+        .end((error, res) => {
           res.status.should.equal(200);
           done();
         });
@@ -36,7 +42,7 @@ describe('Basic auth', () => {
       request
         .get(`${base}/basic-auth/again`)
         .auth('tobi')
-        .end((err, res) => {
+        .end((error, res) => {
           res.status.should.eql(200);
           done();
         });

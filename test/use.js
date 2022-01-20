@@ -1,30 +1,36 @@
-const setup = require('./support/setup');
-
-const { uri } = setup;
-
 const assert = require('assert');
+const getSetup = require('./support/setup');
+
 const request = require('./support/client');
 
 describe('request', function () {
-  this.timeout(20000);
+  let setup;
+  let uri;
+
+  before(async function () {
+    setup = await getSetup();
+    uri = setup.uri;
+  });
+
+  this.timeout(20_000);
   describe('use', () => {
     it('should use plugin success', (done) => {
       const now = `${Date.now()}`;
-      function uuid(req) {
-        req.set('X-UUID', now);
-        return req;
+      function uuid(request_) {
+        request_.set('X-UUID', now);
+        return request_;
       }
 
-      function prefix(req) {
-        req.url = uri + req.url;
-        return req;
+      function prefix(request_) {
+        request_.url = uri + request_.url;
+        return request_;
       }
 
       request
         .get('/echo')
         .use(uuid)
         .use(prefix)
-        .end((err, res) => {
+        .end((error, res) => {
           assert.strictEqual(res.statusCode, 200);
           assert.equal(res.get('X-UUID'), now);
           done();
@@ -43,8 +49,8 @@ describe('subclass', () => {
   });
 
   it('should be an instance of Request', () => {
-    const req = request.get('/');
-    assert(req instanceof request.Request);
+    const request_ = request.get('/');
+    assert(request_ instanceof request.Request);
   });
 
   it('should use patched subclass', () => {
@@ -65,11 +71,11 @@ describe('subclass', () => {
 
     request.Request = NewRequest;
 
-    const req = request.get('/').send();
+    const request_ = request.get('/').send();
     assert(constructorCalled);
     assert(sendCalled);
-    assert(req instanceof NewRequest);
-    assert(req instanceof OriginalRequest);
+    assert(request_ instanceof NewRequest);
+    assert(request_ instanceof OriginalRequest);
   });
 
   it('should use patched subclass in agent too', () => {
@@ -82,8 +88,8 @@ describe('subclass', () => {
     NewRequest.prototype = Object.create(OriginalRequest.prototype);
     request.Request = NewRequest;
 
-    const req = request.agent().del('/');
-    assert(req instanceof NewRequest);
-    assert(req instanceof OriginalRequest);
+    const request_ = request.agent().del('/');
+    assert(request_ instanceof NewRequest);
+    assert(request_ instanceof OriginalRequest);
   });
 });

@@ -25,8 +25,8 @@ describe('with network error', () => {
   });
 
   it('should error', function (done) {
-    request.get(`http://localhost:${this.port}/`).end((err, res) => {
-      assert(err, 'expected an error');
+    request.get(`http://localhost:${this.port}/`).end((error, res) => {
+      assert(error, 'expected an error');
       done();
     });
   });

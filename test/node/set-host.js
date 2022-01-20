@@ -22,8 +22,8 @@ describe('request.get().set()', () => {
   });
 
   it('should set host header after get()', (done) => {
-    app.get('/', (req, res) => {
-      assert.equal(req.hostname, 'example.com');
+    app.get('/', (request_, res) => {
+      assert.equal(request_.hostname, 'example.com');
       res.end();
     });
 

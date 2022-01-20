@@ -1,12 +1,13 @@
 {
   "name": "superagent",
   "description": "elegant & feature rich browser / node HTTP with a fluent API",
-  "version": "6.1.0",
+  "version": "7.1.1",
   "author": "TJ Holowaychuk <tj@vision-media.ca>",
   "browser": {
     "./src/node/index.js": "./src/client.js",
     "./lib/node/index.js": "./lib/client.js",
-    "./test/support/server.js": "./test/support/blank.js"
+    "./test/support/server.js": "./test/support/blank.js",
+    "semver": false
   },
   "bugs": {
     "url": "https://github.com/visionmedia/superagent/issues"
@@ -24,64 +25,63 @@
   ],
   "dependencies": {
     "component-emitter": "^1.3.0",
-    "cookiejar": "^2.1.2",
-    "debug": "^4.1.1",
-    "fast-safe-stringify": "^2.0.7",
-    "form-data": "^3.0.0",
-    "formidable": "^1.2.2",
+    "cookiejar": "^2.1.3",
+    "debug": "^4.3.3",
+    "fast-safe-stringify": "^2.1.1",
+    "form-data": "^4.0.0",
+    "formidable": "^2.0.1",
     "methods": "^1.1.2",
-    "mime": "^2.4.6",
-    "qs": "^6.9.4",
+    "mime": "^2.5.0",
+    "qs": "^6.10.1",
     "readable-stream": "^3.6.0",
-    "semver": "^7.3.2"
+    "semver": "^7.3.5"
   },
   "devDependencies": {
-    "@babel/cli": "^7.10.5",
-    "@babel/core": "^7.11.1",
-    "@babel/plugin-transform-runtime": "^7.11.0",
-    "@babel/preset-env": "^7.11.0",
-    "@commitlint/cli": "^9.1.1",
-    "@commitlint/config-conventional": "^9.1.1",
+    "@babel/cli": "^7.16.0",
+    "@babel/core": "^7.16.0",
+    "@babel/plugin-transform-runtime": "^7.16.4",
+    "@babel/preset-env": "^7.16.4",
+    "@commitlint/cli": "^15.0.0",
+    "@commitlint/config-conventional": "^15.0.0",
     "Base64": "^1.1.0",
     "babelify": "^10.0.0",
     "basic-auth-connect": "^1.0.0",
     "body-parser": "^1.19.0",
-    "browserify": "^16.5.2",
-    "codecov": "^3.7.2",
-    "cookie-parser": "^1.4.5",
-    "cross-env": "^7.0.2",
-    "eslint": "^7.6.0",
-    "eslint-config-xo-lass": "^1.0.3",
-    "eslint-plugin-compat": "^3.8.0",
+    "browserify": "^17.0.0",
+    "codecov": "^3.8.3",
+    "cookie-parser": "^1.4.6",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.3.0",
+    "eslint-config-xo-lass": "^1.0.6",
+    "eslint-plugin-compat": "^4.0.0",
     "eslint-plugin-node": "^11.1.0",
     "express": "^4.17.1",
-    "express-session": "^1.17.1",
-    "fixpack": "^3.0.6",
-    "husky": "^4.2.5",
-    "lint-staged": "^10.2.11",
-    "marked": "^1.1.1",
-    "mocha": "3.5.3",
-    "multer": "^1.4.2",
+    "express-session": "^1.17.2",
+    "fixpack": "^4.0.0",
+    "get-port": "4.2.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.1.2",
+    "marked": "^2.0.0",
+    "mocha": "6.2.2",
+    "multer": "^1.4.3",
     "nyc": "^15.1.0",
-    "remark-cli": "^8.0.1",
-    "remark-preset-github": "^3.0.0",
+    "remark-cli": "^10.0.1",
+    "remark-preset-github": "^4.0.1",
     "rimraf": "^3.0.2",
     "should": "^13.2.3",
     "should-http": "^0.1.1",
     "tinyify": "^3.0.0",
-    "xo": "0.32.1",
+    "xo": "^0.47.0",
     "zuul": "^3.12.0"
   },
   "engines": {
-    "node": ">= 7.0.0"
+    "node": ">=6.4.0 <13 || >=14"
   },
+  "files": [
+    "dist/*.js",
+    "lib/**/*.js"
+  ],
   "homepage": "https://github.com/visionmedia/superagent",
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm test",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
-  },
   "jsdelivr": "dist/superagent.min.js",
   "keywords": [
     "agent",
@@ -148,6 +148,7 @@
     "url": "git://github.com/visionmedia/superagent.git"
   },
   "scripts": {
+    "prepare": "husky install",
     "browserify": "browserify src/node/index.js -o dist/superagent.js -s superagent -g [ babelify --configFile ./.dist.babelrc ]",
     "build": "npm run build:clean && npm run build:lib && npm run build:dist",
     "build:clean": "rimraf lib dist",
@@ -167,59 +168,72 @@
     "extends": [
       "xo-lass"
     ],
-    "env": [
+    "envs": [
       "node",
       "browser"
     ],
     "overrides": [
       {
         "files": "test/**/*.js",
-        "env": [
+        "envs": [
           "mocha"
         ],
         "rules": {
-          "block-scoped-var": "off",
-          "complexity": "off",
-          "default-case": "off",
-          "eqeqeq": "off",
-          "func-name-matching": "off",
-          "func-names": "off",
-          "guard-for-in": "off",
-          "handle-callback-err": "off",
-          "import/no-extraneous-dependencies": "off",
-          "import/no-unassigned-import": "off",
-          "import/order": "off",
-          "max-nested-callbacks": "off",
-          "new-cap": "off",
-          "no-eq-null": "off",
-          "no-extend-native": "off",
-          "no-implicit-coercion": "off",
-          "no-multi-assign": "off",
-          "no-negated-condition": "off",
-          "no-prototype-builtins": "off",
-          "no-redeclare": "off",
-          "no-undef": "off",
-          "no-unused-expressions": "off",
-          "no-unused-vars": "off",
-          "no-use-extend-native/no-use-extend-native": "off",
-          "no-useless-escape": "off",
-          "no-var": "off",
-          "no-void": "off",
-          "node/no-deprecated-api": "off",
-          "prefer-rest-params": "off",
-          "prefer-spread": "off",
-          "promise/prefer-await-to-then": "off",
-          "promise/valid-params": "off",
-          "unicorn/filename-case": "off",
-          "valid-jsdoc": "off",
-          "node/no-unsupported-features/node-builtins": "off",
-          "node/no-path-concat": "off"
+          "block-scoped-var": "warn",
+          "complexity": "warn",
+          "default-case": "warn",
+          "eqeqeq": "warn",
+          "func-name-matching": "warn",
+          "func-names": "warn",
+          "guard-for-in": "warn",
+          "handle-callback-err": "warn",
+          "import/no-extraneous-dependencies": "warn",
+          "import/no-unassigned-import": "warn",
+          "import/order": "warn",
+          "max-nested-callbacks": "warn",
+          "new-cap": "warn",
+          "no-eq-null": "warn",
+          "no-extend-native": "warn",
+          "no-implicit-coercion": "warn",
+          "no-multi-assign": "warn",
+          "no-negated-condition": "warn",
+          "no-prototype-builtins": "warn",
+          "no-redeclare": "warn",
+          "no-undef": "warn",
+          "no-unused-expressions": "warn",
+          "no-unused-vars": "warn",
+          "no-use-extend-native/no-use-extend-native": "warn",
+          "no-useless-escape": "warn",
+          "no-var": "warn",
+          "no-void": "warn",
+          "node/no-deprecated-api": "warn",
+          "prefer-rest-params": "warn",
+          "prefer-spread": "warn",
+          "unicorn/filename-case": "warn",
+          "valid-jsdoc": "warn",
+          "node/no-path-concat": "warn",
+          "unicorn/no-empty-file": "warn"
         }
       }
     ],
     "rules": {
-      "unicorn/prevent-abbreviations": "off",
-      "node/no-unsupported-features/es-syntax": "off"
+      "unicorn/prevent-abbreviations": [
+        "warn",
+        {
+          "replacements": {
+            "res": false,
+            "args": false
+          }
+        }
+      ],
+      "no-bitwise": "warn",
+      "node/prefer-global/buffer": "warn",
+      "node/prefer-global/process": "warn",
+      "unicorn/no-new-array": "warn",
+      "unicorn/no-this-assignment": "warn",
+      "unicorn/prefer-spread": "warn",
+      "unicorn/catch-error-name": "warn",
+      "unicorn/prefer-code-point": "warn"
     },
     "globals": [
       "ActiveXObject"
