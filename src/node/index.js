@@ -167,7 +167,7 @@ function Request(method, url) {
   this.qsRaw = this._query; // Unused, for backwards compatibility only
   this._redirectList = [];
   this._streamRequest = false;
-  this._lookup = null;
+  this._lookup = undefined;
   this.once('end', this.clearTimeout.bind(this));
 }
 
