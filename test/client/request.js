@@ -55,7 +55,6 @@ describe('request', function () {
 
     try {
       var file = new File([''], 'image.jpg', { type: 'image/jpeg' });
-      // eslint-disable-next-line unicorn/prefer-optional-catch-binding
     } catch (err) {
       // Skip if file constructor not supported.
       return next();
