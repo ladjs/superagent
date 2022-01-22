@@ -114,7 +114,7 @@ describe('Multipart', () => {
 
       it('should report ENOENT via the callback', (done) => {
         request
-          .post('http://127.0.0.1:1') // nobody is listening there
+          .post(`${base}/echo`)
           .attach('name', 'file-does-not-exist')
           .end((error, res) => {
             assert.ok(Boolean(error), 'Request should have failed');
@@ -125,7 +125,7 @@ describe('Multipart', () => {
 
       it('should report ENOENT via Promise', () => {
         return request
-          .post(`http://127.0.0.1:1`) // nobody is listening there
+          .post(`${base}/echo`)
           .attach('name', 'file-does-not-exist')
           .then(
             (res) => assert.fail('Request should have failed'),

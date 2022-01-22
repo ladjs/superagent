@@ -1,3 +1,4 @@
+.vscode
 build
 lib-cov
 coverage.html

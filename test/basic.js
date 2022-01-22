@@ -100,7 +100,7 @@ describe('request', function () {
 
       return Promise.all([request_, request_, request_]).then((results) => {
         for (const item of results) {
-          assert.equal(
+          assert.deepEqual(
             item.body,
             results[0].body,
             'It should keep returning the same result after being called once'
