@@ -1,7 +1,10 @@
+const fs = require('fs');
+
 const assert = require('assert');
 const getSetup = require('./support/setup');
 
 const request = require('./support/client');
+const binData = fs.readFileSync(`${__dirname}/node/fixtures/test.aac`);
 
 describe('request', function () {
   let setup;
@@ -623,6 +626,21 @@ describe('request', function () {
         try {
           assert.ifError(error);
           assert.deepEqual(res.text, '\u001E{"id":1}\n\u001E{"id":2}\n');
+          next();
+        } catch (err) {
+          next(err);
+        }
+      });
+  });
+
+  it('GET binary data', (next) => {
+    request
+      .get(`${uri}/binary-data`)
+      .buffer()
+      .end((error, res) => {
+        try {
+          assert.ifError(error);
+          assert.deepEqual(res.body, binData);
           next();
         } catch (err) {
           next(err);

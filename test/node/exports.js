@@ -18,6 +18,7 @@ describe('exports', () => {
       'application/x-www-form-urlencoded',
       'application/json',
       'text',
+      'application/json-seq',
       'application/octet-stream',
       'application/pdf',
       'image'
