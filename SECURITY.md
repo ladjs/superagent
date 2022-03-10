@@ -1,6 +1,0 @@
-# Security Policy
-
-
-## Reporting a Vulnerability
-
-Please report security issues to `niftylettuce@gmail.com`
