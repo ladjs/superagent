@@ -167,6 +167,7 @@ function Request(method, url) {
   this.qsRaw = this._query; // Unused, for backwards compatibility only
   this._redirectList = [];
   this._streamRequest = false;
+  this._lookup = undefined;
   this.once('end', this.clearTimeout.bind(this));
 }
 
@@ -303,6 +304,20 @@ Request.prototype._getFormData = function () {
 Request.prototype.agent = function (agent) {
   if (arguments.length === 0) return this._agent;
   this._agent = agent;
+  return this;
+};
+
+/**
+ * Gets/sets the `lookup` function to use custom DNS resolver.
+ *
+ * @param {Function} lookup
+ * @return {Function}
+ * @api public
+ */
+
+Request.prototype.lookup = function (lookup) {
+  if (arguments.length === 0) return this._lookup;
+  this._lookup = lookup;
   return this;
 };
 
@@ -765,6 +780,7 @@ Request.prototype.request = function () {
   options.cert = this._cert;
   options.passphrase = this._passphrase;
   options.agent = this._agent;
+  options.lookup = this._lookup;
   options.rejectUnauthorized =
     typeof this._disableTLSCerts === 'boolean'
       ? !this._disableTLSCerts
