@@ -7,12 +7,12 @@ test:
 	@if [ "x$(BROWSER)" = "x" ]; then make test-node; else make test-browser; fi
 
 test-node:
-	@NODE_ENV=test nyc ./node_modules/.bin/mocha \
+	@NODE_ENV=test ./node_modules/.bin/nyc ./node_modules/.bin/mocha \
 		--require should \
 		--trace-warnings \
 		--throw-deprecation \
 		--reporter $(REPORTER) \
-		--timeout 5000 \
+		--timeout 15000 \
 		--exit \
 		$(NODETESTS)
 
