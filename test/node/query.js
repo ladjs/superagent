@@ -212,6 +212,9 @@ describe('req.query(Object)', () => {
       done(err);
     });
 
+    stream.on('error', function(err) {
+      done(err);
+    });
     stream.pipe(request_);
   });
 });
