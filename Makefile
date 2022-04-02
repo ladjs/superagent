@@ -12,6 +12,7 @@ test-node:
 		--trace-warnings \
 		--throw-deprecation \
 		--reporter $(REPORTER) \
+    	--slow 2000 \
 		--timeout 15000 \
 		--exit \
 		$(NODETESTS)
