@@ -2,8 +2,8 @@ name: CI
 on: [push, pull_request]
 
 env:
-  SAUCE_USERNAME: shtylman-superagent
-  SAUCE_ACCESS_KEY: 39a45464-cb1d-4b8d-aa1f-83c7c04fa673
+  SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+  SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
 
 jobs:
   test:
