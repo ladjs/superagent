@@ -13,7 +13,7 @@ test-node:
 		--throw-deprecation \
 		--reporter $(REPORTER) \
     	--slow 2000 \
-		--timeout 15000 \
+		--timeout 5000 \
 		--exit \
 		$(NODETESTS)
 
