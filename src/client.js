@@ -568,10 +568,12 @@ Request.prototype.auth = function (user, pass, options) {
     };
   }
 
-  const encoder = (string) => {
-    if (typeof btoa === 'function') {
-      return btoa(string);
-    }
+  const encoder =
+    options.encoder ||
+    (string) => {
+      if (typeof btoa === 'function') {
+        return btoa(string);
+      }
 
     throw new Error('Cannot use basic auth, btoa is not a function');
   };
