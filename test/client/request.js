@@ -55,7 +55,7 @@ describe('request', function () {
 
     try {
       var file = new File([''], 'image.jpg', { type: 'image/jpeg' });
-    } catch (err) {
+    } catch {
       // Skip if file constructor not supported.
       return next();
     }

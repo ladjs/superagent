@@ -71,7 +71,7 @@
     "should": "^13.2.3",
     "should-http": "^0.1.1",
     "tinyify": "^3.0.0",
-    "xo": "0.47.0",
+    "xo": "^0.48.0",
     "zuul": "^3.12.0"
   },
   "engines": {
@@ -223,7 +223,11 @@
         {
           "replacements": {
             "res": false,
-            "args": false
+            "args": false,
+            "fn": false,
+            "err": false,
+            "e": false,
+            "i": false
           }
         }
       ],
@@ -234,7 +238,8 @@
       "unicorn/no-this-assignment": "warn",
       "unicorn/prefer-spread": "warn",
       "unicorn/catch-error-name": "warn",
-      "unicorn/prefer-code-point": "warn"
+      "unicorn/prefer-code-point": "warn",
+      "node/no-unsupported-features": ["error", {"version": 8, "ignores": ["syntax"]}]
     },
     "globals": [
       "ActiveXObject"

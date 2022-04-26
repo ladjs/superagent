@@ -71,19 +71,27 @@ request.getXHR = () => {
 
   try {
     return new ActiveXObject('Microsoft.XMLHTTP');
-  } catch {/**/}
+  } catch {
+    /**/
+  }
 
   try {
     return new ActiveXObject('Msxml2.XMLHTTP.6.0');
-  } catch {/**/}
+  } catch {
+    /**/
+  }
 
   try {
     return new ActiveXObject('Msxml2.XMLHTTP.3.0');
-  } catch {/**/}
+  } catch {
+    /**/
+  }
 
   try {
     return new ActiveXObject('Msxml2.XMLHTTP');
-  } catch {/**/}
+  } catch {
+    /**/
+  }
 
   throw new Error('Browser-only version of superagent could not find XHR');
 };
@@ -436,10 +444,10 @@ function Request(method, url) {
 
     try {
       res = new Response(self);
-    } catch (error_) {
+    } catch (err) {
       error = new Error('Parser is unable to parse the response');
       error.parse = true;
-      error.original = error_;
+      error.original = err;
       // issue #675: return the raw response if the response parsing fails
       if (self.xhr) {
         // ie9 doesn't have 'response' property
@@ -568,15 +576,15 @@ Request.prototype.auth = function (user, pass, options) {
     };
   }
 
-  const encoder =
-    options.encoder ||
-    (string) => {
-      if (typeof btoa === 'function') {
-        return btoa(string);
-      }
+  const encoder = options.encoder
+    ? options.encoder
+    : (string) => {
+        if (typeof btoa === 'function') {
+          return btoa(string);
+        }
 
-    throw new Error('Cannot use basic auth, btoa is not a function');
-  };
+        throw new Error('Cannot use basic auth, btoa is not a function');
+      };
 
   return this._auth(user, pass, options, encoder);
 };

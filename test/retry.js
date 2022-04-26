@@ -211,8 +211,8 @@ describe('.retry(count)', function () {
     request_.end((error, res) => {
       try {
         assert(false, 'should not complete the request');
-      } catch (error_) {
-        done(error_);
+      } catch (err) {
+        done(err);
       }
     });
 

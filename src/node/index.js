@@ -799,12 +799,12 @@ Request.prototype.request = function () {
   }
 
   // initiate request
-  const mod = this._enableHttp2
+  const module_ = this._enableHttp2
     ? exports.protocols['http2:'].setProtocol(url.protocol)
     : exports.protocols[url.protocol];
 
   // request
-  this.req = mod.request(options);
+  this.req = module_.request(options);
   const { req } = this;
 
   // set tcp no delay
@@ -900,8 +900,8 @@ Request.prototype.callback = function (error, res) {
         error = new Error(message);
         error.status = res ? res.status : undefined;
       }
-    } catch (error_) {
-      error = error_;
+    } catch (err) {
+      error = err;
     }
   }
 
@@ -1195,7 +1195,7 @@ Request.prototype._end = function () {
     let loaded = 0;
 
     const progress = new Stream.Transform();
-    progress._transform = (chunk, encoding, cb) => {
+    progress._transform = (chunk, encoding, callback) => {
       loaded += chunk.length;
       this.emit('progress', {
         direction: 'upload',
@@ -1203,7 +1203,7 @@ Request.prototype._end = function () {
         loaded,
         total
       });
-      cb(null, chunk);
+      callback(null, chunk);
     };
 
     return progress;

@@ -591,8 +591,8 @@ describe('request', function () {
       request_.end((error, res) => {
         try {
           assert(false, 'should not complete the request');
-        } catch (error_) {
-          done(error_);
+        } catch (err) {
+          done(err);
         }
       });
 
@@ -625,8 +625,8 @@ describe('request', function () {
       request_.end((error, res) => {
         try {
           assert(false, 'should not complete the request');
-        } catch (error_) {
-          done(error_);
+        } catch (err) {
+          done(err);
         }
       });
 

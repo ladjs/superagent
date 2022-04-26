@@ -12,10 +12,12 @@ const IS_WINDOWS = require('os').platform() === 'win32';
 function read(file) {
   return fs.readFileSync(file, 'utf8');
 }
+
 function getFullPath(filename) {
   if (!IS_WINDOWS) {
     return filename;
   }
+
   const fullPath = path.join(__dirname, '../../', filename);
   return fullPath.charAt(0).toLowerCase() + fullPath.slice(1);
 }
@@ -188,7 +190,9 @@ describe('Multipart', () => {
         .end((error, res) => {
           assert.ok(Boolean(error), 'Request should have failed.');
           error.code.should.equal('ENOENT');
-          error.path.should.equal(getFullPath('test/node/fixtures/non-existent-file.ext'));
+          error.path.should.equal(
+            getFullPath('test/node/fixtures/non-existent-file.ext')
+          );
           done();
         });
     });

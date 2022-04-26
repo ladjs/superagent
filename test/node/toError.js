@@ -27,7 +27,7 @@ before(function listen(done) {
 describe('res.toError()', () => {
   it('should return an Error', (done) => {
     request.get(base).end((err, res) => {
-      var error = res.toError();
+      const error = res.toError();
       assert.equal(error.status, 400);
       assert.equal(error.method, 'GET');
       assert.equal(error.path, '/');

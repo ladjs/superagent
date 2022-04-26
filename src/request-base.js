@@ -199,8 +199,8 @@ RequestBase.prototype._shouldRetry = function (error, res) {
       if (override === true) return true;
       if (override === false) return false;
       // undefined falls back to defaults
-    } catch (error_) {
-      console.error(error_);
+    } catch (err) {
+      console.error(err);
     }
   }
 
@@ -292,8 +292,8 @@ RequestBase.prototype.then = function (resolve, reject) {
   return this._fullfilledPromise.then(resolve, reject);
 };
 
-RequestBase.prototype.catch = function (cb) {
-  return this.then(undefined, cb);
+RequestBase.prototype.catch = function (callback) {
+  return this.then(undefined, callback);
 };
 
 /**
@@ -305,9 +305,9 @@ RequestBase.prototype.use = function (fn) {
   return this;
 };
 
-RequestBase.prototype.ok = function (cb) {
-  if (typeof cb !== 'function') throw new Error('Callback required');
-  this._okCallback = cb;
+RequestBase.prototype.ok = function (callback) {
+  if (typeof callback !== 'function') throw new Error('Callback required');
+  this._okCallback = callback;
   return this;
 };
 
