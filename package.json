@@ -41,8 +41,6 @@
     "@babel/core": "^7.17.9",
     "@babel/plugin-transform-runtime": "^7.17.0",
     "@babel/preset-env": "^7.16.11",
-    "@commitlint/cli": "^16.2.3",
-    "@commitlint/config-conventional": "^16.2.1",
     "Base64": "^1.1.0",
     "babelify": "^10.0.0",
     "basic-auth-connect": "^1.0.0",
@@ -69,6 +67,8 @@
     "zuul": "^3.12.0"
   },
   "optionalDependencies": {
+    "@commitlint/cli": "^16.2.3",
+    "@commitlint/config-conventional": "^16.2.1",
     "eslint": "^8.14.0",
     "eslint-config-xo-lass": "^1.0.6",
     "eslint-plugin-compat": "^4.0.2",
