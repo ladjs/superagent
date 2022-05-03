@@ -1,28 +1,38 @@
-
+OLDNODETESTS ?= lib/node/test/*.js lib/node/test/node/*.js
 NODETESTS ?= test/*.js test/node/*.js
 BROWSERTESTS ?= test/*.js test/client/*.js
 REPORTER = spec
 
+ifeq ("$(OLD_NODE_TEST)", "1")
+	NODETESTS := $(OLDNODETESTS)
+endif
+
 test:
-	@if [ "x$(BROWSER)" = "x" ]; then make test-node; else make test-browser; fi
+	@if [ "$(BROWSER)" = "1" ]; then \
+		echo test on browser; \
+		make test-browser; \
+	fi
 
-test-node:
-	@NODE_ENV=test ./node_modules/.bin/nyc ./node_modules/.bin/mocha \
+	@if [ "$(NODE_TEST)" = "1" ] || [ "x$(BROWSER)" = "x" ]; then \
+		echo test on node; \
+		make test-node; \
+	fi
+	
+copy:
+	@if [ "$(OLD_NODE_TEST)" = "1" ]; then \
+		echo test on old node; \
+		cp test/node/fixtures lib/node/test/node -rf; \
+	else \
+		echo test on plain node; \
+	fi
+	
+test-node:copy
+	@NODE_ENV=test HTTP2_TEST=$(HTTP2_TEST) ./node_modules/.bin/nyc ./node_modules/.bin/mocha \
 		--require should \
 		--trace-warnings \
 		--throw-deprecation \
 		--reporter $(REPORTER) \
-    	--slow 2000 \
-		--timeout 5000 \
-		--exit \
-		$(NODETESTS)
-
-test-node-http2:
-	@NODE_ENV=test HTTP2_TEST=1 node ./node_modules/.bin/mocha \
-		--require should \
-		--trace-warnings \
-		--throw-deprecation \
-		--reporter $(REPORTER) \
+		--slow 2000 \
 		--timeout 5000 \
 		--exit \
 		$(NODETESTS)
@@ -60,4 +70,4 @@ test-docs: docs/head.html docs/tail.html
 clean:
 	rm -fr components
 
-.PHONY: test-cov test docs test-docs clean test-browser-local
+.PHONY: copy test-cov test docs test-docs clean test-browser-local

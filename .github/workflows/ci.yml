@@ -11,6 +11,8 @@ jobs:
     strategy:
       matrix:
        include:
+        - node-version: 10.x
+          test-on-old-node: 1
         - node-version: 12.x
           # test-on-brower: 1
         - node-version: 14.x
@@ -21,7 +23,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Install Node - ${{ matrix.node-version }}
-        uses: actions/setup-node@v2        
+        uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
       - name: Cache node modules
@@ -32,14 +34,29 @@ jobs:
           # npm cache files are stored in `~/.npm` on Linux/macOS
           path: ~/.npm
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
-      - name: Install Dependencies
+      - name: Install Dependencies On Old Node ${{ matrix.node-version }}
+        if: ${{ matrix.test-on-old-node == '1' }}
+        run: yarn install --ignore-optional --ignore-scripts
+      - name: Install Dependencies On Node ${{ matrix.node-version }}
+        if: ${{ matrix.test-on-old-node != '1' }}
         run: yarn install
       - name: Build
         run: npm run build
+      - name: Build On Old Node
+        if: ${{ matrix.test-on-old-node == '1' }}
+        run: npm run build:test
       - name: Test On Node ${{ matrix.node-version }}
         env:
           BROWSER: ${{ matrix.test-on-brower }}
           HTTP2_TEST: ${{ matrix.test-http2 }}
+          OLD_NODE_TEST: ${{ matrix.test-on-old-node }}
         run: |
-          npm run test
+          if [ "$OLD_NODE_TEST" = "1" ]; then
+            make test
+          else
+            npm run lint
+            make test
+          fi
+      - name: Coverage On Node ${{ matrix.node-version }}
+        run:
           npm run coverage
