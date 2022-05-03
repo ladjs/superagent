@@ -12,6 +12,7 @@ jobs:
       matrix:
        include:
         - node-version: 10.x
+          test-on-old-node: 1
         - node-version: 12.x
           # test-on-brower: 1
         - node-version: 14.x
@@ -35,7 +36,7 @@ jobs:
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
       - name: Install Dependencies On Node 10
         if: ${{ matrix.node-version == '10.x' }}
-        run: yarn install --ignore-optional
+        run: yarn install --ignore-optional --ignore-scripts
       - name: Install Dependencies On Node ${{ matrix.node-version }}
         if: ${{ matrix.node-version != '10.x' }}
         run: yarn install
@@ -45,6 +46,8 @@ jobs:
         env:
           BROWSER: ${{ matrix.test-on-brower }}
           HTTP2_TEST: ${{ matrix.test-http2 }}
+          OLD_NODE_TEST: ${{ matrix.test-on-old-node }}
         run: |
           npm run test
+      - name: Coverage On Node ${{ matrix.node-version }}
           npm run coverage

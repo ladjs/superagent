@@ -1,6 +1,7 @@
 'use strict';
 const assert = require('assert');
-const utils = require('../../lib/utils');
+const utils = process.env.OLD_NODE_TEST === '1' ?
+require('../../../utils') : require('../../lib/utils');
 
 describe('utils.type(str)', () => {
   it('should return the mime type', () => {
