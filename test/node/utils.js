@@ -1,6 +1,7 @@
 'use strict';
 const assert = require('assert');
 const utils = process.env.OLD_NODE_TEST === '1' ?
+// eslint-disable-next-line node/no-missing-require
 require('../../../utils') : require('../../lib/utils');
 
 describe('utils.type(str)', () => {
