@@ -14,10 +14,14 @@ test:
 	fi
 
 	@if [ "$(NODE_TEST)" = "1" ] || [ "x$(BROWSER)" = "x" ]; then \
-		echo test on node; \
-		make test-node; \
+    @if [ "$(HTTP2_TEST_DISABLED)" != "1" ]; then \
+		  echo test on node with htt2; \
+      export HTTP2_TEST="1" && make test-node; \
+    fi \
+    echo test on node with http1; \
+    export HTTP2_TEST="" && make test-node; \
 	fi
-	
+
 copy:
 	@if [ "$(OLD_NODE_TEST)" = "1" ]; then \
 		echo test on old node; \
@@ -25,7 +29,7 @@ copy:
 	else \
 		echo test on plain node; \
 	fi
-	
+
 test-node:copy
 	@NODE_ENV=test HTTP2_TEST=$(HTTP2_TEST) ./node_modules/.bin/nyc ./node_modules/.bin/mocha \
 		--require should \
