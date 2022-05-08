@@ -11,15 +11,15 @@ test:
 	@if [ "$(BROWSER)" = "1" ]; then \
 		echo test on browser; \
 		make test-browser; \
-	fi
+	fi \
 
 	@if [ "$(NODE_TEST)" = "1" ] || [ "x$(BROWSER)" = "x" ]; then \
-    @if [ "$(HTTP2_TEST_DISABLED)" != "1" ]; then \
-		  echo test on node with htt2; \
-      export HTTP2_TEST="1" && make test-node; \
-    fi \
     echo test on node with http1; \
     export HTTP2_TEST="" && make test-node; \
+    if [ "$(HTTP2_TEST_DISABLED)" != "1" ]; then \
+      echo test on node with http2; \
+      export HTTP2_TEST="1" && make test-node; \
+    fi \
 	fi
 
 copy:
