@@ -35,7 +35,7 @@ describe('request.get().http2()', () => {
         assert(res.ok);
       }));
 
-  it('should default to http', () =>
+  it.skip('should default to http', () =>
     request
       .get('localhost:5000/login')
       .http2()
