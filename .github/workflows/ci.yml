@@ -16,9 +16,7 @@ jobs:
         - node-version: 12.x
           # test-on-brower: 1
         - node-version: 14.x
-          # test-http2: 1
         - node-version: 16.x
-          # test-http2: 1
     steps:
       - uses: actions/checkout@v2
 
@@ -48,7 +46,7 @@ jobs:
       - name: Test On Node ${{ matrix.node-version }}
         env:
           BROWSER: ${{ matrix.test-on-brower }}
-          HTTP2_TEST: ${{ matrix.test-http2 }}
+          HTTP2_TEST_DISABLED: ${{ matrix.http2-test-disabled }}
           OLD_NODE_TEST: ${{ matrix.test-on-old-node }}
         run: |
           if [ "$OLD_NODE_TEST" = "1" ]; then
