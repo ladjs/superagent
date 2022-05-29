@@ -255,7 +255,7 @@ function setMethods(request) {
 
     // support flattened arguments
     if (!Array.isArray(types)) {
-      array = new Array(arguments.length);
+      array = Array.from({ length: arguments.length });
       for (let i = 0; i < array.length; i++) {
         array[i] = arguments[i];
       }

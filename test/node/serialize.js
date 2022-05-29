@@ -17,7 +17,7 @@ describe('req.serialize(fn)', () => {
     request
       .post(`${base}/echo`)
       .send({ foo: 123 })
-      .serialize((data) => '{"bar":456}')
+      .serialize(() => '{"bar":456}')
       .end((error, res) => {
         assert.ifError(error);
         assert.equal('{"bar":456}', res.text);

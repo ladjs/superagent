@@ -1,0 +1,38 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "plugin:node/recommended"
+  ],
+  "env": {
+    "node": true,
+    "browser": true,
+    "es6": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2021
+  },
+  "overrides": [
+    {
+      "files": "test/**/*.js",
+      "env": {
+        "mocha": true
+      },
+      "rules": {
+        "no-prototype-builtins": "off",
+        "node/no-deprecated-api": "warn",
+        "node/no-extraneous-require": "warn",
+        "no-unused-vars": "warn"
+      }
+    }
+  ],
+  "rules": {
+    "node/no-unsupported-features/node-builtins": "off",
+    "node/no-unsupported-features/es-syntax": "off",
+    "node/no-exports-assign": "off"
+  },
+  "globals": {
+    "ActiveXObject": "readonly"
+  }
+    
+  
+}

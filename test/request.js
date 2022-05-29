@@ -958,9 +958,9 @@ describe('request', function () {
   it('req.toJSON()', (next) => {
     request.get(`${uri}/ok`).end((error, res) => {
       try {
-        const j = (res.request || res.req).toJSON();
-        for (const prop of ['url', 'method', 'data', 'headers']) {
-          assert(j.hasOwnProperty(prop));
+        const index = (res.request || res.req).toJSON();
+        for (const property of ['url', 'method', 'data', 'headers']) {
+          assert(index.hasOwnProperty(property));
         }
 
         next();

@@ -3,7 +3,7 @@ const semver = require('semver');
 /**
  * Module of mixed-in functions shared between node and client code
  */
-const isObject = require('./is-object');
+const { isObject, hasOwn } = require('./utils');
 
 /**
  * Expose `RequestBase`.
@@ -17,26 +17,7 @@ module.exports = RequestBase;
  * @api public
  */
 
-function RequestBase(object) {
-  if (object) return mixin(object);
-}
-
-/**
- * Mixin the prototype properties.
- *
- * @param {Object} obj
- * @return {Object}
- * @api private
- */
-
-function mixin(object) {
-  for (const key in RequestBase.prototype) {
-    if (Object.prototype.hasOwnProperty.call(RequestBase.prototype, key))
-      object[key] = RequestBase.prototype[key];
-  }
-
-  return object;
-}
+function RequestBase() {}
 
 /**
  * Clear previous timeout.
@@ -129,7 +110,7 @@ RequestBase.prototype.timeout = function (options) {
   }
 
   for (const option in options) {
-    if (Object.prototype.hasOwnProperty.call(options, option)) {
+    if (hasOwn(options, option)) {
       switch (option) {
         case 'deadline':
           this._timeout = options.deadline;
@@ -218,8 +199,8 @@ RequestBase.prototype._shouldRetry = function (error, res) {
       if (override === true) return true;
       if (override === false) return false;
       // undefined falls back to defaults
-    } catch (error_) {
-      console.error(error_);
+    } catch (err) {
+      console.error(err);
     }
   }
 
@@ -311,8 +292,8 @@ RequestBase.prototype.then = function (resolve, reject) {
   return this._fullfilledPromise.then(resolve, reject);
 };
 
-RequestBase.prototype.catch = function (cb) {
-  return this.then(undefined, cb);
+RequestBase.prototype.catch = function (callback) {
+  return this.then(undefined, callback);
 };
 
 /**
@@ -324,9 +305,9 @@ RequestBase.prototype.use = function (fn) {
   return this;
 };
 
-RequestBase.prototype.ok = function (cb) {
-  if (typeof cb !== 'function') throw new Error('Callback required');
-  this._okCallback = cb;
+RequestBase.prototype.ok = function (callback) {
+  if (typeof callback !== 'function') throw new Error('Callback required');
+  this._okCallback = callback;
   return this;
 };
 
@@ -393,8 +374,7 @@ RequestBase.prototype.getHeader = RequestBase.prototype.get;
 RequestBase.prototype.set = function (field, value) {
   if (isObject(field)) {
     for (const key in field) {
-      if (Object.prototype.hasOwnProperty.call(field, key))
-        this.set(key, field[key]);
+      if (hasOwn(field, key)) this.set(key, field[key]);
     }
 
     return this;
@@ -439,10 +419,11 @@ RequestBase.prototype.unset = function (field) {
  *
  * @param {String|Object} name name of field
  * @param {String|Blob|File|Buffer|fs.ReadStream} val value of field
+ * @param {String} options extra options, e.g. 'blob'
  * @return {Request} for chaining
  * @api public
  */
-RequestBase.prototype.field = function (name, value) {
+RequestBase.prototype.field = function (name, value, options) {
   // name should be either a string or an object.
   if (name === null || undefined === name) {
     throw new Error('.field(name, val) name can not be empty');
@@ -456,8 +437,7 @@ RequestBase.prototype.field = function (name, value) {
 
   if (isObject(name)) {
     for (const key in name) {
-      if (Object.prototype.hasOwnProperty.call(name, key))
-        this.field(key, name[key]);
+      if (hasOwn(name, key)) this.field(key, name[key]);
     }
 
     return this;
@@ -465,8 +445,7 @@ RequestBase.prototype.field = function (name, value) {
 
   if (Array.isArray(value)) {
     for (const i in value) {
-      if (Object.prototype.hasOwnProperty.call(value, i))
-        this.field(name, value[i]);
+      if (hasOwn(value, i)) this.field(name, value[i]);
     }
 
     return this;
@@ -481,7 +460,7 @@ RequestBase.prototype.field = function (name, value) {
     value = String(value);
   }
 
-  this._getFormData().append(name, value);
+  this._getFormData().append(name, value, options);
   return this;
 };
 
@@ -683,8 +662,7 @@ RequestBase.prototype.send = function (data) {
   // merge
   if (isObject_ && isObject(this._data)) {
     for (const key in data) {
-      if (Object.prototype.hasOwnProperty.call(data, key))
-        this._data[key] = data[key];
+      if (hasOwn(data, key)) this._data[key] = data[key];
     }
   } else if (typeof data === 'string') {
     // default to x-www-form-urlencoded

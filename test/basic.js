@@ -100,7 +100,7 @@ describe('request', function () {
 
       return Promise.all([request_, request_, request_]).then((results) => {
         for (const item of results) {
-          assert.equal(
+          assert.deepEqual(
             item.body,
             results[0].body,
             'It should keep returning the same result after being called once'
@@ -591,8 +591,8 @@ describe('request', function () {
       request_.end((error, res) => {
         try {
           assert(false, 'should not complete the request');
-        } catch (error_) {
-          done(error_);
+        } catch (err) {
+          done(err);
         }
       });
 
@@ -625,8 +625,8 @@ describe('request', function () {
       request_.end((error, res) => {
         try {
           assert(false, 'should not complete the request');
-        } catch (error_) {
-          done(error_);
+        } catch (err) {
+          done(err);
         }
       });
 

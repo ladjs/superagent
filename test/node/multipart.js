@@ -2,13 +2,24 @@
 
 const assert = require('assert');
 const fs = require('fs');
+const path = require('path');
 const should = require('should');
 const getPort = require('get-port');
 const request = require('../support/client');
 const getSetup = require('../support/setup');
+const IS_WINDOWS = require('os').platform() === 'win32';
 
 function read(file) {
   return fs.readFileSync(file, 'utf8');
+}
+
+function getFullPath(filename) {
+  if (!IS_WINDOWS) {
+    return filename;
+  }
+
+  const fullPath = path.join(__dirname, '../../', filename);
+  return fullPath.charAt(0).toLowerCase() + fullPath.slice(1);
 }
 
 describe('Multipart', () => {
@@ -86,14 +97,14 @@ describe('Multipart', () => {
         const request_ = request.post(`${base}/echo`);
 
         request_.attach('name', 'foo');
-        request_.attach('name2', 'bar');
-        request_.attach('name3', 'baz');
+        // request_.attach('name2', 'bar');
+        // request_.attach('name3', 'baz');
 
         request_.end((error, res) => {
           assert.ok(Boolean(error), 'Request should have failed.');
           error.code.should.equal('ENOENT');
           error.message.should.containEql('ENOENT');
-          error.path.should.equal('foo');
+          error.path.should.equal(getFullPath('foo'));
           done();
         });
       });
@@ -107,14 +118,14 @@ describe('Multipart', () => {
             (res) => assert.fail('It should not allow this'),
             (err) => {
               err.code.should.equal('ENOENT');
-              err.path.should.equal('does-not-exist.txt');
+              err.path.should.equal(getFullPath('does-not-exist.txt'));
             }
           );
       });
 
       it('should report ENOENT via the callback', (done) => {
         request
-          .post('http://127.0.0.1:1') // nobody is listening there
+          .post(`${base}/echo`)
           .attach('name', 'file-does-not-exist')
           .end((error, res) => {
             assert.ok(Boolean(error), 'Request should have failed');
@@ -125,7 +136,7 @@ describe('Multipart', () => {
 
       it('should report ENOENT via Promise', () => {
         return request
-          .post(`http://127.0.0.1:1`) // nobody is listening there
+          .post(`${base}/echo`)
           .attach('name', 'file-does-not-exist')
           .then(
             (res) => assert.fail('Request should have failed'),
@@ -179,7 +190,9 @@ describe('Multipart', () => {
         .end((error, res) => {
           assert.ok(Boolean(error), 'Request should have failed.');
           error.code.should.equal('ENOENT');
-          error.path.should.equal('test/node/fixtures/non-existent-file.ext');
+          error.path.should.equal(
+            getFullPath('test/node/fixtures/non-existent-file.ext')
+          );
           done();
         });
     });
