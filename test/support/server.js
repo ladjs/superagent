@@ -506,7 +506,7 @@ app.get('/image-as-octets', (request, res) => {
 app.get('/binary-data', (request, res) => {
   const binData = fs.readFileSync(`${__dirname}/../node/fixtures/test.aac`);
   res.writeHead(200, { 'Content-type': 'audio/aac' });
-  res.end(binData, 'binary')
+  res.end(binData, 'binary');
 });
 
 app.get('/chunked-json', (request, res) => {

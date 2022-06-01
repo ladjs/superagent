@@ -4,6 +4,7 @@ const assert = require('assert');
 const getSetup = require('./support/setup');
 
 const request = require('./support/client');
+
 const binData = fs.readFileSync(`${__dirname}/node/fixtures/test.aac`);
 
 describe('request', function () {

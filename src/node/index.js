@@ -1365,18 +1365,13 @@ function isText(mime) {
 // in the long run to have file that includes all binary
 // content types from https://www.iana.org/assignments/media-types/media-types.xhtml
 function isBinary(mime) {
-  let [ registry, name ] = mime.split('/');
+  let [registry, name] = mime.split('/');
   if (registry) registry = registry.toLowerCase().trim();
   if (name) name = name.toLowerCase().trim();
-  return [
-    'audio',
-    'font',
-    'image',
-    'video' 
-  ].includes(registry) || [
-    'gz',
-    'gzip',
-  ].includes(name);
+  return (
+    ['audio', 'font', 'image', 'video'].includes(registry) ||
+    ['gz', 'gzip'].includes(name)
+  );
 }
 
 /**

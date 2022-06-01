@@ -17,7 +17,7 @@ module.exports = RequestBase;
  * @api public
  */
 
-function RequestBase() { }
+function RequestBase() {}
 
 /**
  * Clear previous timeout.
@@ -460,7 +460,7 @@ RequestBase.prototype.field = function (name, value, options) {
     value = String(value);
   }
 
-  //fix https://github.com/visionmedia/superagent/issues/1680
+  // fix https://github.com/visionmedia/superagent/issues/1680
   if (options) this._getFormData().append(name, value, options);
   else this._getFormData().append(name, value);
 

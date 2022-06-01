@@ -14,9 +14,9 @@ let http = require('http');
 
 if (process.env.HTTP2_TEST) {
   http = require('http2');
-  http.Http2ServerResponse.prototype._implicitHeader = function() {
+  http.Http2ServerResponse.prototype._implicitHeader = function () {
     this.writeHead(this.statusCode);
-  }
+  };
 }
 
 app.use(cookieParser());

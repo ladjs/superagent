@@ -628,9 +628,7 @@ function setMethods(res) {
 
   res.set = res.header = function header(field, value_) {
     if (arguments.length === 2) {
-      let value = Array.isArray(value_)
-        ? value_.map((v) => String(v))
-        : String(value_);
+      let value = Array.isArray(value_) ? value_.map(String) : String(value_);
 
       // add charset to content-type
       if (field.toLowerCase() === 'content-type') {
