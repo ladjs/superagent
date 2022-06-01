@@ -458,7 +458,7 @@ function Request(method, url) {
     if (new_error) {
       new_error.original = error;
       new_error.response = res;
-      new_error.status = res.status;
+      new_error.status = new_error.status || res.status;
       self.callback(new_error, res);
     } else {
       self.callback(null, res);

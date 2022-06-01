@@ -902,6 +902,7 @@ Request.prototype.callback = function (error, res) {
       }
     } catch (err) {
       error = err;
+      error.status = error.status || (res ? res.status : undefined);
     }
   }
 
