@@ -63,34 +63,9 @@ request.getXHR = () => {
   if (
     root.XMLHttpRequest &&
     (!root.location ||
-      root.location.protocol !== 'file:' ||
-      !root.ActiveXObject)
+      root.location.protocol !== 'file:')
   ) {
     return new XMLHttpRequest();
-  }
-
-  try {
-    return new ActiveXObject('Microsoft.XMLHTTP');
-  } catch {
-    /**/
-  }
-
-  try {
-    return new ActiveXObject('Msxml2.XMLHTTP.6.0');
-  } catch {
-    /**/
-  }
-
-  try {
-    return new ActiveXObject('Msxml2.XMLHTTP.3.0');
-  } catch {
-    /**/
-  }
-
-  try {
-    return new ActiveXObject('Msxml2.XMLHTTP');
-  } catch {
-    /**/
   }
 
   throw new Error('Browser-only version of superagent could not find XHR');
