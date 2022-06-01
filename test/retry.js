@@ -1,32 +1,39 @@
-const setup = require('./support/setup');
-
-const base = setup.uri;
 const assert = require('assert');
+const getSetup = require('./support/setup');
+
 const request = require('./support/client');
 
 function uniqid() {
-  return Math.random() * 10000000;
+  return Math.random() * 10_000_000;
 }
 
 describe('.retry(count)', function () {
-  this.timeout(15000);
+  let setup;
+  let base;
+
+  before(async () => {
+    setup = await getSetup();
+    base = setup.uri;
+  });
+
+  this.timeout(15_000);
 
   it('should not retry if passed "0"', (done) => {
     request
       .get(`${base}/error`)
       .retry(0)
-      .end((err, res) => {
+      .end((error, res) => {
         try {
-          assert(err, 'expected an error');
+          assert(error, 'expected an error');
           assert.equal(
             undefined,
-            err.retries,
+            error.retries,
             'expected an error without .retries'
           );
-          assert.equal(500, err.status, 'expected an error status of 500');
+          assert.equal(500, error.status, 'expected an error status of 500');
           done();
-        } catch (err_) {
-          done(err_);
+        } catch (err) {
+          done(err);
         }
       });
   });
@@ -35,18 +42,18 @@ describe('.retry(count)', function () {
     request
       .get(`${base}/error`)
       .retry(-2)
-      .end((err, res) => {
+      .end((error, res) => {
         try {
-          assert(err, 'expected an error');
+          assert(error, 'expected an error');
           assert.equal(
             undefined,
-            err.retries,
+            error.retries,
             'expected an error without .retries'
           );
-          assert.equal(500, err.status, 'expected an error status of 500');
+          assert.equal(500, error.status, 'expected an error status of 500');
           done();
-        } catch (err_) {
-          done(err_);
+        } catch (err) {
+          done(err);
         }
       });
   });
@@ -55,18 +62,18 @@ describe('.retry(count)', function () {
     request
       .get(`${base}/error`)
       .retry(undefined)
-      .end((err, res) => {
+      .end((error, res) => {
         try {
-          assert(err, 'expected an error');
+          assert(error, 'expected an error');
           assert.equal(
             undefined,
-            err.retries,
+            error.retries,
             'expected an error without .retries'
           );
-          assert.equal(500, err.status, 'expected an error status of 500');
+          assert.equal(500, error.status, 'expected an error status of 500');
           done();
-        } catch (err_) {
-          done(err_);
+        } catch (err) {
+          done(err);
         }
       });
   });
@@ -75,14 +82,14 @@ describe('.retry(count)', function () {
     request
       .get(`${base}/error`)
       .retry(2)
-      .end((err, res) => {
+      .end((error, res) => {
         try {
-          assert(err, 'expected an error');
-          assert.equal(2, err.retries, 'expected an error with .retries');
-          assert.equal(500, err.status, 'expected an error status of 500');
+          assert(error, 'expected an error');
+          assert.equal(2, error.retries, 'expected an error with .retries');
+          assert.equal(500, error.status, 'expected an error status of 500');
           done();
-        } catch (err_) {
-          done(err_);
+        } catch (err) {
+          done(err);
         }
       });
   });
@@ -91,14 +98,14 @@ describe('.retry(count)', function () {
     request
       .get(`${base}/error`)
       .retry()
-      .end((err, res) => {
+      .end((error, res) => {
         try {
-          assert(err, 'expected an error');
-          assert.equal(1, err.retries, 'expected an error with .retries');
-          assert.equal(500, err.status, 'expected an error status of 500');
+          assert(error, 'expected an error');
+          assert.equal(1, error.retries, 'expected an error with .retries');
+          assert.equal(500, error.status, 'expected an error status of 500');
           done();
-        } catch (err_) {
-          done(err_);
+        } catch (err) {
+          done(err);
         }
       });
   });
@@ -107,14 +114,14 @@ describe('.retry(count)', function () {
     request
       .get(`${base}/error`)
       .retry(true)
-      .end((err, res) => {
+      .end((error, res) => {
         try {
-          assert(err, 'expected an error');
-          assert.equal(1, err.retries, 'expected an error with .retries');
-          assert.equal(500, err.status, 'expected an error status of 500');
+          assert(error, 'expected an error');
+          assert.equal(1, error.retries, 'expected an error with .retries');
+          assert.equal(500, error.status, 'expected an error status of 500');
           done();
-        } catch (err_) {
-          done(err_);
+        } catch (err) {
+          done(err);
         }
       });
   });
@@ -124,14 +131,14 @@ describe('.retry(count)', function () {
       .get(`${base}/error/ok/${uniqid()}`)
       .query({ qs: 'present' })
       .retry(2)
-      .end((err, res) => {
+      .end((error, res) => {
         try {
-          assert.ifError(err);
+          assert.ifError(error);
           assert(res.ok, 'response should be ok');
           assert(res.text, 'res.text');
           done();
-        } catch (err_) {
-          done(err_);
+        } catch (err) {
+          done(err);
         }
       });
   });
@@ -141,19 +148,19 @@ describe('.retry(count)', function () {
       .get(`${base}/delay/400`)
       .timeout(200)
       .retry(2)
-      .end((err, res) => {
+      .end((error, res) => {
         try {
-          assert(err, 'expected an error');
-          assert.equal(2, err.retries, 'expected an error with .retries');
+          assert(error, 'expected an error');
+          assert.equal(2, error.retries, 'expected an error with .retries');
           assert.equal(
             'number',
-            typeof err.timeout,
+            typeof error.timeout,
             'expected an error with .timeout'
           );
-          assert.equal('ECONNABORTED', err.code, 'expected abort error code');
+          assert.equal('ECONNABORTED', error.code, 'expected abort error code');
           done();
-        } catch (err_) {
-          done(err_);
+        } catch (err) {
+          done(err);
         }
       });
   });
@@ -166,14 +173,14 @@ describe('.retry(count)', function () {
       .query({ json: 'ed' })
       .timeout(600)
       .retry(2)
-      .end((err, res) => {
+      .end((error, res) => {
         try {
-          assert.ifError(err);
+          assert.ifError(error);
           assert(res.ok, 'response should be ok');
           assert.equal(res.text, `ok = ${url}&string=ified&json=ed`);
           done();
-        } catch (err_) {
-          done(err_);
+        } catch (err) {
+          done(err);
         }
       });
   });
@@ -186,35 +193,35 @@ describe('.retry(count)', function () {
       .query({ json: 'ed' })
       .timeout(600)
       .retry(1)
-      .then((res, err) => {
+      .then((res, error) => {
         try {
-          assert.ifError(err);
+          assert.ifError(error);
           assert(res.ok, 'response should be ok');
           assert.equal(res.text, `ok = ${url}&string=ified&json=ed`);
           done();
-        } catch (err_) {
-          done(err_);
+        } catch (err) {
+          done(err);
         }
       });
   });
 
   it('should correctly abort a retry attempt', (done) => {
     let aborted = false;
-    const req = request.get(`${base}/delay/400`).timeout(200).retry(2);
-    req.end((err, res) => {
+    const request_ = request.get(`${base}/delay/400`).timeout(200).retry(2);
+    request_.end((error, res) => {
       try {
         assert(false, 'should not complete the request');
-      } catch (err_) {
-        done(err_);
+      } catch (err) {
+        done(err);
       }
     });
 
-    req.on('abort', () => {
+    request_.on('abort', () => {
       aborted = true;
     });
 
     setTimeout(() => {
-      req.abort();
+      request_.abort();
       setTimeout(() => {
         try {
           assert(aborted, 'should be aborted');
@@ -232,14 +239,14 @@ describe('.retry(count)', function () {
       .query({ qs: 'present' })
       .retry(2)
       .set('X-Foo', 'bar')
-      .end((err, res) => {
+      .end((error, res) => {
         try {
-          assert.ifError(err);
+          assert.ifError(error);
           assert(res.body);
           res.body.should.have.property('x-foo', 'bar');
           done();
-        } catch (err_) {
-          done(err_);
+        } catch (err) {
+          done(err);
         }
       });
   });
@@ -248,14 +255,14 @@ describe('.retry(count)', function () {
     request
       .get(`${base}/bad-request`)
       .retry(2)
-      .end((err, res) => {
+      .end((error, res) => {
         try {
-          assert(err, 'expected an error');
-          assert.equal(0, err.retries, 'expected an error with 0 .retries');
-          assert.equal(400, err.status, 'expected an error status of 400');
+          assert(error, 'expected an error');
+          assert.equal(0, error.retries, 'expected an error with 0 .retries');
+          assert.equal(400, error.status, 'expected an error status of 400');
           done();
-        } catch (err_) {
-          done(err_);
+        } catch (err) {
+          done(err);
         }
       });
   });
@@ -269,19 +276,19 @@ describe('.retry(count)', function () {
     request
       .get(`${base}/error`)
       .retry(2, retryCallback)
-      .end((err, res) => {
+      .end((error, res) => {
         try {
-          assert(err, 'expected an error');
-          assert.equal(2, err.retries, 'expected an error with .retries');
-          assert.equal(500, err.status, 'expected an error status of 500');
+          assert(error, 'expected an error');
+          assert.equal(2, error.retries, 'expected an error with .retries');
+          assert.equal(500, error.status, 'expected an error status of 500');
           assert.equal(
             2,
             callbackCallCount,
             'expected the callback to be called on each retry'
           );
           done();
-        } catch (err_) {
-          done(err_);
+        } catch (err) {
+          done(err);
         }
       });
   });

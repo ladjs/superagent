@@ -6,17 +6,17 @@ module.exports = function (res, fn) {
   });
   res.on('end', () => {
     let body;
-    let err;
+    let error;
     try {
       body = res.text && JSON.parse(res.text);
-    } catch (err_) {
-      err = err_;
+    } catch (err) {
+      error = err;
       // issue #675: return the raw response if the response parsing fails
-      err.rawResponse = res.text || null;
+      error.rawResponse = res.text || null;
       // issue #876: return the http status code if the response parsing fails
-      err.statusCode = res.statusCode;
+      error.statusCode = res.statusCode;
     } finally {
-      fn(err, body);
+      fn(error, body);
     }
   });
 };

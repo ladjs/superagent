@@ -12,13 +12,13 @@
  * @api private
  */
 
+const querystring = require('querystring');
 const { Buffer } = require('safe-buffer');
 const contentType = require('content-type');
 const { mime } = require('send');
 const etag = require('etag');
 const proxyaddr = require('proxy-addr');
 const qs = require('qs');
-const querystring = require('querystring');
 
 let isHttp2Supported = true;
 
@@ -63,7 +63,7 @@ exports.wetag = createETagGenerator({ weak: true });
 
 exports.normalizeType = function (type) {
   return ~type.indexOf('/')
-    ? acceptParams(type)
+    ? acceptParameters(type)
     : { value: mime.lookup(type), params: {} };
 };
 
@@ -76,13 +76,13 @@ exports.normalizeType = function (type) {
  */
 
 exports.normalizeTypes = function (types) {
-  const ret = [];
+  const returnValue = [];
 
   for (const element of types) {
-    ret.push(exports.normalizeType(element));
+    returnValue.push(exports.normalizeType(element));
   }
 
-  return ret;
+  return returnValue;
 };
 
 /**
@@ -95,20 +95,25 @@ exports.normalizeTypes = function (types) {
  * @api private
  */
 
-function acceptParams(str, index) {
-  const parts = str.split(/ *; */);
-  const ret = { value: parts[0], quality: 1, params: {}, originalIndex: index };
+function acceptParameters(string_, index) {
+  const parts = string_.split(/ *; */);
+  const returnValue = {
+    value: parts[0],
+    quality: 1,
+    params: {},
+    originalIndex: index
+  };
 
   for (let i = 1; i < parts.length; ++i) {
     const pms = parts[i].split(/ *= */);
     if (pms[0] === 'q') {
-      ret.quality = Number.parseFloat(pms[1]);
+      returnValue.quality = Number.parseFloat(pms[1]);
     } else {
-      ret.params[pms[0]] = pms[1];
+      returnValue.params[pms[0]] = pms[1];
     }
   }
 
-  return ret;
+  return returnValue;
 }
 
 /**
@@ -119,14 +124,14 @@ function acceptParams(str, index) {
  * @api private
  */
 
-exports.compileETag = function (val) {
+exports.compileETag = function (value) {
   let fn;
 
-  if (typeof val === 'function') {
-    return val;
+  if (typeof value === 'function') {
+    return value;
   }
 
-  switch (val) {
+  switch (value) {
     case true:
       fn = exports.wetag;
       break;
@@ -139,7 +144,7 @@ exports.compileETag = function (val) {
       fn = exports.wetag;
       break;
     default:
-      throw new TypeError('unknown value for etag function: ' + val);
+      throw new TypeError('unknown value for etag function: ' + value);
   }
 
   return fn;
@@ -153,14 +158,14 @@ exports.compileETag = function (val) {
  * @api private
  */
 
-exports.compileQueryParser = function compileQueryParser(val) {
+exports.compileQueryParser = function compileQueryParser(value) {
   let fn;
 
-  if (typeof val === 'function') {
-    return val;
+  if (typeof value === 'function') {
+    return value;
   }
 
-  switch (val) {
+  switch (value) {
     case true:
       fn = querystring.parse;
       break;
@@ -173,7 +178,7 @@ exports.compileQueryParser = function compileQueryParser(val) {
       fn = querystring.parse;
       break;
     default:
-      throw new TypeError('unknown value for query parser function: ' + val);
+      throw new TypeError('unknown value for query parser function: ' + value);
   }
 
   return fn;
@@ -187,29 +192,29 @@ exports.compileQueryParser = function compileQueryParser(val) {
  * @api private
  */
 
-exports.compileTrust = function (val) {
-  if (typeof val === 'function') return val;
+exports.compileTrust = function (value) {
+  if (typeof value === 'function') return value;
 
-  if (val === true) {
+  if (value === true) {
     // Support plain true/false
     return function () {
       return true;
     };
   }
 
-  if (typeof val === 'number') {
+  if (typeof value === 'number') {
     // Support trusting hop count
     return function (a, i) {
-      return i < val;
+      return i < value;
     };
   }
 
-  if (typeof val === 'string') {
+  if (typeof value === 'string') {
     // Support comma-separated values
-    val = val.split(/ *, */);
+    value = value.split(/ *, */);
   }
 
-  return proxyaddr.compile(val || []);
+  return proxyaddr.compile(value || []);
 };
 
 /**
@@ -264,8 +269,8 @@ function createETagGenerator(options) {
  * @private
  */
 
-function parseExtendedQueryString(str) {
-  return qs.parse(str, {
+function parseExtendedQueryString(string_) {
+  return qs.parse(string_, {
     allowPrototypes: true
   });
 }

@@ -1,22 +1,29 @@
-const setup = require('./support/setup');
-
-const { NODE } = setup;
-const { uri } = setup;
-
 const assert = require('assert');
+const getSetup = require('./support/setup');
+
 const request = require('./support/client');
 
 describe('request', function () {
-  this.timeout(20000);
+  let setup;
+  let NODE;
+  let uri;
+
+  before(async () => {
+    setup = await getSetup();
+    NODE = setup.NODE;
+    uri = setup.uri;
+  });
+
+  this.timeout(20_000);
 
   describe('res.statusCode', () => {
     it('should set statusCode', (done) => {
-      request.get(`${uri}/login`, (err, res) => {
+      request.get(`${uri}/login`, (error, res) => {
         try {
           assert.strictEqual(res.statusCode, 200);
           done();
-        } catch (err_) {
-          done(err_);
+        } catch (err) {
+          done(err);
         }
       });
     });
@@ -24,21 +31,21 @@ describe('request', function () {
 
   describe('should allow the send shorthand', () => {
     it('with callback in the method call', (done) => {
-      request.get(`${uri}/login`, (err, res) => {
+      request.get(`${uri}/login`, (error, res) => {
         assert.equal(res.status, 200);
         done();
       });
     });
 
     it('with data in the method call', (done) => {
-      request.post(`${uri}/echo`, { foo: 'bar' }).end((err, res) => {
+      request.post(`${uri}/echo`, { foo: 'bar' }).end((error, res) => {
         assert.equal('{"foo":"bar"}', res.text);
         done();
       });
     });
 
     it('with callback and data in the method call', (done) => {
-      request.post(`${uri}/echo`, { foo: 'bar' }, (err, res) => {
+      request.post(`${uri}/echo`, { foo: 'bar' }, (error, res) => {
         assert.equal('{"foo":"bar"}', res.text);
         done();
       });
@@ -47,12 +54,12 @@ describe('request', function () {
 
   describe('with a callback', () => {
     it('should invoke .end()', (done) => {
-      request.get(`${uri}/login`, (err, res) => {
+      request.get(`${uri}/login`, (error, res) => {
         try {
           assert.equal(res.status, 200);
           done();
-        } catch (err_) {
-          done(err_);
+        } catch (err) {
+          done(err);
         }
       });
     });
@@ -60,12 +67,12 @@ describe('request', function () {
 
   describe('.end()', () => {
     it('should issue a request', (done) => {
-      request.get(`${uri}/login`).end((err, res) => {
+      request.get(`${uri}/login`).end((error, res) => {
         try {
           assert.equal(res.status, 200);
           done();
-        } catch (err_) {
-          done(err_);
+        } catch (err) {
+          done(err);
         }
       });
     });
@@ -89,16 +96,16 @@ describe('request', function () {
         return;
       }
 
-      const req = request.get(`${uri}/unique`);
+      const request_ = request.get(`${uri}/unique`);
 
-      return Promise.all([req, req, req]).then((results) => {
-        results.forEach((item) => {
-          assert.equal(
+      return Promise.all([request_, request_, request_]).then((results) => {
+        for (const item of results) {
+          assert.deepEqual(
             item.body,
             results[0].body,
             'It should keep returning the same result after being called once'
           );
-        });
+        }
       });
     });
   });
@@ -114,18 +121,18 @@ describe('request', function () {
           calledOKHandler = true;
           return true;
         })
-        .on('error', (err) => {
+        .on('error', (error) => {
           calledErrorEvent = true;
         })
-        .end((err, res) => {
+        .end((error, res) => {
           try {
-            assert.ifError(err);
+            assert.ifError(error);
             assert.strictEqual(res.status, 500);
             assert(!calledErrorEvent);
             assert(calledOKHandler);
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
     });
@@ -134,11 +141,11 @@ describe('request', function () {
       let calledErrorEvent = false;
       request
         .get(`${uri}/error`)
-        .on('error', (err) => {
-          assert.strictEqual(err.status, 500);
+        .on('error', (error) => {
+          assert.strictEqual(error.status, 500);
           calledErrorEvent = true;
         })
-        .end((err, res) => {
+        .end((error, res) => {
           try {
             if (NODE) {
               res.error.message.should.equal('cannot GET /error (500)');
@@ -147,12 +154,12 @@ describe('request', function () {
             }
 
             assert.strictEqual(res.error.status, 500);
-            assert(err, 'should have an error for 500');
-            assert.equal(err.message, 'Internal Server Error');
+            assert(error, 'should have an error for 500');
+            assert.equal(error.message, 'Internal Server Error');
             assert(calledErrorEvent);
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
     });
@@ -240,12 +247,12 @@ describe('request', function () {
 
   describe('res.header', () => {
     it('should be an object', (done) => {
-      request.get(`${uri}/login`).end((err, res) => {
+      request.get(`${uri}/login`).end((error, res) => {
         try {
           assert.equal('Express', res.header['x-powered-by']);
           done();
-        } catch (err_) {
-          done(err_);
+        } catch (err) {
+          done(err);
         }
       });
     });
@@ -265,9 +272,9 @@ describe('request', function () {
         request
           .get(`${uri}/echo-headers`)
           .set('valid', 'ok')
-          .end((err, res) => {
+          .end((error, res) => {
             if (
-              !err &&
+              !error &&
               res.body &&
               res.body.valid &&
               !res.body.hasOwnProperty('invalid')
@@ -275,7 +282,7 @@ describe('request', function () {
               return done();
             }
 
-            done(err || new Error('fail'));
+            done(error || new Error('fail'));
           });
       } catch (err) {
         done(err);
@@ -285,12 +292,12 @@ describe('request', function () {
 
   describe('res.charset', () => {
     it('should be set when present', (done) => {
-      request.get(`${uri}/login`).end((err, res) => {
+      request.get(`${uri}/login`).end((error, res) => {
         try {
           res.charset.should.equal('utf-8');
           done();
-        } catch (err_) {
-          done(err_);
+        } catch (err) {
+          done(err);
         }
       });
     });
@@ -298,14 +305,14 @@ describe('request', function () {
 
   describe('res.statusType', () => {
     it('should provide the first digit', (done) => {
-      request.get(`${uri}/login`).end((err, res) => {
+      request.get(`${uri}/login`).end((error, res) => {
         try {
-          assert(!err, 'should not have an error for success responses');
+          assert(!error, 'should not have an error for success responses');
           assert.equal(200, res.status);
           assert.equal(2, res.statusType);
           done();
-        } catch (err_) {
-          done(err_);
+        } catch (err) {
+          done(err);
         }
       });
     });
@@ -313,13 +320,13 @@ describe('request', function () {
 
   describe('res.type', () => {
     it('should provide the mime-type void of params', (done) => {
-      request.get(`${uri}/login`).end((err, res) => {
+      request.get(`${uri}/login`).end((error, res) => {
         try {
           res.type.should.equal('text/html');
           res.charset.should.equal('utf-8');
           done();
-        } catch (err_) {
-          done(err_);
+        } catch (err) {
+          done(err);
         }
       });
     });
@@ -331,13 +338,13 @@ describe('request', function () {
         .post(`${uri}/echo`)
         .set('X-Foo', 'bar')
         .set('X-Bar', 'baz')
-        .end((err, res) => {
+        .end((error, res) => {
           try {
             assert.equal('bar', res.header['x-foo']);
             assert.equal('baz', res.header['x-bar']);
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
     });
@@ -348,13 +355,13 @@ describe('request', function () {
       request
         .post(`${uri}/echo`)
         .set({ 'X-Foo': 'bar', 'X-Bar': 'baz' })
-        .end((err, res) => {
+        .end((error, res) => {
           try {
             assert.equal('bar', res.header['x-foo']);
             assert.equal('baz', res.header['x-bar']);
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
     });
@@ -365,12 +372,12 @@ describe('request', function () {
       request
         .post(`${uri}/echo`)
         .type('text/x-foo')
-        .end((err, res) => {
+        .end((error, res) => {
           try {
             res.header['content-type'].should.equal('text/x-foo');
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
     });
@@ -380,12 +387,12 @@ describe('request', function () {
         .post(`${uri}/echo`)
         .type('json')
         .send('{"a": 1}')
-        .end((err, res) => {
+        .end((error, res) => {
           try {
             res.should.be.json();
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
     });
@@ -394,12 +401,12 @@ describe('request', function () {
       request
         .post(`${uri}/echo`)
         .type('html')
-        .end((err, res) => {
+        .end((error, res) => {
           try {
             res.header['content-type'].should.equal('text/html');
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
     });
@@ -410,12 +417,12 @@ describe('request', function () {
       request
         .get(`${uri}/echo`)
         .accept('text/x-foo')
-        .end((err, res) => {
+        .end((error, res) => {
           try {
             res.header.accept.should.equal('text/x-foo');
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
     });
@@ -424,12 +431,12 @@ describe('request', function () {
       request
         .get(`${uri}/echo`)
         .accept('json')
-        .end((err, res) => {
+        .end((error, res) => {
           try {
             res.header.accept.should.equal('application/json');
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
     });
@@ -438,7 +445,7 @@ describe('request', function () {
       request
         .get(`${uri}/echo`)
         .accept('xml')
-        .end((err, res) => {
+        .end((error, res) => {
           try {
             // Mime module keeps changing this :(
             assert(
@@ -446,8 +453,8 @@ describe('request', function () {
                 res.header.accept == 'text/xml'
             );
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
     });
@@ -456,12 +463,12 @@ describe('request', function () {
       request
         .get(`${uri}/echo`)
         .accept('html')
-        .end((err, res) => {
+        .end((error, res) => {
           try {
             res.header.accept.should.equal('text/html');
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
     });
@@ -473,12 +480,12 @@ describe('request', function () {
         .post(`${uri}/echo`)
         .type('json')
         .send('{"name":"tobi"}')
-        .end((err, res) => {
+        .end((error, res) => {
           try {
             res.text.should.equal('{"name":"tobi"}');
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
     });
@@ -489,13 +496,13 @@ describe('request', function () {
       request
         .post(`${uri}/echo`)
         .send({ name: 'tobi' })
-        .end((err, res) => {
+        .end((error, res) => {
           try {
             res.should.be.json();
             res.text.should.equal('{"name":"tobi"}');
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
     });
@@ -506,7 +513,7 @@ describe('request', function () {
           .post(`${uri}/echo`)
           .send({ name: 'tobi' })
           .send({ age: 1 })
-          .end((err, res) => {
+          .end((error, res) => {
             try {
               res.should.be.json();
               if (NODE) {
@@ -515,8 +522,8 @@ describe('request', function () {
 
               res.text.should.equal('{"name":"tobi","age":1}');
               done();
-            } catch (err_) {
-              done(err_);
+            } catch (err) {
+              done(err);
             }
           });
       });
@@ -528,24 +535,24 @@ describe('request', function () {
       request
         .post(`${uri}/echo`)
         .send({ name: 'tobi' })
-        .end((err, res) => {
+        .end((error, res) => {
           try {
-            assert.ifError(err);
+            assert.ifError(error);
             res.text.should.equal('{"name":"tobi"}');
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
     });
 
     it('should emit request', (done) => {
-      const req = request.post(`${uri}/echo`);
-      req.on('request', (request) => {
-        assert.equal(req, request);
+      const request_ = request.post(`${uri}/echo`);
+      request_.on('request', (request) => {
+        assert.equal(request_, request);
         done();
       });
-      req.end();
+      request_.end();
     });
 
     it('should emit response', (done) => {
@@ -605,30 +612,30 @@ describe('request', function () {
 
   describe('.abort()', () => {
     it('should abort the request', (done) => {
-      const req = request.get(`${uri}/delay/3000`);
-      req.end((err, res) => {
+      const request_ = request.get(`${uri}/delay/3000`);
+      request_.end((error, res) => {
         try {
           assert(false, 'should not complete the request');
-        } catch (err_) {
-          done(err_);
+        } catch (err) {
+          done(err);
         }
       });
 
-      req.on('error', (error) => {
+      request_.on('error', (error) => {
         done(error);
       });
-      req.on('abort', done);
+      request_.on('abort', done);
 
       setTimeout(() => {
-        req.abort();
+        request_.abort();
       }, 500);
     });
     it('should abort the promise', () => {
-      const req = request.get(`${uri}/delay/3000`);
+      const request_ = request.get(`${uri}/delay/3000`);
       setTimeout(() => {
-        req.abort();
+        request_.abort();
       }, 10);
-      return req.then(
+      return request_.then(
         () => {
           assert.fail('should not complete the request');
         },
@@ -639,20 +646,20 @@ describe('request', function () {
     });
 
     it('should allow chaining .abort() several times', (done) => {
-      const req = request.get(`${uri}/delay/3000`);
-      req.end((err, res) => {
+      const request_ = request.get(`${uri}/delay/3000`);
+      request_.end((error, res) => {
         try {
           assert(false, 'should not complete the request');
-        } catch (err_) {
-          done(err_);
+        } catch (err) {
+          done(err);
         }
       });
 
       // This also verifies only a single 'done' event is emitted
-      req.on('abort', done);
+      request_.on('abort', done);
 
       setTimeout(() => {
-        req.abort().abort().abort();
+        request_.abort().abort().abort();
       }, 1000);
     });
 
@@ -660,24 +667,24 @@ describe('request', function () {
       request
         .get(`${uri}/delay/3000`)
         .abort()
-        .end((err, res) => {
-          done(err ? undefined : new Error('Expected abort error'));
+        .end((error, res) => {
+          done(error ? undefined : new Error('Expected abort error'));
         });
     });
   });
 
   describe('req.toJSON()', () => {
     it('should describe the request', (done) => {
-      const req = request.post(`${uri}/echo`).send({ foo: 'baz' });
-      req.end((err, res) => {
+      const request_ = request.post(`${uri}/echo`).send({ foo: 'baz' });
+      request_.end((error, res) => {
         try {
-          const json = req.toJSON();
+          const json = request_.toJSON();
           assert.equal('POST', json.method);
           assert(/\/echo$/.test(json.url));
           assert.equal('baz', json.data.foo);
           done();
-        } catch (err_) {
-          done(err_);
+        } catch (err) {
+          done(err);
         }
       });
     });
@@ -688,13 +695,13 @@ describe('request', function () {
       request
         .options(`${uri}/options/echo/body`)
         .send({ foo: 'baz' })
-        .end((err, res) => {
+        .end((error, res) => {
           try {
-            assert.equal(err, null);
+            assert.equal(error, null);
             assert.strictEqual(res.body.foo, 'baz');
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
     });
@@ -705,12 +712,12 @@ describe('request', function () {
       request
         .get(`${uri}/url`)
         .sortQuery()
-        .end((err, res) => {
+        .end((error, res) => {
           try {
             assert.equal(res.text, '/url');
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
     });
@@ -721,12 +728,12 @@ describe('request', function () {
         .query('search=Manny')
         .query('order=desc')
         .sortQuery()
-        .end((err, res) => {
+        .end((error, res) => {
           try {
             assert.equal(res.text, '/url?order=desc&search=Manny');
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
     });
@@ -738,12 +745,12 @@ describe('request', function () {
         .query('order=desc')
         .sortQuery() // take default of true
         .sortQuery(false) // override it in later call
-        .end((err, res) => {
+        .end((error, res) => {
           try {
             assert.equal(res.text, '/url?search=Manny&order=desc');
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
     });
@@ -755,12 +762,12 @@ describe('request', function () {
         .query('search=Manny')
         .query('order=desc')
         .sortQuery((a, b) => a.length - b.length)
-        .end((err, res) => {
+        .end((error, res) => {
           try {
             assert.equal(res.text, '/url?name=Nick&order=desc&search=Manny');
             done();
-          } catch (err_) {
-            done(err_);
+          } catch (err) {
+            done(err);
           }
         });
     });

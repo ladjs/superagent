@@ -2,11 +2,11 @@ const assert = require('assert');
 const request = require('../support/client');
 
 describe('request', function () {
-  this.timeout(20000);
+  this.timeout(20_000);
 
   it('request() error object', (next) => {
-    request('GET', '/error').end((err, res) => {
-      assert(err);
+    request('GET', '/error').end((error, res) => {
+      assert(error);
       assert(res.error, 'response should be an error');
       assert.equal(res.error.message, 'cannot GET /error (500)');
       assert.equal(res.error.status, 500);
@@ -17,12 +17,12 @@ describe('request', function () {
   });
 
   // This test results in a weird Jetty error on IE9 and IE11 saying PATCH is not a supported method. Looks like something's up with SauceLabs
-  const isIE11 = Boolean(navigator.userAgent.match(/Trident.*rv[ :]*11\./));
+  const isIE11 = Boolean(/Trident.*rv[ :]*11\./.test(navigator.userAgent));
   const isIE9OrOlder = !window.atob;
   if (!isIE9OrOlder && !isIE11) {
     // Don't run on IE9 or older, or IE11
     it('patch()', (next) => {
-      request.patch('/user/12').end((err, res) => {
+      request.patch('/user/12').end((error, res) => {
         assert.equal('updated', res.text);
         next();
       });
@@ -41,7 +41,7 @@ describe('request', function () {
     request
       .post('/echo')
       .send(data)
-      .end((err, res) => {
+      .end((error, res) => {
         assert.equal('multipart/form-data', res.type);
         next();
       });
@@ -55,8 +55,7 @@ describe('request', function () {
 
     try {
       var file = new File([''], 'image.jpg', { type: 'image/jpeg' });
-      // eslint-disable-next-line unicorn/prefer-optional-catch-binding
-    } catch (err) {
+    } catch {
       // Skip if file constructor not supported.
       return next();
     }
@@ -64,7 +63,7 @@ describe('request', function () {
     request
       .post('/echo')
       .attach('image', file)
-      .end((err, res) => {
+      .end((error, res) => {
         const regx = new RegExp(`filename="${file.name}"`);
         assert.notEqual(res.text.match(regx), null);
         next();
@@ -89,10 +88,10 @@ describe('request', function () {
   });
 
   it('GET invalid json', (next) => {
-    request.get('/invalid-json').end((err, res) => {
-      assert(err.parse);
+    request.get('/invalid-json').end((error, res) => {
+      assert(error.parse);
       assert.deepEqual(
-        err.rawResponse,
+        error.rawResponse,
         ")]}', {'header':{'code':200,'text':'OK','version':'1.0'},'data':'some data'}"
       );
       next();
@@ -100,30 +99,30 @@ describe('request', function () {
   });
 
   it('GET querystring empty objects', (next) => {
-    const req = request.get('/querystring').query({});
-    req.end((err, res) => {
-      assert.deepEqual(req._query, []);
+    const request_ = request.get('/querystring').query({});
+    request_.end((error, res) => {
+      assert.deepEqual(request_._query, []);
       assert.deepEqual(res.body, {});
       next();
     });
   });
 
   it('GET querystring object .get(uri, obj)', (next) => {
-    request.get('/querystring', { search: 'Manny' }).end((err, res) => {
+    request.get('/querystring', { search: 'Manny' }).end((error, res) => {
       assert.deepEqual(res.body, { search: 'Manny' });
       next();
     });
   });
 
   it('GET querystring object .get(uri, obj, fn)', (next) => {
-    request.get('/querystring', { search: 'Manny' }, (err, res) => {
+    request.get('/querystring', { search: 'Manny' }, (error, res) => {
       assert.deepEqual(res.body, { search: 'Manny' });
       next();
     });
   });
 
   it('GET querystring object with null value', (next) => {
-    request.get('/url', { nil: null }).end((err, res) => {
+    request.get('/url', { nil: null }).end((error, res) => {
       assert.equal(res.text, '/url?nil');
       next();
     });
@@ -137,7 +136,7 @@ describe('request', function () {
     request
       .get('/blob', { foo: 'bar' })
       .responseType('blob')
-      .end((err, res) => {
+      .end((error, res) => {
         assert(res.xhr.response instanceof Blob);
         assert(res.body instanceof Blob);
         next();
@@ -160,7 +159,7 @@ describe('request', function () {
     request
       .post('/auth')
       .auth('foo', 'bar')
-      .end((err, res) => {
+      .end((error, res) => {
         assert.equal('foo', res.body.user);
         assert.equal('bar', res.body.pass);
         next();
@@ -173,7 +172,7 @@ describe('request', function () {
     request
       .post('/auth')
       .auth('foo', 'bar', { type: 'basic' })
-      .end((err, res) => {
+      .end((error, res) => {
         assert.equal('foo', res.body.user);
         assert.equal('bar', res.body.pass);
         next();
@@ -186,7 +185,7 @@ describe('request', function () {
     request
       .post('/auth')
       .auth('foo', 'bar', { type: 'auto' })
-      .end((err, res) => {
+      .end((error, res) => {
         assert.equal('foo', res.body.user);
         assert.equal('bar', res.body.pass);
         next();
@@ -194,22 +193,22 @@ describe('request', function () {
   });
 
   it('progress event listener on xhr object registered when some on the request', () => {
-    const req = request.get('/foo').on('progress', (data) => {});
-    req.end();
+    const request_ = request.get('/foo').on('progress', (data) => {});
+    request_.end();
 
-    if (req.xhr.upload) {
+    if (request_.xhr.upload) {
       // Only run assertion on capable browsers
-      assert.notEqual(null, req.xhr.upload.onprogress);
+      assert.notEqual(null, request_.xhr.upload.onprogress);
     }
   });
 
   it('no progress event listener on xhr object when none registered on request', () => {
-    const req = request.get('/foo');
-    req.end();
+    const request_ = request.get('/foo');
+    request_.end();
 
-    if (req.xhr.upload) {
+    if (request_.xhr.upload) {
       // Only run assertion on capable browsers
-      assert.strictEqual(null, req.xhr.upload.onprogress);
+      assert.strictEqual(null, request_.xhr.upload.onprogress);
     }
   });
 
@@ -226,8 +225,8 @@ describe('request', function () {
       .serialize(testParser)
       .type('json')
       .send({ foo: 123 })
-      .end((err) => {
-        if (err) return done(err);
+      .end((error) => {
+        if (error) return done(error);
         assert(runParser);
         done();
       });
@@ -236,7 +235,7 @@ describe('request', function () {
   // Don't run on browsers without xhr2 support
   if ('FormData' in window) {
     it('xhr2 download file old hack', (next) => {
-      request.parse['application/vnd.superagent'] = (obj) => obj;
+      request.parse['application/vnd.superagent'] = (object) => object;
 
       request
         .get('/arraybuffer')
@@ -251,7 +250,7 @@ describe('request', function () {
     });
 
     it('xhr2 download file responseType', (next) => {
-      request.parse['application/vnd.superagent'] = (obj) => obj;
+      request.parse['application/vnd.superagent'] = (object) => object;
 
       request
         .get('/arraybuffer')
@@ -267,10 +266,10 @@ describe('request', function () {
       request
         .get('/arraybuffer-unauthorized')
         .responseType('arraybuffer')
-        .end((err, res) => {
-          assert.equal(err.status, 401);
+        .end((error, res) => {
+          assert.equal(error.status, 401);
           assert(res.body instanceof ArrayBuffer);
-          assert(err.response.body instanceof ArrayBuffer);
+          assert(error.response.body instanceof ArrayBuffer);
           const decodedString = String.fromCharCode.apply(
             null,
             new Uint8Array(res.body)
@@ -288,7 +287,7 @@ describe('request', function () {
     request
       .get('/foo')
       .parse((res, text) => `customText: ${res.status}`)
-      .end((err, res) => {
+      .end((error, res) => {
         assert(res.ok);
         assert(res.body === 'customText: 200');
         done();
@@ -298,8 +297,8 @@ describe('request', function () {
   it('handles `xhr.open()` errors', (done) => {
     request
       .get('http://foo\0.com') // throws "Failed to execute 'open' on 'XMLHttpRequest': Invalid URL"
-      .end((err, res) => {
-        assert(err);
+      .end((error, res) => {
+        assert(error);
         done();
       });
   });

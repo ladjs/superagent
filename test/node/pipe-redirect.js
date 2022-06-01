@@ -1,21 +1,27 @@
 'use strict';
-const request = require('../support/client');
-const setup = require('../support/setup');
-
-const base = setup.uri;
 const fs = require('fs');
+const request = require('../support/client');
+const getSetup = require('../support/setup');
 
 describe('pipe on redirect', () => {
-  const destPath = 'test/node/fixtures/pipe.txt';
+  let setup;
+  let base;
+  const destinationPath = 'test/node/fixtures/pipe.txt';
 
-  after(function removeTmpfile(done) {
-    fs.unlink(destPath, done);
+  before(async () => {
+    setup = await getSetup();
+    base = setup.uri;
+  });
+
+  after((done) => {
+    // Remove tmp file
+    fs.unlink(destinationPath, done);
   });
 
   it('should follow Location', (done) => {
-    const stream = fs.createWriteStream(destPath);
+    const stream = fs.createWriteStream(destinationPath);
     const redirects = [];
-    const req = request
+    const request_ = request
       .get(base)
       .on('redirect', (res) => {
         redirects.push(res.headers.location);
@@ -25,9 +31,9 @@ describe('pipe on redirect', () => {
       });
     stream.on('finish', () => {
       redirects.should.eql(['/movies', '/movies/all', '/movies/all/0']);
-      fs.readFileSync(destPath, 'utf8').should.eql('first movie page');
+      fs.readFileSync(destinationPath, 'utf8').should.eql('first movie page');
       done();
     });
-    req.pipe(stream);
+    request_.pipe(stream);
   });
 });

@@ -12,21 +12,21 @@
  * @private
  */
 
+const path = require('path');
 const { Buffer } = require('safe-buffer');
 const contentDisposition = require('content-disposition');
 const encodeUrl = require('encodeurl');
 const escapeHtml = require('escape-html');
 const onFinished = require('on-finished');
-const path = require('path');
 const pathIsAbsolute = require('path-is-absolute');
 const statuses = require('statuses');
 const merge = require('utils-merge');
 const { sign } = require('cookie-signature');
+const cookie = require('cookie');
+const send = require('send');
 const { normalizeType } = require('./utils');
 const { normalizeTypes } = require('./utils');
 const { setCharset } = require('./utils');
-const cookie = require('cookie');
-const send = require('send');
 
 const { extname } = path;
 const { mime } = send;
@@ -151,30 +151,32 @@ function setMethods(res) {
     const generateETag = !this.get('ETag') && typeof etagFn === 'function';
 
     // populate Content-Length
-    let len;
+    let length_;
     if (chunk !== undefined) {
       if (Buffer.isBuffer(chunk)) {
         // get length of Buffer
-        len = chunk.length;
+        length_ = chunk.length;
       } else if (!generateETag && chunk.length < 1000) {
         // just calculate length when no ETag + small chunk
-        len = Buffer.byteLength(chunk, encoding);
+        length_ = Buffer.byteLength(chunk, encoding);
       } else {
         // convert chunk to Buffer and calculate
         chunk = Buffer.from(chunk, encoding);
         encoding = undefined;
-        len = chunk.length;
+        length_ = chunk.length;
       }
 
-      this.set('Content-Length', len);
+      this.set('Content-Length', length_);
     }
 
     // populate ETag
     let etag;
-    if (generateETag && len !== undefined) {
-      if ((etag = etagFn(chunk, encoding))) {
-        this.set('ETag', etag);
-      }
+    if (
+      generateETag &&
+      length_ !== undefined &&
+      (etag = etagFn(chunk, encoding))
+    ) {
+      this.set('ETag', etag);
     }
 
     // freshness
@@ -211,13 +213,13 @@ function setMethods(res) {
    * @public
    */
 
-  res.json = function json(obj) {
+  res.json = function json(object) {
     // settings
     const { app } = this;
     const escape = app.get('json escape');
     const replacer = app.get('json replacer');
     const spaces = app.get('json spaces');
-    const body = stringify(obj, replacer, spaces, escape);
+    const body = stringify(object, replacer, spaces, escape);
 
     // content-type
     if (!this.get('Content-Type')) {
@@ -239,13 +241,13 @@ function setMethods(res) {
    * @public
    */
 
-  res.jsonp = function jsonp(obj) {
+  res.jsonp = function jsonp(object) {
     // settings
     const { app } = this;
     const escape = app.get('json escape');
     const replacer = app.get('json replacer');
     const spaces = app.get('json spaces');
-    let body = stringify(obj, replacer, spaces, escape);
+    let body = stringify(object, replacer, spaces, escape);
     let callback = this.req.query[app.get('jsonp callback name')];
 
     // content-type
@@ -260,7 +262,7 @@ function setMethods(res) {
     }
 
     // jsonp
-    if (typeof callback === 'string' && callback.length !== 0) {
+    if (typeof callback === 'string' && callback.length > 0) {
       this.set('X-Content-Type-Options', 'nosniff');
       this.set('Content-Type', 'text/javascript');
 
@@ -301,7 +303,7 @@ function setMethods(res) {
    */
 
   res.sendStatus = function sendStatus(statusCode) {
-    const body = statuses[statusCode] || String(statusCode);
+    const body = statuses(statusCode) || String(statusCode);
 
     this.statusCode = statusCode;
     this.type('txt');
@@ -355,7 +357,7 @@ function setMethods(res) {
     const { req } = this;
     const res = this;
     const { next } = req;
-    let opts = options || {};
+    let options_ = options || {};
 
     if (!path) {
       throw new TypeError('path argument is required to res.sendFile');
@@ -364,10 +366,10 @@ function setMethods(res) {
     // support function as second arg
     if (typeof options === 'function') {
       done = options;
-      opts = {};
+      options_ = {};
     }
 
-    if (!opts.root && !pathIsAbsolute(path)) {
+    if (!options_.root && !pathIsAbsolute(path)) {
       throw new TypeError(
         'path must be absolute or specify root to res.sendFile'
       );
@@ -375,16 +377,16 @@ function setMethods(res) {
 
     // create file stream
     const pathname = encodeURI(path);
-    const file = send(req, pathname, opts);
+    const file = send(req, pathname, options_);
 
     // transfer
-    sendfile(res, file, opts, (err) => {
-      if (done) return done(err);
-      if (err && err.code === 'EISDIR') return next();
+    sendfile(res, file, options_, (error) => {
+      if (done) return done(error);
+      if (error && error.code === 'EISDIR') return next();
 
       // next() all but write errors
-      if (err && err.code !== 'ECONNABORTED' && err.syscall !== 'write') {
-        next(err);
+      if (error && error.code !== 'ECONNABORTED' && error.syscall !== 'write') {
+        next(error);
       }
     });
   };
@@ -410,16 +412,16 @@ function setMethods(res) {
   res.download = function download(path, filename, options, callback) {
     let done = callback;
     let name = filename;
-    let opts = options || null;
+    let options_ = options || null;
 
     // support function as second or third arg
     if (typeof filename === 'function') {
       done = filename;
       name = null;
-      opts = null;
+      options_ = null;
     } else if (typeof options === 'function') {
       done = options;
-      opts = null;
+      options_ = null;
     }
 
     // set Content-Disposition when file is sent
@@ -428,24 +430,24 @@ function setMethods(res) {
     };
 
     // merge user-provided headers
-    if (opts && opts.headers) {
-      const keys = Object.keys(opts.headers);
+    if (options_ && options_.headers) {
+      const keys = Object.keys(options_.headers);
       for (const key of keys) {
         if (key.toLowerCase() !== 'content-disposition') {
-          headers[key] = opts.headers[key];
+          headers[key] = options_.headers[key];
         }
       }
     }
 
     // merge user-provided options
-    opts = Object.create(opts);
-    opts.headers = headers;
+    options_ = Object.create(options_);
+    options_.headers = headers;
 
     // Resolve the full path for sendFile
     const fullPath = resolve(path);
 
     // send file
-    return this.sendFile(fullPath, opts, done);
+    return this.sendFile(fullPath, options_, done);
   };
 
   /**
@@ -528,13 +530,13 @@ function setMethods(res) {
    * @public
    */
 
-  res.format = function (obj) {
+  res.format = function (object) {
     const { req } = this;
     const { next } = req;
 
-    const fn = obj.default;
-    if (fn) delete obj.default;
-    const keys = Object.keys(obj);
+    const fn = object.default;
+    if (fn) delete object.default;
+    const keys = Object.keys(object);
 
     const key = keys.length > 0 ? req.accepts(keys) : false;
 
@@ -542,16 +544,16 @@ function setMethods(res) {
 
     if (key) {
       this.set('Content-Type', normalizeType(key).value);
-      obj[key](req, this, next);
+      object[key](req, this, next);
     } else if (fn) {
       fn();
     } else {
-      const err = new Error('Not Acceptable');
-      err.status = err.statusCode = 406;
-      err.types = normalizeTypes(keys).map((o) => {
+      const error = new Error('Not Acceptable');
+      error.status = error.statusCode = 406;
+      error.types = normalizeTypes(keys).map((o) => {
         return o.value;
       });
-      next(err);
+      next(error);
     }
 
     return this;
@@ -590,17 +592,17 @@ function setMethods(res) {
    * @public
    */
 
-  res.append = function append(field, val) {
-    const prev = this.get(field);
-    let value = val;
+  res.append = function append(field, value_) {
+    const previous = this.get(field);
+    let value = value_;
 
-    if (prev) {
+    if (previous) {
       // concat the new and prev vals
-      value = Array.isArray(prev)
-        ? prev.concat(val)
-        : Array.isArray(val)
-        ? [prev].concat(val)
-        : [prev, val];
+      value = Array.isArray(previous)
+        ? previous.concat(value_)
+        : Array.isArray(value_)
+        ? [previous].concat(value_)
+        : [previous, value_];
     }
 
     return this.set(field, value);
@@ -624,9 +626,11 @@ function setMethods(res) {
    * @public
    */
 
-  res.set = res.header = function header(field, val) {
+  res.set = res.header = function header(field, value_) {
     if (arguments.length === 2) {
-      let value = Array.isArray(val) ? val.map((v) => String(v)) : String(val);
+      let value = Array.isArray(value_)
+        ? value_.map((v) => String(v))
+        : String(value_);
 
       // add charset to content-type
       if (field.toLowerCase() === 'content-type') {
@@ -672,9 +676,9 @@ function setMethods(res) {
    */
 
   res.clearCookie = function clearCookie(name, options) {
-    const opts = merge({ expires: new Date(1), path: '/' }, options);
+    const options_ = merge({ expires: new Date(1), path: '/' }, options);
 
-    return this.cookie(name, '', opts);
+    return this.cookie(name, '', options_);
   };
 
   /**
@@ -702,31 +706,31 @@ function setMethods(res) {
    */
 
   res.cookie = function (name, value, options) {
-    const opts = merge({}, options);
+    const options_ = merge({}, options);
     const { secret } = this.req;
-    const { signed } = opts;
+    const { signed } = options_;
 
     if (signed && !secret) {
       throw new Error('cookieParser("secret") required for signed cookies');
     }
 
-    let val =
+    let value_ =
       typeof value === 'object' ? 'j:' + JSON.stringify(value) : String(value);
 
     if (signed) {
-      val = 's:' + sign(val, secret);
+      value_ = 's:' + sign(value_, secret);
     }
 
-    if ('maxAge' in opts) {
-      opts.expires = new Date(Date.now() + opts.maxAge);
-      opts.maxAge /= 1000;
+    if ('maxAge' in options_) {
+      options_.expires = new Date(Date.now() + options_.maxAge);
+      options_.maxAge /= 1000;
     }
 
-    if (opts.path == null) {
-      opts.path = '/';
+    if (options_.path == null) {
+      options_.path = '/';
     }
 
-    this.append('Set-Cookie', cookie.serialize(name, String(val), opts));
+    this.append('Set-Cookie', cookie.serialize(name, String(value_), options_));
 
     return this;
   };
@@ -795,14 +799,14 @@ function setMethods(res) {
     // Support text/{plain,html} by default
     this.format({
       text() {
-        body = statuses[status] + '. Redirecting to ' + address;
+        body = statuses(status) + '. Redirecting to ' + address;
       },
 
       html() {
         const u = escapeHtml(address);
         body =
           '<p>' +
-          statuses[status] +
+          statuses(status) +
           '. Redirecting to <a href="' +
           u +
           '">' +
@@ -857,29 +861,29 @@ function setMethods(res) {
   res.render = function render(view, options, callback) {
     const { app } = this.req;
     let done = callback;
-    let opts = options || {};
+    let options_ = options || {};
     const { req } = this;
     const self = this;
 
     // support callback function as second arg
     if (typeof options === 'function') {
       done = options;
-      opts = {};
+      options_ = {};
     }
 
     // merge res.locals
-    opts._locals = self.locals;
+    options_._locals = self.locals;
 
     // default callback to respond
     done =
       done ||
-      function (err, str) {
-        if (err) return req.next(err);
-        self.send(str);
+      function (error, string_) {
+        if (error) return req.next(error);
+        self.send(string_);
       };
 
     // render
-    app.render(view, opts, done);
+    app.render(view, options_, done);
   };
 
   // pipe the send file stream
@@ -892,9 +896,9 @@ function setMethods(res) {
       if (done) return;
       done = true;
 
-      const err = new Error('Request aborted');
-      err.code = 'ECONNABORTED';
-      callback(err);
+      const error = new Error('Request aborted');
+      error.code = 'ECONNABORTED';
+      callback(error);
     }
 
     // directory
@@ -902,16 +906,16 @@ function setMethods(res) {
       if (done) return;
       done = true;
 
-      const err = new Error('EISDIR, read');
-      err.code = 'EISDIR';
-      callback(err);
+      const error = new Error('EISDIR, read');
+      error.code = 'EISDIR';
+      callback(error);
     }
 
     // errors
-    function onerror(err) {
+    function onerror(error) {
       if (done) return;
       done = true;
-      callback(err);
+      callback(error);
     }
 
     // ended
@@ -927,9 +931,9 @@ function setMethods(res) {
     }
 
     // finished
-    function onfinish(err) {
-      if (err && err.code === 'ECONNRESET') return onaborted();
-      if (err) return onerror(err);
+    function onfinish(error) {
+      if (error && error.code === 'ECONNRESET') return onaborted();
+      if (error) return onerror(error);
       if (done) return;
 
       setImmediate(() => {
@@ -958,11 +962,11 @@ function setMethods(res) {
     if (options.headers) {
       // set headers on successful transfer
       file.on('headers', function headers(res) {
-        const obj = options.headers;
-        const keys = Object.keys(obj);
+        const object = options.headers;
+        const keys = Object.keys(object);
 
         for (const k of keys) {
-          res.setHeader(k, obj[k]);
+          res.setHeader(k, object[k]);
         }
       });
     }

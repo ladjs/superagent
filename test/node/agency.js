@@ -14,6 +14,9 @@ let http = require('http');
 
 if (process.env.HTTP2_TEST) {
   http = require('http2');
+  http.Http2ServerResponse.prototype._implicitHeader = function() {
+    this.writeHead(this.statusCode);
+  }
 }
 
 app.use(cookieParser());
@@ -25,41 +28,41 @@ app.use(
   })
 );
 
-app.post('/signin', (req, res) => {
-  req.session.user = 'hunter@hunterloftis.com';
+app.post('/signin', (request_, res) => {
+  request_.session.user = 'hunter@hunterloftis.com';
   res.redirect('/dashboard');
 });
 
-app.post('/setcookie', (req, res) => {
+app.post('/setcookie', (request_, res) => {
   res.cookie('cookie', 'jar');
   res.sendStatus(200);
 });
 
-app.get('/getcookie', (req, res) => {
-  res.status(200).send(req.cookies.cookie);
+app.get('/getcookie', (request_, res) => {
+  res.status(200).send(request_.cookies.cookie);
 });
 
-app.get('/dashboard', (req, res) => {
-  if (req.session.user) return res.status(200).send('dashboard');
+app.get('/dashboard', (request_, res) => {
+  if (request_.session.user) return res.status(200).send('dashboard');
   res.status(401).send('dashboard');
 });
 
-app.all('/signout', (req, res) => {
-  req.session.regenerate(() => {
+app.all('/signout', (request_, res) => {
+  request_.session.regenerate(() => {
     res.status(200).send('signout');
   });
 });
 
-app.get('/', (req, res) => {
-  if (req.session.user) return res.redirect('/dashboard');
+app.get('/', (request_, res) => {
+  if (request_.session.user) return res.redirect('/dashboard');
   res.status(200).send('home');
 });
 
-app.post('/redirect', (req, res) => {
+app.post('/redirect', (request_, res) => {
   res.redirect('/simple');
 });
 
-app.get('/simple', (req, res) => {
+app.get('/simple', (request_, res) => {
   res.status(200).send('simple');
 });
 
@@ -88,8 +91,8 @@ describe('request', () => {
       }));
 
     it('should start with empty session (set cookies)', (done) => {
-      agent1.get(`${base}/dashboard`).end((err, res) => {
-        should.exist(err);
+      agent1.get(`${base}/dashboard`).end((error, res) => {
+        should.exist(error);
         res.should.have.status(401);
         should.exist(res.headers['set-cookie']);
         done();
@@ -118,8 +121,8 @@ describe('request', () => {
         }));
 
     it('should not share cookies', (done) => {
-      agent2.get(`${base}/dashboard`).end((err, res) => {
-        should.exist(err);
+      agent2.get(`${base}/dashboard`).end((error, res) => {
+        should.exist(error);
         res.should.have.status(401);
         done();
       });
@@ -150,8 +153,8 @@ describe('request', () => {
       agent1
         .get(base)
         .redirects(0)
-        .end((err, res) => {
-          should.exist(err);
+        .end((error, res) => {
+          should.exist(error);
           res.should.have.status(302);
           res.redirects.should.eql([]);
           res.header.location.should.equal('/dashboard');
@@ -166,8 +169,8 @@ describe('request', () => {
       }));
 
     it('should regenerate with an empty session', (done) => {
-      agent1.get(`${base}/dashboard`).end((err, res) => {
-        should.exist(err);
+      agent1.get(`${base}/dashboard`).end((error, res) => {
+        should.exist(error);
         res.should.have.status(401);
         should.not.exist(res.headers['set-cookie']);
         done();

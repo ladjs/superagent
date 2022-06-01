@@ -16,26 +16,7 @@ module.exports = ResponseBase;
  * @api public
  */
 
-function ResponseBase(obj) {
-  if (obj) return mixin(obj);
-}
-
-/**
- * Mixin the prototype properties.
- *
- * @param {Object} obj
- * @return {Object}
- * @api private
- */
-
-function mixin(obj) {
-  for (const key in ResponseBase.prototype) {
-    if (Object.prototype.hasOwnProperty.call(ResponseBase.prototype, key))
-      obj[key] = ResponseBase.prototype[key];
-  }
-
-  return obj;
-}
+function ResponseBase() {}
 
 /**
  * Get case-insensitive `field` value.
@@ -70,10 +51,10 @@ ResponseBase.prototype._setHeaderProperties = function (header) {
   this.type = utils.type(ct);
 
   // params
-  const params = utils.params(ct);
-  for (const key in params) {
-    if (Object.prototype.hasOwnProperty.call(params, key))
-      this[key] = params[key];
+  const parameters = utils.params(ct);
+  for (const key in parameters) {
+    if (Object.prototype.hasOwnProperty.call(parameters, key))
+      this[key] = parameters[key];
   }
 
   this.links = {};
@@ -110,7 +91,7 @@ ResponseBase.prototype._setHeaderProperties = function (header) {
  */
 
 ResponseBase.prototype._setStatusProperties = function (status) {
-  const type = (status / 100) | 0;
+  const type = Math.trunc(status / 100);
 
   // status / class
   this.statusCode = status;

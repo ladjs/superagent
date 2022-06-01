@@ -1,17 +1,24 @@
 'use strict';
 const assert = require('assert');
 const request = require('../support/client');
-const setup = require('../support/setup');
+const getSetup = require('../support/setup');
 
-const base = setup.uri;
 const doesntWorkInHttp2 = !process.env.HTTP2_TEST;
 
 describe('req.parse(fn)', () => {
+  let setup;
+  let base;
+
+  before(async () => {
+    setup = await getSetup();
+    base = setup.uri;
+  });
+
   it('should take precedence over default parsers', (done) => {
     request
       .get(`${base}/manny`)
       .parse(request.parse['application/json'])
-      .end((err, res) => {
+      .end((error, res) => {
         assert(res.ok);
         assert.equal('{"name":"manny"}', res.text);
         assert.equal('manny', res.body.name);
@@ -38,8 +45,8 @@ describe('req.parse(fn)', () => {
       .parse(() => {
         throw new Error('I am broken');
       })
-      .on('error', (err) => {
-        err.message.should.equal('I am broken');
+      .on('error', (error) => {
+        error.message.should.equal('I am broken');
         done();
       })
       .end();
@@ -51,8 +58,8 @@ describe('req.parse(fn)', () => {
       .parse((res, fn) => {
         fn(new Error('I am broken'));
       })
-      .on('error', (err) => {
-        err.message.should.equal('I am broken');
+      .on('error', (error) => {
+        error.message.should.equal('I am broken');
         done();
       })
       .end();
@@ -60,22 +67,22 @@ describe('req.parse(fn)', () => {
 
   if (doesntWorkInHttp2)
     it('should not emit error on chunked json', (done) => {
-      request.get(`${base}/chunked-json`).end((err) => {
-        assert.ifError(err);
+      request.get(`${base}/chunked-json`).end((error) => {
+        assert.ifError(error);
         done();
       });
     });
 
   if (doesntWorkInHttp2)
     it('should not emit error on aborted chunked json', (done) => {
-      const req = request.get(`${base}/chunked-json`);
-      req.end((err) => {
-        assert.ifError(err);
+      const request_ = request.get(`${base}/chunked-json`);
+      request_.end((error) => {
+        assert.ifError(error);
         done();
       });
 
       setTimeout(() => {
-        req.abort();
+        request_.abort();
       }, 50);
     });
 });

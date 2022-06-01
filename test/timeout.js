@@ -1,25 +1,32 @@
-const setup = require('./support/setup');
-
-const base = setup.uri;
 const assert = require('assert');
+const getSetup = require('./support/setup');
+
 const request = require('./support/client');
 
 describe('.timeout(ms)', function () {
-  this.timeout(15000);
+  let setup;
+  let base;
+
+  before(async () => {
+    setup = await getSetup();
+    base = setup.uri;
+  });
+
+  this.timeout(15_000);
 
   describe('when timeout is exceeded', () => {
     it('should error', (done) => {
       request
         .get(`${base}/delay/500`)
         .timeout(150)
-        .end((err, res) => {
-          assert(err, 'expected an error');
+        .end((error, res) => {
+          assert(error, 'expected an error');
           assert.equal(
             'number',
-            typeof err.timeout,
+            typeof error.timeout,
             'expected an error with .timeout'
           );
-          assert.equal('ECONNABORTED', err.code, 'expected abort error code');
+          assert.equal('ECONNABORTED', error.code, 'expected abort error code');
           done();
         });
     });
@@ -44,14 +51,14 @@ describe('.timeout(ms)', function () {
       request
         .get(`${base}/delay/zip`)
         .timeout(150)
-        .end((err, res) => {
-          assert(err, 'expected an error');
+        .end((error, res) => {
+          assert(error, 'expected an error');
           assert.equal(
             'number',
-            typeof err.timeout,
+            typeof error.timeout,
             'expected an error with .timeout'
           );
-          assert.equal('ECONNABORTED', err.code, 'expected abort error code');
+          assert.equal('ECONNABORTED', error.code, 'expected abort error code');
           done();
         });
     });
@@ -61,14 +68,14 @@ describe('.timeout(ms)', function () {
         .get(`${base}/delay/json`)
         .buffer(true)
         .timeout(150)
-        .end((err, res) => {
-          assert(err, 'expected an error');
+        .end((error, res) => {
+          assert(error, 'expected an error');
           assert.equal(
             'number',
-            typeof err.timeout,
+            typeof error.timeout,
             'expected an error with .timeout'
           );
-          assert.equal('ECONNABORTED', err.code, 'expected abort error code');
+          assert.equal('ECONNABORTED', error.code, 'expected abort error code');
           done();
         });
     });
@@ -77,14 +84,14 @@ describe('.timeout(ms)', function () {
       request
         .get(`${base}/delay/500`)
         .timeout({ deadline: 150 })
-        .end((err, res) => {
-          assert(err, 'expected an error');
+        .end((error, res) => {
+          assert(error, 'expected an error');
           assert.equal(
             'number',
-            typeof err.timeout,
+            typeof error.timeout,
             'expected an error with .timeout'
           );
-          assert.equal('ECONNABORTED', err.code, 'expected abort error code');
+          assert.equal('ECONNABORTED', error.code, 'expected abort error code');
           done();
         });
     });
@@ -93,11 +100,11 @@ describe('.timeout(ms)', function () {
       request
         .get(`${base}/delay/500`)
         .timeout({ deadline: 10 })
-        .timeout({ response: 99999 })
-        .end((err, res) => {
-          assert(err, 'expected an error');
-          assert.equal('ECONNABORTED', err.code, 'expected abort error code');
-          assert.equal('ETIME', err.errno);
+        .timeout({ response: 99_999 })
+        .end((error, res) => {
+          assert(error, 'expected an error');
+          assert.equal('ECONNABORTED', error.code, 'expected abort error code');
+          assert.equal('ETIME', error.errno);
           done();
         });
     });
@@ -106,15 +113,15 @@ describe('.timeout(ms)', function () {
       request
         .get(`${base}/delay/500`)
         .timeout({ response: 150 })
-        .end((err, res) => {
-          assert(err, 'expected an error');
+        .end((error, res) => {
+          assert(error, 'expected an error');
           assert.equal(
             'number',
-            typeof err.timeout,
+            typeof error.timeout,
             'expected an error with .timeout'
           );
-          assert.equal('ECONNABORTED', err.code, 'expected abort error code');
-          assert.equal('ETIMEDOUT', err.errno);
+          assert.equal('ECONNABORTED', error.code, 'expected abort error code');
+          assert.equal('ETIMEDOUT', error.errno);
           done();
         });
     });

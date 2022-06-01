@@ -2,23 +2,25 @@ const assert = require('assert');
 
 const request = require('../support/client');
 
-function serialize(obj, res) {
-  const val = request.serializeObject(obj);
+function serialize(object, res) {
+  const value = request.serializeObject(object);
   assert.equal(
-    val,
+    value,
     res,
-    `${JSON.stringify(obj)} to "${res}" serialization failed. got: "${val}"`
+    `${JSON.stringify(
+      object
+    )} to "${res}" serialization failed. got: "${value}"`
   );
 }
 
-function parse(str, obj) {
-  const val = request.parseString(str);
+function parse(string_, object) {
+  const value = request.parseString(string_);
   assert.deepEqual(
-    val,
-    obj,
-    `"${str}" to ${JSON.stringify(obj)} parse failed. got: ${JSON.stringify(
-      val
-    )}`
+    value,
+    object,
+    `"${string_}" to ${JSON.stringify(
+      object
+    )} parse failed. got: ${JSON.stringify(value)}`
   );
 }
 

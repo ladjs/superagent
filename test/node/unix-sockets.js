@@ -22,11 +22,11 @@ if (process.env.HTTP2_TEST) {
   http = https = require('http2');
 }
 
-app.get('/', (req, res) => {
+app.get('/', (request_, res) => {
   res.send('root ok!');
 });
 
-app.get('/request/path', (req, res) => {
+app.get('/request/path', (request_, res) => {
   res.send('request path ok!');
 });
 
@@ -49,7 +49,7 @@ describe('[unix-sockets] http', () => {
 
   describe('request', () => {
     it('path: / (root)', (done) => {
-      request.get(`${base}/`).end((err, res) => {
+      request.get(`${base}/`).end((error, res) => {
         assert(res.ok);
         assert.strictEqual('root ok!', res.text);
         done();
@@ -57,7 +57,7 @@ describe('[unix-sockets] http', () => {
     });
 
     it('path: /request/path', (done) => {
-      request.get(`${base}/request/path`).end((err, res) => {
+      request.get(`${base}/request/path`).end((error, res) => {
         assert(res.ok);
         assert.strictEqual('request path ok!', res.text);
         done();
@@ -83,11 +83,9 @@ describe('[unix-sockets] https', () => {
       fs.unlinkSync(httpsSockPath);
     }
 
-    if (process.env.HTTP2_TEST) {
-      httpsServer = https.createSecureServer({ key, cert }, app);
-    } else {
-      httpsServer = https.createServer({ key, cert }, app);
-    }
+    httpsServer = process.env.HTTP2_TEST
+      ? https.createSecureServer({ key, cert }, app)
+      : https.createServer({ key, cert }, app);
 
     httpsServer.listen(httpsSockPath, done);
   });
@@ -99,8 +97,8 @@ describe('[unix-sockets] https', () => {
       request
         .get(`${base}/`)
         .ca(cacert)
-        .end((err, res) => {
-          assert.ifError(err);
+        .end((error, res) => {
+          assert.ifError(error);
           assert(res.ok);
           assert.strictEqual('root ok!', res.text);
           done();
@@ -111,8 +109,8 @@ describe('[unix-sockets] https', () => {
       request
         .get(`${base}/request/path`)
         .ca(cacert)
-        .end((err, res) => {
-          assert.ifError(err);
+        .end((error, res) => {
+          assert.ifError(error);
           assert(res.ok);
           assert.strictEqual('request path ok!', res.text);
           done();

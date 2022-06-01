@@ -8,7 +8,6 @@
     "no-console": "off",
     "no-unused-vars": "off",
     "no-empty": "off",
-    "node/no-unsupported-features/node-builtins": "off",
     "no-func-assign": "off",
     "no-global-assign": ["error", {"exceptions": ["exports"]}],
     "no-fallthrough": "off",
@@ -21,6 +20,13 @@
       "files": [ "lib/client.js" ],
       "globals": {
         "ActiveXObject": "readable"
+      }
+    },
+    {
+      "files": [ "lib/node/http2wrapper.js" ],
+      "rules": {
+        "node/no-unsupported-features/es-builtins": "off",
+        "node/no-unsupported-features/node-builtins": "off"
       }
     }
   ]

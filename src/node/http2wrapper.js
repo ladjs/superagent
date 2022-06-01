@@ -4,11 +4,12 @@ const net = require('net');
 const tls = require('tls');
 // eslint-disable-next-line node/no-deprecated-api
 const { parse } = require('url');
-const semver = require('semver');
+const process = require('process');
+const semverGte = require('semver/functions/gte');
 
 let http2;
-// eslint-disable-next-line node/no-unsupported-features/node-builtins
-if (semver.gte(process.version, 'v10.10.0')) http2 = require('http2');
+
+if (semverGte(process.version, 'v10.10.0')) http2 = require('http2');
 else
   throw new Error('superagent: this version of Node.js does not support http2');
 
@@ -59,7 +60,7 @@ function Request(protocol, options) {
   const session = http2.connect(`${protocol}//${host}:${port}`, sessionOptions);
   this.setHeader('host', `${host}:${port}`);
 
-  session.on('error', (err) => this.emit('error', err));
+  session.on('error', (error) => this.emit('error', error));
 
   this.session = session;
 }
@@ -117,7 +118,7 @@ Request.prototype.getFrame = function () {
   this._headerSent = true;
 
   frame.once('drain', () => this.emit('drain'));
-  frame.on('error', (err) => this.emit('error', err));
+  frame.on('error', (error) => this.emit('error', error));
   frame.on('close', () => this.session.close());
 
   this.frame = frame;

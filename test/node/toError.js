@@ -10,7 +10,7 @@ if (process.env.HTTP2_TEST) {
   http = require('http2');
 }
 
-app.get('/', (req, res) => {
+app.get('/', (request_, res) => {
   res.status(400).send('invalid json');
 });
 
@@ -27,12 +27,12 @@ before(function listen(done) {
 describe('res.toError()', () => {
   it('should return an Error', (done) => {
     request.get(base).end((err, res) => {
-      var err = res.toError();
-      assert.equal(err.status, 400);
-      assert.equal(err.method, 'GET');
-      assert.equal(err.path, '/');
-      assert.equal(err.message, 'cannot GET / (400)');
-      assert.equal(err.text, 'invalid json');
+      const error = res.toError();
+      assert.equal(error.status, 400);
+      assert.equal(error.method, 'GET');
+      assert.equal(error.path, '/');
+      assert.equal(error.message, 'cannot GET / (400)');
+      assert.equal(error.text, 'invalid json');
       done();
     });
   });

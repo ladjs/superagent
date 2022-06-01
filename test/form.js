@@ -1,23 +1,27 @@
-const setup = require('./support/setup');
-
-const base = setup.uri;
-const should = require('should');
-const request = require('./support/client');
-
 const assert = require('assert');
+const should = require('should');
+
+const getSetup = require('./support/setup');
+const request = require('./support/client');
 
 if (!assert.deepStrictEqual) assert.deepStrictEqual = assert.deepEqual;
 
-const formDataSupported = setup.NODE || FormData !== 'undefined';
-
 describe('req.send(Object) as "form"', () => {
+  let setup;
+  let base;
+
+  before(async () => {
+    setup = await getSetup();
+    base = setup.uri;
+  });
+
   describe('with req.type() set to form', () => {
     it('should send x-www-form-urlencoded data', (done) => {
       request
         .post(`${base}/echo`)
         .type('form')
         .send({ name: 'tobi' })
-        .end((err, res) => {
+        .end((error, res) => {
           res.header['content-type'].should.equal(
             'application/x-www-form-urlencoded'
           );
@@ -34,7 +38,7 @@ describe('req.send(Object) as "form"', () => {
         .type('form')
         .send({ name: { first: 'tobi', last: 'holowaychuk' } })
         .send({ age: '1' })
-        .end((err, res) => {
+        .end((error, res) => {
           res.header['content-type'].should.equal(
             'application/x-www-form-urlencoded'
           );
@@ -52,13 +56,24 @@ describe('req.attach', () => {
     request
       .post('/echo')
       .attach('image', null)
-      .end((err, res) => {
+      .end((error, res) => {
         done();
       });
   });
 });
 
 describe('req.field', function () {
+  let setup;
+  let base;
+  let formDataSupported;
+
+  before(async () => {
+    setup = await getSetup();
+    base = setup.uri;
+
+    formDataSupported = setup.NODE || FormData !== 'undefined';
+  });
+
   this.timeout(5000);
   it('allow bools', (done) => {
     if (!formDataSupported) {
@@ -69,8 +84,8 @@ describe('req.field', function () {
       .post(`${base}/formecho`)
       .field('bools', true)
       .field('strings', 'true')
-      .end((err, res) => {
-        assert.ifError(err);
+      .end((error, res) => {
+        assert.ifError(error);
         assert.deepStrictEqual(res.body, { bools: 'true', strings: 'true' });
         done();
       });
@@ -84,8 +99,8 @@ describe('req.field', function () {
     request
       .post(`${base}/formecho`)
       .field({ bools: true, strings: 'true' })
-      .end((err, res) => {
-        assert.ifError(err);
+      .end((error, res) => {
+        assert.ifError(error);
         assert.deepStrictEqual(res.body, { bools: 'true', strings: 'true' });
         done();
       });
@@ -99,8 +114,8 @@ describe('req.field', function () {
     request
       .post(`${base}/formecho`)
       .field({ numbers: [1, 2, 3] })
-      .end((err, res) => {
-        assert.ifError(err);
+      .end((error, res) => {
+        assert.ifError(error);
         assert.deepStrictEqual(res.body, { numbers: ['1', '2', '3'] });
         done();
       });
@@ -114,8 +129,8 @@ describe('req.field', function () {
     request
       .post(`${base}/formecho`)
       .field('letters', ['a', 'b', 'c'])
-      .end((err, res) => {
-        assert.ifError(err);
+      .end((error, res) => {
+        assert.ifError(error);
         assert.deepStrictEqual(res.body, { letters: ['a', 'b', 'c'] });
         done();
       });

@@ -32,34 +32,34 @@ before(function listen(done) {
   });
 });
 
-app.all('/test-301', (req, res) => {
+app.all('/test-301', (request_, res) => {
   res.redirect(301, `${base2}/`);
 });
-app.all('/test-302', (req, res) => {
+app.all('/test-302', (request_, res) => {
   res.redirect(302, `${base2}/`);
 });
-app.all('/test-303', (req, res) => {
+app.all('/test-303', (request_, res) => {
   res.redirect(303, `${base2}/`);
 });
-app.all('/test-307', (req, res) => {
+app.all('/test-307', (request_, res) => {
   res.redirect(307, `${base2}/`);
 });
-app.all('/test-308', (req, res) => {
+app.all('/test-308', (request_, res) => {
   res.redirect(308, `${base2}/`);
 });
 
-app2.all('/', (req, res) => {
-  res.send(req.method);
+app2.all('/', (request_, res) => {
+  res.send(request_.method);
 });
 
 describe('request.get', () => {
   describe('on 301 redirect', () => {
     it('should follow Location with a GET request', (done) => {
-      const req = request.get(`${base}/test-301`).redirects(1);
-      req.end((err, res) => {
-        const headers = req.req.getHeaders
-          ? req.req.getHeaders()
-          : req.req._headers;
+      const request_ = request.get(`${base}/test-301`).redirects(1);
+      request_.end((error, res) => {
+        const headers = request_.req.getHeaders
+          ? request_.req.getHeaders()
+          : request_.req._headers;
         headers.host.should.eql(`localhost:${server2.address().port}`);
         res.status.should.eql(200);
         res.text.should.eql('GET');
@@ -69,11 +69,11 @@ describe('request.get', () => {
   });
   describe('on 302 redirect', () => {
     it('should follow Location with a GET request', (done) => {
-      const req = request.get(`${base}/test-302`).redirects(1);
-      req.end((err, res) => {
-        const headers = req.req.getHeaders
-          ? req.req.getHeaders()
-          : req.req._headers;
+      const request_ = request.get(`${base}/test-302`).redirects(1);
+      request_.end((error, res) => {
+        const headers = request_.req.getHeaders
+          ? request_.req.getHeaders()
+          : request_.req._headers;
         res.status.should.eql(200);
         res.text.should.eql('GET');
         done();
@@ -82,11 +82,11 @@ describe('request.get', () => {
   });
   describe('on 303 redirect', () => {
     it('should follow Location with a GET request', (done) => {
-      const req = request.get(`${base}/test-303`).redirects(1);
-      req.end((err, res) => {
-        const headers = req.req.getHeaders
-          ? req.req.getHeaders()
-          : req.req._headers;
+      const request_ = request.get(`${base}/test-303`).redirects(1);
+      request_.end((error, res) => {
+        const headers = request_.req.getHeaders
+          ? request_.req.getHeaders()
+          : request_.req._headers;
         headers.host.should.eql(`localhost:${server2.address().port}`);
         res.status.should.eql(200);
         res.text.should.eql('GET');
@@ -96,11 +96,11 @@ describe('request.get', () => {
   });
   describe('on 307 redirect', () => {
     it('should follow Location with a GET request', (done) => {
-      const req = request.get(`${base}/test-307`).redirects(1);
-      req.end((err, res) => {
-        const headers = req.req.getHeaders
-          ? req.req.getHeaders()
-          : req.req._headers;
+      const request_ = request.get(`${base}/test-307`).redirects(1);
+      request_.end((error, res) => {
+        const headers = request_.req.getHeaders
+          ? request_.req.getHeaders()
+          : request_.req._headers;
         headers.host.should.eql(`localhost:${server2.address().port}`);
         res.status.should.eql(200);
         res.text.should.eql('GET');
@@ -110,11 +110,11 @@ describe('request.get', () => {
   });
   describe('on 308 redirect', () => {
     it('should follow Location with a GET request', (done) => {
-      const req = request.get(`${base}/test-308`).redirects(1);
-      req.end((err, res) => {
-        const headers = req.req.getHeaders
-          ? req.req.getHeaders()
-          : req.req._headers;
+      const request_ = request.get(`${base}/test-308`).redirects(1);
+      request_.end((error, res) => {
+        const headers = request_.req.getHeaders
+          ? request_.req.getHeaders()
+          : request_.req._headers;
         headers.host.should.eql(`localhost:${server2.address().port}`);
         res.status.should.eql(200);
         res.text.should.eql('GET');
@@ -127,11 +127,11 @@ describe('request.get', () => {
 describe('request.post', () => {
   describe('on 301 redirect', () => {
     it('should follow Location with a GET request', (done) => {
-      const req = request.post(`${base}/test-301`).redirects(1);
-      req.end((err, res) => {
-        const headers = req.req.getHeaders
-          ? req.req.getHeaders()
-          : req.req._headers;
+      const request_ = request.post(`${base}/test-301`).redirects(1);
+      request_.end((error, res) => {
+        const headers = request_.req.getHeaders
+          ? request_.req.getHeaders()
+          : request_.req._headers;
         headers.host.should.eql(`localhost:${server2.address().port}`);
         res.status.should.eql(200);
         res.text.should.eql('GET');
@@ -141,11 +141,11 @@ describe('request.post', () => {
   });
   describe('on 302 redirect', () => {
     it('should follow Location with a GET request', (done) => {
-      const req = request.post(`${base}/test-302`).redirects(1);
-      req.end((err, res) => {
-        const headers = req.req.getHeaders
-          ? req.req.getHeaders()
-          : req.req._headers;
+      const request_ = request.post(`${base}/test-302`).redirects(1);
+      request_.end((error, res) => {
+        const headers = request_.req.getHeaders
+          ? request_.req.getHeaders()
+          : request_.req._headers;
         headers.host.should.eql(`localhost:${server2.address().port}`);
         res.status.should.eql(200);
         res.text.should.eql('GET');
@@ -155,11 +155,11 @@ describe('request.post', () => {
   });
   describe('on 303 redirect', () => {
     it('should follow Location with a GET request', (done) => {
-      const req = request.post(`${base}/test-303`).redirects(1);
-      req.end((err, res) => {
-        const headers = req.req.getHeaders
-          ? req.req.getHeaders()
-          : req.req._headers;
+      const request_ = request.post(`${base}/test-303`).redirects(1);
+      request_.end((error, res) => {
+        const headers = request_.req.getHeaders
+          ? request_.req.getHeaders()
+          : request_.req._headers;
         headers.host.should.eql(`localhost:${server2.address().port}`);
         res.status.should.eql(200);
         res.text.should.eql('GET');
@@ -169,11 +169,11 @@ describe('request.post', () => {
   });
   describe('on 307 redirect', () => {
     it('should follow Location with a POST request', (done) => {
-      const req = request.post(`${base}/test-307`).redirects(1);
-      req.end((err, res) => {
-        const headers = req.req.getHeaders
-          ? req.req.getHeaders()
-          : req.req._headers;
+      const request_ = request.post(`${base}/test-307`).redirects(1);
+      request_.end((error, res) => {
+        const headers = request_.req.getHeaders
+          ? request_.req.getHeaders()
+          : request_.req._headers;
         headers.host.should.eql(`localhost:${server2.address().port}`);
         res.status.should.eql(200);
         res.text.should.eql('POST');
@@ -183,11 +183,11 @@ describe('request.post', () => {
   });
   describe('on 308 redirect', () => {
     it('should follow Location with a POST request', (done) => {
-      const req = request.post(`${base}/test-308`).redirects(1);
-      req.end((err, res) => {
-        const headers = req.req.getHeaders
-          ? req.req.getHeaders()
-          : req.req._headers;
+      const request_ = request.post(`${base}/test-308`).redirects(1);
+      request_.end((error, res) => {
+        const headers = request_.req.getHeaders
+          ? request_.req.getHeaders()
+          : request_.req._headers;
         headers.host.should.eql(`localhost:${server2.address().port}`);
         res.status.should.eql(200);
         res.text.should.eql('POST');

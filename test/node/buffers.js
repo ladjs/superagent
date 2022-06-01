@@ -1,11 +1,17 @@
 'use strict';
 const assert = require('assert');
 const request = require('../support/client');
-const setup = require('../support/setup');
-
-const base = setup.uri;
+const getSetup = require('../support/setup');
 
 describe("req.buffer['someMimeType']", () => {
+  let setup;
+  let base;
+
+  before(async () => {
+    setup = await getSetup();
+    base = setup.uri;
+  });
+
   it('should respect that agent.buffer(true) takes precedent', (done) => {
     const agent = request.agent();
     agent.buffer(true);
@@ -16,9 +22,9 @@ describe("req.buffer['someMimeType']", () => {
       .post(`${base}/echo`)
       .type(type)
       .send(send)
-      .end((err, res) => {
+      .end((error, res) => {
         delete request.buffer[type];
-        assert.ifError(err);
+        assert.ifError(error);
         assert.equal(res.type, type);
         assert.equal(send, res.text);
         assert(res.buffered);
@@ -36,9 +42,9 @@ describe("req.buffer['someMimeType']", () => {
       .post(`${base}/echo`)
       .type(type)
       .send(send)
-      .end((err, res) => {
+      .end((error, res) => {
         delete request.buffer[type];
-        assert.ifError(err);
+        assert.ifError(error);
         assert.equal(null, res.text);
         assert.equal(res.type, type);
         assert(!res.buffered);
@@ -63,9 +69,9 @@ describe("req.buffer['someMimeType']", () => {
       .post(`${base}/echo`)
       .type(type)
       .send(send)
-      .end((err, res) => {
+      .end((error, res) => {
         delete request.buffer[type];
-        assert.ifError(err);
+        assert.ifError(error);
         assert.equal(null, res.text);
         assert.equal(res.type, type);
         assert(!res.buffered);
@@ -89,9 +95,9 @@ describe("req.buffer['someMimeType']", () => {
       .post(`${base}/echo`)
       .type(type)
       .send(send)
-      .end((err, res) => {
+      .end((error, res) => {
         delete request.buffer[type];
-        assert.ifError(err);
+        assert.ifError(error);
         assert.equal(res.type, type);
         assert.equal(send, res.text);
         assert(res.buffered);

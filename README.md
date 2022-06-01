@@ -83,7 +83,7 @@ Browser-ready versions of this module are available via [jsdelivr][], [unpkg][],
 This is the solution for you if you're just using `<script>` tags everywhere!
 
 ```html
-<script src="https://polyfill.io/v3/polyfill.min.js?features=Array.from,Promise,Symbol,Object.setPrototypeOf,Object.getOwnPropertySymbols,Set"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=Array.from,Promise,Symbol,Object.setPrototypeOf,Object.getOwnPropertySymbols,Set,Math.trunc,BigInt,Map,Reflect,WeakMap,WeakRef,WeakSet,BigInt,Map,Reflect,WeakMap,WeakRef,WeakSet"></script>
 <script src="https://cdn.jsdelivr.net/npm/superagent"></script>
 <!-- if you wish to use unpkg.com instead: -->
 <!-- <script src="https://unpkg.com/superagent"></script> -->
@@ -159,11 +159,11 @@ If you are using [browserify][], [webpack][], [rollup][], or another bundler, th
 We recommend using <https://polyfill.io> (specifically with the bundle mentioned in [VanillaJS](#vanillajs) above):
 
 ```html
-<script src="https://polyfill.io/v3/polyfill.min.js?features=Array.from,Promise,Symbol,Object.setPrototypeOf,Object.getOwnPropertySymbols,Set"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=Array.from,Promise,Symbol,Object.setPrototypeOf,Object.getOwnPropertySymbols,Set,Math.trunc,BigInt,Map,Reflect,WeakMap,WeakRef,WeakSet"></script>
 ```
 
 * IE 9-10 requires a polyfill for `Promise`, `Array.from`, `Symbol`, `Object.getOwnPropertySymbols`, and `Object.setPrototypeOf`
-* IE 9 requires a polyfill for `window.FormData` (we recommend [formdata-polyfill][]) and `Set`
+* IE 9 requires a polyfill for `window.FormData` (we recommend [formdata-polyfill][]), `Set`, `Math.trunc`, `BigInt`, `Map`, `Reflect`, `WeakMap`, `WeakRef`, and `WeakSet`
 
 
 ## Plugins
@@ -210,8 +210,12 @@ For SuperAgent extensions such as couchdb and oauth visit the [wiki](https://git
 
 ## Upgrading from previous versions
 
+Please see [GitHub releases page](https://github.com/visionmedia/superagent/releases) for the current changelog.
+
 Our breaking changes are mostly in rarely used functionality and from stricter error handling.
 
+* [6.0 to 6.1](https://github.com/visionmedia/superagent/releases/tag/v6.1.0)
+  * Browser behaviour changed to match Node when serializing `application/x-www-form-urlencoded`, using `arrayFormat: 'indices'` semantics of `qs` library. (See: <https://www.npmjs.com/package/qs#stringifying>)
 * [5.x to 6.x](https://github.com/visionmedia/superagent/releases/tag/v6.0.0):
   * Retry behavior is still opt-in, however we now have a more fine-grained list of status codes and error codes that we retry against (see updated docs)
   * A specific issue with Content-Type matching not being case-insensitive is fixed
@@ -229,7 +233,7 @@ Our breaking changes are mostly in rarely used functionality and from stricter e
   * Ensure you're running Node 4 or later. We've dropped support for Node 0.x.
   * Test code that calls `.send()` multiple times. Invalid calls to `.send()` will now throw instead of sending garbage.
 * [1.x to 2.x](https://github.com/visionmedia/superagent/releases/tag/v2.0.0):
-  * If you use `.parse()` in the _browser_ version, rename it to `.serialize()`.
+  * If you use `.parse()` in the *browser* version, rename it to `.serialize()`.
   * If you rely on `undefined` in query-string values being sent literally as the text "undefined", switch to checking for missing value instead. `?key=undefined` is now `?key` (without a value).
   * If you use `.then()` in Internet Explorer, ensure that you have a polyfill that adds a global `Promise` object.
 * 0.x to 1.x:
@@ -251,7 +255,7 @@ Our breaking changes are mostly in rarely used functionality and from stricter e
 [MIT](LICENSE) © TJ Holowaychuk
 
 
-## 
+##
 
 [npm]: https://www.npmjs.com/
 
