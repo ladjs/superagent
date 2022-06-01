@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 let http = require('http');
 const multer = require('multer');
 const bodyParser = require('body-parser');
@@ -500,6 +501,12 @@ app.get('/image', (request, res) => {
 });
 app.get('/image-as-octets', (request, res) => {
   serveImageWithType(res, 'application/octet-stream');
+});
+
+app.get('/binary-data', (request, res) => {
+  const binData = fs.readFileSync(`${__dirname}/../node/fixtures/test.aac`);
+  res.writeHead(200, { 'Content-type': 'audio/aac' });
+  res.end(binData, 'binary')
 });
 
 app.get('/chunked-json', (request, res) => {

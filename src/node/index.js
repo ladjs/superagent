@@ -1083,7 +1083,7 @@ Request.prototype._end = function () {
         const form = formidable();
         parser = form.parse.bind(form);
         buffer = true;
-      } else if (isImageOrVideo(mime)) {
+      } else if (isBinary(mime)) {
         parser = exports.parse.image;
         buffer = true; // For backwards-compatibility buffering default is ad-hoc MIME-dependent
       } else if (exports.parse[mime]) {
@@ -1091,7 +1091,6 @@ Request.prototype._end = function () {
       } else if (type === 'text') {
         parser = exports.parse.text;
         buffer = buffer !== false;
-
         // everyone wants their own white-labeled json
       } else if (isJSON(mime)) {
         parser = exports.parse['application/json'];
@@ -1362,11 +1361,22 @@ function isText(mime) {
   return type === 'text' || subtype === 'x-www-form-urlencoded';
 }
 
-function isImageOrVideo(mime) {
-  let type = mime.split('/')[0];
-  if (type) type = type.toLowerCase().trim();
-
-  return type === 'image' || type === 'video';
+// This is not a catchall, but a start. It might be useful
+// in the long run to have file that includes all binary
+// content types from https://www.iana.org/assignments/media-types/media-types.xhtml
+function isBinary(mime) {
+  let [ registry, name ] = mime.split('/');
+  if (registry) registry = registry.toLowerCase().trim();
+  if (name) name = name.toLowerCase().trim();
+  return [
+    'audio',
+    'font',
+    'image',
+    'video' 
+  ].includes(registry) || [
+    'gz',
+    'gzip',
+  ].includes(name);
 }
 
 /**
