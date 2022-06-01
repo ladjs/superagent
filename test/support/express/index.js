@@ -1,12 +1,13 @@
+const process = require('process');
 const express = require('express');
 
 let http2Request;
 let http2Res;
 if (process.env.HTTP2_TEST) {
   const http2 = require('http2');
-  const reqDecorator = require('./requestDecorator');
+  const requestDecorator = require('./requestDecorator');
   const resDecorator = require('./responseDecorator');
-  http2Request = reqDecorator(
+  http2Request = requestDecorator(
     Object.create(http2.Http2ServerRequest.prototype)
   );
   http2Res = resDecorator(Object.create(http2.Http2ServerResponse.prototype));

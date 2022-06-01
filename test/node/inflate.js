@@ -5,6 +5,7 @@ require('should-http');
 const assert = require('assert');
 const zlib = require('zlib');
 let http = require('http');
+const getPort = require('get-port');
 const express = require('../support/express');
 const request = require('../support/client');
 
@@ -20,11 +21,15 @@ let server;
 
 before(function listen(done) {
   server = http.createServer(app);
-  server = server.listen(0, function listening() {
-    base += `:${server.address().port}`;
-    done();
+
+  getPort().then((port) => {
+    server = server.listen(port, function listening() {
+      base += `:${server.address().port}`;
+      done();
+    });
   });
 });
+
 app.get('/binary', (request_, res) => {
   zlib.deflate(subject, (error, buf) => {
     res.set('Content-Encoding', 'gzip');

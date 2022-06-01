@@ -21,7 +21,7 @@ const Emitter = require('component-emitter');
 const safeStringify = require('fast-safe-stringify');
 const qs = require('qs');
 const RequestBase = require('./request-base');
-const isObject = require('./is-object');
+const { isObject, mixin, hasOwn } = require('./utils');
 const ResponseBase = require('./response-base');
 const Agent = require('./agent-base');
 
@@ -93,8 +93,7 @@ function serialize(object) {
   if (!isObject(object)) return object;
   const pairs = [];
   for (const key in object) {
-    if (Object.prototype.hasOwnProperty.call(object, key))
-      pushEncodedKeyValuePair(pairs, key, object[key]);
+    if (hasOwn(object, key)) pushEncodedKeyValuePair(pairs, key, object[key]);
   }
 
   return pairs.join('&');
@@ -122,7 +121,7 @@ function pushEncodedKeyValuePair(pairs, key, value) {
     }
   } else if (isObject(value)) {
     for (const subkey in value) {
-      if (Object.prototype.hasOwnProperty.call(value, subkey))
+      if (hasOwn(value, subkey))
         pushEncodedKeyValuePair(pairs, `${key}[${subkey}]`, value[subkey]);
     }
   } else {
@@ -344,8 +343,7 @@ function Response(request_) {
   }
 }
 
-// eslint-disable-next-line new-cap
-ResponseBase(Response.prototype);
+mixin(Response.prototype, ResponseBase.prototype);
 
 /**
  * Parse the given body `str`.
@@ -421,10 +419,10 @@ function Request(method, url) {
 
     try {
       res = new Response(self);
-    } catch (error_) {
+    } catch (err) {
       error = new Error('Parser is unable to parse the response');
       error.parse = true;
-      error.original = error_;
+      error.original = err;
       // issue #675: return the raw response if the response parsing fails
       if (self.xhr) {
         // ie9 doesn't have 'response' property
@@ -474,8 +472,8 @@ function Request(method, url) {
 
 // eslint-disable-next-line new-cap
 Emitter(Request.prototype);
-// eslint-disable-next-line new-cap
-RequestBase(Request.prototype);
+
+mixin(Request.prototype, RequestBase.prototype);
 
 /**
  * Set Content-Type to `type`, mapping values from `request.types`.
@@ -553,13 +551,15 @@ Request.prototype.auth = function (user, pass, options) {
     };
   }
 
-  const encoder = (string) => {
-    if (typeof btoa === 'function') {
-      return btoa(string);
-    }
+  const encoder = options.encoder
+    ? options.encoder
+    : (string) => {
+        if (typeof btoa === 'function') {
+          return btoa(string);
+        }
 
-    throw new Error('Cannot use basic auth, btoa is not a function');
-  };
+        throw new Error('Cannot use basic auth, btoa is not a function');
+      };
 
   return this._auth(user, pass, options, encoder);
 };
@@ -858,7 +858,7 @@ Request.prototype._end = function () {
   for (const field in this.header) {
     if (this.header[field] === null) continue;
 
-    if (Object.prototype.hasOwnProperty.call(this.header, field))
+    if (hasOwn(this.header, field))
       xhr.setRequestHeader(field, this.header[field]);
   }
 

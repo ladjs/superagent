@@ -1,11 +1,17 @@
-const setup = require('./support/setup');
-
-const { uri } = setup;
-
 const assert = require('assert');
+const getSetup = require('./support/setup');
+
 const request = require('./support/client');
 
 describe('req.set("Content-Type", contentType)', function () {
+  let setup;
+  let uri;
+
+  before(async () => {
+    setup = await getSetup();
+    uri = setup.uri;
+  });
+
   this.timeout(20_000);
 
   it('should work with just the contentType component', (done) => {
@@ -13,7 +19,7 @@ describe('req.set("Content-Type", contentType)', function () {
       .post(`${uri}/echo`)
       .set('Content-Type', 'application/json')
       .send({ name: 'tobi' })
-      .end((error, res) => {
+      .end((error) => {
         assert(!error);
         done();
       });
@@ -24,7 +30,7 @@ describe('req.set("Content-Type", contentType)', function () {
       .post(`${uri}/echo`)
       .set('Content-Type', 'application/json; charset=utf-8')
       .send({ name: 'tobi' })
-      .end((error, res) => {
+      .end((error) => {
         assert(!error);
         done();
       });

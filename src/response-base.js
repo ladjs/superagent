@@ -16,26 +16,7 @@ module.exports = ResponseBase;
  * @api public
  */
 
-function ResponseBase(object) {
-  if (object) return mixin(object);
-}
-
-/**
- * Mixin the prototype properties.
- *
- * @param {Object} obj
- * @return {Object}
- * @api private
- */
-
-function mixin(object) {
-  for (const key in ResponseBase.prototype) {
-    if (Object.prototype.hasOwnProperty.call(ResponseBase.prototype, key))
-      object[key] = ResponseBase.prototype[key];
-  }
-
-  return object;
-}
+function ResponseBase() {}
 
 /**
  * Get case-insensitive `field` value.

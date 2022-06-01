@@ -17,7 +17,7 @@ const FormData = require('form-data');
 const formidable = require('formidable');
 const debug = require('debug')('superagent');
 const CookieJar = require('cookiejar');
-const semver = require('semver');
+const semverGte = require('semver/functions/gte');
 const safeStringify = require('fast-safe-stringify');
 
 const utils = require('../utils');
@@ -25,9 +25,11 @@ const RequestBase = require('../request-base');
 const { unzip } = require('./unzip');
 const Response = require('./response');
 
+const { mixin, hasOwn } = utils;
+
 let http2;
 
-if (semver.gte(process.version, 'v10.10.0')) http2 = require('./http2wrapper');
+if (semverGte(process.version, 'v10.10.0')) http2 = require('./http2wrapper');
 
 function request(method, url) {
   // callback
@@ -165,6 +167,7 @@ function Request(method, url) {
   this.qsRaw = this._query; // Unused, for backwards compatibility only
   this._redirectList = [];
   this._streamRequest = false;
+  this._lookup = undefined;
   this.once('end', this.clearTimeout.bind(this));
 }
 
@@ -173,8 +176,8 @@ function Request(method, url) {
  * Mixin `RequestBase`.
  */
 util.inherits(Request, Stream);
-// eslint-disable-next-line new-cap
-RequestBase(Request.prototype);
+
+mixin(Request.prototype, RequestBase.prototype);
 
 /**
  * Enable or Disable http2.
@@ -256,6 +259,10 @@ Request.prototype.attach = function (field, file, options) {
       if (!o.filename) o.filename = file;
       debug('creating `fs.ReadStream` instance for file: %s', file);
       file = fs.createReadStream(file);
+      file.on('error', (error) => {
+        const formData = this._getFormData();
+        formData.emit('error', error);
+      });
     } else if (!o.filename && file.path) {
       o.filename = file.path;
     }
@@ -297,6 +304,20 @@ Request.prototype._getFormData = function () {
 Request.prototype.agent = function (agent) {
   if (arguments.length === 0) return this._agent;
   this._agent = agent;
+  return this;
+};
+
+/**
+ * Gets/sets the `lookup` function to use custom DNS resolver.
+ *
+ * @param {Function} lookup
+ * @return {Function}
+ * @api public
+ */
+
+Request.prototype.lookup = function (lookup) {
+  if (arguments.length === 0) return this._lookup;
+  this._lookup = lookup;
   return this;
 };
 
@@ -759,6 +780,7 @@ Request.prototype.request = function () {
   options.cert = this._cert;
   options.passphrase = this._passphrase;
   options.agent = this._agent;
+  options.lookup = this._lookup;
   options.rejectUnauthorized =
     typeof this._disableTLSCerts === 'boolean'
       ? !this._disableTLSCerts
@@ -777,12 +799,12 @@ Request.prototype.request = function () {
   }
 
   // initiate request
-  const mod = this._enableHttp2
+  const module_ = this._enableHttp2
     ? exports.protocols['http2:'].setProtocol(url.protocol)
     : exports.protocols[url.protocol];
 
   // request
-  this.req = mod.request(options);
+  this.req = module_.request(options);
   const { req } = this;
 
   // set tcp no delay
@@ -825,13 +847,12 @@ Request.prototype.request = function () {
   }
 
   for (const key in this.header) {
-    if (Object.prototype.hasOwnProperty.call(this.header, key))
-      req.setHeader(key, this.header[key]);
+    if (hasOwn(this.header, key)) req.setHeader(key, this.header[key]);
   }
 
   // add cookies
   if (this.cookies) {
-    if (Object.prototype.hasOwnProperty.call(this._header, 'cookie')) {
+    if (hasOwn(this._header, 'cookie')) {
       // merge
       const temporaryJar = new CookieJar.CookieJar();
       temporaryJar.setCookies(this._header.cookie.split(';'));
@@ -879,8 +900,8 @@ Request.prototype.callback = function (error, res) {
         error = new Error(message);
         error.status = res ? res.status : undefined;
       }
-    } catch (error_) {
-      error = error_;
+    } catch (err) {
+      error = err;
     }
   }
 
@@ -1101,8 +1122,10 @@ Request.prototype._end = function () {
           // Parsers aren't required to observe error event,
           // so would incorrectly report success
           parserHandlesEnd = false;
-          // Will emit error event
+          // Will not emit error event
           res.destroy(error);
+          // so we do callback now
+          this.callback(error, null);
         }
       });
     }
@@ -1172,7 +1195,7 @@ Request.prototype._end = function () {
     let loaded = 0;
 
     const progress = new Stream.Transform();
-    progress._transform = (chunk, encoding, cb) => {
+    progress._transform = (chunk, encoding, callback) => {
       loaded += chunk.length;
       this.emit('progress', {
         direction: 'upload',
@@ -1180,7 +1203,7 @@ Request.prototype._end = function () {
         loaded,
         total
       });
-      cb(null, chunk);
+      callback(null, chunk);
     };
 
     return progress;
@@ -1214,7 +1237,7 @@ Request.prototype._end = function () {
     // set headers
     const headers = formData.getHeaders();
     for (const i in headers) {
-      if (Object.prototype.hasOwnProperty.call(headers, i)) {
+      if (hasOwn(headers, i)) {
         debug('setting FormData header: "%s: %s"', i, headers[i]);
         req.setHeader(i, headers[i]);
       }

@@ -1,7 +1,9 @@
+const semver = require('semver');
+
 /**
  * Module of mixed-in functions shared between node and client code
  */
-const isObject = require('./is-object');
+const { isObject, hasOwn } = require('./utils');
 
 /**
  * Expose `RequestBase`.
@@ -15,26 +17,7 @@ module.exports = RequestBase;
  * @api public
  */
 
-function RequestBase(object) {
-  if (object) return mixin(object);
-}
-
-/**
- * Mixin the prototype properties.
- *
- * @param {Object} obj
- * @return {Object}
- * @api private
- */
-
-function mixin(object) {
-  for (const key in RequestBase.prototype) {
-    if (Object.prototype.hasOwnProperty.call(RequestBase.prototype, key))
-      object[key] = RequestBase.prototype[key];
-  }
-
-  return object;
-}
+function RequestBase() { }
 
 /**
  * Clear previous timeout.
@@ -127,7 +110,7 @@ RequestBase.prototype.timeout = function (options) {
   }
 
   for (const option in options) {
-    if (Object.prototype.hasOwnProperty.call(options, option)) {
+    if (hasOwn(options, option)) {
       switch (option) {
         case 'deadline':
           this._timeout = options.deadline;
@@ -216,8 +199,8 @@ RequestBase.prototype._shouldRetry = function (error, res) {
       if (override === true) return true;
       if (override === false) return false;
       // undefined falls back to defaults
-    } catch (error_) {
-      console.error(error_);
+    } catch (err) {
+      console.error(err);
     }
   }
 
@@ -309,8 +292,8 @@ RequestBase.prototype.then = function (resolve, reject) {
   return this._fullfilledPromise.then(resolve, reject);
 };
 
-RequestBase.prototype.catch = function (cb) {
-  return this.then(undefined, cb);
+RequestBase.prototype.catch = function (callback) {
+  return this.then(undefined, callback);
 };
 
 /**
@@ -322,9 +305,9 @@ RequestBase.prototype.use = function (fn) {
   return this;
 };
 
-RequestBase.prototype.ok = function (cb) {
-  if (typeof cb !== 'function') throw new Error('Callback required');
-  this._okCallback = cb;
+RequestBase.prototype.ok = function (callback) {
+  if (typeof callback !== 'function') throw new Error('Callback required');
+  this._okCallback = callback;
   return this;
 };
 
@@ -391,8 +374,7 @@ RequestBase.prototype.getHeader = RequestBase.prototype.get;
 RequestBase.prototype.set = function (field, value) {
   if (isObject(field)) {
     for (const key in field) {
-      if (Object.prototype.hasOwnProperty.call(field, key))
-        this.set(key, field[key]);
+      if (hasOwn(field, key)) this.set(key, field[key]);
     }
 
     return this;
@@ -437,10 +419,11 @@ RequestBase.prototype.unset = function (field) {
  *
  * @param {String|Object} name name of field
  * @param {String|Blob|File|Buffer|fs.ReadStream} val value of field
+ * @param {String} options extra options, e.g. 'blob'
  * @return {Request} for chaining
  * @api public
  */
-RequestBase.prototype.field = function (name, value) {
+RequestBase.prototype.field = function (name, value, options) {
   // name should be either a string or an object.
   if (name === null || undefined === name) {
     throw new Error('.field(name, val) name can not be empty');
@@ -454,8 +437,7 @@ RequestBase.prototype.field = function (name, value) {
 
   if (isObject(name)) {
     for (const key in name) {
-      if (Object.prototype.hasOwnProperty.call(name, key))
-        this.field(key, name[key]);
+      if (hasOwn(name, key)) this.field(key, name[key]);
     }
 
     return this;
@@ -463,8 +445,7 @@ RequestBase.prototype.field = function (name, value) {
 
   if (Array.isArray(value)) {
     for (const i in value) {
-      if (Object.prototype.hasOwnProperty.call(value, i))
-        this.field(name, value[i]);
+      if (hasOwn(value, i)) this.field(name, value[i]);
     }
 
     return this;
@@ -479,7 +460,10 @@ RequestBase.prototype.field = function (name, value) {
     value = String(value);
   }
 
-  this._getFormData().append(name, value);
+  //fix https://github.com/visionmedia/superagent/issues/1680
+  if (options) this._getFormData().append(name, value, options);
+  else this._getFormData().append(name, value);
+
   return this;
 };
 
@@ -496,7 +480,36 @@ RequestBase.prototype.abort = function () {
 
   this._aborted = true;
   if (this.xhr) this.xhr.abort(); // browser
-  if (this.req) this.req.abort(); // node
+  if (this.req) {
+    // Node v13 has major differences in `abort()`
+    // https://github.com/nodejs/node/blob/v12.x/lib/internal/streams/end-of-stream.js
+    // https://github.com/nodejs/node/blob/v13.x/lib/internal/streams/end-of-stream.js
+    // https://github.com/nodejs/node/blob/v14.x/lib/internal/streams/end-of-stream.js
+    // (if you run a diff across these you will see the differences)
+    //
+    // References:
+    // <https://github.com/nodejs/node/issues/31630>
+    // <https://github.com/visionmedia/superagent/pull/1084/commits/dc18679a7c5ccfc6046d882015e5126888973bc8>
+    //
+    // Thanks to @shadowgate15 and @niftylettuce
+    if (
+      semver.gte(process.version, 'v13.0.0') &&
+      semver.lt(process.version, 'v14.0.0')
+    ) {
+      // Note that the reason this doesn't work is because in v13 as compared to v14
+      // there is no `callback = nop` set in end-of-stream.js above
+      throw new Error(
+        'Superagent does not work in v13 properly with abort() due to Node.js core changes'
+      );
+    } else if (semver.gte(process.version, 'v14.0.0')) {
+      // We have to manually set `destroyed` to `true` in order for this to work
+      // (see core internals of end-of-stream.js above in v14 branch as compared to v12)
+      this.req.destroyed = true;
+    }
+
+    this.req.abort(); // node
+  }
+
   this.clearTimeout();
   this.emit('abort');
   return this;
@@ -652,8 +665,7 @@ RequestBase.prototype.send = function (data) {
   // merge
   if (isObject_ && isObject(this._data)) {
     for (const key in data) {
-      if (Object.prototype.hasOwnProperty.call(data, key))
-        this._data[key] = data[key];
+      if (hasOwn(data, key)) this._data[key] = data[key];
     }
   } else if (typeof data === 'string') {
     // default to x-www-form-urlencoded

@@ -1,10 +1,17 @@
-const setup = require('./support/setup');
-
-const { uri } = setup;
 const assert = require('assert');
+const getSetup = require('./support/setup');
+
 const request = require('./support/client');
 
 describe('request', function () {
+  let setup;
+  let uri;
+
+  before(async () => {
+    setup = await getSetup();
+    uri = setup.uri;
+  });
+
   this.timeout(20_000);
 
   it('Request inheritance', () => {
@@ -951,9 +958,9 @@ describe('request', function () {
   it('req.toJSON()', (next) => {
     request.get(`${uri}/ok`).end((error, res) => {
       try {
-        const j = (res.request || res.req).toJSON();
-        for (const prop of ['url', 'method', 'data', 'headers']) {
-          assert(j.hasOwnProperty(prop));
+        const index = (res.request || res.req).toJSON();
+        for (const property of ['url', 'method', 'data', 'headers']) {
+          assert(index.hasOwnProperty(property));
         }
 
         next();

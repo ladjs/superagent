@@ -47,10 +47,10 @@ before(function listen(done) {
 });
 
 describe('request pipe', () => {
-  const destPath = 'test/node/fixtures/tmp.json';
+  const destinationPath = 'test/node/fixtures/tmp.json';
 
   after(function removeTmpfile(done) {
-    fs.unlink(destPath, done);
+    fs.unlink(destinationPath, done);
   });
 
   it('should act as a writable stream', (done) => {
@@ -68,7 +68,7 @@ describe('request pipe', () => {
   });
 
   it('end() stops piping', (done) => {
-    const stream = fs.createWriteStream(destPath);
+    const stream = fs.createWriteStream(destinationPath);
     request.get(base).end((error, res) => {
       try {
         res.pipe(stream);
@@ -82,7 +82,7 @@ describe('request pipe', () => {
   });
 
   it('should act as a readable stream', (done) => {
-    const stream = fs.createWriteStream(destPath);
+    const stream = fs.createWriteStream(destinationPath);
 
     let responseCalled = false;
     const request_ = request.get(base);
@@ -93,7 +93,7 @@ describe('request pipe', () => {
       responseCalled = true;
     });
     stream.on('finish', () => {
-      JSON.parse(fs.readFileSync(destPath, 'utf8')).should.eql({
+      JSON.parse(fs.readFileSync(destinationPath)).should.eql({
         name: 'tobi'
       });
       responseCalled.should.be.true();
@@ -103,7 +103,7 @@ describe('request pipe', () => {
   });
 
   it('should follow redirects', (done) => {
-    const stream = fs.createWriteStream(destPath);
+    const stream = fs.createWriteStream(destinationPath);
 
     let responseCalled = false;
     const request_ = request.get(base + '/redirect');
@@ -114,7 +114,7 @@ describe('request pipe', () => {
       responseCalled = true;
     });
     stream.on('finish', () => {
-      JSON.parse(fs.readFileSync(destPath, 'utf8')).should.eql({
+      JSON.parse(fs.readFileSync(destinationPath)).should.eql({
         name: 'tobi'
       });
       responseCalled.should.be.true();
@@ -124,7 +124,7 @@ describe('request pipe', () => {
   });
 
   it('should not throw on bad redirects', (done) => {
-    const stream = fs.createWriteStream(destPath);
+    const stream = fs.createWriteStream(destinationPath);
 
     let responseCalled = false;
     let errorCalled = false;

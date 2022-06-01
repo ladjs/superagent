@@ -1,12 +1,18 @@
 'use strict';
 
-const request = require('../support/client');
-const setup = require('../support/setup');
-
-const base = setup.uri;
 const assert = require('assert');
+const request = require('../support/client');
+const getSetup = require('../support/setup');
 
 describe('flags', () => {
+  let setup;
+  let base;
+
+  before(async () => {
+    setup = await getSetup();
+    base = setup.uri;
+  });
+
   describe('with 4xx response', () => {
     it('should set res.error and res.clientError', (done) => {
       request.get(`${base}/notfound`).end((error, res) => {

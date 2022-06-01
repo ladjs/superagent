@@ -5,6 +5,7 @@
 const util = require('util');
 const Stream = require('stream');
 const ResponseBase = require('../response-base');
+const { mixin } = require('../utils');
 
 /**
  * Expose `Response`.
@@ -33,7 +34,6 @@ function Response(request) {
   this.request = request;
   this.req = request.req;
   this.text = res.text;
-  this.body = res.body === undefined ? {} : res.body;
   this.files = res.files || {};
   this.buffered = request._resBuffered;
   this.headers = res.headers;
@@ -47,13 +47,28 @@ function Response(request) {
   res.on('error', this.emit.bind(this, 'error'));
 }
 
+// Lazy access res.body.
+// https://github.com/nodejs/node/pull/39520#issuecomment-889697136
+Object.defineProperty(Response.prototype, 'body', {
+  get() {
+    return this._body !== undefined
+      ? this._body
+      : this.res.body !== undefined
+      ? this.res.body
+      : {};
+  },
+  set(value) {
+    this._body = value;
+  }
+});
+
 /**
  * Inherit from `Stream`.
  */
 
 util.inherits(Response, Stream);
-// eslint-disable-next-line new-cap
-ResponseBase(Response.prototype);
+
+mixin(Response.prototype, ResponseBase.prototype);
 
 /**
  * Implements methods of a `ReadableStream`

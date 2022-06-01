@@ -1,17 +1,36 @@
 'use strict';
 
-const request = require('../support/client');
-const setup = require('../support/setup');
-
-const base = setup.uri;
 const assert = require('assert');
 const fs = require('fs');
+const path = require('path');
+const should = require('should');
+const getPort = require('get-port');
+const request = require('../support/client');
+const getSetup = require('../support/setup');
+const IS_WINDOWS = require('os').platform() === 'win32';
 
 function read(file) {
   return fs.readFileSync(file, 'utf8');
 }
 
+function getFullPath(filename) {
+  if (!IS_WINDOWS) {
+    return filename;
+  }
+
+  const fullPath = path.join(__dirname, '../../', filename);
+  return fullPath.charAt(0).toLowerCase() + fullPath.slice(1);
+}
+
 describe('Multipart', () => {
+  let setup;
+  let base;
+
+  before(async () => {
+    setup = await getSetup();
+    base = setup.uri;
+  });
+
   describe('#field(name, value)', () => {
     it('should set a multipart field value', () => {
       const request_ = request.post(`${base}/echo`);
@@ -39,9 +58,9 @@ describe('Multipart', () => {
         res.body.species.should.equal('ferret');
 
         const html = res.files.document;
-        html.name.should.equal('user.html');
-        html.type.should.equal('text/html');
-        read(html.path).should.equal('<h1>name</h1>');
+        html.originalFilename.should.equal('user.html');
+        html.mimetype.should.equal('text/html');
+        read(html.filepath).should.equal('<h1>name</h1>');
       });
     });
   });
@@ -59,17 +78,17 @@ describe('Multipart', () => {
         const json = res.files.two;
         const text = res.files.three;
 
-        html.name.should.equal('user.html');
-        html.type.should.equal('text/html');
-        read(html.path).should.equal('<h1>name</h1>');
+        html.originalFilename.should.equal('user.html');
+        html.mimetype.should.equal('text/html');
+        read(html.filepath).should.equal('<h1>name</h1>');
 
-        json.name.should.equal('user.json');
-        json.type.should.equal('application/json');
-        read(json.path).should.equal('{"name":"tobi"}');
+        json.originalFilename.should.equal('user.json');
+        json.mimetype.should.equal('application/json');
+        read(json.filepath).should.equal('{"name":"tobi"}');
 
-        text.name.should.equal('user.txt');
-        text.type.should.equal('text/plain');
-        read(text.path).should.equal('Tobi');
+        text.originalFilename.should.equal('user.txt');
+        text.mimetype.should.equal('text/plain');
+        read(text.filepath).should.equal('Tobi');
       });
     });
 
@@ -78,14 +97,14 @@ describe('Multipart', () => {
         const request_ = request.post(`${base}/echo`);
 
         request_.attach('name', 'foo');
-        request_.attach('name2', 'bar');
-        request_.attach('name3', 'baz');
+        // request_.attach('name2', 'bar');
+        // request_.attach('name3', 'baz');
 
         request_.end((error, res) => {
           assert.ok(Boolean(error), 'Request should have failed.');
           error.code.should.equal('ENOENT');
           error.message.should.containEql('ENOENT');
-          error.path.should.equal('foo');
+          error.path.should.equal(getFullPath('foo'));
           done();
         });
       });
@@ -99,28 +118,29 @@ describe('Multipart', () => {
             (res) => assert.fail('It should not allow this'),
             (err) => {
               err.code.should.equal('ENOENT');
-              err.path.should.equal('does-not-exist.txt');
+              err.path.should.equal(getFullPath('does-not-exist.txt'));
             }
           );
       });
 
-      it('should report ECONNREFUSED via the callback', (done) => {
+      it('should report ENOENT via the callback', (done) => {
         request
-          .post('http://127.0.0.1:1') // nobody is listening there
+          .post(`${base}/echo`)
           .attach('name', 'file-does-not-exist')
           .end((error, res) => {
             assert.ok(Boolean(error), 'Request should have failed');
-            error.code.should.equal('ECONNREFUSED');
+            error.code.should.equal('ENOENT');
             done();
           });
       });
-      it('should report ECONNREFUSED via Promise', () => {
+
+      it('should report ENOENT via Promise', () => {
         return request
-          .post('http://127.0.0.1:1') // nobody is listening there
+          .post(`${base}/echo`)
           .attach('name', 'file-does-not-exist')
           .then(
             (res) => assert.fail('Request should have failed'),
-            (err) => err.code.should.equal('ECONNREFUSED')
+            (err) => err.code.should.equal('ENOENT')
           );
       });
     });
@@ -133,9 +153,9 @@ describe('Multipart', () => {
         .attach('document', 'test/node/fixtures/user.html', 'doc.html')
         .then((res) => {
           const html = res.files.document;
-          html.name.should.equal('doc.html');
-          html.type.should.equal('text/html');
-          read(html.path).should.equal('<h1>name</h1>');
+          html.originalFilename.should.equal('doc.html');
+          html.mimetype.should.equal('text/html');
+          read(html.filepath).should.equal('<h1>name</h1>');
         }));
     it('should fire progress event', (done) => {
       let loaded = 0;
@@ -154,9 +174,9 @@ describe('Multipart', () => {
         .end((error, res) => {
           if (error) return done(error);
           const html = res.files.document;
-          html.name.should.equal('user.html');
-          html.type.should.equal('text/html');
-          read(html.path).should.equal('<h1>name</h1>');
+          html.originalFilename.should.equal('user.html');
+          html.mimetype.should.equal('text/html');
+          read(html.filepath).should.equal('<h1>name</h1>');
           total.should.equal(223);
           loaded.should.equal(223);
           uploadEventWasFired.should.equal(true);
@@ -170,7 +190,9 @@ describe('Multipart', () => {
         .end((error, res) => {
           assert.ok(Boolean(error), 'Request should have failed.');
           error.code.should.equal('ENOENT');
-          error.path.should.equal('test/node/fixtures/non-existent-file.ext');
+          error.path.should.equal(
+            getFullPath('test/node/fixtures/non-existent-file.ext')
+          );
           done();
         });
     });

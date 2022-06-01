@@ -83,7 +83,7 @@ Browser-ready versions of this module are available via [jsdelivr][], [unpkg][],
 This is the solution for you if you're just using `<script>` tags everywhere!
 
 ```html
-<script src="https://polyfill.io/v3/polyfill.min.js?features=Array.from,Promise,Symbol,Object.setPrototypeOf,Object.getOwnPropertySymbols,Set,Math.trunc"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=Array.from,Promise,Symbol,Object.setPrototypeOf,Object.getOwnPropertySymbols,Set,Math.trunc,BigInt,Map,Reflect,WeakMap,WeakRef,WeakSet,BigInt,Map,Reflect,WeakMap,WeakRef,WeakSet"></script>
 <script src="https://cdn.jsdelivr.net/npm/superagent"></script>
 <!-- if you wish to use unpkg.com instead: -->
 <!-- <script src="https://unpkg.com/superagent"></script> -->
@@ -159,11 +159,11 @@ If you are using [browserify][], [webpack][], [rollup][], or another bundler, th
 We recommend using <https://polyfill.io> (specifically with the bundle mentioned in [VanillaJS](#vanillajs) above):
 
 ```html
-<script src="https://polyfill.io/v3/polyfill.min.js?features=Array.from,Promise,Symbol,Object.setPrototypeOf,Object.getOwnPropertySymbols,Set,Math.trunc"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=Array.from,Promise,Symbol,Object.setPrototypeOf,Object.getOwnPropertySymbols,Set,Math.trunc,BigInt,Map,Reflect,WeakMap,WeakRef,WeakSet"></script>
 ```
 
 * IE 9-10 requires a polyfill for `Promise`, `Array.from`, `Symbol`, `Object.getOwnPropertySymbols`, and `Object.setPrototypeOf`
-* IE 9 requires a polyfill for `window.FormData` (we recommend [formdata-polyfill][]), `Set`, and `Math.trunc`
+* IE 9 requires a polyfill for `window.FormData` (we recommend [formdata-polyfill][]), `Set`, `Math.trunc`, `BigInt`, `Map`, `Reflect`, `WeakMap`, `WeakRef`, and `WeakSet`
 
 
 ## Plugins

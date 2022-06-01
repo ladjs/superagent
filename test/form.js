@@ -1,16 +1,20 @@
-const setup = require('./support/setup');
-
-const base = setup.uri;
-const should = require('should');
-const request = require('./support/client');
-
 const assert = require('assert');
+const should = require('should');
+
+const getSetup = require('./support/setup');
+const request = require('./support/client');
 
 if (!assert.deepStrictEqual) assert.deepStrictEqual = assert.deepEqual;
 
-const formDataSupported = setup.NODE || FormData !== 'undefined';
-
 describe('req.send(Object) as "form"', () => {
+  let setup;
+  let base;
+
+  before(async () => {
+    setup = await getSetup();
+    base = setup.uri;
+  });
+
   describe('with req.type() set to form', () => {
     it('should send x-www-form-urlencoded data', (done) => {
       request
@@ -59,6 +63,17 @@ describe('req.attach', () => {
 });
 
 describe('req.field', function () {
+  let setup;
+  let base;
+  let formDataSupported;
+
+  before(async () => {
+    setup = await getSetup();
+    base = setup.uri;
+
+    formDataSupported = setup.NODE || FormData !== 'undefined';
+  });
+
   this.timeout(5000);
   it('allow bools', (done) => {
     if (!formDataSupported) {

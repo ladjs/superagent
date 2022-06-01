@@ -1,20 +1,16 @@
 {
   "name": "superagent",
   "description": "elegant & feature rich browser / node HTTP with a fluent API",
-  "version": "6.1.0",
+  "version": "7.1.5",
   "author": "TJ Holowaychuk <tj@vision-media.ca>",
   "browser": {
     "./src/node/index.js": "./src/client.js",
     "./lib/node/index.js": "./lib/client.js",
-    "./test/support/server.js": "./test/support/blank.js"
+    "./test/support/server.js": "./test/support/blank.js",
+    "semver": false
   },
   "bugs": {
     "url": "https://github.com/visionmedia/superagent/issues"
-  },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
   },
   "contributors": [
     "Kornel Lesiński <kornel@geekhood.net>",
@@ -25,43 +21,45 @@
   "dependencies": {
     "component-emitter": "^1.3.0",
     "cookiejar": "^2.1.3",
-    "debug": "^4.3.3",
+    "debug": "^4.3.4",
     "fast-safe-stringify": "^2.1.1",
     "form-data": "^4.0.0",
     "formidable": "^2.0.1",
     "methods": "^1.1.2",
     "mime": "^2.5.0",
-    "qs": "^6.10.1",
+    "qs": "^6.10.3",
     "readable-stream": "^3.6.0",
-    "semver": "^7.3.5"
+    "semver": "^7.3.7"
   },
   "devDependencies": {
-    "@babel/cli": "^7.16.0",
-    "@babel/core": "^7.16.0",
-    "@babel/plugin-transform-runtime": "^7.16.4",
-    "@babel/preset-env": "^7.16.4",
-    "@commitlint/cli": "^15.0.0",
-    "@commitlint/config-conventional": "^15.0.0",
+    "@babel/cli": "^7.17.10",
+    "@babel/core": "^7.18.2",
+    "@babel/plugin-transform-runtime": "^7.18.2",
+    "@babel/preset-env": "^7.18.2",
+    "@babel/runtime": "^7.18.3",
+    "@commitlint/cli": "^17.0.1",
+    "@commitlint/config-conventional": "^17.0.0",
     "Base64": "^1.1.0",
     "babelify": "^10.0.0",
     "basic-auth-connect": "^1.0.0",
-    "body-parser": "^1.19.0",
+    "body-parser": "^1.20.0",
     "browserify": "^17.0.0",
     "codecov": "^3.8.3",
     "cookie-parser": "^1.4.6",
     "cross-env": "^7.0.3",
-    "eslint": "^8.3.0",
+    "eslint": "^8.16.0",
     "eslint-config-xo-lass": "^1.0.6",
-    "eslint-plugin-compat": "^4.0.0",
+    "eslint-plugin-compat": "^4.0.2",
     "eslint-plugin-node": "^11.1.0",
-    "express": "^4.17.1",
-    "express-session": "^1.17.2",
+    "express": "^4.18.1",
+    "express-session": "^1.17.3",
     "fixpack": "^4.0.0",
-    "husky": "^7.0.4",
-    "lint-staged": "^12.1.2",
+    "get-port": "4.2.0",
+    "husky": "^8.0.1",
+    "lint-staged": "^12.5.0",
     "marked": "^2.0.0",
-    "mocha": "3.5.3",
-    "multer": "^1.4.3",
+    "mocha": "6.2.2",
+    "multer": "^1.4.4",
     "nyc": "^15.1.0",
     "remark-cli": "^10.0.1",
     "remark-preset-github": "^4.0.1",
@@ -69,16 +67,17 @@
     "should": "^13.2.3",
     "should-http": "^0.1.1",
     "tinyify": "^3.0.0",
-    "xo": "^0.47.0",
+    "xo": "^0.49.0",
     "zuul": "^3.12.0"
   },
-  "homepage": "https://github.com/visionmedia/superagent",
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm test",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
+  "engines": {
+    "node": ">=6.4.0 <13 || >=14"
   },
+  "files": [
+    "dist/*.js",
+    "lib/**/*.js"
+  ],
+  "homepage": "https://github.com/visionmedia/superagent",
   "jsdelivr": "dist/superagent.min.js",
   "keywords": [
     "agent",
@@ -113,33 +112,7 @@
     "xmlhttprequest"
   ],
   "license": "MIT",
-  "lint-staged": {
-    "linters": {
-      "*.js": [
-        "xo --fix",
-        "git add"
-      ],
-      "*.md": [
-        "remark . -qfo",
-        "git add"
-      ],
-      "package.json": [
-        "fixpack",
-        "git add"
-      ]
-    }
-  },
   "main": "lib/node/index.js",
-  "prettier": {
-    "singleQuote": true,
-    "bracketSpacing": true,
-    "trailingComma": "none"
-  },
-  "remarkConfig": {
-    "plugins": [
-      "preset-github"
-    ]
-  },
   "repository": {
     "type": "git",
     "url": "git://github.com/visionmedia/superagent.git"
@@ -150,78 +123,14 @@
     "build:clean": "rimraf lib dist",
     "build:dist": "npm run browserify && npm run minify",
     "build:lib": "babel --config-file ./.lib.babelrc src --out-dir lib",
+    "build:test": "babel --config-file ./.test.babelrc test --out-dir lib/node/test",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
-    "lint": "xo && remark . -qfo && eslint -c .lib.eslintrc lib && eslint -c .dist.eslintrc dist",
+    "lint": "eslint -c .eslintrc src test && remark . -qfo && eslint -c .lib.eslintrc lib/**/*.js && eslint -c .dist.eslintrc dist/**/*.js",
     "minify": "cross-env NODE_ENV=production browserify src/node/index.js -o dist/superagent.min.js -s superagent -g [ babelify --configFile ./.dist.babelrc ] -p tinyify",
     "nyc": "cross-env NODE_ENV=test nyc ava",
+    "prepare": "husky install",
     "test": "npm run build && npm run lint && make test",
     "test-http2": "npm run build && npm run lint && make test-node-http2"
   },
-  "unpkg": "dist/superagent.min.js",
-  "xo": {
-    "prettier": true,
-    "space": true,
-    "extends": [
-      "xo-lass"
-    ],
-    "envs": [
-      "node",
-      "browser"
-    ],
-    "overrides": [
-      {
-        "files": "test/**/*.js",
-        "envs": [
-          "mocha"
-        ],
-        "rules": {
-          "block-scoped-var": "warn",
-          "complexity": "warn",
-          "default-case": "warn",
-          "eqeqeq": "warn",
-          "func-name-matching": "warn",
-          "func-names": "warn",
-          "guard-for-in": "warn",
-          "handle-callback-err": "warn",
-          "import/no-extraneous-dependencies": "warn",
-          "import/no-unassigned-import": "warn",
-          "import/order": "warn",
-          "max-nested-callbacks": "warn",
-          "new-cap": "warn",
-          "no-eq-null": "warn",
-          "no-extend-native": "warn",
-          "no-implicit-coercion": "warn",
-          "no-multi-assign": "warn",
-          "no-negated-condition": "warn",
-          "no-prototype-builtins": "warn",
-          "no-redeclare": "warn",
-          "no-undef": "warn",
-          "no-unused-expressions": "warn",
-          "no-unused-vars": "warn",
-          "no-use-extend-native/no-use-extend-native": "warn",
-          "no-useless-escape": "warn",
-          "no-var": "warn",
-          "no-void": "warn",
-          "node/no-deprecated-api": "warn",
-          "prefer-rest-params": "warn",
-          "prefer-spread": "warn",
-          "unicorn/filename-case": "warn",
-          "valid-jsdoc": "warn",
-          "node/no-path-concat": "warn",
-          "unicorn/no-empty-file": "warn"
-        }
-      }
-    ],
-    "rules": {
-      "unicorn/prevent-abbreviations": "warn",
-      "no-bitwise": "warn",
-      "node/prefer-global/buffer": "warn",
-      "node/prefer-global/process": "warn",
-      "unicorn/no-new-array": "warn",
-      "unicorn/no-this-assignment": "warn",
-      "unicorn/prefer-spread": "warn",
-      "unicorn/catch-error-name": "warn",
-      "unicorn/prefer-code-point": "warn"
-    }
-  }
+  "unpkg": "dist/superagent.min.js"
 }

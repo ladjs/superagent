@@ -1,12 +1,19 @@
-const setup = require('./support/setup');
-
-const { NODE } = setup;
-const { uri } = setup;
-
 const assert = require('assert');
+const getSetup = require('./support/setup');
+
 const request = require('./support/client');
 
 describe('request', function () {
+  let setup;
+  let NODE;
+  let uri;
+
+  before(async () => {
+    setup = await getSetup();
+    NODE = setup.NODE;
+    uri = setup.uri;
+  });
+
   this.timeout(20_000);
 
   describe('res.statusCode', () => {
@@ -93,7 +100,7 @@ describe('request', function () {
 
       return Promise.all([request_, request_, request_]).then((results) => {
         for (const item of results) {
-          assert.equal(
+          assert.deepEqual(
             item.body,
             results[0].body,
             'It should keep returning the same result after being called once'
@@ -584,8 +591,8 @@ describe('request', function () {
       request_.end((error, res) => {
         try {
           assert(false, 'should not complete the request');
-        } catch (error_) {
-          done(error_);
+        } catch (err) {
+          done(err);
         }
       });
 
@@ -618,8 +625,8 @@ describe('request', function () {
       request_.end((error, res) => {
         try {
           assert(false, 'should not complete the request');
-        } catch (error_) {
-          done(error_);
+        } catch (err) {
+          done(err);
         }
       });
 

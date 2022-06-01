@@ -47,15 +47,17 @@ describe('response', () => {
         trackCloseEvent++;
       });
 
-      (() => {
-        res.pause();
-      }).should.not.throw();
-      (() => {
-        res.resume();
-      }).should.not.throw();
-      (() => {
-        res.destroy();
-      }).should.not.throw();
+      setTimeout(() => {
+        (() => {
+          res.pause();
+        }).should.not.throw();
+        (() => {
+          res.resume();
+        }).should.not.throw();
+        (() => {
+          res.destroy();
+        }).should.not.throw();
+      }, 50);
     });
   });
 });

@@ -200,7 +200,8 @@ describe('req.query(Object)', () => {
       });
   });
 
-  it('query-string should be sent on pipe', (done) => {
+  it('query-string should be sent on pipe', function (done) {
+    this.timeout(15_000);
     const request_ = request.put(`${base}/?name=tobi`);
     const stream = fs.createReadStream('test/node/fixtures/user.json');
 
@@ -208,7 +209,13 @@ describe('req.query(Object)', () => {
       res.body.should.eql({ name: 'tobi' });
       done();
     });
+    request_.on('error', (err) => {
+      done(err);
+    });
 
+    stream.on('error', function (err) {
+      done(err);
+    });
     stream.pipe(request_);
   });
 });
