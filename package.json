@@ -128,6 +128,7 @@
     "lint": "eslint -c .eslintrc src test && remark . -qfo && eslint -c .lib.eslintrc lib/**/*.js && eslint -c .dist.eslintrc dist/**/*.js",
     "minify": "cross-env NODE_ENV=production browserify src/node/index.js -o dist/superagent.min.js -s superagent -g [ babelify --configFile ./.dist.babelrc ] -p tinyify",
     "nyc": "cross-env NODE_ENV=test nyc ava",
+    "prepare": "husky install",
     "test": "npm run build && npm run lint && make test",
     "test-http2": "npm run build && npm run lint && make test-node-http2"
   },
