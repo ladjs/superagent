@@ -34,7 +34,7 @@ jobs:
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
       - name: Install Dependencies On Old Node ${{ matrix.node-version }}
         if: ${{ matrix.test-on-old-node == '1' }}
-        run: yarn install --ignore-optional --ignore-scripts
+        run: node ci/remove-deps-4-old-node.js && yarn install --ignore-scripts
       - name: Install Dependencies On Node ${{ matrix.node-version }}
         if: ${{ matrix.test-on-old-node != '1' }}
         run: yarn install
