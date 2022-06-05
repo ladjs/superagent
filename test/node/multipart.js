@@ -19,7 +19,7 @@ function getFullPath(filename) {
   }
 
   const fullPath = path.join(__dirname, '../../', filename);
-  return fullPath.charAt(0).toLowerCase() + fullPath.slice(1);
+  return fullPath;
 }
 
 describe('Multipart', () => {
@@ -104,7 +104,14 @@ describe('Multipart', () => {
           assert.ok(Boolean(error), 'Request should have failed.');
           error.code.should.equal('ENOENT');
           error.message.should.containEql('ENOENT');
-          error.path.should.equal(getFullPath('foo'));
+          if (IS_WINDOWS) {
+            error.path.toLowerCase().should.equal(
+              getFullPath('foo').toLowerCase()
+            );
+          } else {
+            error.path.should.equal(getFullPath('foo'));
+          }
+
           done();
         });
       });
@@ -118,7 +125,14 @@ describe('Multipart', () => {
             (res) => assert.fail('It should not allow this'),
             (err) => {
               err.code.should.equal('ENOENT');
-              err.path.should.equal(getFullPath('does-not-exist.txt'));
+              if (IS_WINDOWS) {
+                err.path.toLowerCase().should.equal(
+                  getFullPath('does-not-exist.txt').toLowerCase()
+                );
+              } else {
+                err.path.should.equal(getFullPath('does-not-exist.txt'));
+              }
+
             }
           );
       });
@@ -190,9 +204,16 @@ describe('Multipart', () => {
         .end((error, res) => {
           assert.ok(Boolean(error), 'Request should have failed.');
           error.code.should.equal('ENOENT');
-          error.path.should.equal(
-            getFullPath('test/node/fixtures/non-existent-file.ext')
-          );
+          if (IS_WINDOWS) {
+            error.path.toLowerCase().should.equal(
+              getFullPath('test/node/fixtures/non-existent-file.ext').toLowerCase()
+            );
+          } else {
+            error.path.should.equal(
+              getFullPath('test/node/fixtures/non-existent-file.ext')
+            );
+          }
+
           done();
         });
     });
