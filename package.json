@@ -62,7 +62,7 @@
     "multer": "^1.4.4",
     "nyc": "^15.1.0",
     "remark-cli": "^10.0.1",
-    "remark-preset-github": "^4.0.4",
+    "remark-preset-github": "4.0.3",
     "rimraf": "^3.0.2",
     "should": "^13.2.3",
     "should-http": "^0.1.1",
