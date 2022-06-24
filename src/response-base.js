@@ -64,7 +64,7 @@ ResponseBase.prototype._setHeaderProperties = function (header) {
     if (header.link) {
       this.links = utils.parseLinks(header.link);
     }
-  } catch {
+  } catch (err) {
     // ignore
   }
 };

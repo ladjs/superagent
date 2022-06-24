@@ -84,8 +84,8 @@ module.exports = {
 				],
 			},
 		],
+    'unicorn/prefer-optional-catch-binding': 'off',
+    'no-unused-vars': 'off'
 	},
-	globals: [
-		'ActiveXObject',
-	],
+	globals: [],
 };

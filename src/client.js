@@ -60,11 +60,8 @@ exports.Request = Request;
  */
 
 request.getXHR = () => {
-  if (
-    root.XMLHttpRequest &&
-    (!root.location || root.location.protocol !== 'file:')
-  ) {
-    return new XMLHttpRequest();
+  if (root.XMLHttpRequest) {
+    return new root.XMLHttpRequest();
   }
 
   throw new Error('Browser-only version of superagent could not find XHR');
@@ -772,7 +769,7 @@ Request.prototype._end = function () {
     let status;
     try {
       status = xhr.status;
-    } catch {
+    } catch (err) {
       status = 0;
     }
 
@@ -807,7 +804,7 @@ Request.prototype._end = function () {
           handleProgress.bind(null, 'upload')
         );
       }
-    } catch {
+    } catch (err) {
       // Accessing xhr.upload fails in IE from a web worker, so just pretend it doesn't exist.
       // Reported here:
       // https://connect.microsoft.com/IE/feedback/details/837245/xmlhttprequest-upload-throws-invalid-argument-when-used-from-web-worker-context

@@ -40,21 +40,8 @@
   },
   "settings": {
     "polyfills": [
-      "Promise",
-      "Array.from",
-      "Symbol",
-      "Object.getOwnPropertySymbols",
-      "Object.setPrototypeOf",
-      "Set",
-      "Math.trunc",
-      "BigInt",
-      "Map",
-      "Reflect",
-      "WeakMap",
       "WeakRef",
-      "WeakSet",
-      "Atomics",
-      "SharedArrayBuffer"
+      "BigInt"
     ]
   }
 }

@@ -31,8 +31,5 @@
     "node/no-exports-assign": "off"
   },
   "globals": {
-    "ActiveXObject": "readonly"
   }
-    
-  
 }

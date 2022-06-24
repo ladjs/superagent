@@ -855,14 +855,16 @@ Libraries like [co](https://github.com/tj/co) or a web framework like [koa](http
     const res = yield req;
 ```
 
-Note that SuperAgent expects the global `Promise` object to be present. You'll need a polyfill to use promises in Internet Explorer or Node.js 0.10.
+Note that SuperAgent expects the global `Promise` object to be present. You'll need to use v7 and a polyfill to use promises in Internet Explorer or Node.js 0.10.
+
+We have dropped support in v8 for IE.  You must add a polyfill for WeakRef and BigInt if you wish to support Opera 85, iOS Safari 12.2-12.5, for example using <https://polyfill.io>:
+
+```html
+<script src="https://polyfill.io/v3/polyfill.min.js?features=WeakRef,BigInt"></script>
+```
 
 ## Browser and node versions
 
 SuperAgent has two implementations: one for web browsers (using XHR) and one for Node.JS (using core http module). By default Browserify and WebPack will pick the browser version.
 
 If want to use WebPack to compile code for Node.JS, you *must* specify [node target](https://webpack.github.io/docs/configuration.html#target) in its configuration.
-
-### Using browser version in electron
-
-[Electron](https://electron.atom.io/) developers report if you would prefer to use the browser version of SuperAgent instead of the Node version, you can `require('superagent/superagent')`. Your requests will now show up in the Chrome developer tools Network tab. Note this environment is not covered by automated test suite and not officially supported.
