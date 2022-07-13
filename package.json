@@ -112,7 +112,7 @@
     "xmlhttprequest"
   ],
   "license": "MIT",
-  "main": "lib/node/index.js",
+  "main": "src/node/index.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/visionmedia/superagent.git"
