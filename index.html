@@ -73,6 +73,13 @@
 
      });
 </code></pre>
+<h2 id="using-http/2">Using HTTP/2</h2>
+<p>To make a request using HTTP/2 protocol only (with no HTTP/1.x fallback), use the <code>.http2()</code> method.</p>
+<pre><code class="language-javascript">    const request = require(&#39;superagent&#39;);
+    const res = await request
+      .get(&#39;https://example.com/h2&#39;)
+      .http2();
+</code></pre>
 <h2 id="setting-header-fields">Setting header fields</h2>
 <p>Setting header fields is simple, invoke <code>.set()</code> with a field name and value:</p>
 <pre><code class="language-javascript">     request
