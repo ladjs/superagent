@@ -97,10 +97,12 @@ The HTTP method defaults to __GET__, so if you wish, the following is valid:
 
 To make a request using HTTP/2 protocol only (with no HTTP/1.x fallback), use the `.http2()` method. Currently we do not have auto-detection of HTTP/2-capable servers. This feature is experimental.
 
+```javascript
     const request = require('superagent');
     const res = await request
       .get('https://example.com/h2')
       .http2();
+```
 
 ## Setting header fields
 
