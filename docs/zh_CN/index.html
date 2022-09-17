@@ -73,6 +73,13 @@ try {
 
  });
 </code></pre>
+<h2 id="使用-http-2">使用 HTTP/2</h2>
+<p>要使用 HTTP/2 协议（没有 HTTP/1.x 后备），请使用 <code>.http2()</code> 方法。</p>
+<pre><code class="language-javascript">    const request = require(&#39;superagent&#39;);
+    const res = await request
+      .get(&#39;https://example.com/h2&#39;)
+      .http2();
+</code></pre>
 <h2 id="设置请求头字段">设置请求头字段</h2>
 <p>设置请求头字段很简单，调用 <code>.set()</code> 时传入字段名称和值：</p>
 <pre><code> request
