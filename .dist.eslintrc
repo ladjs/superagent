@@ -33,7 +33,8 @@
     "no-constant-condition": "off",
     "no-control-regex": "off",
     "no-fallthrough": "off",
-    "operator-linebreak": "off"
+    "operator-linebreak": "off",
+    "node/no-missing-require": "warn"
   },
   "globals": {
     "regeneratorRuntime": "writable"

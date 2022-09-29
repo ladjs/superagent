@@ -21,14 +21,16 @@
         "no-prototype-builtins": "off",
         "node/no-deprecated-api": "warn",
         "node/no-extraneous-require": "warn",
-        "no-unused-vars": "warn"
+        "no-unused-vars": "warn",
+        "node/no-missing-require": "warn"
       }
     }
   ],
   "rules": {
     "node/no-unsupported-features/node-builtins": "off",
     "node/no-unsupported-features/es-syntax": "off",
-    "node/no-exports-assign": "off"
+    "node/no-exports-assign": "off",
+    "no-unused-vars": "warn"
   },
   "globals": {
   }
