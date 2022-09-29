@@ -105,9 +105,9 @@ describe('Multipart', () => {
           error.code.should.equal('ENOENT');
           error.message.should.containEql('ENOENT');
           if (IS_WINDOWS) {
-            error.path.toLowerCase().should.equal(
-              getFullPath('foo').toLowerCase()
-            );
+            error.path
+              .toLowerCase()
+              .should.equal(getFullPath('foo').toLowerCase());
           } else {
             error.path.should.equal(getFullPath('foo'));
           }
@@ -126,13 +126,14 @@ describe('Multipart', () => {
             (err) => {
               err.code.should.equal('ENOENT');
               if (IS_WINDOWS) {
-                err.path.toLowerCase().should.equal(
-                  getFullPath('does-not-exist.txt').toLowerCase()
-                );
+                err.path
+                  .toLowerCase()
+                  .should.equal(
+                    getFullPath('does-not-exist.txt').toLowerCase()
+                  );
               } else {
                 err.path.should.equal(getFullPath('does-not-exist.txt'));
               }
-
             }
           );
       });
@@ -205,9 +206,13 @@ describe('Multipart', () => {
           assert.ok(Boolean(error), 'Request should have failed.');
           error.code.should.equal('ENOENT');
           if (IS_WINDOWS) {
-            error.path.toLowerCase().should.equal(
-              getFullPath('test/node/fixtures/non-existent-file.ext').toLowerCase()
-            );
+            error.path
+              .toLowerCase()
+              .should.equal(
+                getFullPath(
+                  'test/node/fixtures/non-existent-file.ext'
+                ).toLowerCase()
+              );
           } else {
             error.path.should.equal(
               getFullPath('test/node/fixtures/non-existent-file.ext')

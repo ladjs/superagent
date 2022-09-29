@@ -84,7 +84,6 @@ Request.prototype.createUnixConnection = function (authority, options) {
   }
 };
 
-// eslint-disable-next-line no-unused-vars
 Request.prototype.setNoDelay = function (bool) {
   // We can not use setNoDelay with HTTP/2.
   // Node 10 limits http2session.socket methods to ones safe to use with HTTP/2.
@@ -106,7 +105,7 @@ Request.prototype.getFrame = function () {
   headers = Object.assign(headers, method);
 
   const frame = this.session.request(headers);
-  // eslint-disable-next-line no-unused-vars
+
   frame.once('response', (headers, flags) => {
     headers = this.mapToHttpHeader(headers);
     frame.headers = headers;
@@ -191,7 +190,6 @@ Request.prototype.end = function (data) {
   frame.end(data);
 };
 
-// eslint-disable-next-line no-unused-vars
 Request.prototype.abort = function (data) {
   const frame = this.getFrame();
   frame.close(NGHTTP2_CANCEL);
