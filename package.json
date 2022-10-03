@@ -28,7 +28,6 @@
     "methods": "^1.1.2",
     "mime": "2.6.0",
     "qs": "^6.11.0",
-    "readable-stream": "^4.2.0",
     "semver": "^7.3.7"
   },
   "devDependencies": {
