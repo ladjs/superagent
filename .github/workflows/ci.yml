@@ -18,6 +18,7 @@ jobs:
           # test-on-brower: 1
         - node-version: 14.x
         - node-version: 16.x
+        - node-version: 18.x
     steps:
       - uses: actions/checkout@v2
 
