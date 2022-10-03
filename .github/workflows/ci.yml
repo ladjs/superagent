@@ -60,3 +60,5 @@ jobs:
       - name: Coverage On Node ${{ matrix.node-version }}
         run:
           npm run coverage
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
