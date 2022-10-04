@@ -14,18 +14,20 @@ jobs:
         - node-version: 10.x
           test-on-old-node: 1
         - node-version: 12.x
+          test-on-old-node: 1
           # test-on-brower: 1
         - node-version: 14.x
         - node-version: 16.x
+        - node-version: 18.x
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Install Node - ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
       - name: Cache node modules
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-node-modules
         with:
@@ -58,3 +60,5 @@ jobs:
       - name: Coverage On Node ${{ matrix.node-version }}
         run:
           npm run coverage
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3

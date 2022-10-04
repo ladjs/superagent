@@ -11,6 +11,7 @@ const UNSUPPORT_DEPS_4_OLD = new Set([
   'eslint-plugin-node',
   'husky',
   'lint-staged',
+  'marked',
   'remark-cli',
   'remark-preset-github',
   'xo'
