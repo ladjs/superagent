@@ -73,6 +73,7 @@ pre {
   -webkit-box-shadow: inset 0 0 5px #eee;
   -moz-box-shadow: inset 0 0 5px #eee;
   box-shadow: inset 0 0 5px #eee;
+  overflow: scroll;
 }
 
 code .comment { color: #ddd }
