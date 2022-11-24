@@ -543,7 +543,8 @@ RequestBase.prototype._auth = function (user, pass, options, base64Encoder) {
  * using "Access-Control-Allow-Origin" with a wildcard,
  * and also must set "Access-Control-Allow-Credentials"
  * to "true".
- *
+ * @param {Boolean} [on=true] - Set 'withCredentials' state
+ * @return {Request} for chaining
  * @api public
  */
 
