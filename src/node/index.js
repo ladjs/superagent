@@ -715,7 +715,7 @@ Request.prototype.request = function () {
   if (url.indexOf('http') !== 0) url = `http://${url}`;
   url = parse(url);
 
-  // See https://github.com/visionmedia/superagent/issues/1367
+  // See https://github.com/ladjs/superagent/issues/1367
   if (queryStringBackticks) {
     let i = 0;
     url.query = url.query.replace(/%60/g, () => queryStringBackticks[i++]);

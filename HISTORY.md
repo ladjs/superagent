@@ -1,6 +1,6 @@
 # This HISTORY log is deprecated
 
-Please see [GitHub releases page](https://github.com/visionmedia/superagent/releases) for the current changelog.
+Please see [GitHub releases page](https://github.com/ladjs/superagent/releases) for the current changelog.
 
 # 4.1.0 (2018-12-26)
 
@@ -70,22 +70,22 @@ Please see [GitHub releases page](https://github.com/visionmedia/superagent/rele
 
 # 3.6.0 (2017-08-20)
 
-* Support disabling TCP_NODELAY option ([#1240](https://github.com/visionmedia/superagent/issues/1240)) (xiamengyu)
+* Support disabling TCP_NODELAY option ([#1240](https://github.com/ladjs/superagent/issues/1240)) (xiamengyu)
 * Send payload in query string for GET and HEAD shorthand API (Peter Lyons)
 * Support passphrase with pfx certificate (Paul Westerdale (ABRS Limited))
 * Documentation improvements (Peter Lyons)
-* Fixed duplicated query string params ([#1200](https://github.com/visionmedia/superagent/issues/1200)) (Kornel)
+* Fixed duplicated query string params ([#1200](https://github.com/ladjs/superagent/issues/1200)) (Kornel)
 
 # 3.5.1 (2017-03-18)
 
-* Allow crossDomain errors to be retried ([#1194](https://github.com/visionmedia/superagent/issues/1194)) (Michael Olson)
+* Allow crossDomain errors to be retried ([#1194](https://github.com/ladjs/superagent/issues/1194)) (Michael Olson)
 * Read responseType property from the correct object (Julien Dupouy)
 * Check for ownProperty before adding header (Lucas Vieira)
 
 # 3.5.0 (2017-02-23)
 
-* Add errno to distinguish between request timeout and body download timeout ([#1184](https://github.com/visionmedia/superagent/issues/1184)) (Kornel Lesiński)
-* Warn about bogus timeout options ([#1185](https://github.com/visionmedia/superagent/issues/1185)) (Kornel Lesiński)
+* Add errno to distinguish between request timeout and body download timeout ([#1184](https://github.com/ladjs/superagent/issues/1184)) (Kornel Lesiński)
+* Warn about bogus timeout options ([#1185](https://github.com/ladjs/superagent/issues/1185)) (Kornel Lesiński)
 
 # 3.4.4 (2017-02-17)
 
@@ -222,7 +222,7 @@ Breaking changes are in rarely used functionality, so we hope upgrade will be sm
 
 # 1.7.2 (2016-01-26)
 
-* Fix case-sensitivity of header fields introduced by [`a4ddd6a`](https://github.com/visionmedia/superagent/commit/a4ddd6a). (Edward J. Jinotti)
+* Fix case-sensitivity of header fields introduced by [`a4ddd6a`](https://github.com/ladjs/superagent/commit/a4ddd6a). (Edward J. Jinotti)
 * bump extend dependency, as former version did not contain any license information (Lukas Eipert)
 
 # 1.7.1 (2016-01-21)
@@ -293,7 +293,7 @@ Breaking changes are in rarely used functionality, so we hope upgrade will be sm
 
 # 1.0.0 / 2015-03-08
 
-* All non-200 responses are treated as errors now. (The callback is called with an error when the response has a status &lt; 200 or >= 300 now. In previous versions this would not have raised an error and the client would have to check the `res` object. See [#283](https://github.com/visionmedia/superagent/issues/283).
+* All non-200 responses are treated as errors now. (The callback is called with an error when the response has a status &lt; 200 or >= 300 now. In previous versions this would not have raised an error and the client would have to check the `res` object. See [#283](https://github.com/ladjs/superagent/issues/283).
 * keep timeouts intact across redirects (hopkinsth)
 * handle falsy json values (themaarten)
 * fire response events in browser version (Schoonology)
@@ -397,7 +397,7 @@ Breaking changes are in rarely used functionality, so we hope upgrade will be sm
 
 # 0.15.3 / 2013-07-05
 
-* fix .pipe() unzipping on more recent nodes. Closes [#240](https://github.com/visionmedia/superagent/issues/240)
+* fix .pipe() unzipping on more recent nodes. Closes [#240](https://github.com/ladjs/superagent/issues/240)
 * fix passing an empty object to .query() no longer appends "?"
 * fix formidable error handling
 * update formidable
@@ -422,7 +422,7 @@ Breaking changes are in rarely used functionality, so we hope upgrade will be sm
 # 0.14.8 / 2013-06-13
 
 * set .agent = false always
-* remove X-Requested-With. Closes [#189](https://github.com/visionmedia/superagent/issues/189)
+* remove X-Requested-With. Closes [#189](https://github.com/ladjs/superagent/issues/189)
 
 # 0.14.7 / 2013-06-06
 
@@ -441,7 +441,7 @@ Breaking changes are in rarely used functionality, so we hope upgrade will be sm
 * add superagent.js build output
 * update qs
 * update emitter-component
-* revert "add browser field to support browserify" see [GH-221](https://github.com/visionmedia/superagent/issues/221)
+* revert "add browser field to support browserify" see [GH-221](https://github.com/ladjs/superagent/issues/221)
 
 # 0.14.3 / 2013-05-18
 
@@ -469,7 +469,7 @@ Breaking changes are in rarely used functionality, so we hope upgrade will be sm
 
 # 0.12.4 / 2013-02-11
 
-* fix get content-type even if can't get other headers in firefox. fixes [#181](https://github.com/visionmedia/superagent/issues/181)
+* fix get content-type even if can't get other headers in firefox. fixes [#181](https://github.com/ladjs/superagent/issues/181)
 
 # 0.12.3 / 2013-02-11
 
@@ -480,8 +480,8 @@ Breaking changes are in rarely used functionality, so we hope upgrade will be sm
 * add test to check if response acts as a readable stream
 * add ReadableStream in the Response prototype.
 * add test to assert correct redirection when the host changes in the location header.
-* add default Accept-Encoding. Closes [#155](https://github.com/visionmedia/superagent/issues/155)
-* fix req.pipe() return value of original stream for node parity. Closes [#171](https://github.com/visionmedia/superagent/issues/171)
+* add default Accept-Encoding. Closes [#155](https://github.com/ladjs/superagent/issues/155)
+* fix req.pipe() return value of original stream for node parity. Closes [#171](https://github.com/ladjs/superagent/issues/171)
 * remove the host header when cleaning headers to properly follow the redirection.
 
 # 0.12.1 / 2013-01-10
@@ -494,9 +494,9 @@ Breaking changes are in rarely used functionality, so we hope upgrade will be sm
 
 # 0.11.0 / 2013-01-02
 
-* add .error Error object. Closes [#156](https://github.com/visionmedia/superagent/issues/156)
-* add forcing of res.text removal for FF HEAD responses. Closes [#162](https://github.com/visionmedia/superagent/issues/162)
-* add reduce component usage. Closes [#90](https://github.com/visionmedia/superagent/issues/90)
+* add .error Error object. Closes [#156](https://github.com/ladjs/superagent/issues/156)
+* add forcing of res.text removal for FF HEAD responses. Closes [#162](https://github.com/ladjs/superagent/issues/162)
+* add reduce component usage. Closes [#90](https://github.com/ladjs/superagent/issues/90)
 * move better-assert dep to development deps
 
 # 0.10.0 / 2012-11-14
@@ -510,7 +510,7 @@ Breaking changes are in rarely used functionality, so we hope upgrade will be sm
 # 0.9.9 / 2012-11-14
 
 * add .parse(fn) support
-* fix socket hangup with dates in querystring. Closes [#146](https://github.com/visionmedia/superagent/issues/146)
+* fix socket hangup with dates in querystring. Closes [#146](https://github.com/ladjs/superagent/issues/146)
 * fix socket hangup "error" event when a callback of arity 2 is provided
 
 # 0.9.8 / 2012-11-03
@@ -530,7 +530,7 @@ Breaking changes are in rarely used functionality, so we hope upgrade will be sm
 
 * change: use `this` when `window` is undefined
 * update to new component spec [juliangruber]
-* fix emission of "data" events for compressed responses without encoding. Closes [#125](https://github.com/visionmedia/superagent/issues/125)
+* fix emission of "data" events for compressed responses without encoding. Closes [#125](https://github.com/ladjs/superagent/issues/125)
 
 # 0.9.5 / 2012-10-01
 
@@ -551,7 +551,7 @@ Breaking changes are in rarely used functionality, so we hope upgrade will be sm
 # 0.9.2 / 2012-09-17
 
 * add `.aborted` prop
-* add `.abort()`. Closes [#115](https://github.com/visionmedia/superagent/issues/115)
+* add `.abort()`. Closes [#115](https://github.com/ladjs/superagent/issues/115)
 
 # 0.9.1 / 2012-09-07
 
@@ -562,11 +562,11 @@ Breaking changes are in rarely used functionality, so we hope upgrade will be sm
 
 # 0.9.0 / 2012-08-28
 
-* add `.timeout(ms)`. Closes [#17](https://github.com/visionmedia/superagent/issues/17)
+* add `.timeout(ms)`. Closes [#17](https://github.com/ladjs/superagent/issues/17)
 
 # 0.8.2 / 2012-08-28
 
-* fix pathname relative redirects. Closes [#112](https://github.com/visionmedia/superagent/issues/112)
+* fix pathname relative redirects. Closes [#112](https://github.com/ladjs/superagent/issues/112)
 
 # 0.8.1 / 2012-08-21
 
@@ -575,7 +575,7 @@ Breaking changes are in rarely used functionality, so we hope upgrade will be sm
 # 0.8.0 / 2012-08-19
 
 * add `res.buffered` flag
-* add buffering of text/\*, json and forms only by default. Closes [#61](https://github.com/visionmedia/superagent/issues/61)
+* add buffering of text/\*, json and forms only by default. Closes [#61](https://github.com/ladjs/superagent/issues/61)
 * add `.buffer(false)` cancellation
 * add cookie jar support [hunterloftis]
 * add agent functionality [hunterloftis]
@@ -611,20 +611,20 @@ Breaking changes are in rarely used functionality, so we hope upgrade will be sm
 # 0.4.1 / 2012-04-13
 
 * Added HTTP PATCH support
-* Fixed: GET / HEAD when following redirects. Closes [#86](https://github.com/visionmedia/superagent/issues/86)
+* Fixed: GET / HEAD when following redirects. Closes [#86](https://github.com/ladjs/superagent/issues/86)
 * Fixed Content-Length detection for multibyte chars
 
 # 0.4.0 / 2012-03-04
 
-* Added `.head()` method [browser]. Closes [#78](https://github.com/visionmedia/superagent/issues/78)
+* Added `.head()` method [browser]. Closes [#78](https://github.com/ladjs/superagent/issues/78)
 * Added `make test-cov` support
-* Added multipart request support. Closes [#11](https://github.com/visionmedia/superagent/issues/11)
-* Added all methods that node supports. Closes [#71](https://github.com/visionmedia/superagent/issues/71)
-* Added "response" event providing a Response object. Closes [#28](https://github.com/visionmedia/superagent/issues/28)
-* Added `.query(obj)`. Closes [#59](https://github.com/visionmedia/superagent/issues/59)
-* Added `res.type` (browser). Closes [#54](https://github.com/visionmedia/superagent/issues/54)
+* Added multipart request support. Closes [#11](https://github.com/ladjs/superagent/issues/11)
+* Added all methods that node supports. Closes [#71](https://github.com/ladjs/superagent/issues/71)
+* Added "response" event providing a Response object. Closes [#28](https://github.com/ladjs/superagent/issues/28)
+* Added `.query(obj)`. Closes [#59](https://github.com/ladjs/superagent/issues/59)
+* Added `res.type` (browser). Closes [#54](https://github.com/ladjs/superagent/issues/54)
 * Changed: default `res.body` and `res.files` to {}
-* Fixed: port existing query-string fix (browser). Closes [#57](https://github.com/visionmedia/superagent/issues/57)
+* Fixed: port existing query-string fix (browser). Closes [#57](https://github.com/ladjs/superagent/issues/57)
 
 # 0.3.0 / 2012-01-24
 
@@ -633,19 +633,19 @@ Breaking changes are in rarely used functionality, so we hope upgrade will be sm
 * Added `res.statusCode` to mirror node
 * Added `res.headers` to mirror node
 * Changed: parsers take callbacks
-* Fixed optional schema support. Closes [#49](https://github.com/visionmedia/superagent/issues/49)
+* Fixed optional schema support. Closes [#49](https://github.com/ladjs/superagent/issues/49)
 
 # 0.2.0 / 2012-01-05
 
 * Added url auth support
 * Added `.auth(username, password)`
-* Added basic auth support [node]. Closes [#41](https://github.com/visionmedia/superagent/issues/41)
+* Added basic auth support [node]. Closes [#41](https://github.com/ladjs/superagent/issues/41)
 * Added `make test-docs`
-* Added guillermo's EventEmitter. Closes [#16](https://github.com/visionmedia/superagent/issues/16)
+* Added guillermo's EventEmitter. Closes [#16](https://github.com/ladjs/superagent/issues/16)
 * Removed `Request#data()` for SS, renamed to `send()`
 * Removed `Request#data()` from client, renamed to `send()`
 * Fixed array support. [browser]
-* Fixed array support. Closes [#35](https://github.com/visionmedia/superagent/issues/35) [node]
+* Fixed array support. Closes [#35](https://github.com/ladjs/superagent/issues/35) [node]
 * Fixed `EventEmitter#emit()`
 
 # 0.1.3 / 2011-10-25

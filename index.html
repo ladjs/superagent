@@ -261,7 +261,7 @@ the built-in serialization with the <code>.serialize()</code> method on a per-re
        .accept(&#39;png&#39;)
 </code></pre>
 <h3 id="facebook-and-accept-json">Facebook and Accept JSON</h3>
-<p>If you are calling Facebook&#39;s API, be sure to send an <code>Accept: application/json</code> header in your request. If you don&#39;t do this, Facebook will respond with <code>Content-Type: text/javascript; charset=UTF-8</code>, which SuperAgent will not parse and thus <code>res.body</code> will be undefined. You can do this with either <code>req.accept(&#39;json&#39;)</code> or <code>req.set(&#39;Accept&#39;, &#39;application/json&#39;)</code>. See <a href="https://github.com/visionmedia/superagent/issues/1078">issue 1078</a> for details.</p>
+<p>If you are calling Facebook&#39;s API, be sure to send an <code>Accept: application/json</code> header in your request. If you don&#39;t do this, Facebook will respond with <code>Content-Type: text/javascript; charset=UTF-8</code>, which SuperAgent will not parse and thus <code>res.body</code> will be undefined. You can do this with either <code>req.accept(&#39;json&#39;)</code> or <code>req.set(&#39;Accept&#39;, &#39;application/json&#39;)</code>. See <a href="https://github.com/ladjs/superagent/issues/1078">issue 1078</a> for details.</p>
 <h2 id="query-strings">Query strings</h2>
 <p>  <code>req.query(obj)</code> is a method which may be used to build up a query-string. For example populating <code>?format=json&amp;dest=/login</code> on a <strong>POST</strong>:</p>
 <pre><code class="language-javascript">    request
@@ -494,7 +494,7 @@ Tobi
       // BAD: this is also unsupported, .pipe calls .end for you.
       .pipe(nope_its_too_late);
 </code></pre>
-<p>In a <a href="https://github.com/visionmedia/superagent/issues/1188">future version</a> of superagent, improper calls to <code>pipe()</code> will fail.</p>
+<p>In a <a href="https://github.com/ladjs/superagent/issues/1188">future version</a> of superagent, improper calls to <code>pipe()</code> will fail.</p>
 <h2 id="multipart-requests">Multipart requests</h2>
 <p>SuperAgent is also great for <em>building</em> multipart requests for which it provides methods <code>.attach()</code> and <code>.field()</code>.</p>
 <p>When you use <code>.field()</code> or <code>.attach()</code> you can&#39;t use <code>.send()</code> and you <em>must not</em> set <code>Content-Type</code> (the correct type will be set for you).</p>
@@ -631,7 +631,7 @@ Tobi
 <p>If want to use WebPack to compile code for Node.JS, you <em>must</em> specify <a href="https://webpack.github.io/docs/configuration.html#target">node target</a> in its configuration.</p>
 
     </div>
-    <a href="http://github.com/visionmedia/superagent"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub"></a>
+    <a href="http://github.com/ladjs/superagent"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub"></a>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
     <script>
       $('code').each(function(){

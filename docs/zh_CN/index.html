@@ -255,7 +255,7 @@ try {
    .accept(&#39;png&#39;)
 </code></pre>
 <h3 id="facebook-和-accept-json">Facebook 和 Accept JSON</h3>
-<p>如果您正在调用 Facebook 的 API，请务必在您的请求中发送 <code>Accept: application/json</code> 请求头。如果你不这样做，Facebook 会回复 <code>Content-Type: text/javascript; charset=UTF-8</code>，SuperAgent 将不会解析，因此 <code>res.body</code> 将是未定义的。您可以使用 <code>req.accept(&#39;json&#39;)</code> 或 <code>req.header(&#39;Accept&#39;, &#39;application/json&#39;)</code> 来执行此操作。有关详细信息，请参阅 <a href="https://github.com/visionmedia/superagent/issues/1078">issue 1078</a>。</p>
+<p>如果您正在调用 Facebook 的 API，请务必在您的请求中发送 <code>Accept: application/json</code> 请求头。如果你不这样做，Facebook 会回复 <code>Content-Type: text/javascript; charset=UTF-8</code>，SuperAgent 将不会解析，因此 <code>res.body</code> 将是未定义的。您可以使用 <code>req.accept(&#39;json&#39;)</code> 或 <code>req.header(&#39;Accept&#39;, &#39;application/json&#39;)</code> 来执行此操作。有关详细信息，请参阅 <a href="https://github.com/ladjs/superagent/issues/1078">issue 1078</a>。</p>
 <h2 id="查询字符串query-strings">查询字符串(Query strings)</h2>
 <p><code>req.query(obj)</code> 是一种可用于构建查询字符串的方法。例如在 <strong>POST</strong> 上增加 <code>?format=json&amp;dest=/login</code>：</p>
 <pre><code>request
@@ -484,7 +484,7 @@ const req = request
   // BAD: 这也不支持，调用 .end 之后调用 .pipe。
   .pipe(nope_its_too_late);
 </code></pre>
-<p>在 superagent 的<a href="https://github.com/visionmedia/superagent/issues/1188">未来版本</a>中，对 <code>pipe()</code> 的不当调用将失败。</p>
+<p>在 superagent 的<a href="https://github.com/ladjs/superagent/issues/1188">未来版本</a>中，对 <code>pipe()</code> 的不当调用将失败。</p>
 <h2 id="多部分请求">多部分请求</h2>
 <p>SuperAgent 也非常适合 <em>构建</em> 它提供方法 <code>.attach()</code> 和 <code>.field()</code> 的多部分请求。</p>
 <p>当您使用 <code>.field()</code> 或 <code>.attach()</code> 时，您不能使用 <code>.send()</code> 并且您<em>不能</em>设置 <code>Content-Type</code>（将为您设置正确的类型）。</p>
@@ -622,7 +622,7 @@ const res = yield req;
 <h2 id="翻译说明">翻译说明</h2>
 <p>文档全部内容都是根据原英文文档翻译的，译者也没水平，所以如果有错误还请指出</p>
     </div>
-    <a href="http://github.com/visionmedia/superagent"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub"></a>
+    <a href="http://github.com/ladjs/superagent"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub"></a>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
     <script>
       $('code').each(function(){

@@ -352,7 +352,7 @@ In a similar fashion to the `.type()` method it is also possible to set the `Acc
 
 ### Facebook and Accept JSON
 
-If you are calling Facebook's API, be sure to send an `Accept: application/json` header in your request. If you don't do this, Facebook will respond with `Content-Type: text/javascript; charset=UTF-8`, which SuperAgent will not parse and thus `res.body` will be undefined. You can do this with either `req.accept('json')` or `req.set('Accept', 'application/json')`. See [issue 1078](https://github.com/visionmedia/superagent/issues/1078) for details.
+If you are calling Facebook's API, be sure to send an `Accept: application/json` header in your request. If you don't do this, Facebook will respond with `Content-Type: text/javascript; charset=UTF-8`, which SuperAgent will not parse and thus `res.body` will be undefined. You can do this with either `req.accept('json')` or `req.set('Accept', 'application/json')`. See [issue 1078](https://github.com/ladjs/superagent/issues/1078) for details.
 
 ## Query strings
 
@@ -675,7 +675,7 @@ Or piping the response to a file:
       .pipe(nope_its_too_late);
 ```
 
-In a [future version](https://github.com/visionmedia/superagent/issues/1188) of superagent, improper calls to `pipe()` will fail.
+In a [future version](https://github.com/ladjs/superagent/issues/1188) of superagent, improper calls to `pipe()` will fail.
 
 ## Multipart requests
 

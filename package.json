@@ -10,7 +10,7 @@
     "semver": false
   },
   "bugs": {
-    "url": "https://github.com/visionmedia/superagent/issues"
+    "url": "https://github.com/ladjs/superagent/issues"
   },
   "contributors": [
     "Kornel Lesiński <kornel@geekhood.net>",
@@ -75,7 +75,7 @@
     "dist/*.js",
     "lib/**/*.js"
   ],
-  "homepage": "https://github.com/visionmedia/superagent",
+  "homepage": "https://github.com/ladjs/superagent",
   "jsdelivr": "dist/superagent.min.js",
   "keywords": [
     "agent",
@@ -113,7 +113,7 @@
   "main": "lib/node/index.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/visionmedia/superagent.git"
+    "url": "git://github.com/ladjs/superagent.git"
   },
   "scripts": {
     "browserify": "browserify src/node/index.js -o dist/superagent.js -s superagent -g [ babelify --configFile ./.dist.babelrc ]",

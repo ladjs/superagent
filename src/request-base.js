@@ -460,7 +460,7 @@ RequestBase.prototype.field = function (name, value, options) {
     value = String(value);
   }
 
-  // fix https://github.com/visionmedia/superagent/issues/1680
+  // fix https://github.com/ladjs/superagent/issues/1680
   if (options) this._getFormData().append(name, value, options);
   else this._getFormData().append(name, value);
 
@@ -489,7 +489,7 @@ RequestBase.prototype.abort = function () {
     //
     // References:
     // <https://github.com/nodejs/node/issues/31630>
-    // <https://github.com/visionmedia/superagent/pull/1084/commits/dc18679a7c5ccfc6046d882015e5126888973bc8>
+    // <https://github.com/ladjs/superagent/pull/1084/commits/dc18679a7c5ccfc6046d882015e5126888973bc8>
     //
     // Thanks to @shadowgate15 and @niftylettuce
     if (

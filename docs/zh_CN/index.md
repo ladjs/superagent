@@ -294,7 +294,7 @@ request
 
 ### Facebook 和 Accept JSON
 
-如果您正在调用 Facebook 的 API，请务必在您的请求中发送 `Accept: application/json` 请求头。如果你不这样做，Facebook 会回复 `Content-Type: text/javascript; charset=UTF-8`，SuperAgent 将不会解析，因此 `res.body` 将是未定义的。您可以使用 `req.accept('json')` 或 `req.header('Accept', 'application/json')` 来执行此操作。有关详细信息，请参阅 [issue 1078](https://github.com/visionmedia/superagent/issues/1078)。
+如果您正在调用 Facebook 的 API，请务必在您的请求中发送 `Accept: application/json` 请求头。如果你不这样做，Facebook 会回复 `Content-Type: text/javascript; charset=UTF-8`，SuperAgent 将不会解析，因此 `res.body` 将是未定义的。您可以使用 `req.accept('json')` 或 `req.header('Accept', 'application/json')` 来执行此操作。有关详细信息，请参阅 [issue 1078](https://github.com/ladjs/superagent/issues/1078)。
 
 ## 查询字符串(Query strings)
 
@@ -589,7 +589,7 @@ Node 客户端允许您通过管道将数据传入和传出请求。请注意，
       // BAD: 这也不支持，调用 .end 之后调用 .pipe。
       .pipe(nope_its_too_late);
 
-在 superagent 的[未来版本](https://github.com/visionmedia/superagent/issues/1188)中，对 `pipe()` 的不当调用将失败。
+在 superagent 的[未来版本](https://github.com/ladjs/superagent/issues/1188)中，对 `pipe()` 的不当调用将失败。
 
 ## 多部分请求
 

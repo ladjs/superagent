@@ -1,13 +1,13 @@
 # superagent
 
-[![build status](https://img.shields.io/travis/visionmedia/superagent.svg)](https://travis-ci.org/visionmedia/superagent)
-[![code coverage](https://img.shields.io/codecov/c/github/visionmedia/superagent.svg)](https://codecov.io/gh/visionmedia/superagent)
+[![build status](https://img.shields.io/travis/ladjs/superagent.svg)](https://travis-ci.org/ladjs/superagent)
+[![code coverage](https://img.shields.io/codecov/c/github/ladjs/superagent.svg)](https://codecov.io/gh/ladjs/superagent)
 [![code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![made with lass](https://img.shields.io/badge/made_with-lass-95CC28.svg)](https://lass.js.org)
-[![license](https://img.shields.io/github/license/visionmedia/superagent.svg)](LICENSE)
+[![license](https://img.shields.io/github/license/ladjs/superagent.svg)](LICENSE)
 
-> Small progressive client-side HTTP request library, and Node.js module with the same API, supporting many high-level HTTP client features
+> Small progressive client-side HTTP request library, and Node.js module with the same API, supporting many high-level HTTP client features.  Maintained for [Forward Email](https://github.com/forwardemail) and [Lad](https://github.com/ladjs).
 
 
 ## Table of Contents
@@ -204,34 +204,34 @@ Existing plugins:
 
 Please prefix your plugin with `superagent-*` so that it can easily be found by others.
 
-For SuperAgent extensions such as couchdb and oauth visit the [wiki](https://github.com/visionmedia/superagent/wiki).
+For SuperAgent extensions such as couchdb and oauth visit the [wiki](https://github.com/ladjs/superagent/wiki).
 
 
 ## Upgrading from previous versions
 
-Please see [GitHub releases page](https://github.com/visionmedia/superagent/releases) for the current changelog.
+Please see [GitHub releases page](https://github.com/ladjs/superagent/releases) for the current changelog.
 
 Our breaking changes are mostly in rarely used functionality and from stricter error handling.
 
-* [6.0 to 6.1](https://github.com/visionmedia/superagent/releases/tag/v6.1.0)
+* [6.0 to 6.1](https://github.com/ladjs/superagent/releases/tag/v6.1.0)
   * Browser behaviour changed to match Node when serializing `application/x-www-form-urlencoded`, using `arrayFormat: 'indices'` semantics of `qs` library. (See: <https://www.npmjs.com/package/qs#stringifying>)
-* [5.x to 6.x](https://github.com/visionmedia/superagent/releases/tag/v6.0.0):
+* [5.x to 6.x](https://github.com/ladjs/superagent/releases/tag/v6.0.0):
   * Retry behavior is still opt-in, however we now have a more fine-grained list of status codes and error codes that we retry against (see updated docs)
   * A specific issue with Content-Type matching not being case-insensitive is fixed
   * Set is now required for IE 9, see [Required Browser Features](#required-browser-features) for more insight
-* [4.x to 5.x](https://github.com/visionmedia/superagent/releases/tag/v5.0.0):
+* [4.x to 5.x](https://github.com/ladjs/superagent/releases/tag/v5.0.0):
   * We've implemented the build setup of [Lass](https://lass.js.org) to simplify our stack and linting
   * Unminified browserified build size has been reduced from 48KB to 20KB (via `tinyify` and the latest version of Babel using `@babel/preset-env` and `.browserslistrc`)
   * Linting support has been added using `caniuse-lite` and `eslint-plugin-compat`
   * We can now target what versions of Node we wish to support more easily using `.babelrc`
-* [3.x to 4.x](https://github.com/visionmedia/superagent/releases/tag/v4.0.0-alpha.1):
+* [3.x to 4.x](https://github.com/ladjs/superagent/releases/tag/v4.0.0-alpha.1):
   * Ensure you're running Node 6 or later. We've dropped support for Node 4.
   * We've started using ES6 and for compatibility with Internet Explorer you may need to use Babel.
   * We suggest migrating from `.end()` callbacks to `.then()` or `await`.
-* [2.x to 3.x](https://github.com/visionmedia/superagent/releases/tag/v3.0.0):
+* [2.x to 3.x](https://github.com/ladjs/superagent/releases/tag/v3.0.0):
   * Ensure you're running Node 4 or later. We've dropped support for Node 0.x.
   * Test code that calls `.send()` multiple times. Invalid calls to `.send()` will now throw instead of sending garbage.
-* [1.x to 2.x](https://github.com/visionmedia/superagent/releases/tag/v2.0.0):
+* [1.x to 2.x](https://github.com/ladjs/superagent/releases/tag/v2.0.0):
   * If you use `.parse()` in the *browser* version, rename it to `.serialize()`.
   * If you rely on `undefined` in query-string values being sent literally as the text "undefined", switch to checking for missing value instead. `?key=undefined` is now `?key` (without a value).
   * If you use `.then()` in Internet Explorer, ensure that you have a polyfill that adds a global `Promise` object.
