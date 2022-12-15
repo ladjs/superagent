@@ -65,7 +65,10 @@ Agent.prototype = Object.create(AgentBase.prototype);
 
 Agent.prototype._saveCookies = function (res) {
   const cookies = res.headers['set-cookie'];
-  if (cookies) this.jar.setCookies(cookies);
+  if (cookies) {
+    const url = parse(res.request?.url || '')
+    this.jar.setCookies(cookies, url.hostname, url.pathname);
+  }
 };
 
 /**
