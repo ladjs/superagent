@@ -120,6 +120,16 @@ describe('request', () => {
           assert.strictEqual(res.text, 'jar');
         }));
 
+    it('should not share cookies between domains', () => {
+      assert.equal(agent4.get('https://google.com').cookies, "");
+    });
+
+    it('should send cookies to allowed domain with a different path', () => {
+      const postRequest = agent4.post(`${base}/x/y/z`)
+      const cookiesNames = postRequest.cookies.split(';').map(cookie => cookie.split('=')[0])
+      cookiesNames.should.eql(['cookie', ' connect.sid']);
+    });
+
     it('should not share cookies', (done) => {
       agent2.get(`${base}/dashboard`).end((error, res) => {
         should.exist(error);
