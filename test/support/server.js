@@ -419,6 +419,7 @@ app.get('/cookie-redirect', (request, res) => {
 });
 
 app.get('/set-cookie', (request, res) => {
+  res.cookie('replaced', 'no')
   res.cookie('persist', '123');
   res.send('ok');
 });
