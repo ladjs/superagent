@@ -855,8 +855,8 @@ Request.prototype.request = function () {
     if (hasOwn(this._header, 'cookie')) {
       // merge
       const temporaryJar = new CookieJar.CookieJar();
-      temporaryJar.setCookies(this._header.cookie.split(';'));
-      temporaryJar.setCookies(this.cookies.split(';'));
+      temporaryJar.setCookies(this._header.cookie.split('; '));
+      temporaryJar.setCookies(this.cookies.split('; '));
       req.setHeader(
         'Cookie',
         temporaryJar.getCookies(CookieJar.CookieAccessInfo.All).toValueString()

@@ -9,6 +9,7 @@ const request = require('../support/client');
 const assert = require('assert');
 const should = require('should');
 const cookieParser = require('cookie-parser');
+const cookiejar = require('cookiejar');
 const session = require('express-session');
 let http = require('http');
 
@@ -40,6 +41,10 @@ app.post('/setcookie', (request_, res) => {
 
 app.get('/getcookie', (request_, res) => {
   res.status(200).send(request_.cookies.cookie);
+});
+
+app.get('/cookieheader', (request_, res) => {
+  res.status(200).send(request_.headers.cookie);
 });
 
 app.get('/dashboard', (request_, res) => {
@@ -119,6 +124,21 @@ describe('request', () => {
           res.should.have.status(200);
           assert.strictEqual(res.text, 'jar');
         }));
+
+    it('should produce a valid cookie header', (done) => {
+      agent4
+        .set('Cookie', 'first_cookie=dummy; cookie=jam')
+        .get(`${base}/cookieheader`)
+        .then((res) => {
+          const cookiePairs = res.text.split('; '); // https://httpwg.org/specs/rfc6265.html#rfc.section.4.2.1
+          assert.deepStrictEqual(cookiePairs, [
+            'first_cookie=dummy',
+            'cookie=jar',
+            `connect.sid=${agent4.jar.getCookie('connect.sid', cookiejar.CookieAccessInfo.All).value}`,
+          ]);
+          done();
+        });
+    });
 
     it('should not share cookies between domains', () => {
       assert.equal(agent4.get('https://google.com').cookies, "");
