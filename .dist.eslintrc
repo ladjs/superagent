@@ -8,14 +8,7 @@
   },
   "plugins": ["compat"],
   "rules": {
-    "node/no-unsupported-features/es-builtins": ["error", {
-      "version": ">=8.0.0",
-      "ignores": [
-        "Atomics",
-        "BigInt",
-        "SharedArrayBuffer"
-      ]
-    }],
+    "node/no-unsupported-features/es-builtins": "off",
     "compat/compat": "error",
     "no-console": "off",
     "no-empty": "off",

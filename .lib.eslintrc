@@ -4,6 +4,11 @@
     "browser": true
   },
   "rules": {
+    "node/no-unsupported-features/es-builtins": ["error", {
+      "version": ">=6.4.0",
+      "ignores": [
+      ]
+    }],
     "node/no-deprecated-api": "off",
     "no-console": "off",
     "no-unused-vars": "off",
