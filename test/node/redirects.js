@@ -71,6 +71,25 @@ describe('request', () => {
       });
     });
 
+    it('should overwrite previously set cookie during a redirect when agent is used', (done) => {
+      const agent = request.agent();
+      agent.get(`${base}/set-cookie`).end((error) => {
+        assert.ifError(error);
+        agent
+          .get(`${base}/cookie-redirect`)
+          .redirects(1)
+          .end((error, res) => {
+            try {
+              assert.ifError(error);
+              assert(/replaced=yes/.test(res.text), 'replaced=yes');
+              done();
+            } catch (err) {
+              done(err);
+            }
+          });
+      });
+    })
+
     it('should follow Location', (done) => {
       const redirects = [];
 

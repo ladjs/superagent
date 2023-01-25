@@ -551,12 +551,13 @@ Request.prototype._redirect = function (res) {
   _initHeaders(this);
 
   // redirect
+  this.res = res;
   this._endCalled = false;
   this.url = url;
   this.qs = {};
   this._query.length = 0;
   this.set(headers);
-  this.emit('redirect', res);
+  this._emitRedirect();
   this._redirectList.push(this.url);
   this.end(this._callback);
   return this;
@@ -967,6 +968,18 @@ Request.prototype._emitResponse = function (body, files) {
 
   this.emit('response', response);
   return response;
+};
+
+/**
+ * Emit `redirect` event, passing an instanceof `Response`.
+ *
+ * @api private
+ */
+
+Request.prototype._emitRedirect = function () {
+  const response = new Response(this);
+  response.redirects = this._redirectList;
+  this.emit('redirect', response);
 };
 
 Request.prototype.end = function (fn) {
