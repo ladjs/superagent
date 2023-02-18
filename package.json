@@ -61,7 +61,7 @@
     "nyc": "^15.1.0",
     "remark-cli": "^11.0.0",
     "remark-preset-github": "4.0.4",
-    "rimraf": "^4.1.2",
+    "rimraf": "3",
     "should": "^13.2.3",
     "should-http": "^0.1.1",
     "tinyify": "3.0.0",

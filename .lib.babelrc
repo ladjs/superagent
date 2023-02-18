@@ -1,11 +1,11 @@
 {
-    "presets": [
-      ["@babel/env", {
-        "targets": {
-          "node": "6.4.0",
-          "browsers": [ "defaults, not ie 11" ]
-        }
-      }]
-    ],
-    "sourceMaps": "inline"
-  }
+  "presets": [
+    ["@babel/env", {
+      "targets": {
+        "node": "6.4.0",
+        "browsers": [ "defaults, not ie 11" ]
+      }
+    }]
+  ],
+  "sourceMaps": "inline"
+}
