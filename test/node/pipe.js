@@ -6,6 +6,8 @@ const app = express();
 const fs = require('fs');
 const bodyParser = require('body-parser');
 let http = require('http');
+const zlib = require('zlib');
+const { pipeline } = require('stream');
 
 if (process.env.HTTP2_TEST) {
   http = require('http2');
@@ -15,6 +17,13 @@ app.use(bodyParser.json());
 
 app.get('/', (request_, res) => {
   fs.createReadStream('test/node/fixtures/user.json').pipe(res);
+});
+
+app.get('/gzip', (request_, res) => {
+  res.writeHead(200, {
+    'Content-Encoding': 'gzip'
+  });
+  fs.createReadStream('test/node/fixtures/user.json').pipe(new zlib.createGzip()).pipe(res);
 });
 
 app.get('/redirect', (request_, res) => {
@@ -100,6 +109,52 @@ describe('request pipe', () => {
       done();
     });
     request_.pipe(stream);
+  });
+
+  it('should act as a readable stream with unzip', (done) => {
+    const stream = fs.createWriteStream(destinationPath);
+
+    let responseCalled = false;
+    const request_ = request.get(base + '/gzip');
+    request_.type('json');
+
+    request_.on('response', (res) => {
+      res.status.should.eql(200);
+      responseCalled = true;
+    });
+    stream.on('finish', () => {
+      JSON.parse(fs.readFileSync(destinationPath)).should.eql({
+        name: 'tobi'
+      });
+      responseCalled.should.be.true();
+      done();
+    });
+    request_.pipe(stream);
+  });
+
+  it('should act as a readable stream with unzip and node.stream.pipeline', (done) => {
+    const stream = fs.createWriteStream(destinationPath);
+
+    let responseCalled = false;
+    const request_ = request.get(base + '/gzip');
+    request_.type('json');
+
+    request_.on('response', (res) => {
+      res.status.should.eql(200);
+      responseCalled = true;
+    });
+    // pipeline automatically ends streams by default.  Since unzipping introduces a transform stream that is
+    // not monitored by pipeline, we need to make sure request_ does not emit 'end' until the unzip step
+    // has finished writing data.  Otherwise, we'll either end up with truncated data or a 'write after end' error.
+    pipeline(request_, stream, function (err) {
+      (!!err).should.be.false();
+      responseCalled.should.be.true();
+
+      JSON.parse(fs.readFileSync(destinationPath)).should.eql({
+        name: 'tobi'
+      });
+      done();
+    });
   });
 
   it('should follow redirects', (done) => {
