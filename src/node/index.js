@@ -168,6 +168,7 @@ function Request(method, url) {
   this._redirectList = [];
   this._streamRequest = false;
   this._lookup = undefined;
+  this._invalidRequest = false;
   this.once('end', this.clearTimeout.bind(this));
 }
 
@@ -679,6 +680,13 @@ Request.prototype.disableTLSCerts = function () {
 Request.prototype.request = function () {
   if (this.req) return this.req;
 
+  if (this._invalidRequest) {
+    if (!this.called) {
+      console.warn('Invalid request error not handled');
+    }
+    return;
+  }
+
   const options = {};
 
   try {
@@ -693,7 +701,8 @@ Request.prototype.request = function () {
 
     this._finalizeQueryString();
   } catch (err) {
-    return this.emit('error', err);
+    this.callback(err, undefined, true);
+    return;
   }
 
   let { url } = this;
@@ -799,6 +808,13 @@ Request.prototype.request = function () {
     options.rejectUnauthorized = false;
   }
 
+  //https://github.com/ladjs/superagent/issues/1640
+  if (!exports.protocols[url.protocol]) {
+    const err = new Error('Unrecognized protocol ' + '"' + url.protocol + '"' + ' for url ' + '"' + url.href + '"');
+    this.callback(err, undefined, true);
+    return;
+  }
+
   // initiate request
   const module_ = this._enableHttp2
     ? exports.protocols['http2:'].setProtocol(url.protocol)
@@ -879,7 +895,11 @@ Request.prototype.request = function () {
  * @api private
  */
 
-Request.prototype.callback = function (error, res) {
+Request.prototype.callback = function (error, res, isInvalidRequest) {
+  if (isInvalidRequest === true) {
+    this._invalidRequest = true;
+  }
+
   if (this._shouldRetry(error, res)) {
     return this._retry();
   }
@@ -1005,6 +1025,13 @@ Request.prototype._end = function () {
     return this.callback(
       new Error('The request has been aborted even before .end() was called')
     );
+
+  if (this._invalidRequest) {
+    if (!this.called) {
+      console.warn('Invalid request error not handled');
+    }
+    return;
+  }
 
   let data = this._data;
   const { req } = this;
