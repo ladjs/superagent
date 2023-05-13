@@ -473,6 +473,14 @@ app.get('/bad-redirect', (request, res) => {
   res.status(307).end();
 });
 
+app.get('/bad-redirect/invalid-protocol-1', (request, res) => {
+  res.redirect('httphttp://invalid-protocol');
+});
+
+app.get('/bad-redirect/invalid-protocol-2', (request, res) => {
+  res.redirect('httpshttp:https/https/httpswhttpswhttpswhttps.hpsdhttps.httpschttpsohttpsmhttps/https');
+});
+
 app.all('/ua', (request, res) => {
   const { headers } = request;
   if (process.env.HTTP2_TEST) {
