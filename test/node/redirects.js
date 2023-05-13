@@ -257,6 +257,28 @@ describe('request', () => {
       });
     });
 
+    it('should handle bad / malformed protocol in location header (1)', (done) => {
+      request.get(`${base}/bad-redirect/invalid-protocol-1`).end((error, res) => {
+        try {
+          error.message.should.containEql('Unrecognized protocol');
+          done();
+        } catch (err) {
+          done(err);
+        }
+      });
+    });
+
+    it('should handle bad / malformed protocol in location header (2)', (done) => {
+      request.get(`${base}/bad-redirect/invalid-protocol-2`).end((error, res) => {
+        try {
+          error.message.should.containEql('Unrecognized protocol');
+          done();
+        } catch (err) {
+          done(err);
+        }
+      });
+    });
+
     describe('when relative', () => {
       it('should redirect to a sibling path', (done) => {
         const redirects = [];

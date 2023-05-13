@@ -189,6 +189,11 @@ const STATUS_CODES = new Set([
  * @returns {Boolean} if segment should be retried
  */
 RequestBase.prototype._shouldRetry = function (error, res) {
+
+  if (this._invalidRequest) {
+    return false;
+  }
+
   if (!this._maxRetries || this._retries++ >= this._maxRetries) {
     return false;
   }
