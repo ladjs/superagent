@@ -28,7 +28,7 @@
     "methods": "^1.1.2",
     "mime": "2.6.0",
     "qs": "^6.11.0",
-    "semver": "^7.3.8"
+    "semver": "^7.5.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.20.7",
