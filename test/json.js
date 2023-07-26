@@ -119,6 +119,32 @@ describe('req.send(Object) as "json"', function () {
       });
   });
 
+  it('should error for BigInt object', (done) => {
+    try {
+      request
+        .post(`${uri}/echo`)
+        .type('json')
+        .send({number: 1n})
+        throw new Error('Should have thrown error for object with BigInt')
+    } catch (error) {
+      assert.strictEqual(error.message, 'Cannot serialize BigInt value to json');
+    }
+    done();
+  });
+
+  it('should error for BigInt primitive', (done) => {
+    try {
+      request
+        .post(`${uri}/echo`)
+        .type('json')
+        .send(1n)
+        throw new Error('Should have thrown error for BigInt primitive')
+    } catch (error) {
+      assert.strictEqual(error.message, 'Cannot send value of type BigInt');
+    }
+    done();
+  });
+
   describe('when called several times', () => {
     it('should merge the objects', (done) => {
       request
