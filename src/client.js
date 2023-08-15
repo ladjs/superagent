@@ -75,7 +75,9 @@ request.getXHR = () => {
  * @api private
  */
 
-const trim = ''.trim ? (s) => s.trim() : (s) => s.replace(/(^\s*|\s*$)/g, '');
+const trim = ''.trim
+  ? (s) => s.trim()
+  : (s) => s.replaceAll(/(^\s*|\s*$)/g, '');
 
 /**
  * Serialize the given `obj`.
@@ -310,7 +312,7 @@ function Response(request_) {
   this.text =
     (this.req.method !== 'HEAD' &&
       (this.xhr.responseType === '' || this.xhr.responseType === 'text')) ||
-    typeof this.xhr.responseType === 'undefined'
+    this.xhr.responseType === undefined
       ? this.xhr.responseText
       : null;
   this.statusText = this.req.xhr.statusText;
@@ -423,7 +425,7 @@ function Request(method, url) {
       if (self.xhr) {
         // ie9 doesn't have 'response' property
         error.rawResponse =
-          typeof self.xhr.responseType === 'undefined'
+          self.xhr.responseType === undefined
             ? self.xhr.responseText
             : self.xhr.response;
         // issue #876: return the http status code if the response parsing fails
@@ -867,7 +869,7 @@ Request.prototype._end = function () {
 
   // IE11 xhr.send(undefined) sends 'undefined' string as POST payload (instead of nothing)
   // We need null here if data is undefined
-  xhr.send(typeof data === 'undefined' ? null : data);
+  xhr.send(data === undefined ? null : data);
 };
 
 request.agent = () => new Agent();

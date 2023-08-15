@@ -1,7 +1,7 @@
 'use strict';
 
-const URL = require('url');
-const assert = require('assert');
+const URL = require('node:url');
+const assert = require('node:assert');
 const getSetup = require('../support/setup');
 const request = require('../support/client');
 
@@ -88,7 +88,7 @@ describe('request', () => {
             }
           });
       });
-    })
+    });
 
     it('should follow Location', (done) => {
       const redirects = [];

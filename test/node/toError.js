@@ -1,13 +1,13 @@
 'use strict';
-const assert = require('assert');
+const assert = require('node:assert');
 const request = require('../support/client');
 const express = require('../support/express');
 
 const app = express();
-let http = require('http');
+let http = require('node:http');
 
 if (process.env.HTTP2_TEST) {
-  http = require('http2');
+  http = require('node:http2');
 }
 
 app.get('/', (request_, res) => {

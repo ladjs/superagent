@@ -1,5 +1,5 @@
 'use strict';
-const URL = require('url');
+const URL = require('node:url');
 const request = require('../support/client');
 const getSetup = require('../support/setup');
 

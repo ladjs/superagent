@@ -1,10 +1,9 @@
 'use strict';
-const assert = require('assert');
-
-let http = require('http');
-let https = require('https');
-const os = require('os');
-const fs = require('fs');
+const assert = require('node:assert');
+let http = require('node:http');
+let https = require('node:https');
+const os = require('node:os');
+const fs = require('node:fs');
 const express = require('../support/express');
 const request = require('../support/client');
 
@@ -19,7 +18,7 @@ let httpServer;
 let httpsServer;
 
 if (process.env.HTTP2_TEST) {
-  http = https = require('http2');
+  http = https = require('node:http2');
 }
 
 app.get('/', (request_, res) => {
@@ -45,7 +44,7 @@ describe('[unix-sockets] http', () => {
     httpServer.listen(httpSockPath, done);
   });
 
-  const base = `http+unix://${httpSockPath.replace(/\//g, '%2F')}`;
+  const base = `http+unix://${httpSockPath.replaceAll('/', '%2F')}`;
 
   describe('request', () => {
     it('path: / (root)', (done) => {
@@ -90,7 +89,7 @@ describe('[unix-sockets] https', () => {
     httpsServer.listen(httpsSockPath, done);
   });
 
-  const base = `https+unix://${httpsSockPath.replace(/\//g, '%2F')}`;
+  const base = `https+unix://${httpsSockPath.replaceAll('/', '%2F')}`;
 
   describe('request', () => {
     it('path: / (root)', (done) => {

@@ -1,13 +1,13 @@
 'use strict';
 
-const assert = require('assert');
-const fs = require('fs');
-const path = require('path');
+const assert = require('node:assert');
+const fs = require('node:fs');
+const path = require('node:path');
 const should = require('should');
 const getPort = require('get-port');
 const request = require('../support/client');
 const getSetup = require('../support/setup');
-const IS_WINDOWS = require('os').platform() === 'win32';
+const IS_WINDOWS = require('node:os').platform() === 'win32';
 
 function read(file) {
   return fs.readFileSync(file, 'utf8');

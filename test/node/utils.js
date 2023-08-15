@@ -1,5 +1,5 @@
 'use strict';
-const assert = require('assert');
+const assert = require('node:assert');
 const utils =
   process.env.OLD_NODE_TEST === '1'
     ? // eslint-disable-next-line node/no-missing-require

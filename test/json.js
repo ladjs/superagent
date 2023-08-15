@@ -2,7 +2,7 @@ const getSetup = require('./support/setup');
 
 const doesntWorkInHttp2 = !process.env.HTTP2_TEST;
 
-const assert = require('assert');
+const assert = require('node:assert');
 const request = require('./support/client');
 
 describe('req.send(Object) as "json"', function () {
@@ -99,7 +99,7 @@ describe('req.send(Object) as "json"', function () {
           try {
             res.should.be.json();
             res.text.should.equal('{"tobi":"ferret"}');
-            ({ tobi: 'ferret' }.should.eql(res.body));
+            ({ tobi: 'ferret' }).should.eql(res.body);
             done();
           } catch (err) {
             done(err);
@@ -114,34 +114,30 @@ describe('req.send(Object) as "json"', function () {
       .send({ name: 'vendor' })
       .end((error, res) => {
         res.text.should.equal('{"name":"vendor"}');
-        ({ name: 'vendor' }.should.eql(res.body));
+        ({ name: 'vendor' }).should.eql(res.body);
         done();
       });
   });
 
   it('should error for BigInt object', (done) => {
     try {
-      request
-        .post(`${uri}/echo`)
-        .type('json')
-        .send({number: 1n})
-        throw new Error('Should have thrown error for object with BigInt')
-    } catch (error) {
-      assert.strictEqual(error.message, 'Cannot serialize BigInt value to json');
+      request.post(`${uri}/echo`).type('json').send({ number: 1n });
+      throw new Error('Should have thrown error for object with BigInt');
+    } catch (err) {
+      assert.strictEqual(err.message, 'Cannot serialize BigInt value to json');
     }
+
     done();
   });
 
   it('should error for BigInt primitive', (done) => {
     try {
-      request
-        .post(`${uri}/echo`)
-        .type('json')
-        .send(1n)
-        throw new Error('Should have thrown error for BigInt primitive')
-    } catch (error) {
-      assert.strictEqual(error.message, 'Cannot send value of type BigInt');
+      request.post(`${uri}/echo`).type('json').send(1n);
+      throw new Error('Should have thrown error for BigInt primitive');
+    } catch (err) {
+      assert.strictEqual(err.message, 'Cannot send value of type BigInt');
     }
+
     done();
   });
 
@@ -154,7 +150,7 @@ describe('req.send(Object) as "json"', function () {
         .end((error, res) => {
           res.should.be.json();
           res.text.should.equal('{"name":"tobi","age":1}');
-          ({ name: 'tobi', age: 1 }.should.eql(res.body));
+          ({ name: 'tobi', age: 1 }).should.eql(res.body);
           done();
         });
     });

@@ -2,9 +2,9 @@
  * Module dependencies.
  */
 
-const { StringDecoder } = require('string_decoder');
-const Stream = require('stream');
-const zlib = require('zlib');
+const { StringDecoder } = require('node:string_decoder');
+const Stream = require('node:stream');
+const zlib = require('node:zlib');
 
 /**
  * Buffers response data events and re-emits when they're unzipped.

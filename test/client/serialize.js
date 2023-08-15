@@ -1,5 +1,4 @@
-const assert = require('assert');
-
+const assert = require('node:assert');
 const request = require('../support/client');
 
 function serialize(object, res) {

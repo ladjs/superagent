@@ -1,6 +1,6 @@
 'use strict';
-const assert = require('assert');
-const net = require('net');
+const assert = require('node:assert');
+const net = require('node:net');
 const request = require('../support/client');
 const express = require('../support/express');
 

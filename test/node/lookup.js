@@ -1,6 +1,6 @@
 'use strict';
-const assert = require('assert');
-const dns = require('dns');
+const assert = require('node:assert');
+const dns = require('node:dns');
 const request = require('../support/client');
 const getSetup = require('../support/setup');
 

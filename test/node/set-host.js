@@ -3,8 +3,8 @@ const request = require('../support/client');
 const express = require('../support/express');
 
 const app = express();
-const http = require('http');
-const assert = require('assert');
+const http = require('node:http');
+const assert = require('node:assert');
 
 describe('request.get().set()', () => {
   if (process.env.HTTP2_TEST) {

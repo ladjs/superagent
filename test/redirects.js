@@ -1,5 +1,4 @@
-const assert = require('assert');
-
+const assert = require('node:assert');
 const getSetup = require('./support/setup');
 const request = require('./support/client');
 

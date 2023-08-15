@@ -2,19 +2,19 @@
 
 require('should-http');
 
-const express = require('../support/express');
-
-const app = express();
-const request = require('../support/client');
-const assert = require('assert');
+let http = require('node:http');
+const assert = require('node:assert');
 const should = require('should');
 const cookieParser = require('cookie-parser');
 const cookiejar = require('cookiejar');
 const session = require('express-session');
-let http = require('http');
+const request = require('../support/client');
+const express = require('../support/express');
+
+const app = express();
 
 if (process.env.HTTP2_TEST) {
-  http = require('http2');
+  http = require('node:http2');
   http.Http2ServerResponse.prototype._implicitHeader = function () {
     this.writeHead(this.statusCode);
   };
@@ -134,19 +134,26 @@ describe('request', () => {
           assert.deepStrictEqual(cookiePairs, [
             'first_cookie=dummy',
             'cookie=jar',
-            `connect.sid=${agent4.jar.getCookie('connect.sid', cookiejar.CookieAccessInfo.All).value}`,
+            `connect.sid=${
+              agent4.jar.getCookie(
+                'connect.sid',
+                cookiejar.CookieAccessInfo.All
+              ).value
+            }`
           ]);
           done();
         });
     });
 
     it('should not share cookies between domains', () => {
-      assert.equal(agent4.get('https://google.com').cookies, "");
+      assert.equal(agent4.get('https://google.com').cookies, '');
     });
 
     it('should send cookies to allowed domain with a different path', () => {
-      const postRequest = agent4.post(`${base}/x/y/z`)
-      const cookiesNames = postRequest.cookies.split(';').map(cookie => cookie.split('=')[0])
+      const postRequest = agent4.post(`${base}/x/y/z`);
+      const cookiesNames = postRequest.cookies
+        .split(';')
+        .map((cookie) => cookie.split('=')[0]);
       cookiesNames.should.eql(['cookie', ' connect.sid']);
     });
 

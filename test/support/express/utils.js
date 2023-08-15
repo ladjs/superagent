@@ -12,7 +12,7 @@
  * @api private
  */
 
-const querystring = require('querystring');
+const querystring = require('node:querystring');
 const { Buffer } = require('safe-buffer');
 const contentType = require('content-type');
 const { mime } = require('send');
@@ -27,7 +27,7 @@ let isHttp2Supported = true;
  * @api private
  */
 try {
-  require('http2');
+  require('node:http2');
 } catch {
   isHttp2Supported = false;
 }
@@ -132,19 +132,28 @@ exports.compileETag = function (value) {
   }
 
   switch (value) {
-    case true:
+    case true: {
       fn = exports.wetag;
       break;
-    case false:
+    }
+
+    case false: {
       break;
-    case 'strong':
+    }
+
+    case 'strong': {
       fn = exports.etag;
       break;
-    case 'weak':
+    }
+
+    case 'weak': {
       fn = exports.wetag;
       break;
-    default:
+    }
+
+    default: {
       throw new TypeError('unknown value for etag function: ' + value);
+    }
   }
 
   return fn;
@@ -166,19 +175,28 @@ exports.compileQueryParser = function compileQueryParser(value) {
   }
 
   switch (value) {
-    case true:
+    case true: {
       fn = querystring.parse;
       break;
-    case false:
+    }
+
+    case false: {
       break;
-    case 'extended':
+    }
+
+    case 'extended': {
       fn = parseExtendedQueryString;
       break;
-    case 'simple':
+    }
+
+    case 'simple': {
       fn = querystring.parse;
       break;
-    default:
+    }
+
+    default: {
       throw new TypeError('unknown value for query parser function: ' + value);
+    }
   }
 
   return fn;
@@ -256,7 +274,7 @@ exports.setCharset = function setCharset(type, charset) {
 
 function createETagGenerator(options) {
   return function generateETag(body, encoding) {
-    const buf = !Buffer.isBuffer(body) ? Buffer.from(body, encoding) : body;
+    const buf = Buffer.isBuffer(body) ? body : Buffer.from(body, encoding);
 
     return etag(buf, options);
   };

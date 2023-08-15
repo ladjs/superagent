@@ -1,14 +1,14 @@
-const Stream = require('stream');
-const net = require('net');
-const tls = require('tls');
+const Stream = require('node:stream');
+const net = require('node:net');
+const tls = require('node:tls');
 // eslint-disable-next-line node/no-deprecated-api
-const { parse } = require('url');
-const process = require('process');
+const { parse } = require('node:url');
+const process = require('node:process');
 const semverGte = require('semver/functions/gte');
 
 let http2;
 
-if (semverGte(process.version, 'v10.10.0')) http2 = require('http2');
+if (semverGte(process.version, 'v10.10.0')) http2 = require('node:http2');
 else
   throw new Error('superagent: this version of Node.js does not support http2');
 
@@ -70,15 +70,20 @@ class Request extends Stream {
 
   createUnixConnection(authority, options) {
     switch (this.protocol) {
-      case 'http:':
+      case 'http:': {
         return net.connect(options.socketPath);
-      case 'https:':
+      }
+
+      case 'https:': {
         options.ALPNProtocols = ['h2'];
         options.servername = this.host;
         options.allowHalfOpen = true;
         return tls.connect(options.socketPath, options);
-      default:
+      }
+
+      default: {
         throw new Error('Unsupported protocol', this.protocol);
+      }
     }
   }
 
@@ -129,11 +134,14 @@ class Request extends Stream {
       let value = headers[key];
       key = key.toLowerCase();
       switch (key) {
-        case HTTP2_HEADER_SET_COOKIE:
+        case HTTP2_HEADER_SET_COOKIE: {
           value = Array.isArray(value) ? value : [value];
           break;
-        default:
+        }
+
+        default: {
           break;
+        }
       }
 
       http2Headers[key] = value;
@@ -149,14 +157,17 @@ class Request extends Stream {
       let value = headers[key];
       key = key.toLowerCase();
       switch (key) {
-        case HTTP2_HEADER_HOST:
+        case HTTP2_HEADER_HOST: {
           key = HTTP2_HEADER_AUTHORITY;
           value = /^http:\/\/|^https:\/\//.test(value)
             ? parse(value).host
             : value;
           break;
-        default:
+        }
+
+        default: {
           break;
+        }
       }
 
       http2Headers[key] = value;

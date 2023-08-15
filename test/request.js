@@ -1,8 +1,6 @@
-const fs = require('fs');
-
-const assert = require('assert');
+const fs = require('node:fs');
+const assert = require('node:assert');
 const getSetup = require('./support/setup');
-
 const request = require('./support/client');
 
 const binData = fs.readFileSync(`${__dirname}/node/fixtures/test.aac`);

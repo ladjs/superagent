@@ -12,7 +12,7 @@
  * @private
  */
 
-const path = require('path');
+const path = require('node:path');
 const { Buffer } = require('safe-buffer');
 const contentDisposition = require('content-disposition');
 const encodeUrl = require('encodeurl');
@@ -113,15 +113,17 @@ function setMethods(res) {
 
     switch (typeof chunk) {
       // string defaulting to html
-      case 'string':
+      case 'string': {
         if (!this.get('Content-Type')) {
           this.type('html');
         }
 
         break;
+      }
+
       case 'boolean':
       case 'number':
-      case 'object':
+      case 'object': {
         if (chunk === null) {
           chunk = '';
         } else if (Buffer.isBuffer(chunk)) {
@@ -133,6 +135,7 @@ function setMethods(res) {
         }
 
         break;
+      }
     }
 
     // write strings in utf-8
@@ -267,10 +270,12 @@ function setMethods(res) {
       this.set('Content-Type', 'text/javascript');
 
       // restrict callback charset
-      callback = callback.replace(/[^[\]\w$.]/g, '');
+      callback = callback.replaceAll(/[^[\]\w$.]/g, '');
 
       // replace chars not allowed in JavaScript that are in JSON
-      body = body.replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029');
+      body = body
+        .replaceAll('\u2028', '\\u2028')
+        .replaceAll('\u2029', '\\u2029');
 
       // the /**/ is a specific security mitigation for "Rosetta Flash JSONP abuse"
       // the typeof check is just to reduce client error noise
@@ -468,7 +473,7 @@ function setMethods(res) {
    */
 
   res.contentType = res.type = function contentType(type) {
-    const ct = !type.includes('/') ? mime.lookup(type) : type;
+    const ct = type.includes('/') ? type : mime.lookup(type);
 
     return this.set('Content-Type', ct);
   };
@@ -999,16 +1004,23 @@ function stringify(value, replacer, spaces, escape) {
       : JSON.stringify(value);
 
   if (escape) {
-    json = json.replace(/[<>&]/g, (c) => {
+    json = json.replaceAll(/[<>&]/g, (c) => {
       switch (c.charCodeAt(0)) {
-        case 0x3c:
+        case 0x3c: {
           return '\\u003c';
-        case 0x3e:
+        }
+
+        case 0x3e: {
           return '\\u003e';
-        case 0x26:
+        }
+
+        case 0x26: {
           return '\\u0026';
-        default:
+        }
+
+        default: {
           return c;
+        }
       }
     });
   }
