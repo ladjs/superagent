@@ -662,9 +662,12 @@ RequestBase.prototype.send = function (data) {
   // merge
   if (isObject_ && isObject(this._data)) {
     for (const key in data) {
+      if (typeof data[key] == "bigint") throw new Error("Cannot serialize BigInt value to json");
       if (hasOwn(data, key)) this._data[key] = data[key];
     }
-  } else if (typeof data === 'string') {
+  }
+  else if (typeof data === 'bigint') throw new Error("Cannot send value of type BigInt");
+  else if (typeof data === 'string') {
     // default to x-www-form-urlencoded
     if (!type) this.type('form');
     type = this._header['content-type'];
