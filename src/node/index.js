@@ -463,13 +463,13 @@ Request.prototype._pipeContinue = function (stream, options) {
         stream.emit('error', error);
       });
       res.pipe(unzipObject).pipe(stream, options);
+      // don't emit 'end' until unzipObject has completed writing all its data.
+      unzipObject.once('end', () => this.emit('end'));
     } else {
       res.pipe(stream, options);
+      res.once('end', () => this.emit('end'));
     }
 
-    res.once('end', () => {
-      this.emit('end');
-    });
   });
   return stream;
 };
