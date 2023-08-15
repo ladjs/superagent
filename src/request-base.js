@@ -501,10 +501,6 @@ RequestBase.prototype.abort = function () {
       throw new Error(
         'Superagent does not work in v13 properly with abort() due to Node.js core changes'
       );
-    } else if (semver.gte(process.version, 'v14.0.0')) {
-      // We have to manually set `destroyed` to `true` in order for this to work
-      // (see core internals of end-of-stream.js above in v14 branch as compared to v12)
-      this.req.destroyed = true;
     }
 
     this.req.abort(); // node
