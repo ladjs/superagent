@@ -662,7 +662,8 @@ RequestBase.prototype.send = function (data) {
   // merge
   if (isObject_ && isObject(this._data)) {
     for (const key in data) {
-      if (typeof data[key] == "bigint") throw new Error("Cannot serialize BigInt value to json");
+      if (typeof data[key] == 'bigint' && !data[key].toJSON)
+        throw new Error('Cannot serialize BigInt value to json');
       if (hasOwn(data, key)) this._data[key] = data[key];
     }
   }

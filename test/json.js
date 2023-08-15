@@ -132,6 +132,32 @@ describe('req.send(Object) as "json"', function () {
     done();
   });
 
+  describe('when BigInts have a .toJSON property', function () {
+    before(function () {
+      // eslint-disable-next-line node/no-unsupported-features/es-builtins
+      BigInt.prototype.toJSON = function () {
+        return this.toString();
+      };
+    });
+
+    it('should accept BigInt properties', (done) => {
+      request
+        .post(`${uri}/echo`)
+        .send({ number: 1n })
+        .end((error, res) => {
+          res.should.be.json();
+          res.text.should.equal('{"number":"1"}');
+          done();
+        });
+    });
+
+    after(function () {
+      // eslint-disable-next-line node/no-unsupported-features/es-builtins
+      delete BigInt.prototype.toJSON;
+    });
+  });
+
+
   it('should error for BigInt primitive', (done) => {
     try {
       request
