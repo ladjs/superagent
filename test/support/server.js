@@ -1,6 +1,6 @@
-const fs = require('node:fs');
-const path = require('node:path');
-let http = require('node:http');
+const fs = require('fs');
+const path = require('path');
+let http = require('http');
 const multer = require('multer');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -10,7 +10,7 @@ const express = require('./express');
 let isPseudoHeader;
 
 if (process.env.HTTP2_TEST) {
-  http = require('node:http2');
+  http = require('http2');
   const {
     HTTP2_HEADER_AUTHORITY,
     HTTP2_HEADER_METHOD,
@@ -24,14 +24,10 @@ if (process.env.HTTP2_TEST) {
       case HTTP2_HEADER_METHOD: // :method
       case HTTP2_HEADER_PATH: // :path
       case HTTP2_HEADER_AUTHORITY: // :authority
-      case HTTP2_HEADER_SCHEME: {
-        // :scheme
+      case HTTP2_HEADER_SCHEME: // :scheme
         return true;
-      }
-
-      default: {
+      default:
         return false;
-      }
     }
   };
 }
@@ -423,7 +419,7 @@ app.get('/cookie-redirect', (request, res) => {
 });
 
 app.get('/set-cookie', (request, res) => {
-  res.cookie('replaced', 'no');
+  res.cookie('replaced', 'no')
   res.cookie('persist', '123');
   res.send('ok');
 });
@@ -546,48 +542,48 @@ app.get('/error/ok/:id', (request, res) => {
   }
 
   const { id } = request.params;
-  if (called[id]) {
-    res.send(request.headers);
-    delete called[id];
-  } else {
+  if (!called[id]) {
     called[id] = true;
     res.status(500).send('boom');
+  } else {
+    res.send(request.headers);
+    delete called[id];
   }
 });
 
 app.get('/delay/:ms/ok/:id', (request, res) => {
   const { id } = request.params;
-  if (called[id]) {
-    res.send(`ok = ${request.url}`);
-    delete called[id];
-  } else {
+  if (!called[id]) {
     called[id] = true;
     const ms = Math.trunc(request.params.ms);
     setTimeout(() => {
       res.sendStatus(200);
     }, ms);
+  } else {
+    res.send(`ok = ${request.url}`);
+    delete called[id];
   }
 });
 
 app.get('/error/redirect/:id', (request, res) => {
   const { id } = request.params;
-  if (called[id]) {
-    res.redirect('/movies');
-    delete called[id];
-  } else {
+  if (!called[id]) {
     called[id] = true;
     res.status(500).send('boom');
+  } else {
+    res.redirect('/movies');
+    delete called[id];
   }
 });
 
 app.get('/error/redirect-error:id', (request, res) => {
   const { id } = request.params;
-  if (called[id]) {
-    res.redirect('/error');
-    delete called[id];
-  } else {
+  if (!called[id]) {
     called[id] = true;
     res.status(500).send('boom');
+  } else {
+    res.redirect('/error');
+    delete called[id];
   }
 });
 

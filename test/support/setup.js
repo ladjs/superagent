@@ -12,7 +12,10 @@ async function getSetup() {
   }
 
   NODE = true;
-  if (typeof window === 'undefined') {
+  if (typeof window !== 'undefined') {
+    NODE = false;
+    uri = `//${window.location.host}`;
+  } else {
     try {
       const port = await getPort();
 
@@ -25,9 +28,6 @@ async function getSetup() {
     } catch (err) {
       console.error(err);
     }
-  } else {
-    NODE = false;
-    uri = `//${window.location.host}`;
   }
 
   return { NODE, uri };

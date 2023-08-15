@@ -1,14 +1,14 @@
 'use strict';
-let http = require('node:http');
-const assert = require('node:assert');
-const fs = require('node:fs');
+let http = require('http');
+const assert = require('assert');
+const fs = require('fs');
 const request = require('../support/client');
 const express = require('../support/express');
 
 const app = express();
 
 if (process.env.HTTP2_TEST) {
-  http = require('node:http2');
+  http = require('http2');
 }
 
 app.get('/raw-query', (request_, res) => {

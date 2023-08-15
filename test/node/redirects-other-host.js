@@ -1,15 +1,15 @@
 'use strict';
-const assert = require('node:assert');
+const assert = require('assert');
 const request = require('../support/client');
 const express = require('../support/express');
 
 const app = express();
 const app2 = express();
 const should = require('should');
-let http = require('node:http');
+let http = require('http');
 
 if (process.env.HTTP2_TEST) {
-  http = require('node:http2');
+  http = require('http2');
 }
 
 let base = 'http://localhost';

@@ -3,8 +3,8 @@ if (!process.env.HTTP2_TEST) {
   return;
 }
 
-const assert = require('node:assert');
-const url = require('node:url');
+const assert = require('assert');
+const url = require('url');
 const request = require('../..');
 const getSetup = require('../support/setup');
 

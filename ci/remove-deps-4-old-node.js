@@ -1,5 +1,5 @@
-const fs = require('node:fs');
-const path = require('node:path');
+const fs = require('fs');
+const path = require('path');
 const package = require('../package.json');
 
 const UNSUPPORT_DEPS_4_OLD = new Set([

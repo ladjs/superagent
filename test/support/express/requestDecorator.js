@@ -13,7 +13,7 @@
  * @private
  */
 
-const { isIP } = require('node:net');
+const { isIP } = require('net');
 const accepts = require('accepts');
 const typeis = require('type-is');
 const fresh = require('fresh');
@@ -71,13 +71,10 @@ function setMethods(request) {
 
     switch (lc) {
       case 'referer':
-      case 'referrer': {
+      case 'referrer':
         return this.headers.referrer || this.headers.referer;
-      }
-
-      default: {
+      default:
         return this.headers[lc];
-      }
     }
   };
 
@@ -294,7 +291,7 @@ function setMethods(request) {
     const header = this.get('X-Forwarded-Proto') || proto;
     const index = header.indexOf(',');
 
-    return index === -1 ? header.trim() : header.slice(0, index).trim();
+    return index !== -1 ? header.slice(0, index).trim() : header.trim();
   });
 
   /**
@@ -369,9 +366,9 @@ function setMethods(request) {
     if (!hostname) return [];
 
     const offset = this.app.get('subdomain offset');
-    const subdomains = isIP(hostname)
-      ? [hostname]
-      : hostname.split('.').reverse();
+    const subdomains = !isIP(hostname)
+      ? hostname.split('.').reverse()
+      : [hostname];
 
     return subdomains.slice(offset);
   });
@@ -429,7 +426,7 @@ function setMethods(request) {
     const offset = host[0] === '[' ? host.indexOf(']') + 1 : 0;
     const index = host.indexOf(':', offset);
 
-    return index === -1 ? host : host.slice(0, index);
+    return index !== -1 ? host.slice(0, index) : host;
   });
 
   /**

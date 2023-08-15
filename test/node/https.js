@@ -1,9 +1,10 @@
 'use strict';
 
-const assert = require('node:assert');
-const url = require('node:url');
-const https = require('node:https');
-const fs = require('node:fs');
+const assert = require('assert');
+
+const url = require('url');
+const https = require('https');
+const fs = require('fs');
 const express = require('../support/express');
 const request = require('../support/client');
 
@@ -31,7 +32,7 @@ openssl pkcs12 -export -in cert.pem -inkey key.pem -out passcert.pfx # password 
  */
 let http2;
 if (process.env.HTTP2_TEST) {
-  http2 = require('node:http2');
+  http2 = require('http2');
 }
 
 let server;

@@ -1,5 +1,6 @@
-const assert = require('node:assert');
+const assert = require('assert');
 const getSetup = require('./support/setup');
+
 const request = require('./support/client');
 
 function uniqid() {

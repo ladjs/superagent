@@ -112,24 +112,17 @@ RequestBase.prototype.timeout = function (options) {
   for (const option in options) {
     if (hasOwn(options, option)) {
       switch (option) {
-        case 'deadline': {
+        case 'deadline':
           this._timeout = options.deadline;
           break;
-        }
-
-        case 'response': {
+        case 'response':
           this._responseTimeout = options.response;
           break;
-        }
-
-        case 'upload': {
+        case 'upload':
           this._uploadTimeout = options.upload;
           break;
-        }
-
-        default: {
+        default:
           console.warn('Unknown timeout option', option);
-        }
       }
     }
   }
@@ -520,26 +513,20 @@ RequestBase.prototype.abort = function () {
 
 RequestBase.prototype._auth = function (user, pass, options, base64Encoder) {
   switch (options.type) {
-    case 'basic': {
+    case 'basic':
       this.set('Authorization', `Basic ${base64Encoder(`${user}:${pass}`)}`);
       break;
-    }
 
-    case 'auto': {
+    case 'auto':
       this.username = user;
       this.password = pass;
       break;
-    }
 
-    case 'bearer': {
-      // usage would be .auth(accessToken, { type: 'bearer' })
+    case 'bearer': // usage would be .auth(accessToken, { type: 'bearer' })
       this.set('Authorization', `Bearer ${user}`);
       break;
-    }
-
-    default: {
+    default:
       break;
-    }
   }
 
   return this;
@@ -675,12 +662,11 @@ RequestBase.prototype.send = function (data) {
   // merge
   if (isObject_ && isObject(this._data)) {
     for (const key in data) {
-      if (typeof data[key] === 'bigint')
-        throw new Error('Cannot serialize BigInt value to json');
+      if (typeof data[key] == "bigint") throw new Error("Cannot serialize BigInt value to json");
       if (hasOwn(data, key)) this._data[key] = data[key];
     }
-  } else if (typeof data === 'bigint')
-    throw new Error('Cannot send value of type BigInt');
+  }
+  else if (typeof data === 'bigint') throw new Error("Cannot send value of type BigInt");
   else if (typeof data === 'string') {
     // default to x-www-form-urlencoded
     if (!type) this.type('form');
@@ -734,7 +720,7 @@ RequestBase.prototype.send = function (data) {
 
 RequestBase.prototype.sortQuery = function (sort) {
   // _sort default to true but otherwise can be a function or boolean
-  this._sort = sort === undefined ? true : sort;
+  this._sort = typeof sort === 'undefined' ? true : sort;
   return this;
 };
 

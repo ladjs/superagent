@@ -2,8 +2,8 @@
  * Module dependencies.
  */
 
-const util = require('node:util');
-const Stream = require('node:stream');
+const util = require('util');
+const Stream = require('stream');
 const ResponseBase = require('../response-base');
 const { mixin } = require('../utils');
 
@@ -51,11 +51,11 @@ function Response(request) {
 // https://github.com/nodejs/node/pull/39520#issuecomment-889697136
 Object.defineProperty(Response.prototype, 'body', {
   get() {
-    return this._body === undefined
-      ? this.res.body === undefined
-        ? {}
-        : this.res.body
-      : this._body;
+    return this._body !== undefined
+      ? this._body
+      : this.res.body !== undefined
+      ? this.res.body
+      : {};
   },
   set(value) {
     this._body = value;

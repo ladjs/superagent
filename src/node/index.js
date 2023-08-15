@@ -3,13 +3,13 @@
  */
 
 // eslint-disable-next-line node/no-deprecated-api
-const { parse, format, resolve } = require('node:url');
-const Stream = require('node:stream');
-const https = require('node:https');
-const http = require('node:http');
-const fs = require('node:fs');
-const zlib = require('node:zlib');
-const util = require('node:util');
+const { parse, format, resolve } = require('url');
+const Stream = require('stream');
+const https = require('https');
+const http = require('http');
+const fs = require('fs');
+const zlib = require('zlib');
+const util = require('util');
 const qs = require('qs');
 const mime = require('mime');
 let methods = require('methods');
@@ -19,6 +19,7 @@ const debug = require('debug')('superagent');
 const CookieJar = require('cookiejar');
 const semverGte = require('semver/functions/gte');
 const safeStringify = require('fast-safe-stringify');
+
 const utils = require('../utils');
 const RequestBase = require('../request-base');
 const { unzip } = require('./unzip');
@@ -468,6 +469,7 @@ Request.prototype._pipeContinue = function (stream, options) {
       res.pipe(stream, options);
       res.once('end', () => this.emit('end'));
     }
+
   });
   return stream;
 };
@@ -717,7 +719,7 @@ Request.prototype.request = function () {
   // See https://github.com/ladjs/superagent/issues/1367
   if (queryStringBackticks) {
     let i = 0;
-    url.query = url.query.replaceAll('%60', () => queryStringBackticks[i++]);
+    url.query = url.query.replace(/%60/g, () => queryStringBackticks[i++]);
     url.search = `?${url.query}`;
     url.path = url.pathname + url.search;
   }
@@ -729,7 +731,7 @@ Request.prototype.request = function () {
 
     // get the socket, path
     const unixParts = url.path.match(/^([^/]+)(.+)$/);
-    options.socketPath = unixParts[1].replaceAll('%2F', '/');
+    options.socketPath = unixParts[1].replace(/%2F/g, '/');
     url.path = unixParts[2];
   }
 

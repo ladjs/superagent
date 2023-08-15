@@ -2,15 +2,15 @@
 require('should');
 require('should-http');
 
-const assert = require('node:assert');
-const zlib = require('node:zlib');
-let http = require('node:http');
+const assert = require('assert');
+const zlib = require('zlib');
+let http = require('http');
 const getPort = require('get-port');
 const express = require('../support/express');
 const request = require('../support/client');
 
 if (process.env.HTTP2_TEST) {
-  http = require('node:http2');
+  http = require('http2');
 }
 
 const app = express();

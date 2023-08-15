@@ -1,10 +1,10 @@
-const process = require('node:process');
+const process = require('process');
 const express = require('express');
 
 let http2Request;
 let http2Res;
 if (process.env.HTTP2_TEST) {
-  const http2 = require('node:http2');
+  const http2 = require('http2');
   const requestDecorator = require('./requestDecorator');
   const resDecorator = require('./responseDecorator');
   http2Request = requestDecorator(

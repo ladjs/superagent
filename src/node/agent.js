@@ -3,7 +3,7 @@
  */
 
 // eslint-disable-next-line node/no-deprecated-api
-const { parse } = require('node:url');
+const { parse } = require('url');
 const { CookieJar } = require('cookiejar');
 const { CookieAccessInfo } = require('cookiejar');
 const methods = require('methods');
@@ -66,7 +66,7 @@ Agent.prototype = Object.create(AgentBase.prototype);
 Agent.prototype._saveCookies = function (res) {
   const cookies = res.headers['set-cookie'];
   if (cookies) {
-    const url = parse(res.request?.url || '');
+    const url = parse(res.request?.url || '')
     this.jar.setCookies(cookies, url.hostname, url.pathname);
   }
 };

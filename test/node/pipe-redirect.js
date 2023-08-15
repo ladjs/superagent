@@ -1,5 +1,5 @@
 'use strict';
-const fs = require('node:fs');
+const fs = require('fs');
 const request = require('../support/client');
 const getSetup = require('../support/setup');
 

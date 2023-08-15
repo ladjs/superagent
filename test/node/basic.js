@@ -1,10 +1,10 @@
 'use strict';
 
-const assert = require('node:assert');
-const fs = require('node:fs');
-const { EventEmitter } = require('node:events');
-const { StringDecoder } = require('node:string_decoder');
-const url = require('node:url');
+const assert = require('assert');
+const fs = require('fs');
+const { EventEmitter } = require('events');
+const { StringDecoder } = require('string_decoder');
+const url = require('url');
 const getSetup = require('../support/setup');
 const request = require('../support/client');
 
@@ -247,7 +247,7 @@ describe('[node] request', () => {
 
   describe('.agent(new http.Agent())', () => {
     it('should set passed agent', (done) => {
-      const http = require('node:http');
+      const http = require('http');
       const request_ = request.get(`${base}/echo`);
       const agent = new http.Agent();
       const returnValue = request_.agent(agent);
