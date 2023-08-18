@@ -1,8 +1,4 @@
-function Agent() {
-  this._defaults = [];
-}
-
-for (const fn of [
+const defaults = [
   'use',
   'on',
   'once',
@@ -25,7 +21,21 @@ for (const fn of [
   'pfx',
   'cert',
   'disableTLSCerts'
-]) {
+]
+
+class Agent {
+  constructor () {
+    this._defaults = [];
+  }
+
+  _setDefaults (request) {
+    for (const def of this._defaults) {
+      request[def.fn](...def.args);
+    }
+  }
+}
+
+for (const fn of defaults) {
   // Default setting for all requests from this agent
   Agent.prototype[fn] = function (...args) {
     this._defaults.push({ fn, args });
@@ -33,10 +43,5 @@ for (const fn of [
   };
 }
 
-Agent.prototype._setDefaults = function (request) {
-  for (const def of this._defaults) {
-    request[def.fn](...def.args);
-  }
-};
 
 module.exports = Agent;
