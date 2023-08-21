@@ -1,11 +1,14 @@
-exports['application/x-www-form-urlencoded'] = require('./urlencoded');
-exports['application/json'] = require('./json');
-exports.text = require('./text');
+const urlencoded = require('./urlencoded.js');
+const json = require('./json.js');
+const text = require('./text.js');
+const binary = require('./image.js');
 
-exports['application/json-seq'] = exports.text;
-
-const binary = require('./image');
-
-exports['application/octet-stream'] = binary;
-exports['application/pdf'] = binary;
-exports.image = binary;
+module.exports = {
+  'application/x-www-form-urlencoded': urlencoded,
+  'application/json': json,
+  'text': text,
+  'application/json-seq': text,
+  'application/octet-stream': binary,
+  'application/pdf': binary,
+  'image': binary
+}
