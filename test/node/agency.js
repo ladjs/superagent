@@ -4,7 +4,7 @@ const express = require('../support/express');
 
 const app = express();
 const request = require('../support/client');
-const assert = require('assert/strict');
+const assert = require('assert');
 const cookieParser = require('cookie-parser');
 const cookiejar = require('cookiejar');
 const session = require('express-session');
