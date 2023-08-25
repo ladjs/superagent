@@ -1,13 +1,10 @@
 'use strict';
 
-require('should-http');
-
 const express = require('../support/express');
 
 const app = express();
 const request = require('../support/client');
-const assert = require('assert');
-const should = require('should');
+const assert = require('assert/strict');
 const cookieParser = require('cookie-parser');
 const cookiejar = require('cookiejar');
 const session = require('express-session');
@@ -90,30 +87,30 @@ describe('request', () => {
 
     it('should gain a session on POST', () =>
       agent3.post(`${base}/signin`).then((res) => {
-        res.should.have.status(200);
-        should.not.exist(res.headers['set-cookie']);
-        res.text.should.containEql('dashboard');
+        assert.equal(res.status, 200);
+        assert.ok('set-cookie' in res.headers === false);
+        assert.equal(res.text, 'dashboard');
       }));
 
     it('should start with empty session (set cookies)', (done) => {
       agent1.get(`${base}/dashboard`).end((error, res) => {
-        should.exist(error);
-        res.should.have.status(401);
-        should.exist(res.headers['set-cookie']);
+        assert.ok(error instanceof Error);
+        assert.equal(res.status, 401);
+        assert.ok('set-cookie' in res.headers);
         done();
       });
     });
 
     it('should gain a session (cookies already set)', () =>
       agent1.post(`${base}/signin`).then((res) => {
-        res.should.have.status(200);
-        should.not.exist(res.headers['set-cookie']);
-        res.text.should.containEql('dashboard');
+        assert.equal(res.status, 200);
+        assert.ok('set-cookie' in res.headers === false);
+        assert.equal('dashboard', res.text);
       }));
 
     it('should persist cookies across requests', () =>
       agent1.get(`${base}/dashboard`).then((res) => {
-        res.should.have.status(200);
+        assert.equal(res.status, 200);
       }));
 
     it('should have the cookie set in the end callback', () =>
@@ -121,6 +118,7 @@ describe('request', () => {
         .post(`${base}/setcookie`)
         .then(() => agent4.get(`${base}/getcookie`))
         .then((res) => {
+          assert.equal(res.status, 200);
           res.should.have.status(200);
           assert.strictEqual(res.text, 'jar');
         }));
@@ -147,26 +145,26 @@ describe('request', () => {
     it('should send cookies to allowed domain with a different path', () => {
       const postRequest = agent4.post(`${base}/x/y/z`)
       const cookiesNames = postRequest.cookies.split(';').map(cookie => cookie.split('=')[0])
-      cookiesNames.should.eql(['cookie', ' connect.sid']);
+      assert.deepStrictEqual(cookiesNames, ['cookie', ' connect.sid']);
     });
 
     it('should not share cookies', (done) => {
       agent2.get(`${base}/dashboard`).end((error, res) => {
-        should.exist(error);
-        res.should.have.status(401);
+        assert.ok(error instanceof Error);
+        assert.equal(res.status, 401);
         done();
       });
     });
 
     it('should not lose cookies between agents', () =>
       agent1.get(`${base}/dashboard`).then((res) => {
-        res.should.have.status(200);
+        assert.equal(res.status, 200);
       }));
 
     it('should be able to follow redirects', () =>
       agent1.get(base).then((res) => {
-        res.should.have.status(200);
-        res.text.should.containEql('dashboard');
+        assert.equal(res.status, 200);
+        assert.equal(res.text, 'dashboard');
       }));
 
     it('should be able to post redirects', () =>
@@ -174,9 +172,9 @@ describe('request', () => {
         .post(`${base}/redirect`)
         .send({ foo: 'bar', baz: 'blaaah' })
         .then((res) => {
-          res.should.have.status(200);
-          res.text.should.containEql('simple');
-          res.redirects.should.eql([`${base}/simple`]);
+          assert.equal(res.status, 200);
+          assert.equal(res.text, 'simple');
+          assert.deepStrictEqual(res.redirects, [`${base}/simple`]);
         }));
 
     it('should be able to limit redirects', (done) => {
@@ -184,25 +182,25 @@ describe('request', () => {
         .get(base)
         .redirects(0)
         .end((error, res) => {
-          should.exist(error);
-          res.should.have.status(302);
-          res.redirects.should.eql([]);
-          res.header.location.should.equal('/dashboard');
+          assert.ok(error instanceof Error);
+          assert.equal(res.status, 302);
+          assert.deepEqual(res.redirects, []);
+          assert.equal(res.header.location, '/dashboard');
           done();
         });
     });
 
     it('should be able to create a new session (clear cookie)', () =>
       agent1.post(`${base}/signout`).then((res) => {
-        res.should.have.status(200);
-        should.exist(res.headers['set-cookie']);
+        assert.equal(res.status, 200);
+        assert.ok('set-cookie' in res.headers);
       }));
 
     it('should regenerate with an empty session', (done) => {
       agent1.get(`${base}/dashboard`).end((error, res) => {
-        should.exist(error);
-        res.should.have.status(401);
-        should.not.exist(res.headers['set-cookie']);
+        assert.ok(error instanceof Error);
+        assert.equal(res.status, 401);
+        assert.ok('set-cookie' in res.headers === false);
         done();
       });
     });

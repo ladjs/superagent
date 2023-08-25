@@ -83,6 +83,6 @@ describe('req.parse(fn)', () => {
 
       setTimeout(() => {
         request_.abort();
-      }, 50);
+      }, 150);
     });
 });
