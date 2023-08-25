@@ -119,7 +119,6 @@ describe('request', () => {
         .then(() => agent4.get(`${base}/getcookie`))
         .then((res) => {
           assert.equal(res.status, 200);
-          res.should.have.status(200);
           assert.strictEqual(res.text, 'jar');
         }));
 
