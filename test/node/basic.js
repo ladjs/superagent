@@ -31,7 +31,7 @@ describe('[node] request', () => {
   describe('with an object', () => {
     it('should format the url', () =>
       request.get(url.parse(`${base}/login`)).then((res) => {
-        assert(res.ok);
+        assert.ok(res.ok);
       }));
   });
 
@@ -59,12 +59,13 @@ describe('[node] request', () => {
   describe('res.links', () => {
     it('should default to an empty object', () =>
       request.get(`${base}/login`).then((res) => {
-        res.links.should.eql({});
+        assert.deepEqual(res.links, {});
       }));
 
     it('should parse the Link header field', (done) => {
       request.get(`${base}/links`).end((error, res) => {
-        res.links.next.should.equal(
+        assert.equal(
+          res.links.next,
           'https://api.github.com/repos/visionmedia/mocha/issues?page=2'
         );
         done();
@@ -78,7 +79,7 @@ describe('[node] request', () => {
         .post(`${base}/echo`)
         .unset('User-Agent')
         .end((error, res) => {
-          assert.equal(void 0, res.header['user-agent']);
+          assert.equal(res.header['user-agent'], undefined);
           done();
         });
     });
@@ -86,16 +87,16 @@ describe('[node] request', () => {
 
   describe('case-insensitive', () => {
     it('should set/get header fields case-insensitively', () => {
-      const r = request.post(`${base}/echo`);
-      r.set('MiXeD', 'helloes');
-      assert.strictEqual(r.get('mixed'), 'helloes');
+      const req = request.post(`${base}/echo`);
+      req.set('MiXeD', 'helloes');
+      assert.strictEqual(req.get('mixed'), 'helloes');
     });
 
     it('should unset header fields case-insensitively', () => {
-      const r = request.post(`${base}/echo`);
-      r.set('MiXeD', 'helloes');
-      r.unset('MIXED');
-      assert.strictEqual(r.get('mixed'), undefined);
+      const req = request.post(`${base}/echo`);
+      req.set('MiXeD', 'helloes');
+      req.unset('MIXED');
+      assert.strictEqual(req.get('mixed'), undefined);
     });
   });
 
@@ -106,7 +107,7 @@ describe('[node] request', () => {
       assert.equal('boolean', typeof request_.write('{"name"'));
       assert.equal('boolean', typeof request_.write(':"tobi"}'));
       request_.end((error, res) => {
-        res.text.should.equal('{"name":"tobi"}');
+        assert.equal(res.text, '{"name":"tobi"}');
         done();
       });
     });
@@ -116,19 +117,21 @@ describe('[node] request', () => {
     it('should pipe the response to the given stream', (done) => {
       const stream = new EventEmitter();
 
-      stream.buf = '';
+      let buf = '';
       stream.writable = true;
 
       stream.write = function (chunk) {
-        this.buf += chunk;
+        buf += chunk;
       };
 
       stream.end = function () {
-        this.buf.should.equal('{"name":"tobi"}');
+        assert.equal(buf, '{"name":"tobi"}');
         done();
       };
 
-      request.post(`${base}/echo`).send('{"name":"tobi"}').pipe(stream);
+      request.post(`${base}/echo`)
+        .send('{"name":"tobi"}')
+        .pipe(stream);
     });
   });
 
@@ -140,7 +143,7 @@ describe('[node] request', () => {
         .end((error, res) => {
           assert.ifError(error);
           assert.equal('custom stuff', res.text);
-          assert(res.buffered);
+          assert.ok(res.buffered);
           done();
         });
     });
@@ -158,7 +161,7 @@ describe('[node] request', () => {
           assert.ifError(error);
           assert.equal(res.type, type);
           assert.equal(send, res.text);
-          assert(res.buffered);
+          assert.ok(res.buffered);
           done();
         });
     });
@@ -174,18 +177,19 @@ describe('[node] request', () => {
         .end((error, res) => {
           assert.ifError(error);
           assert.equal(null, res.text);
-          res.body.should.eql({});
-          let buf = '';
+          assert.deepEqual(res.body, {});
+          let str = '';
           res.setEncoding('utf8');
           res.on('data', (chunk) => {
-            buf += chunk;
+            str += chunk;
           });
           res.on('end', () => {
-            buf.should.equal('hello this is dog');
+            assert.equal(str, 'hello this is dog');
             done();
           });
         });
     });
+
     it("should take precedence over request.buffer['someMimeType'] = true", (done) => {
       const type = 'application/foobar';
       const send = 'hello this is a dog';
@@ -200,15 +204,15 @@ describe('[node] request', () => {
           assert.ifError(error);
           assert.equal(null, res.text);
           assert.equal(res.type, type);
-          assert(!res.buffered);
-          res.body.should.eql({});
-          let buf = '';
+          assert.equal(res.buffered, false);
+          assert.deepEqual(res.body, {});
+          let str = '';
           res.setEncoding('utf8');
           res.on('data', (chunk) => {
-            buf += chunk;
+            str += chunk;
           });
           res.on('end', () => {
-            buf.should.equal(send);
+            assert.equal(str, send);
             done();
           });
         });
@@ -229,8 +233,8 @@ describe('[node] request', () => {
 
   describe('.agent()', () => {
     it('should return the defaut agent', (done) => {
-      const request_ = request.post(`${base}/echo`);
-      request_.agent().should.equal(false);
+      const agent = request.post(`${base}/echo`).agent();
+      assert.equal(agent, false);
       done();
     });
   });
@@ -239,7 +243,7 @@ describe('[node] request', () => {
     it('should set an agent to undefined and ensure it is chainable', (done) => {
       const request_ = request.get(`${base}/echo`);
       const returnValue = request_.agent(undefined);
-      returnValue.should.equal(request_);
+      assert.equal(returnValue, request_);
       assert.strictEqual(request_.agent(), undefined);
       done();
     });
@@ -251,8 +255,8 @@ describe('[node] request', () => {
       const request_ = request.get(`${base}/echo`);
       const agent = new http.Agent();
       const returnValue = request_.agent(agent);
-      returnValue.should.equal(request_);
-      request_.agent().should.equal(agent);
+      assert.equal(returnValue, request_);
+      assert.equal(request_.agent(), agent);
       done();
     });
   });
@@ -264,9 +268,9 @@ describe('[node] request', () => {
         .type('application/x-dog')
         .send('hello this is dog')
         .then((res) => {
-          assert.equal(null, res.text);
+          assert.equal(res.text, null);
           assert.equal(res.body.toString(), 'hello this is dog');
-          res.buffered.should.be.true;
+          assert.equal(res.buffered, true);
         });
     });
   });
@@ -283,7 +287,7 @@ describe('[node] request', () => {
         .buffer(false)
         .end((error, res) => {
           assert.ifError(error);
-          assert(!res.buffered);
+          assert.equal(res.buffered, false);
           assert.equal(res.header['content-length'], Buffer.byteLength(img));
           done();
         });
@@ -313,7 +317,7 @@ describe('[node] request', () => {
         .send('wahoo')
         .end((error, res) => {
           try {
-            assert.equal('wahoo', res.text);
+            assert.equal(res.text, 'wahoo');
             next();
           } catch (err) {
             next(err);

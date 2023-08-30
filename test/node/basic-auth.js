@@ -1,4 +1,4 @@
-'use strict';
+const assert = require('assert');
 const URL = require('url');
 const request = require('../support/client');
 const getSetup = require('../support/setup');
@@ -19,7 +19,7 @@ describe('Basic auth', () => {
       new_url.pathname = '/basic-auth';
 
       request.get(URL.format(new_url)).end((error, res) => {
-        res.status.should.equal(200);
+        assert.equal(res.status, 200);
         done();
       });
     });
@@ -31,7 +31,7 @@ describe('Basic auth', () => {
         .get(`${base}/basic-auth`)
         .auth('tobi', 'learnboost')
         .end((error, res) => {
-          res.status.should.equal(200);
+          assert.equal(res.status, 200);
           done();
         });
     });
@@ -43,7 +43,7 @@ describe('Basic auth', () => {
         .get(`${base}/basic-auth/again`)
         .auth('tobi')
         .end((error, res) => {
-          res.status.should.eql(200);
+          assert.equal(res.status, 200);
           done();
         });
     });
