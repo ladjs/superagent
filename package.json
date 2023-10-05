@@ -24,7 +24,7 @@
     "debug": "^4.3.4",
     "fast-safe-stringify": "^2.1.1",
     "form-data": "^4.0.0",
-    "formidable": "^2.1.2",
+    "formidable": "^3.2.4",
     "methods": "^1.1.2",
     "mime": "2.6.0",
     "qs": "^6.11.0",
