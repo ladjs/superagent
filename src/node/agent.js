@@ -9,6 +9,7 @@ const { CookieAccessInfo } = require('cookiejar');
 const methods = require('methods');
 const request = require('../..');
 const AgentBase = require('../agent-base');
+const { hasOwn } = require('../utils');
 
 /**
  * Initialize a new `Agent`.
@@ -37,17 +38,15 @@ class Agent extends AgentBase {
       cert: true,
       pfx: true,
       key: true,
-      rejectUnauthorized: false,
     }
 
     for(const prop in agentOptionsProperty) {
-      if (
-        Object.prototype.hasOwnProperty.call(options, prop) &&
-        agentOptionsProperty[prop] === !!options[prop]
-      ) {
+      if (hasOwn(options, prop) && agentOptionsProperty[prop] === !!options[prop]) {
         this[prop](options[prop])
       }
     }
+
+    if(options.rejectUnauthorized === false) this.disableTLSCerts();
   }
 
   /**
