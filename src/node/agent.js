@@ -21,26 +21,31 @@ class Agent extends AgentBase {
     super();
 
     this.jar = new CookieJar();
+    this._initRequests(options)
+  }
 
-    if (options) {
-      if (options.ca) {
-        this.ca(options.ca);
-      }
+  /**
+   * @params{Options} - options requests
+   * @api private
+   */
 
-      if (options.key) {
-        this.key(options.key);
-      }
+  _initRequests(options) {
+    if(!options)  return;
 
-      if (options.pfx) {
-        this.pfx(options.pfx);
-      }
+    const agentOptionsProperty = {
+      ca: true,
+      cert: true,
+      pfx: true,
+      key: true,
+      rejectUnauthorized: false,
+    }
 
-      if (options.cert) {
-        this.cert(options.cert);
-      }
-
-      if (options.rejectUnauthorized === false) {
-        this.disableTLSCerts();
+    for(const prop in agentOptionsProperty) {
+      if (
+        Object.prototype.hasOwnProperty.call(options, prop) &&
+        agentOptionsProperty[prop] === !!options[prop]
+      ) {
+        this[prop](options[prop])
       }
     }
   }
