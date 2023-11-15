@@ -9,6 +9,7 @@ const { CookieAccessInfo } = require('cookiejar');
 const methods = require('methods');
 const request = require('../..');
 const AgentBase = require('../agent-base');
+const { hasOwn } = require('../utils');
 
 /**
  * Initialize a new `Agent`.
@@ -21,28 +22,32 @@ class Agent extends AgentBase {
     super();
 
     this.jar = new CookieJar();
+    this._initOptions(options)
+  }
 
-    if (options) {
-      if (options.ca) {
-        this.ca(options.ca);
-      }
+  /**
+   * Saves options passed when calling the constructor
+   * @params{Options} - options requests
+   * @api private
+   */
 
-      if (options.key) {
-        this.key(options.key);
-      }
+  _initOptions(options) {
+    if(!options)  return;
 
-      if (options.pfx) {
-        this.pfx(options.pfx);
-      }
+    const agentOptionsProperty = {
+      ca: true,
+      cert: true,
+      pfx: true,
+      key: true,
+    }
 
-      if (options.cert) {
-        this.cert(options.cert);
-      }
-
-      if (options.rejectUnauthorized === false) {
-        this.disableTLSCerts();
+    for(const prop in agentOptionsProperty) {
+      if (hasOwn(options, prop) && agentOptionsProperty[prop] === !!options[prop]) {
+        this[prop](options[prop])
       }
     }
+
+    if(options.rejectUnauthorized === false) this.disableTLSCerts();
   }
 
   /**
