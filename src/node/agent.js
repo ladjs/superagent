@@ -22,15 +22,16 @@ class Agent extends AgentBase {
     super();
 
     this.jar = new CookieJar();
-    this._initRequests(options)
+    this._initOptions(options)
   }
 
   /**
+   * Saves options passed when calling the constructor
    * @params{Options} - options requests
    * @api private
    */
 
-  _initRequests(options) {
+  _initOptions(options) {
     if(!options)  return;
 
     const agentOptionsProperty = {
