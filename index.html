@@ -623,8 +623,8 @@ Tobi
     const res = yield req;
 </code></pre>
 <p>Note that SuperAgent expects the global <code>Promise</code> object to be present. You&#39;ll need to use v7 and a polyfill to use promises in Internet Explorer or Node.js 0.10.</p>
-<p>We have dropped support in v8 for IE.  You must add a polyfill for WeakRef and BigInt if you wish to support Opera 85, iOS Safari 12.2-12.5, for example using <a href="https://polyfill.io">https://polyfill.io</a>:</p>
-<pre><code class="language-html">&lt;script src=&quot;https://polyfill.io/v3/polyfill.min.js?features=WeakRef,BigInt&quot;&gt;&lt;/script&gt;
+<p>We have dropped support in v8 for IE.  You must add a polyfill for WeakRef and BigInt if you wish to support Opera 85, iOS Safari 12.2-12.5, for example using <a href="https://cdnjs.cloudflare.com/polyfill/">https://cdnjs.cloudflare.com/polyfill/</a>:</p>
+<pre><code class="language-html">&lt;script src=&quot;https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=WeakRef,BigInt&quot;&gt;&lt;/script&gt;
 </code></pre>
 <h2 id="browser-and-node-versions">Browser and node versions</h2>
 <p>SuperAgent has two implementations: one for web browsers (using XHR) and one for Node.JS (using core http module). By default Browserify and WebPack will pick the browser version.</p>

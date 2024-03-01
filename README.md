@@ -83,7 +83,7 @@ Browser-ready versions of this module are available via [jsdelivr][], [unpkg][],
 This is the solution for you if you're just using `<script>` tags everywhere!
 
 ```html
-<script src="https://polyfill.io/v3/polyfill.min.js?features=WeakRef,BigInt"></script>
+<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=WeakRef,BigInt"></script>
 <script src="https://cdn.jsdelivr.net/npm/superagent"></script>
 <!-- if you wish to use unpkg.com instead: -->
 <!-- <script src="https://unpkg.com/superagent"></script> -->
@@ -155,10 +155,10 @@ If you are using [browserify][], [webpack][], [rollup][], or another bundler, th
 
 ### Required Browser Features
 
-We recommend using <https://polyfill.io> (specifically with the bundle mentioned in [VanillaJS](#vanillajs) above):
+We recommend using <https://cdnjs.cloudflare.com/polyfill/> (specifically with the bundle mentioned in [VanillaJS](#vanillajs) above):
 
 ```html
-<script src="https://polyfill.io/v3/polyfill.min.js?features=WeakRef,BigInt"></script>
+<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=WeakRef,BigInt"></script>
 ```
 
 * WeakRef is not supported in Opera 85, iOS Safari 12.2-12.5

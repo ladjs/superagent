@@ -868,10 +868,10 @@ Libraries like [co](https://github.com/tj/co) or a web framework like [koa](http
 
 Note that SuperAgent expects the global `Promise` object to be present. You'll need to use v7 and a polyfill to use promises in Internet Explorer or Node.js 0.10.
 
-We have dropped support in v8 for IE.  You must add a polyfill for WeakRef and BigInt if you wish to support Opera 85, iOS Safari 12.2-12.5, for example using <https://polyfill.io>:
+We have dropped support in v8 for IE.  You must add a polyfill for WeakRef and BigInt if you wish to support Opera 85, iOS Safari 12.2-12.5, for example using <https://cdnjs.cloudflare.com/polyfill/>:
 
 ```html
-<script src="https://polyfill.io/v3/polyfill.min.js?features=WeakRef,BigInt"></script>
+<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=WeakRef,BigInt"></script>
 ```
 
 ## Browser and node versions
