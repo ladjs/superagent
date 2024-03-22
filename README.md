@@ -201,7 +201,7 @@ Existing plugins:
 * [superagent-verbose-errors](https://github.com/jcoreio/superagent-verbose-errors) - include response body in error messages for failed requests
 * [superagent-declare](https://github.com/damoclark/superagent-declare) - A simple [declarative](https://en.wikipedia.org/wiki/Declarative_programming) API for SuperAgent
 * [superagent-node-http-timings](https://github.com/webuniverseio/superagent-node-http-timings) - measure http timings in node.js
-* [superagent-cheerio](https://github.com/mmmmmrob/superagent-cheerio) - add [cheerio](https://www.npmjs.com/package/cheerio) to your response content automatically.
+* [superagent-cheerio](https://github.com/mmmmmrob/superagent-cheerio) - add [cheerio](https://www.npmjs.com/package/cheerio) to your response content automatically. Adds `res.$` for HTML and XML response bodies.
 
 Please prefix your plugin with `superagent-*` so that it can easily be found by others.
 
